@@ -364,8 +364,12 @@ export default function App() {
           </div>
           <div className="header-actions">
             <Badge className="live-badge">{dbStatus}</Badge>
-            <Button variant="outline"><User size={16} /> İş Ara</Button>
-            <Button><Building2 size={16} /> İlan Ver</Button>
+            <Button variant="outline" onClick={() => setTab("jobs")}>
+              <User size={16} /> İş Ara
+            </Button>
+            <Button onClick={() => setTab("post")}>
+              <Building2 size={16} /> İlan Ver
+            </Button>
           </div>
         </header>
 
