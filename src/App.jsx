@@ -575,7 +575,10 @@ export default function App() {
     }
 
     if (!jobForm.title || !jobForm.company || !jobForm.city) return;
-
+if (jobForm.package_type === "premium" && !jobForm.payment_note.trim()) {
+  alert("Premium ilan için ödeme referansı girmen gerekiyor.");
+  return;
+}
     const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
     const paymentStatus = selectedPackage.payment_status;
 
