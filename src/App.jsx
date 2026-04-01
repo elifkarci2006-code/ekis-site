@@ -82,7 +82,7 @@ const PACKAGE_OPTIONS = {
   },
   premium: {
     label: "Premium",
-    price: "99 TL",
+    price: "399 TL",
     featured: true,
     note: "İlan öne çıkar, premium rozeti alır ve üst sıralarda görünür.",
     payment_status: "waiting_payment",
