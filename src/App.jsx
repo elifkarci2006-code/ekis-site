@@ -18,6 +18,8 @@ import {
   Check,
   Trash2,
   FileText,
+  Phone,
+  CalendarDays,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -134,6 +136,19 @@ function JobCard({ job, onApply }) {
       </Card>
     </motion.div>
   );
+}
+
+function formatDate(dateString) {
+  if (!dateString) return "-";
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return "-";
+  return new Intl.DateTimeFormat("tr-TR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
 }
 
 export default function App() {
@@ -255,6 +270,18 @@ export default function App() {
   }, [jobs, search, city, type]);
 
   const pendingJobs = useMemo(() => jobs.filter((job) => job.status === "pending"), [jobs]);
+
+  const enrichedApplications = useMemo(() => {
+    return applications.map((app) => {
+      const matchedJob = jobs.find((job) => String(job.id) === String(app.job_id));
+      return {
+        ...app,
+        jobTitle: matchedJob?.title || `İlan #${app.job_id}`,
+        company: matchedJob?.company || "-",
+        city: matchedJob?.city || "-",
+      };
+    });
+  }, [applications, jobs]);
 
   function resetJobForm() {
     setJobForm({
@@ -674,18 +701,41 @@ export default function App() {
                     <span className="muted">Başvurular yükleniyor</span>
                     <Loader2 size={16} className="spin" />
                   </div>
-                ) : applications.length === 0 ? (
+                ) : enrichedApplications.length === 0 ? (
                   <div className="panel-row">
                     <span className="muted">Henüz başvuru yok</span>
                     <strong>0</strong>
                   </div>
                 ) : (
-                  applications.slice(0, 10).map((app) => (
-                    <div key={app.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column" }}>
-                      <strong>{app.full_name}</strong>
-                      <div className="muted">Telefon: {app.phone}</div>
-                      <div className="muted">İlan ID: {app.job_id}</div>
-                      {app.note ? <div className="muted">Not: {app.note}</div> : null}
+                  enrichedApplications.slice(0, 10).map((app) => (
+                    <div key={app.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column", gap: "8px" }}>
+                      <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+                        <strong>{app.full_name}</strong>
+                        <Badge className="soft">{app.jobTitle}</Badge>
+                      </div>
+
+                      <div className="muted" style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                          <Phone size={14} /> {app.phone}
+                        </span>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                          <Building2 size={14} /> {app.company}
+                        </span>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                          <MapPin size={14} /> {app.city}
+                        </span>
+                      </div>
+
+                      <div className="muted" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                        <CalendarDays size={14} /> {formatDate(app.created_at)}
+                      </div>
+
+                      {app.note ? (
+                        <div style={{ width: "100%", padding: "10px 12px", borderRadius: "14px", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                          <div className="muted" style={{ fontSize: "13px", marginBottom: "4px" }}>Başvuru notu</div>
+                          <div>{app.note}</div>
+                        </div>
+                      ) : null}
                     </div>
                   ))
                 )}
