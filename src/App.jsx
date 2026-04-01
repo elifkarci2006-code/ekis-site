@@ -1,4 +1,3 @@
-const SHOPIER_PAYMENT_URL = "https://www.shopier.com"; // şimdilik fake
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -32,6 +31,8 @@ import {
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
+const SHOPIER_PAYMENT_URL = "https://www.shopier.com";
+
 const initialJobs = [
   {
     id: 1,
@@ -43,7 +44,8 @@ const initialJobs = [
     pay: "Saatlik 170 TL",
     hours: "18:00 - 23:00",
     tags: ["Öğrenciye uygun", "Akşam", "Hızlı başlangıç"],
-    description: "Yoğun saatlerde servis desteği verecek, güler yüzlü ekip arkadaşı aranıyor.",
+    description:
+      "Yoğun saatlerde servis desteği verecek, güler yüzlü ekip arkadaşı aranıyor.",
     status: "active",
     package_type: "premium",
     featured: true,
@@ -62,7 +64,8 @@ const initialJobs = [
     pay: "Günlük 1200 TL",
     hours: "10:00 - 19:00",
     tags: ["Hafta sonu", "Deneyim şart değil"],
-    description: "Kasa ve reyon düzenine destek olacak ekip arkadaşı aranıyor.",
+    description:
+      "Kasa ve reyon düzenine destek olacak ekip arkadaşı aranıyor.",
     status: "active",
     package_type: "standard",
     featured: false,
@@ -197,7 +200,9 @@ function JobCard({ job, onApply }) {
                 <Badge className="featured-tag">Öne Çıkan</Badge>
               ) : null}
               <Badge className="soft">
-                {job.package_type === "premium" ? "399 TL" : job.price || "Ücretsiz"}
+                {job.package_type === "premium"
+                  ? "399 TL"
+                  : job.price || "Ücretsiz"}
               </Badge>
             </div>
           </div>
@@ -294,6 +299,10 @@ export default function App() {
   useEffect(() => {
     if (currentEmployer) {
       localStorage.setItem("ekis_employer_session", JSON.stringify(currentEmployer));
+      setJobForm((prev) => ({
+        ...prev,
+        company: prev.company || currentEmployer.company_name || "",
+      }));
     } else {
       localStorage.removeItem("ekis_employer_session");
     }
@@ -441,6 +450,7 @@ export default function App() {
     });
     setShowAuthModal(false);
     setAuthMessage("");
+    setAuthForm({ full_name: "", company_name: "", email: "", password: "" });
   }
 
   async function handleLogin() {
@@ -484,6 +494,7 @@ export default function App() {
     });
     setShowAuthModal(false);
     setAuthMessage("");
+    setAuthForm({ full_name: "", company_name: "", email: "", password: "" });
   }
 
   function handleLogout() {
@@ -576,11 +587,6 @@ export default function App() {
 
     if (!jobForm.title || !jobForm.company || !jobForm.city) return;
 
-    if (jobForm.package_type === "premium" && !jobForm.payment_note.trim()) {
-  al
-    ert("Premium ilan için ödeme referansı girmen gerekiyor.");
-  return;
-}
     const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
     const paymentStatus = selectedPackage.payment_status;
 
@@ -600,6 +606,7 @@ export default function App() {
       setJobs(next);
       localStorage.setItem("ekis_demo_jobs", JSON.stringify(next));
       resetJobForm();
+      setTab("dashboard");
       return;
     }
 
@@ -645,7 +652,9 @@ export default function App() {
     if (!supabase) {
       setJobs((prev) =>
         prev.map((job) =>
-          job.id === jobId ? { ...job, payment_status: "paid", payment_note: "Ödeme bildirildi" } : job
+          job.id === jobId
+            ? { ...job, payment_status: "paid" }
+            : job
         )
       );
       return;
@@ -669,7 +678,9 @@ export default function App() {
 
     setJobs((prev) =>
       prev.map((job) =>
-        job.id === jobId ? { ...job, payment_status: "paid" } : job
+        job.id === jobId
+          ? { ...job, payment_status: "paid" }
+          : job
       )
     );
   }
@@ -678,7 +689,9 @@ export default function App() {
     if (!appliedJob || !applicationForm.full_name || !applicationForm.phone) return;
 
     if (!supabase) {
-      const existing = JSON.parse(localStorage.getItem("ekis_demo_applications") || "[]");
+      const existing = JSON.parse(
+        localStorage.getItem("ekis_demo_applications") || "[]"
+      );
       const next = [
         {
           id: Date.now(),
@@ -725,7 +738,10 @@ export default function App() {
     const selected = jobs.find((job) => job.id === jobId);
     if (!selected) return;
 
-    if (selected.package_type === "premium" && selected.payment_status !== "paid") {
+    if (
+      selected.package_type === "premium" &&
+      selected.payment_status !== "paid"
+    ) {
       alert("Premium ilanı yayına almadan önce ödeme durumu paid olmalı.");
       return;
     }
@@ -736,7 +752,10 @@ export default function App() {
           ? {
               ...job,
               status: "active",
-              tags: job.package_type === "premium" ? ["Premium", "Yayınlandı", "Öne Çıkan"] : ["Yayınlandı"],
+              tags:
+                job.package_type === "premium"
+                  ? ["Premium", "Yayınlandı", "Öne Çıkan"]
+                  : ["Yayınlandı"],
             }
           : job
       );
@@ -771,7 +790,10 @@ export default function App() {
           ? {
               ...job,
               status: "active",
-              tags: job.package_type === "premium" ? ["Premium", "Yayınlandı", "Öne Çıkan"] : ["Yayınlandı"],
+              tags:
+                job.package_type === "premium"
+                  ? ["Premium", "Yayınlandı", "Öne Çıkan"]
+                  : ["Yayınlandı"],
             }
           : job
       )
@@ -790,10 +812,7 @@ export default function App() {
 
     setActionLoadingId(jobId);
 
-    const { error } = await supabase
-      .from("jobs")
-      .delete()
-      .eq("id", jobId);
+    const { error } = await supabase.from("jobs").delete().eq("id", jobId);
 
     setActionLoadingId(null);
 
@@ -857,7 +876,9 @@ export default function App() {
         <header className="header">
           <div>
             <div className="logo">ekis</div>
-            <div className="muted">Ek iş arayanlarla işverenleri buluşturan canlı MVP</div>
+            <div className="muted">
+              Ek iş arayanlarla işverenleri buluşturan canlı MVP
+            </div>
           </div>
 
           <div className="header-actions">
@@ -933,8 +954,8 @@ export default function App() {
                 1 dakikada <span>ilan ver</span>, başvuru al, premiumla öne çık.
               </h1>
               <p>
-                Premium ilan ücreti 399 TL'dir. Ödeme bildirimi sonrası kontrol edilir ve admin
-                onayıyla yayına geçer.
+                Premium ilan ücreti 399 TL'dir. Ödeme bildirimi sonrası kontrol edilir
+                ve admin onayıyla yayına geçer.
               </p>
 
               <div className="filters">
@@ -973,9 +994,21 @@ export default function App() {
           </motion.div>
 
           <div className="stats">
-            <Stat label="Aktif ilan" value={String(filteredJobs.length)} icon={Briefcase} />
-            <Stat label="Ödeme bekleyen" value={String(waitingPaymentJobs.length)} icon={CreditCard} />
-            <Stat label="Benim başvurularım" value={String(enrichedApplications.length)} icon={FileText} />
+            <Stat
+              label="Aktif ilan"
+              value={String(filteredJobs.length)}
+              icon={Briefcase}
+            />
+            <Stat
+              label="Premium ilan"
+              value={String(premiumJobsCount)}
+              icon={Sparkles}
+            />
+            <Stat
+              label="Ödeme bekleyen"
+              value={String(waitingPaymentJobs.length)}
+              icon={CreditCard}
+            />
           </div>
         </section>
 
@@ -998,7 +1031,8 @@ export default function App() {
             <MessageCircle className="feature-icon" />
             <div className="feature-title">Mesajlaşma sistemi</div>
             <p className="muted">
-              Başvuranlarla platform içinde iletişim kurabilir, numara paylaşmadan ilerleyebilirsin.
+              Başvuranlarla platform içinde iletişim kurabilir, numara paylaşmadan
+              ilerleyebilirsin.
             </p>
           </Card>
         </section>
@@ -1122,7 +1156,13 @@ export default function App() {
                         <BadgeCent size={18} />
                         Paket seçimi
                       </div>
-                      <Badge className={jobForm.package_type === "premium" ? "premium-badge" : "soft"}>
+                      <Badge
+                        className={
+                          jobForm.package_type === "premium"
+                            ? "premium-badge"
+                            : "soft"
+                        }
+                      >
                         {selectedPackage.label}
                       </Badge>
                     </div>
@@ -1130,12 +1170,65 @@ export default function App() {
                     <div className="muted">{selectedPackage.note}</div>
                   </div>
 
-                  jobForm.package_type === "premium
+                  {jobForm.package_type === "premium" ? (
+                    <div
+                      className="premium-plan-box"
+                      style={{ marginBottom: "16px" }}
+                    >
+                      <div className="premium-plan-title">
+                        <CreditCard size={18} />
+                        Ödeme bilgisi
+                      </div>
+
+                      <div className="muted" style={{ marginBottom: "8px" }}>
+                        Premium ilan ücreti 399 TL'dir. Ödemeyi yaptıktan sonra
+                        referans numarasını aşağıya yazabilirsin.
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "10px",
+                          flexWrap: "wrap",
+                          marginBottom: "12px",
+                        }}
+                      >
+                        <a
+                          href={SHOPIER_PAYMENT_URL}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{ textDecoration: "none" }}
+                        >
+                          <button type="button" className="btn btn-solid">
+                            <CreditCard size={16} />
+                            Shopier ile 399 TL Öde
+                          </button>
+                        </a>
+                      </div>
+
+                      <div className="muted" style={{ marginBottom: "12px" }}>
+                        Ödeme sonrası referans numarasını buraya yazabilirsin:
+                      </div>
+
+                      <Textarea
+                        placeholder="Örnek: Shopier sipariş no / ödeme referansı"
+                        value={jobForm.payment_note}
+                        onChange={(e) =>
+                          setJobForm({
+                            ...jobForm,
+                            payment_note: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  ) : null}
 
                   <div className="form-grid">
                     <SelectField
                       value={jobForm.package_type}
-                      onChange={(val) => setJobForm({ ...jobForm, package_type: val })}
+                      onChange={(val) =>
+                        setJobForm({ ...jobForm, package_type: val })
+                      }
                       options={[
                         { value: "standard", label: "Standart - Ücretsiz" },
                         { value: "premium", label: "Premium - 399 TL" },
@@ -1145,26 +1238,36 @@ export default function App() {
                     <Input
                       placeholder="İş başlığı"
                       value={jobForm.title}
-                      onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })}
+                      onChange={(e) =>
+                        setJobForm({ ...jobForm, title: e.target.value })
+                      }
                     />
                     <Input
                       placeholder="Firma adı"
                       value={jobForm.company}
-                      onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })}
+                      onChange={(e) =>
+                        setJobForm({ ...jobForm, company: e.target.value })
+                      }
                     />
                     <Input
                       placeholder="Şehir"
                       value={jobForm.city}
-                      onChange={(e) => setJobForm({ ...jobForm, city: e.target.value })}
+                      onChange={(e) =>
+                        setJobForm({ ...jobForm, city: e.target.value })
+                      }
                     />
                     <Input
                       placeholder="İlçe"
                       value={jobForm.district}
-                      onChange={(e) => setJobForm({ ...jobForm, district: e.target.value })}
+                      onChange={(e) =>
+                        setJobForm({ ...jobForm, district: e.target.value })
+                      }
                     />
                     <SelectField
                       value={jobForm.type}
-                      onChange={(val) => setJobForm({ ...jobForm, type: val })}
+                      onChange={(val) =>
+                        setJobForm({ ...jobForm, type: val })
+                      }
                       options={[
                         { value: "Part-time", label: "Part-time" },
                         { value: "Ek iş", label: "Ek iş" },
@@ -1175,13 +1278,17 @@ export default function App() {
                     <Input
                       placeholder="Ücret bilgisi"
                       value={jobForm.pay}
-                      onChange={(e) => setJobForm({ ...jobForm, pay: e.target.value })}
+                      onChange={(e) =>
+                        setJobForm({ ...jobForm, pay: e.target.value })
+                      }
                     />
                     <div className="full">
                       <Input
                         placeholder="Çalışma saatleri"
                         value={jobForm.hours}
-                        onChange={(e) => setJobForm({ ...jobForm, hours: e.target.value })}
+                        onChange={(e) =>
+                          setJobForm({ ...jobForm, hours: e.target.value })
+                        }
                       />
                     </div>
                     <div className="full">
@@ -1189,7 +1296,10 @@ export default function App() {
                         placeholder="İş açıklaması"
                         value={jobForm.description}
                         onChange={(e) =>
-                          setJobForm({ ...jobForm, description: e.target.value })
+                          setJobForm({
+                            ...jobForm,
+                            description: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -1200,7 +1310,9 @@ export default function App() {
                         ) : (
                           <PlusCircle size={16} />
                         )}
-                        {savingJob ? "Kaydediliyor" : `${selectedPackage.label} ilanı kaydet`}
+                        {savingJob
+                          ? "Kaydediliyor"
+                          : `${selectedPackage.label} ilanı kaydet`}
                       </Button>
                       <Button variant="outline">Taslak kaydet</Button>
                     </div>
@@ -1257,6 +1369,7 @@ export default function App() {
                             <Badge className={job.status === "active" ? "soft" : "pending"}>
                               {job.status === "active" ? "yayında" : "pending"}
                             </Badge>
+
                             {job.package_type === "premium" ? (
                               <Badge className="premium-badge">
                                 <Sparkles size={13} /> Premium
@@ -1264,6 +1377,7 @@ export default function App() {
                             ) : (
                               <Badge className="soft">Standart</Badge>
                             )}
+
                             {job.payment_status === "waiting_payment" ? (
                               <Badge className="pending">ödeme bekleniyor</Badge>
                             ) : job.payment_status === "paid" ? (
@@ -1279,7 +1393,10 @@ export default function App() {
                           {job.pay} • {job.hours}
                         </div>
                         <div className="muted">
-                          Paket fiyatı: {job.package_type === "premium" ? "399 TL" : job.price || "Ücretsiz"}
+                          Paket fiyatı:{" "}
+                          {job.package_type === "premium"
+                            ? "399 TL"
+                            : job.price || "Ücretsiz"}
                         </div>
                         {job.payment_note ? (
                           <div className="muted">Ödeme notu: {job.payment_note}</div>
@@ -1294,7 +1411,8 @@ export default function App() {
                             alignItems: "center",
                           }}
                         >
-                          {job.package_type === "premium" && job.payment_status === "waiting_payment" ? (
+                          {job.package_type === "premium" &&
+                          job.payment_status === "waiting_payment" ? (
                             <>
                               <Button
                                 onClick={() => handleMarkPaid(job.id)}
@@ -1303,12 +1421,15 @@ export default function App() {
                                 <CreditCard size={16} />
                                 Ödeme Bildirdim
                               </Button>
-                              <div className="muted">Ödeme yapılmadan ilan yayına alınamaz</div>
+                              <div className="muted">
+                                Ödeme yapılmadan ilan yayına alınamaz
+                              </div>
                             </>
                           ) : null}
 
                           {job.status !== "active" &&
-                          (job.package_type !== "premium" || job.payment_status === "paid") ? (
+                          (job.package_type !== "premium" ||
+                            job.payment_status === "paid") ? (
                             <Button
                               onClick={() => handleApproveJob(job.id)}
                               disabled={actionLoadingId === job.id}
@@ -1370,7 +1491,11 @@ export default function App() {
                       <div
                         key={app.id}
                         className="panel-row"
-                        style={{ alignItems: "flex-start", flexDirection: "column", gap: "8px" }}
+                        style={{
+                          alignItems: "flex-start",
+                          flexDirection: "column",
+                          gap: "8px",
+                        }}
                       >
                         <div
                           style={{
@@ -1386,19 +1511,47 @@ export default function App() {
                           <Badge className="soft">{app.jobTitle}</Badge>
                         </div>
 
-                        <div className="muted" style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                        <div
+                          className="muted"
+                          style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}
+                        >
+                          <span
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "6px",
+                            }}
+                          >
                             <Phone size={14} /> {app.phone}
                           </span>
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                          <span
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "6px",
+                            }}
+                          >
                             <Building2 size={14} /> {app.company}
                           </span>
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                          <span
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "6px",
+                            }}
+                          >
                             <MapPin size={14} /> {app.city}
                           </span>
                         </div>
 
-                        <div className="muted" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                        <div
+                          className="muted"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "6px",
+                          }}
+                        >
                           <CalendarDays size={14} /> {formatDate(app.created_at)}
                         </div>
 
@@ -1412,7 +1565,10 @@ export default function App() {
                               border: "1px solid #e2e8f0",
                             }}
                           >
-                            <div className="muted" style={{ fontSize: "13px", marginBottom: "4px" }}>
+                            <div
+                              className="muted"
+                              style={{ fontSize: "13px", marginBottom: "4px" }}
+                            >
                               Başvuru notu
                             </div>
                             <div>{app.note}</div>
@@ -1451,31 +1607,45 @@ export default function App() {
                     placeholder="Ad soyad"
                     value={applicationForm.full_name}
                     onChange={(e) =>
-                      setApplicationForm({ ...applicationForm, full_name: e.target.value })
+                      setApplicationForm({
+                        ...applicationForm,
+                        full_name: e.target.value,
+                      })
                     }
                   />
                   <Input
                     placeholder="Telefon"
                     value={applicationForm.phone}
                     onChange={(e) =>
-                      setApplicationForm({ ...applicationForm, phone: e.target.value })
+                      setApplicationForm({
+                        ...applicationForm,
+                        phone: e.target.value,
+                      })
                     }
                   />
                   <Textarea
                     placeholder="Kısa bir not yaz"
                     value={applicationForm.note}
                     onChange={(e) =>
-                      setApplicationForm({ ...applicationForm, note: e.target.value })
+                      setApplicationForm({
+                        ...applicationForm,
+                        note: e.target.value,
+                      })
                     }
                   />
                   <div className="action-row">
-                    <Button onClick={handleApplicationSubmit} disabled={sendingApplication}>
+                    <Button
+                      onClick={handleApplicationSubmit}
+                      disabled={sendingApplication}
+                    >
                       {sendingApplication ? (
                         <Loader2 size={16} className="spin" />
                       ) : (
                         <Send size={16} />
                       )}
-                      {sendingApplication ? "Gönderiliyor" : "Başvuruyu gönder"}
+                      {sendingApplication
+                        ? "Gönderiliyor"
+                        : "Başvuruyu gönder"}
                     </Button>
                     <Button variant="outline" onClick={() => setAppliedJob(null)}>
                       Vazgeç
@@ -1529,14 +1699,24 @@ export default function App() {
                       style={{
                         padding: "10px 12px",
                         borderRadius: "14px",
-                        background: msg.sender === "employer" ? "#0f172a" : "#f8fafc",
+                        background:
+                          msg.sender === "employer" ? "#0f172a" : "#f8fafc",
                         color: msg.sender === "employer" ? "#fff" : "#0f172a",
                         border:
-                          msg.sender === "employer" ? "none" : "1px solid #e2e8f0",
+                          msg.sender === "employer"
+                            ? "none"
+                            : "1px solid #e2e8f0",
                       }}
                     >
-                      <div style={{ fontSize: "13px", opacity: 0.8, marginBottom: "4px" }}>
-                        {msg.sender === "employer" ? "Sen" : "Aday"} • {formatDate(msg.created_at)}
+                      <div
+                        style={{
+                          fontSize: "13px",
+                          opacity: 0.8,
+                          marginBottom: "4px",
+                        }}
+                      >
+                        {msg.sender === "employer" ? "Sen" : "Aday"} •{" "}
+                        {formatDate(msg.created_at)}
                       </div>
                       <div>{msg.message}</div>
                     </div>
@@ -1552,7 +1732,11 @@ export default function App() {
 
               <div className="action-row">
                 <Button onClick={sendMessage} disabled={sendingMessage}>
-                  {sendingMessage ? <Loader2 size={16} className="spin" /> : <Send size={16} />}
+                  {sendingMessage ? (
+                    <Loader2 size={16} className="spin" />
+                  ) : (
+                    <Send size={16} />
+                  )}
                   {sendingMessage ? "Gönderiliyor" : "Gönder"}
                 </Button>
                 <Button
@@ -1580,13 +1764,18 @@ export default function App() {
                   <Input
                     placeholder="Ad soyad"
                     value={authForm.full_name}
-                    onChange={(e) => setAuthForm({ ...authForm, full_name: e.target.value })}
+                    onChange={(e) =>
+                      setAuthForm({ ...authForm, full_name: e.target.value })
+                    }
                   />
                   <Input
                     placeholder="Firma adı"
                     value={authForm.company_name}
                     onChange={(e) =>
-                      setAuthForm({ ...authForm, company_name: e.target.value })
+                      setAuthForm({
+                        ...authForm,
+                        company_name: e.target.value,
+                      })
                     }
                   />
                 </>
@@ -1595,14 +1784,18 @@ export default function App() {
               <Input
                 placeholder="E-posta"
                 value={authForm.email}
-                onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+                onChange={(e) =>
+                  setAuthForm({ ...authForm, email: e.target.value })
+                }
               />
 
               <Input
                 type="password"
                 placeholder="Şifre"
                 value={authForm.password}
-                onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+                onChange={(e) =>
+                  setAuthForm({ ...authForm, password: e.target.value })
+                }
               />
 
               {authMessage ? (
@@ -1621,12 +1814,20 @@ export default function App() {
               <div className="action-row">
                 {authMode === "login" ? (
                   <Button onClick={handleLogin} disabled={authLoading}>
-                    {authLoading ? <Loader2 size={16} className="spin" /> : <LogIn size={16} />}
+                    {authLoading ? (
+                      <Loader2 size={16} className="spin" />
+                    ) : (
+                      <LogIn size={16} />
+                    )}
                     {authLoading ? "Giriş yapılıyor" : "Giriş Yap"}
                   </Button>
                 ) : (
                   <Button onClick={handleRegister} disabled={authLoading}>
-                    {authLoading ? <Loader2 size={16} className="spin" /> : <UserPlus size={16} />}
+                    {authLoading ? (
+                      <Loader2 size={16} className="spin" />
+                    ) : (
+                      <UserPlus size={16} />
+                    )}
                     {authLoading ? "Kayıt oluşturuluyor" : "Kayıt Ol"}
                   </Button>
                 )}
@@ -1690,7 +1891,8 @@ export default function App() {
         )}
 
         <footer className="footer">
-          Ödeme akışı aktif. Premium ilanlar ödeme bekleyen duruma düşer, ödeme bildirimi sonrası yayına alınır.
+          Ödeme akışı aktif. Premium ilanlar ödeme bekleyen duruma düşer, ödeme
+          bildirimi sonrası yayına alınır.
         </footer>
       </div>
     </div>
