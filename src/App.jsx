@@ -23,6 +23,10 @@ import {
   Sparkles,
   BadgeCent,
   MessageCircle,
+  LogIn,
+  LogOut,
+  UserPlus,
+  Lock,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -42,6 +46,7 @@ const initialJobs = [
     package_type: "premium",
     featured: true,
     price: "99 TL",
+    employer_email: "demo@ekis.com",
   },
   {
     id: 2,
@@ -58,6 +63,7 @@ const initialJobs = [
     package_type: "standard",
     featured: false,
     price: "Ücretsiz",
+    employer_email: "demo@ekis.com",
   },
 ];
 
@@ -207,6 +213,23 @@ export default function App() {
   const [sendingMessage, setSendingMessage] = useState(false);
   const [actionLoadingId, setActionLoadingId] = useState(null);
   const [dbStatus, setDbStatus] = useState(supabase ? "Supabase bağlı" : "Demo modunda çalışıyor");
+
+  const [currentEmployer, setCurrentEmployer] = useState(() => {
+    const stored = localStorage.getItem("ekis_employer_session");
+    return stored ? JSON.parse(stored) : null;
+  });
+
+  const [authMode, setAuthMode] = useState("login");
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authMessage, setAuthMessage] = useState("");
+  const [authForm, setAuthForm] = useState({
+    full_name: "",
+    company_name: "",
+    email: "",
+    password: "",
+  });
+
   const [applicationForm, setApplicationForm] = useState({ full_name: "", phone: "", note: "" });
   const [jobForm, setJobForm] = useState({
     title: "",
@@ -227,6 +250,14 @@ export default function App() {
     loadJobs();
     loadApplications();
   }, []);
+
+  useEffect(() => {
+    if (currentEmployer) {
+      localStorage.setItem("ekis_employer_session", JSON.stringify(currentEmployer));
+    } else {
+      localStorage.removeItem("ekis_employer_session");
+    }
+  }, [currentEmployer]);
 
   async function loadJobs() {
     if (!supabase) {
@@ -265,6 +296,7 @@ export default function App() {
       featured: Boolean(job.featured),
       price: job.price || "Ücretsiz",
       created_at: job.created_at,
+      employer_email: job.employer_email || "",
     }));
 
     setJobs(mapped.length ? mapped : initialJobs);
@@ -321,6 +353,102 @@ export default function App() {
     setMessages(data || []);
   }
 
+  async function handleRegister() {
+    if (!authForm.email || !authForm.password || !authForm.company_name) {
+      setAuthMessage("Firma adı, e-posta ve şifre zorunlu.");
+      return;
+    }
+
+    if (!supabase) {
+      const demoEmployer = {
+        email: authForm.email,
+        full_name: authForm.full_name,
+        company_name: authForm.company_name,
+      };
+      setCurrentEmployer(demoEmployer);
+      setShowAuthModal(false);
+      setAuthMessage("");
+      return;
+    }
+
+    setAuthLoading(true);
+
+    const { data, error } = await supabase
+      .from("employers")
+      .insert({
+        email: authForm.email,
+        password: authForm.password,
+        company_name: authForm.company_name,
+        full_name: authForm.full_name,
+      })
+      .select()
+      .single();
+
+    setAuthLoading(false);
+
+    if (error) {
+      console.error(error);
+      setAuthMessage("Kayıt başarısız. E-posta kullanımda olabilir.");
+      return;
+    }
+
+    setCurrentEmployer({
+      email: data.email,
+      full_name: data.full_name,
+      company_name: data.company_name,
+    });
+    setShowAuthModal(false);
+    setAuthMessage("");
+  }
+
+  async function handleLogin() {
+    if (!authForm.email || !authForm.password) {
+      setAuthMessage("E-posta ve şifre zorunlu.");
+      return;
+    }
+
+    if (!supabase) {
+      setCurrentEmployer({
+        email: authForm.email,
+        full_name: "Demo Kullanıcı",
+        company_name: "Demo Firma",
+      });
+      setShowAuthModal(false);
+      setAuthMessage("");
+      return;
+    }
+
+    setAuthLoading(true);
+
+    const { data, error } = await supabase
+      .from("employers")
+      .select("*")
+      .eq("email", authForm.email)
+      .eq("password", authForm.password)
+      .maybeSingle();
+
+    setAuthLoading(false);
+
+    if (error || !data) {
+      console.error(error);
+      setAuthMessage("Giriş başarısız. Bilgileri kontrol et.");
+      return;
+    }
+
+    setCurrentEmployer({
+      email: data.email,
+      full_name: data.full_name,
+      company_name: data.company_name,
+    });
+    setShowAuthModal(false);
+    setAuthMessage("");
+  }
+
+  function handleLogout() {
+    setCurrentEmployer(null);
+    setTab("jobs");
+  }
+
   const filteredJobs = useMemo(() => {
     return jobs
       .filter((job) => {
@@ -345,25 +473,38 @@ export default function App() {
       });
   }, [jobs, search, city, type]);
 
-  const pendingJobs = useMemo(() => jobs.filter((job) => job.status === "pending"), [jobs]);
+  const myJobs = useMemo(() => {
+    if (!currentEmployer?.email) return [];
+    return jobs.filter((job) => job.employer_email === currentEmployer.email);
+  }, [jobs, currentEmployer]);
+
+  const myJobIds = useMemo(() => myJobs.map((job) => String(job.id)), [myJobs]);
+
+  const pendingJobs = useMemo(() => {
+    if (!currentEmployer?.email) return [];
+    return jobs.filter((job) => job.status === "pending" && job.employer_email === currentEmployer.email);
+  }, [jobs, currentEmployer]);
+
   const premiumJobsCount = useMemo(() => jobs.filter((job) => job.package_type === "premium").length, [jobs]);
 
   const enrichedApplications = useMemo(() => {
-    return applications.map((app) => {
-      const matchedJob = jobs.find((job) => String(job.id) === String(app.job_id));
-      return {
-        ...app,
-        jobTitle: matchedJob?.title || `İlan #${app.job_id}`,
-        company: matchedJob?.company || "-",
-        city: matchedJob?.city || "-",
-      };
-    });
-  }, [applications, jobs]);
+    return applications
+      .filter((app) => myJobIds.includes(String(app.job_id)))
+      .map((app) => {
+        const matchedJob = jobs.find((job) => String(job.id) === String(app.job_id));
+        return {
+          ...app,
+          jobTitle: matchedJob?.title || `İlan #${app.job_id}`,
+          company: matchedJob?.company || "-",
+          city: matchedJob?.city || "-",
+        };
+      });
+  }, [applications, jobs, myJobIds]);
 
   function resetJobForm() {
     setJobForm({
       title: "",
-      company: "",
+      company: currentEmployer?.company_name || "",
       city: "",
       district: "",
       type: "Part-time",
@@ -375,6 +516,13 @@ export default function App() {
   }
 
   async function handlePublish() {
+    if (!currentEmployer) {
+      setShowAuthModal(true);
+      setAuthMode("login");
+      setAuthMessage("İlan vermek için önce giriş yap.");
+      return;
+    }
+
     if (!jobForm.title || !jobForm.company || !jobForm.city) return;
 
     const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
@@ -386,6 +534,7 @@ export default function App() {
       status: "pending",
       featured: selectedPackage.featured,
       price: selectedPackage.price,
+      employer_email: currentEmployer.email,
     };
 
     if (!supabase) {
@@ -414,6 +563,7 @@ export default function App() {
         package_type: jobForm.package_type,
         featured: selectedPackage.featured,
         price: selectedPackage.price,
+        employer_email: currentEmployer.email,
       })
       .select()
       .single();
@@ -611,29 +761,48 @@ export default function App() {
             <div className="logo">ekis</div>
             <div className="muted">Ek iş arayanlarla işverenleri buluşturan canlı MVP</div>
           </div>
+
           <div className="header-actions">
             <Badge className="live-badge">{dbStatus}</Badge>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setTab("jobs");
-                setTimeout(() => {
-                  jobsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }, 50);
-              }}
-            >
-              <User size={16} /> İş Ara
-            </Button>
-            <Button
-              onClick={() => {
-                setTab("post");
-                setTimeout(() => {
-                  postSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }, 50);
-              }}
-            >
-              <Building2 size={16} /> İlan Ver
-            </Button>
+
+            {currentEmployer ? (
+              <>
+                <Badge className="soft">{currentEmployer.company_name || currentEmployer.email}</Badge>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setTab("jobs");
+                    setTimeout(() => {
+                      jobsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 50);
+                  }}
+                >
+                  <User size={16} /> İş Ara
+                </Button>
+                <Button
+                  onClick={() => {
+                    setTab("post");
+                    setTimeout(() => {
+                      postSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 50);
+                  }}
+                >
+                  <Building2 size={16} /> İlan Ver
+                </Button>
+                <Button variant="outline" onClick={handleLogout}>
+                  <LogOut size={16} /> Çıkış
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" onClick={() => { setAuthMode("login"); setShowAuthModal(true); setAuthMessage(""); }}>
+                  <LogIn size={16} /> Giriş
+                </Button>
+                <Button onClick={() => { setAuthMode("register"); setShowAuthModal(true); setAuthMessage(""); }}>
+                  <UserPlus size={16} /> Kayıt Ol
+                </Button>
+              </>
+            )}
           </div>
         </header>
 
@@ -645,8 +814,7 @@ export default function App() {
                 Türkiye genelinde <span>ek iş</span>, part-time ve günlük işleri tek yerde bul.
               </h1>
               <p>
-                Bu sürümde ilanlar ve başvurular artık gerçek veritabanına bağlanabilecek şekilde hazırlandı.
-                Premium ve mesajlaşma sistemiyle ürün daha güçlü hale geldi.
+                İşveren hesabı ile giriş yap, kendi ilanlarını yönet, başvuruları gör ve adaylarla platform içinde konuş.
               </p>
 
               <div className="filters">
@@ -678,26 +846,26 @@ export default function App() {
 
           <div className="stats">
             <Stat label="Aktif ilan" value={String(filteredJobs.length)} icon={Briefcase} />
-            <Stat label="Premium ilan" value={String(premiumJobsCount)} icon={Sparkles} />
-            <Stat label="Başvuru sayısı" value={String(applications.length)} icon={FileText} />
+            <Stat label="Benim ilanlarım" value={String(myJobs.length)} icon={Building2} />
+            <Stat label="Benim başvurularım" value={String(enrichedApplications.length)} icon={FileText} />
           </div>
         </section>
 
         <section className="feature-grid">
           <Card>
             <Briefcase className="feature-icon" />
-            <div className="feature-title">Kalıcı ilanlar</div>
-            <p className="muted">İşverenin girdiği ilan Supabase’e kaydolur, sayfa yenilense de kaybolmaz.</p>
+            <div className="feature-title">İşveren hesabı</div>
+            <p className="muted">Her işveren kendi hesabıyla giriş yapar ve kendi ilanlarını görür.</p>
           </Card>
           <Card>
             <ShieldCheck className="feature-icon" />
-            <div className="feature-title">Onay akışı aktif</div>
-            <p className="muted">Yeni ilanlar panelde bekler, admin onayı sonrası yayına alınır.</p>
+            <div className="feature-title">Kişiye özel panel</div>
+            <p className="muted">Panelde sadece o işverene ait ilanlar ve başvurular listelenir.</p>
           </Card>
           <Card>
             <MessageCircle className="feature-icon" />
             <div className="feature-title">Mesajlaşma sistemi</div>
-            <p className="muted">Başvuranlarla platform içinde görüşebilir, numara paylaşmadan iletişim kurabilirsin.</p>
+            <p className="muted">Başvuranlarla platform içinde iletişim kurabilir, numara paylaşmadan ilerleyebilirsin.</p>
           </Card>
         </section>
 
@@ -764,59 +932,76 @@ export default function App() {
             <Card>
               <h2>İşveren ilan oluşturma ekranı</h2>
 
-              <div className="premium-plan-box">
-                <div className="premium-plan-head">
-                  <div className="premium-plan-title">
-                    <BadgeCent size={18} />
-                    Paket seçimi
+              {!currentEmployer ? (
+                <div className="premium-plan-box">
+                  <div className="premium-plan-title"><Lock size={18} /> Giriş gerekli</div>
+                  <div className="muted">İlan vermek için önce işveren hesabınla giriş yapman gerekiyor.</div>
+                  <div style={{ marginTop: "12px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                    <Button onClick={() => { setAuthMode("login"); setShowAuthModal(true); setAuthMessage(""); }}>
+                      <LogIn size={16} /> Giriş Yap
+                    </Button>
+                    <Button variant="outline" onClick={() => { setAuthMode("register"); setShowAuthModal(true); setAuthMessage(""); }}>
+                      <UserPlus size={16} /> Kayıt Ol
+                    </Button>
                   </div>
-                  <Badge className={jobForm.package_type === "premium" ? "premium-badge" : "soft"}>
-                    {selectedPackage.label}
-                  </Badge>
                 </div>
-                <div className="premium-plan-price">{selectedPackage.price}</div>
-                <div className="muted">{selectedPackage.note}</div>
-              </div>
+              ) : (
+                <>
+                  <div className="premium-plan-box">
+                    <div className="premium-plan-head">
+                      <div className="premium-plan-title">
+                        <BadgeCent size={18} />
+                        Paket seçimi
+                      </div>
+                      <Badge className={jobForm.package_type === "premium" ? "premium-badge" : "soft"}>
+                        {selectedPackage.label}
+                      </Badge>
+                    </div>
+                    <div className="premium-plan-price">{selectedPackage.price}</div>
+                    <div className="muted">{selectedPackage.note}</div>
+                  </div>
 
-              <div className="form-grid">
-                <SelectField
-                  value={jobForm.package_type}
-                  onChange={(val) => setJobForm({ ...jobForm, package_type: val })}
-                  options={[
-                    { value: "standard", label: "Standart - Ücretsiz" },
-                    { value: "premium", label: "Premium - 99 TL" },
-                  ]}
-                />
+                  <div className="form-grid">
+                    <SelectField
+                      value={jobForm.package_type}
+                      onChange={(val) => setJobForm({ ...jobForm, package_type: val })}
+                      options={[
+                        { value: "standard", label: "Standart - Ücretsiz" },
+                        { value: "premium", label: "Premium - 99 TL" },
+                      ]}
+                    />
 
-                <Input placeholder="İş başlığı" value={jobForm.title} onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })} />
-                <Input placeholder="Firma adı" value={jobForm.company} onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })} />
-                <Input placeholder="Şehir" value={jobForm.city} onChange={(e) => setJobForm({ ...jobForm, city: e.target.value })} />
-                <Input placeholder="İlçe" value={jobForm.district} onChange={(e) => setJobForm({ ...jobForm, district: e.target.value })} />
-                <SelectField
-                  value={jobForm.type}
-                  onChange={(val) => setJobForm({ ...jobForm, type: val })}
-                  options={[
-                    { value: "Part-time", label: "Part-time" },
-                    { value: "Ek iş", label: "Ek iş" },
-                    { value: "Günlük iş", label: "Günlük iş" },
-                    { value: "Yarı zamanlı", label: "Yarı zamanlı" },
-                  ]}
-                />
-                <Input placeholder="Ücret bilgisi" value={jobForm.pay} onChange={(e) => setJobForm({ ...jobForm, pay: e.target.value })} />
-                <div className="full">
-                  <Input placeholder="Çalışma saatleri" value={jobForm.hours} onChange={(e) => setJobForm({ ...jobForm, hours: e.target.value })} />
-                </div>
-                <div className="full">
-                  <Textarea placeholder="İş açıklaması" value={jobForm.description} onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })} />
-                </div>
-                <div className="full action-row">
-                  <Button onClick={handlePublish} disabled={savingJob}>
-                    {savingJob ? <Loader2 size={16} className="spin" /> : <PlusCircle size={16} />}
-                    {savingJob ? "Kaydediliyor" : `${selectedPackage.label} ilanı kaydet`}
-                  </Button>
-                  <Button variant="outline">Taslak kaydet</Button>
-                </div>
-              </div>
+                    <Input placeholder="İş başlığı" value={jobForm.title} onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })} />
+                    <Input placeholder="Firma adı" value={jobForm.company} onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })} />
+                    <Input placeholder="Şehir" value={jobForm.city} onChange={(e) => setJobForm({ ...jobForm, city: e.target.value })} />
+                    <Input placeholder="İlçe" value={jobForm.district} onChange={(e) => setJobForm({ ...jobForm, district: e.target.value })} />
+                    <SelectField
+                      value={jobForm.type}
+                      onChange={(val) => setJobForm({ ...jobForm, type: val })}
+                      options={[
+                        { value: "Part-time", label: "Part-time" },
+                        { value: "Ek iş", label: "Ek iş" },
+                        { value: "Günlük iş", label: "Günlük iş" },
+                        { value: "Yarı zamanlı", label: "Yarı zamanlı" },
+                      ]}
+                    />
+                    <Input placeholder="Ücret bilgisi" value={jobForm.pay} onChange={(e) => setJobForm({ ...jobForm, pay: e.target.value })} />
+                    <div className="full">
+                      <Input placeholder="Çalışma saatleri" value={jobForm.hours} onChange={(e) => setJobForm({ ...jobForm, hours: e.target.value })} />
+                    </div>
+                    <div className="full">
+                      <Textarea placeholder="İş açıklaması" value={jobForm.description} onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })} />
+                    </div>
+                    <div className="full action-row">
+                      <Button onClick={handlePublish} disabled={savingJob}>
+                        {savingJob ? <Loader2 size={16} className="spin" /> : <PlusCircle size={16} />}
+                        {savingJob ? "Kaydediliyor" : `${selectedPackage.label} ilanı kaydet`}
+                      </Button>
+                      <Button variant="outline">Taslak kaydet</Button>
+                    </div>
+                  </div>
+                </>
+              )}
             </Card>
           </div>
         )}
@@ -824,105 +1009,120 @@ export default function App() {
         {tab === "dashboard" && (
           <section className="dashboard-grid">
             <Card>
-              <h2>Bekleyen ilanlar</h2>
-              <div className="panel-list">
-                {pendingJobs.length === 0 ? (
-                  <div className="panel-row">
-                    <span className="muted">Şu an bekleyen ilan yok</span>
-                    <strong>0</strong>
-                  </div>
-                ) : (
-                  pendingJobs.map((job) => (
-                    <div key={job.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column" }}>
-                      <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-                        <strong>{job.title}</strong>
-                        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                          <Badge className="pending">pending</Badge>
-                          {job.package_type === "premium" ? (
-                            <Badge className="premium-badge"><Sparkles size={13} /> Premium</Badge>
-                          ) : (
-                            <Badge className="soft">Standart</Badge>
-                          )}
+              <h2>Benim bekleyen ilanlarım</h2>
+              {!currentEmployer ? (
+                <div className="panel-row">
+                  <span className="muted">Paneli kullanmak için giriş yap.</span>
+                  <Button onClick={() => { setAuthMode("login"); setShowAuthModal(true); setAuthMessage(""); }}>
+                    <LogIn size={16} /> Giriş
+                  </Button>
+                </div>
+              ) : (
+                <div className="panel-list">
+                  {pendingJobs.length === 0 ? (
+                    <div className="panel-row">
+                      <span className="muted">Şu an bekleyen ilan yok</span>
+                      <strong>0</strong>
+                    </div>
+                  ) : (
+                    pendingJobs.map((job) => (
+                      <div key={job.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column" }}>
+                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+                          <strong>{job.title}</strong>
+                          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                            <Badge className="pending">pending</Badge>
+                            {job.package_type === "premium" ? (
+                              <Badge className="premium-badge"><Sparkles size={13} /> Premium</Badge>
+                            ) : (
+                              <Badge className="soft">Standart</Badge>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="muted">{job.company} • {job.city} / {job.district}</div>
+                        <div className="muted">{job.pay} • {job.hours}</div>
+                        <div className="muted">Paket fiyatı: {job.price || "Ücretsiz"}</div>
+
+                        <div style={{ display: "flex", gap: "10px", marginTop: "12px", flexWrap: "wrap" }}>
+                          <Button onClick={() => handleApproveJob(job.id)} disabled={actionLoadingId === job.id}>
+                            {actionLoadingId === job.id ? <Loader2 size={16} className="spin" /> : <Check size={16} />}
+                            Onayla
+                          </Button>
+                          <Button variant="outline" onClick={() => handleDeleteJob(job.id)} disabled={actionLoadingId === job.id}>
+                            <Trash2 size={16} />
+                            Sil
+                          </Button>
                         </div>
                       </div>
-
-                      <div className="muted">{job.company} • {job.city} / {job.district}</div>
-                      <div className="muted">{job.pay} • {job.hours}</div>
-                      <div className="muted">Paket fiyatı: {job.price || "Ücretsiz"}</div>
-
-                      <div style={{ display: "flex", gap: "10px", marginTop: "12px", flexWrap: "wrap" }}>
-                        <Button onClick={() => handleApproveJob(job.id)} disabled={actionLoadingId === job.id}>
-                          {actionLoadingId === job.id ? <Loader2 size={16} className="spin" /> : <Check size={16} />}
-                          Onayla
-                        </Button>
-                        <Button variant="outline" onClick={() => handleDeleteJob(job.id)} disabled={actionLoadingId === job.id}>
-                          <Trash2 size={16} />
-                          Sil
-                        </Button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
+                    ))
+                  )}
+                </div>
+              )}
             </Card>
 
             <Card>
-              <h2>Başvurular</h2>
-              <div className="panel-list">
-                {loadingApplications ? (
-                  <div className="panel-row">
-                    <span className="muted">Başvurular yükleniyor</span>
-                    <Loader2 size={16} className="spin" />
-                  </div>
-                ) : enrichedApplications.length === 0 ? (
-                  <div className="panel-row">
-                    <span className="muted">Henüz başvuru yok</span>
-                    <strong>0</strong>
-                  </div>
-                ) : (
-                  enrichedApplications.slice(0, 10).map((app) => (
-                    <div key={app.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column", gap: "8px" }}>
-                      <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
-                        <strong>{app.full_name}</strong>
-                        <Badge className="soft">{app.jobTitle}</Badge>
-                      </div>
-
-                      <div className="muted" style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                          <Phone size={14} /> {app.phone}
-                        </span>
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                          <Building2 size={14} /> {app.company}
-                        </span>
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                          <MapPin size={14} /> {app.city}
-                        </span>
-                      </div>
-
-                      <div className="muted" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                        <CalendarDays size={14} /> {formatDate(app.created_at)}
-                      </div>
-
-                      {app.note ? (
-                        <div style={{ width: "100%", padding: "10px 12px", borderRadius: "14px", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
-                          <div className="muted" style={{ fontSize: "13px", marginBottom: "4px" }}>Başvuru notu</div>
-                          <div>{app.note}</div>
-                        </div>
-                      ) : null}
-
-                      <div style={{ marginTop: "6px" }}>
-                        <Button
-                          variant="outline"
-                          onClick={() => handleOpenChat(app)}
-                        >
-                          <MessageCircle size={16} />
-                          Mesaj Gönder
-                        </Button>
-                      </div>
+              <h2>Benim başvurularım</h2>
+              {!currentEmployer ? (
+                <div className="panel-row">
+                  <span className="muted">Başvuruları görmek için giriş yap.</span>
+                  <Button onClick={() => { setAuthMode("login"); setShowAuthModal(true); setAuthMessage(""); }}>
+                    <LogIn size={16} /> Giriş
+                  </Button>
+                </div>
+              ) : (
+                <div className="panel-list">
+                  {loadingApplications ? (
+                    <div className="panel-row">
+                      <span className="muted">Başvurular yükleniyor</span>
+                      <Loader2 size={16} className="spin" />
                     </div>
-                  ))
-                )}
-              </div>
+                  ) : enrichedApplications.length === 0 ? (
+                    <div className="panel-row">
+                      <span className="muted">Henüz başvuru yok</span>
+                      <strong>0</strong>
+                    </div>
+                  ) : (
+                    enrichedApplications.slice(0, 10).map((app) => (
+                      <div key={app.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column", gap: "8px" }}>
+                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+                          <strong>{app.full_name}</strong>
+                          <Badge className="soft">{app.jobTitle}</Badge>
+                        </div>
+
+                        <div className="muted" style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                            <Phone size={14} /> {app.phone}
+                          </span>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                            <Building2 size={14} /> {app.company}
+                          </span>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                            <MapPin size={14} /> {app.city}
+                          </span>
+                        </div>
+
+                        <div className="muted" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                          <CalendarDays size={14} /> {formatDate(app.created_at)}
+                        </div>
+
+                        {app.note ? (
+                          <div style={{ width: "100%", padding: "10px 12px", borderRadius: "14px", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                            <div className="muted" style={{ fontSize: "13px", marginBottom: "4px" }}>Başvuru notu</div>
+                            <div>{app.note}</div>
+                          </div>
+                        ) : null}
+
+                        <div style={{ marginTop: "6px" }}>
+                          <Button variant="outline" onClick={() => handleOpenChat(app)}>
+                            <MessageCircle size={16} />
+                            Mesaj Gönder
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
             </Card>
           </section>
         )}
@@ -1034,8 +1234,106 @@ export default function App() {
           </div>
         )}
 
+        {showAuthModal && (
+          <div className="modal-backdrop">
+            <div className="modal">
+              <h2>{authMode === "login" ? "İşveren Girişi" : "İşveren Kaydı"}</h2>
+
+              {authMode === "register" ? (
+                <>
+                  <Input
+                    placeholder="Ad soyad"
+                    value={authForm.full_name}
+                    onChange={(e) => setAuthForm({ ...authForm, full_name: e.target.value })}
+                  />
+                  <Input
+                    placeholder="Firma adı"
+                    value={authForm.company_name}
+                    onChange={(e) => setAuthForm({ ...authForm, company_name: e.target.value })}
+                  />
+                </>
+              ) : null}
+
+              <Input
+                placeholder="E-posta"
+                value={authForm.email}
+                onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+              />
+
+              <Input
+                type="password"
+                placeholder="Şifre"
+                value={authForm.password}
+                onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+              />
+
+              {authMessage ? (
+                <div style={{ padding: "10px 12px", borderRadius: "12px", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                  {authMessage}
+                </div>
+              ) : null}
+
+              <div className="action-row">
+                {authMode === "login" ? (
+                  <Button onClick={handleLogin} disabled={authLoading}>
+                    {authLoading ? <Loader2 size={16} className="spin" /> : <LogIn size={16} />}
+                    {authLoading ? "Giriş yapılıyor" : "Giriş Yap"}
+                  </Button>
+                ) : (
+                  <Button onClick={handleRegister} disabled={authLoading}>
+                    {authLoading ? <Loader2 size={16} className="spin" /> : <UserPlus size={16} />}
+                    {authLoading ? "Kayıt oluşturuluyor" : "Kayıt Ol"}
+                  </Button>
+                )}
+
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowAuthModal(false);
+                    setAuthMessage("");
+                  }}
+                >
+                  Kapat
+                </Button>
+              </div>
+
+              <div className="muted" style={{ marginTop: "10px" }}>
+                {authMode === "login" ? (
+                  <>
+                    Hesabın yok mu?{" "}
+                    <button
+                      type="button"
+                      style={{ background: "none", border: "none", color: "#0f172a", fontWeight: 700, cursor: "pointer" }}
+                      onClick={() => {
+                        setAuthMode("register");
+                        setAuthMessage("");
+                      }}
+                    >
+                      Kayıt ol
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    Zaten hesabın var mı?{" "}
+                    <button
+                      type="button"
+                      style={{ background: "none", border: "none", color: "#0f172a", fontWeight: 700, cursor: "pointer" }}
+                      onClick={() => {
+                        setAuthMode("login");
+                        setAuthMessage("");
+                      }}
+                    >
+                      Giriş yap
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         <footer className="footer">
-          Premium ve mesajlaşma sistemi aktif. Başvuranlarla platform içinde iletişim kurabilir, premium ilanları öne çıkarabilirsin.
+          İşveren hesabı iskeleti aktif. Her işveren kendi ilanlarını ve kendi başvurularını görmeye hazır.
         </footer>
       </div>
     </div>
