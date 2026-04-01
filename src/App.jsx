@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -201,6 +201,9 @@ export default function App() {
     description: "",
   });
 
+  const jobsSectionRef = useRef(null);
+  const postSectionRef = useRef(null);
+
   useEffect(() => {
     loadJobs();
   }, []);
@@ -364,10 +367,25 @@ export default function App() {
           </div>
           <div className="header-actions">
             <Badge className="live-badge">{dbStatus}</Badge>
-            <Button variant="outline" onClick={() => setTab("jobs")}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setTab("jobs");
+                setTimeout(() => {
+                  jobsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 50);
+              }}
+            >
               <User size={16} /> İş Ara
             </Button>
-            <Button onClick={() => setTab("post")}>
+            <Button
+              onClick={() => {
+                setTab("post");
+                setTimeout(() => {
+                  postSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 50);
+              }}
+            >
               <Building2 size={16} /> İlan Ver
             </Button>
           </div>
@@ -438,66 +456,92 @@ export default function App() {
         </section>
 
         <div className="tabs">
-          <button className={tab === "jobs" ? "tab active" : "tab"} onClick={() => setTab("jobs")}>İlanlar</button>
-          <button className={tab === "post" ? "tab active" : "tab"} onClick={() => setTab("post")}>İlan Ver</button>
-          <button className={tab === "dashboard" ? "tab active" : "tab"} onClick={() => setTab("dashboard")}>Panel</button>
+          <button
+            className={tab === "jobs" ? "tab active" : "tab"}
+            onClick={() => {
+              setTab("jobs");
+              setTimeout(() => {
+                jobsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }, 50);
+            }}
+          >
+            İlanlar
+          </button>
+          <button
+            className={tab === "post" ? "tab active" : "tab"}
+            onClick={() => {
+              setTab("post");
+              setTimeout(() => {
+                postSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }, 50);
+            }}
+          >
+            İlan Ver
+          </button>
+          <button className={tab === "dashboard" ? "tab active" : "tab"} onClick={() => setTab("dashboard")}>
+            Panel
+          </button>
         </div>
 
         {tab === "jobs" && (
-          <section className="section-stack">
-            <div className="section-head">
-              <div>
-                <h2>İlan listesi</h2>
-                <p className="muted">Arama ve filtrelere göre güncellenen canlı liste</p>
+          <div ref={jobsSectionRef}>
+            <section className="section-stack">
+              <div className="section-head">
+                <div>
+                  <h2>İlan listesi</h2>
+                  <p className="muted">Arama ve filtrelere göre güncellenen canlı liste</p>
+                </div>
+                <div className="result-wrap">
+                  {loadingJobs ? <Loader2 size={16} className="spin" /> : null}
+                  <Badge className="soft">{filteredJobs.length} sonuç</Badge>
+                </div>
               </div>
-              <div className="result-wrap">
-                {loadingJobs ? <Loader2 size={16} className="spin" /> : null}
-                <Badge className="soft">{filteredJobs.length} sonuç</Badge>
-              </div>
-            </div>
 
-            <div className="job-list">
-              {filteredJobs.map((job) => (
-                <JobCard key={job.id} job={job} onApply={(selected) => { setAppliedJob(selected); setApplicationSent(false); }} />
-              ))}
-            </div>
-          </section>
+              <div className="job-list">
+                {filteredJobs.map((job) => (
+                  <JobCard key={job.id} job={job} onApply={(selected) => { setAppliedJob(selected); setApplicationSent(false); }} />
+                ))}
+              </div>
+            </section>
+          </div>
         )}
 
         {tab === "post" && (
-          <Card>
-            <h2>İşveren ilan oluşturma ekranı</h2>
-            <div className="form-grid">
-              <Input placeholder="İş başlığı" value={jobForm.title} onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })} />
-              <Input placeholder="Firma adı" value={jobForm.company} onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })} />
-              <Input placeholder="Şehir" value={jobForm.city} onChange={(e) => setJobForm({ ...jobForm, city: e.target.value })} />
-              <Input placeholder="İlçe" value={jobForm.district} onChange={(e) => setJobForm({ ...jobForm, district: e.target.value })} />
-              <SelectField
-                value={jobForm.type}
-                onChange={(val) => setJobForm({ ...jobForm, type: val })}
-                options={[
-                  { value: "Part-time", label: "Part-time" },
-                  { value: "Ek iş", label: "Ek iş" },
-                  { value: "Günlük iş", label: "Günlük iş" },
-                  { value: "Yarı zamanlı", label: "Yarı zamanlı" },
-                ]}
-              />
-              <Input placeholder="Ücret bilgisi" value={jobForm.pay} onChange={(e) => setJobForm({ ...jobForm, pay: e.target.value })} />
-              <div className="full">
-                <Input placeholder="Çalışma saatleri" value={jobForm.hours} onChange={(e) => setJobForm({ ...jobForm, hours: e.target.value })} />
+          <div ref={postSectionRef}>
+            <Card>
+              <h2>İşveren ilan oluşturma ekranı</h2>
+              <div className="form-grid">
+                <Input placeholder="İş başlığı" value={jobForm.title} onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })} />
+                <Input placeholder="Firma adı" value={jobForm.company} onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })} />
+                <Input placeholder="Şehir" value={jobForm.city} onChange={(e) => setJobForm({ ...jobForm, city: e.target.value })} />
+                <Input placeholder="İlçe" value={jobForm.district} onChange={(e) => setJobForm({ ...jobForm, district: e.target.value })} />
+                <SelectField
+                  value={jobForm.type}
+                  onChange={(val) => setJobForm({ ...jobForm, type: val })}
+                  options={[
+                    { value: "Part-time", label: "Part-time" },
+                    { value: "Ek iş", label: "Ek iş" },
+                    { value: "Günlük iş", label: "Günlük iş" },
+                    { value: "Yarı zamanlı", label: "Yarı zamanlı" },
+                  ]}
+                />
+                <Input placeholder="Ücret bilgisi" value={jobForm.pay} onChange={(e) => setJobForm({ ...jobForm, pay: e.target.value })} />
+                <div className="full">
+                  <Input placeholder="Çalışma saatleri" value={jobForm.hours} onChange={(e) => setJobForm({ ...jobForm, hours: e.target.value })} />
+                </div>
+                <div className="full">
+                  <Textarea placeholder="İş açıklaması" value={jobForm.description} onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })} />
+                </div>
+                <div className="full action-row">
+                  <Button onClick={handlePublish} disabled={savingJob}>
+                    {savingJob ? <Loader2 size={16} className="spin" /> : <PlusCircle size={16} />}
+                    {savingJob ? "Kaydediliyor" : "İlanı kaydet"}
+                  </Button>
+                  <Button variant="outline">Taslak kaydet</Button>
+                </div>
               </div>
-              <div className="full">
-                <Textarea placeholder="İş açıklaması" value={jobForm.description} onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })} />
-              </div>
-              <div className="full action-row">
-                <Button onClick={handlePublish} disabled={savingJob}>
-                  {savingJob ? <Loader2 size={16} className="spin" /> : <PlusCircle size={16} />}
-                  {savingJob ? "Kaydediliyor" : "İlanı kaydet"}
-                </Button>
-                <Button variant="outline">Taslak kaydet</Button>
-              </div>
-            </div>
-          </Card>
+            </Card>
+          </div>
         )}
 
         {tab === "dashboard" && (
