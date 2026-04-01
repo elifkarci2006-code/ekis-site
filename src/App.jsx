@@ -22,6 +22,7 @@ import {
   CalendarDays,
   Sparkles,
   BadgeCent,
+  MessageCircle,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -189,6 +190,9 @@ function formatDate(dateString) {
 export default function App() {
   const [jobs, setJobs] = useState(initialJobs);
   const [applications, setApplications] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [activeChat, setActiveChat] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("all");
   const [type, setType] = useState("all");
@@ -197,8 +201,10 @@ export default function App() {
   const [applicationSent, setApplicationSent] = useState(false);
   const [loadingJobs, setLoadingJobs] = useState(false);
   const [loadingApplications, setLoadingApplications] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(false);
   const [savingJob, setSavingJob] = useState(false);
   const [sendingApplication, setSendingApplication] = useState(false);
+  const [sendingMessage, setSendingMessage] = useState(false);
   const [actionLoadingId, setActionLoadingId] = useState(null);
   const [dbStatus, setDbStatus] = useState(supabase ? "Supabase bağlı" : "Demo modunda çalışıyor");
   const [applicationForm, setApplicationForm] = useState({ full_name: "", phone: "", note: "" });
@@ -288,6 +294,31 @@ export default function App() {
     }
 
     setApplications(data || []);
+  }
+
+  async function loadMessages(applicationId) {
+    if (!supabase || !applicationId) {
+      setMessages([]);
+      return;
+    }
+
+    setLoadingMessages(true);
+
+    const { data, error } = await supabase
+      .from("messages")
+      .select("*")
+      .eq("application_id", applicationId)
+      .order("created_at", { ascending: true });
+
+    setLoadingMessages(false);
+
+    if (error) {
+      console.error(error);
+      setMessages([]);
+      return;
+    }
+
+    setMessages(data || []);
   }
 
   const filteredJobs = useMemo(() => {
@@ -449,7 +480,6 @@ export default function App() {
 
   async function handleApproveJob(jobId) {
     const selected = jobs.find((job) => job.id === jobId);
-
     if (!selected) return;
 
     if (!supabase) {
@@ -527,6 +557,48 @@ export default function App() {
     setJobs((prev) => prev.filter((job) => job.id !== jobId));
   }
 
+  async function handleOpenChat(app) {
+    setActiveChat(app);
+    await loadMessages(app.id);
+  }
+
+  async function sendMessage() {
+    if (!newMessage.trim() || !activeChat) return;
+
+    if (!supabase) {
+      const fakeMessage = {
+        id: Date.now(),
+        application_id: activeChat.id,
+        job_id: activeChat.job_id,
+        sender: "employer",
+        message: newMessage,
+        created_at: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, fakeMessage]);
+      setNewMessage("");
+      return;
+    }
+
+    setSendingMessage(true);
+
+    const { error } = await supabase.from("messages").insert({
+      application_id: activeChat.id,
+      job_id: activeChat.job_id,
+      sender: "employer",
+      message: newMessage,
+    });
+
+    setSendingMessage(false);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    setNewMessage("");
+    await loadMessages(activeChat.id);
+  }
+
   const cities = [...new Set(jobs.map((j) => j.city).filter(Boolean))];
   const types = [...new Set(jobs.map((j) => j.type).filter(Boolean))];
   const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
@@ -574,7 +646,7 @@ export default function App() {
               </h1>
               <p>
                 Bu sürümde ilanlar ve başvurular artık gerçek veritabanına bağlanabilecek şekilde hazırlandı.
-                Premium sistemle birlikte öne çıkan ilan mantığı da aktif hale geldi.
+                Premium ve mesajlaşma sistemiyle ürün daha güçlü hale geldi.
               </p>
 
               <div className="filters">
@@ -623,9 +695,9 @@ export default function App() {
             <p className="muted">Yeni ilanlar panelde bekler, admin onayı sonrası yayına alınır.</p>
           </Card>
           <Card>
-            <Wallet className="feature-icon" />
-            <div className="feature-title">Premium satışa hazır</div>
-            <p className="muted">Premium ilanlar öne çıkar, rozet alır ve satış modeli hazır hale gelir.</p>
+            <MessageCircle className="feature-icon" />
+            <div className="feature-title">Mesajlaşma sistemi</div>
+            <p className="muted">Başvuranlarla platform içinde görüşebilir, numara paylaşmadan iletişim kurabilirsin.</p>
           </Card>
         </section>
 
@@ -779,18 +851,11 @@ export default function App() {
                       <div className="muted">Paket fiyatı: {job.price || "Ücretsiz"}</div>
 
                       <div style={{ display: "flex", gap: "10px", marginTop: "12px", flexWrap: "wrap" }}>
-                        <Button
-                          onClick={() => handleApproveJob(job.id)}
-                          disabled={actionLoadingId === job.id}
-                        >
+                        <Button onClick={() => handleApproveJob(job.id)} disabled={actionLoadingId === job.id}>
                           {actionLoadingId === job.id ? <Loader2 size={16} className="spin" /> : <Check size={16} />}
                           Onayla
                         </Button>
-                        <Button
-                          variant="outline"
-                          onClick={() => handleDeleteJob(job.id)}
-                          disabled={actionLoadingId === job.id}
-                        >
+                        <Button variant="outline" onClick={() => handleDeleteJob(job.id)} disabled={actionLoadingId === job.id}>
                           <Trash2 size={16} />
                           Sil
                         </Button>
@@ -844,6 +909,16 @@ export default function App() {
                           <div>{app.note}</div>
                         </div>
                       ) : null}
+
+                      <div style={{ marginTop: "6px" }}>
+                        <Button
+                          variant="outline"
+                          onClick={() => handleOpenChat(app)}
+                        >
+                          <MessageCircle size={16} />
+                          Mesaj Gönder
+                        </Button>
+                      </div>
                     </div>
                   ))
                 )}
@@ -897,8 +972,70 @@ export default function App() {
           </div>
         )}
 
+        {activeChat && (
+          <div className="modal-backdrop">
+            <div className="modal">
+              <h2>Mesajlaşma</h2>
+
+              <div className="job-preview">
+                <div className="preview-title">{activeChat.full_name}</div>
+                <div className="muted">{activeChat.jobTitle || `İlan #${activeChat.job_id}`}</div>
+              </div>
+
+              <div style={{ maxHeight: "280px", overflowY: "auto", display: "grid", gap: "10px", marginBottom: "14px" }}>
+                {loadingMessages ? (
+                  <div className="muted">Mesajlar yükleniyor...</div>
+                ) : messages.length === 0 ? (
+                  <div className="muted">Henüz mesaj yok. İlk mesajı sen gönder.</div>
+                ) : (
+                  messages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      style={{
+                        padding: "10px 12px",
+                        borderRadius: "14px",
+                        background: msg.sender === "employer" ? "#0f172a" : "#f8fafc",
+                        color: msg.sender === "employer" ? "#fff" : "#0f172a",
+                        border: msg.sender === "employer" ? "none" : "1px solid #e2e8f0",
+                      }}
+                    >
+                      <div style={{ fontSize: "13px", opacity: 0.8, marginBottom: "4px" }}>
+                        {msg.sender === "employer" ? "Sen" : "Aday"} • {formatDate(msg.created_at)}
+                      </div>
+                      <div>{msg.message}</div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <Textarea
+                placeholder="Mesaj yaz..."
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+              />
+
+              <div className="action-row">
+                <Button onClick={sendMessage} disabled={sendingMessage}>
+                  {sendingMessage ? <Loader2 size={16} className="spin" /> : <Send size={16} />}
+                  {sendingMessage ? "Gönderiliyor" : "Gönder"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setActiveChat(null);
+                    setMessages([]);
+                    setNewMessage("");
+                  }}
+                >
+                  Kapat
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <footer className="footer">
-          Premium sistem aktif. Premium ilanlar öne çıkar, panelde paket tipi görünür ve satış akışı hazırdır.
+          Premium ve mesajlaşma sistemi aktif. Başvuranlarla platform içinde iletişim kurabilir, premium ilanları öne çıkarabilirsin.
         </footer>
       </div>
     </div>
