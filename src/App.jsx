@@ -20,6 +20,8 @@ import {
   FileText,
   Phone,
   CalendarDays,
+  Sparkles,
+  BadgeCent,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -36,6 +38,9 @@ const initialJobs = [
     tags: ["Öğrenciye uygun", "Akşam", "Hızlı başlangıç"],
     description: "Yoğun saatlerde servis desteği verecek, güler yüzlü ekip arkadaşı aranıyor.",
     status: "active",
+    package_type: "premium",
+    featured: true,
+    price: "99 TL",
   },
   {
     id: 2,
@@ -49,8 +54,26 @@ const initialJobs = [
     tags: ["Hafta sonu", "Deneyim şart değil"],
     description: "Kasa ve reyon düzenine destek olacak ekip arkadaşı aranıyor.",
     status: "active",
+    package_type: "standard",
+    featured: false,
+    price: "Ücretsiz",
   },
 ];
+
+const PACKAGE_OPTIONS = {
+  standard: {
+    label: "Standart",
+    price: "Ücretsiz",
+    featured: false,
+    note: "Normal listede yayınlanır.",
+  },
+  premium: {
+    label: "Premium",
+    price: "99 TL",
+    featured: true,
+    note: "İlan öne çıkar, premium rozeti alır ve üst sıralarda görünür.",
+  },
+};
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -107,27 +130,39 @@ function Stat({ label, value, icon: Icon }) {
 function JobCard({ job, onApply }) {
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-      <Card className="job-card">
+      <Card className={`job-card ${job.featured ? "featured-card" : ""}`}>
         <div className="job-layout">
           <div className="job-main">
             <div className="job-top">
               <h3>{job.title}</h3>
               <Badge variant="secondary">{job.type}</Badge>
+              {job.package_type === "premium" ? (
+                <Badge className="premium-badge">
+                  <Sparkles size={13} /> Premium
+                </Badge>
+              ) : null}
               {job.status === "pending" ? <Badge className="pending">Onay bekliyor</Badge> : null}
             </div>
+
             <div className="company">{job.company}</div>
+
             <div className="meta-row">
               <span><MapPin size={15} /> {job.city} / {job.district}</span>
               <span><Clock3 size={15} /> {job.hours}</span>
               <span><Wallet size={15} /> {job.pay}</span>
             </div>
+
             <p className="description">{job.description}</p>
+
             <div className="tags">
               {(job.tags || []).map((tag) => (
                 <Badge key={tag} className="soft">{tag}</Badge>
               ))}
+              {job.featured ? <Badge className="featured-tag">Öne Çıkan</Badge> : null}
+              <Badge className="soft">{job.price || "Ücretsiz"}</Badge>
             </div>
           </div>
+
           <div className="job-actions">
             <Button onClick={() => onApply(job)}>Başvur</Button>
             <Button variant="outline">Detayı Gör</Button>
@@ -176,6 +211,7 @@ export default function App() {
     pay: "",
     hours: "",
     description: "",
+    package_type: "standard",
   });
 
   const jobsSectionRef = useRef(null);
@@ -219,6 +255,10 @@ export default function App() {
       description: job.description,
       tags: Array.isArray(job.tags) ? job.tags : job.tags ? [job.tags] : [],
       status: job.status || "active",
+      package_type: job.package_type || "standard",
+      featured: Boolean(job.featured),
+      price: job.price || "Ücretsiz",
+      created_at: job.created_at,
     }));
 
     setJobs(mapped.length ? mapped : initialJobs);
@@ -251,25 +291,31 @@ export default function App() {
   }
 
   const filteredJobs = useMemo(() => {
-    return jobs.filter((job) => {
-      if (job.status !== "active" && job.status !== undefined) return false;
+    return jobs
+      .filter((job) => {
+        if (job.status !== "active" && job.status !== undefined) return false;
 
-      const q = search.toLowerCase();
-      const searchMatch =
-        !q ||
-        [job.title, job.company, job.city, job.district, ...(job.tags || [])]
-          .join(" ")
-          .toLowerCase()
-          .includes(q);
+        const q = search.toLowerCase();
+        const searchMatch =
+          !q ||
+          [job.title, job.company, job.city, job.district, ...(job.tags || [])]
+            .join(" ")
+            .toLowerCase()
+            .includes(q);
 
-      const cityMatch = city === "all" ? true : job.city === city;
-      const typeMatch = type === "all" ? true : job.type === type;
+        const cityMatch = city === "all" ? true : job.city === city;
+        const typeMatch = type === "all" ? true : job.type === type;
 
-      return searchMatch && cityMatch && typeMatch;
-    });
+        return searchMatch && cityMatch && typeMatch;
+      })
+      .sort((a, b) => {
+        if (a.featured === b.featured) return 0;
+        return a.featured ? -1 : 1;
+      });
   }, [jobs, search, city, type]);
 
   const pendingJobs = useMemo(() => jobs.filter((job) => job.status === "pending"), [jobs]);
+  const premiumJobsCount = useMemo(() => jobs.filter((job) => job.package_type === "premium").length, [jobs]);
 
   const enrichedApplications = useMemo(() => {
     return applications.map((app) => {
@@ -293,17 +339,22 @@ export default function App() {
       pay: "",
       hours: "",
       description: "",
+      package_type: "standard",
     });
   }
 
   async function handlePublish() {
     if (!jobForm.title || !jobForm.company || !jobForm.city) return;
 
+    const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
+
     const newJob = {
       id: Date.now(),
       ...jobForm,
       tags: ["Yeni ilan", "İnceleme bekliyor"],
       status: "pending",
+      featured: selectedPackage.featured,
+      price: selectedPackage.price,
     };
 
     if (!supabase) {
@@ -329,6 +380,9 @@ export default function App() {
         description: jobForm.description,
         tags: ["Yeni ilan", "İnceleme bekliyor"],
         status: "pending",
+        package_type: jobForm.package_type,
+        featured: selectedPackage.featured,
+        price: selectedPackage.price,
       })
       .select()
       .single();
@@ -394,9 +448,19 @@ export default function App() {
   }
 
   async function handleApproveJob(jobId) {
+    const selected = jobs.find((job) => job.id === jobId);
+
+    if (!selected) return;
+
     if (!supabase) {
       const next = jobs.map((job) =>
-        job.id === jobId ? { ...job, status: "active", tags: ["Yayınlandı"] } : job
+        job.id === jobId
+          ? {
+              ...job,
+              status: "active",
+              tags: job.package_type === "premium" ? ["Premium", "Yayınlandı", "Öne Çıkan"] : ["Yayınlandı"],
+            }
+          : job
       );
       setJobs(next);
       localStorage.setItem("ekis_demo_jobs", JSON.stringify(next));
@@ -409,7 +473,10 @@ export default function App() {
       .from("jobs")
       .update({
         status: "active",
-        tags: ["Yayınlandı"],
+        tags:
+          selected.package_type === "premium"
+            ? ["Premium", "Yayınlandı", "Öne Çıkan"]
+            : ["Yayınlandı"],
       })
       .eq("id", jobId);
 
@@ -422,7 +489,13 @@ export default function App() {
 
     setJobs((prev) =>
       prev.map((job) =>
-        job.id === jobId ? { ...job, status: "active", tags: ["Yayınlandı"] } : job
+        job.id === jobId
+          ? {
+              ...job,
+              status: "active",
+              tags: job.package_type === "premium" ? ["Premium", "Yayınlandı", "Öne Çıkan"] : ["Yayınlandı"],
+            }
+          : job
       )
     );
   }
@@ -456,6 +529,7 @@ export default function App() {
 
   const cities = [...new Set(jobs.map((j) => j.city).filter(Boolean))];
   const types = [...new Set(jobs.map((j) => j.type).filter(Boolean))];
+  const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
 
   return (
     <div className="page">
@@ -500,7 +574,7 @@ export default function App() {
               </h1>
               <p>
                 Bu sürümde ilanlar ve başvurular artık gerçek veritabanına bağlanabilecek şekilde hazırlandı.
-                Supabase anahtarlarını girince demo modundan canlı moda geçer.
+                Premium sistemle birlikte öne çıkan ilan mantığı da aktif hale geldi.
               </p>
 
               <div className="filters">
@@ -532,7 +606,7 @@ export default function App() {
 
           <div className="stats">
             <Stat label="Aktif ilan" value={String(filteredJobs.length)} icon={Briefcase} />
-            <Stat label="Bekleyen ilan" value={String(pendingJobs.length)} icon={ShieldCheck} />
+            <Stat label="Premium ilan" value={String(premiumJobsCount)} icon={Sparkles} />
             <Stat label="Başvuru sayısı" value={String(applications.length)} icon={FileText} />
           </div>
         </section>
@@ -550,8 +624,8 @@ export default function App() {
           </Card>
           <Card>
             <Wallet className="feature-icon" />
-            <div className="feature-title">Ödeme eklemeye uygun</div>
-            <p className="muted">Bir sonraki aşamada ücretli ilan ve paket sistemini rahatça bağlarız.</p>
+            <div className="feature-title">Premium satışa hazır</div>
+            <p className="muted">Premium ilanlar öne çıkar, rozet alır ve satış modeli hazır hale gelir.</p>
           </Card>
         </section>
 
@@ -589,7 +663,7 @@ export default function App() {
               <div className="section-head">
                 <div>
                   <h2>İlan listesi</h2>
-                  <p className="muted">Sadece onaylanmış ilanlar burada görünür</p>
+                  <p className="muted">Premium ilanlar üstte görünür, sadece onaylanmış ilanlar listelenir</p>
                 </div>
                 <div className="result-wrap">
                   {loadingJobs ? <Loader2 size={16} className="spin" /> : null}
@@ -617,7 +691,31 @@ export default function App() {
           <div ref={postSectionRef}>
             <Card>
               <h2>İşveren ilan oluşturma ekranı</h2>
+
+              <div className="premium-plan-box">
+                <div className="premium-plan-head">
+                  <div className="premium-plan-title">
+                    <BadgeCent size={18} />
+                    Paket seçimi
+                  </div>
+                  <Badge className={jobForm.package_type === "premium" ? "premium-badge" : "soft"}>
+                    {selectedPackage.label}
+                  </Badge>
+                </div>
+                <div className="premium-plan-price">{selectedPackage.price}</div>
+                <div className="muted">{selectedPackage.note}</div>
+              </div>
+
               <div className="form-grid">
+                <SelectField
+                  value={jobForm.package_type}
+                  onChange={(val) => setJobForm({ ...jobForm, package_type: val })}
+                  options={[
+                    { value: "standard", label: "Standart - Ücretsiz" },
+                    { value: "premium", label: "Premium - 99 TL" },
+                  ]}
+                />
+
                 <Input placeholder="İş başlığı" value={jobForm.title} onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })} />
                 <Input placeholder="Firma adı" value={jobForm.company} onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })} />
                 <Input placeholder="Şehir" value={jobForm.city} onChange={(e) => setJobForm({ ...jobForm, city: e.target.value })} />
@@ -642,7 +740,7 @@ export default function App() {
                 <div className="full action-row">
                   <Button onClick={handlePublish} disabled={savingJob}>
                     {savingJob ? <Loader2 size={16} className="spin" /> : <PlusCircle size={16} />}
-                    {savingJob ? "Kaydediliyor" : "İlanı kaydet"}
+                    {savingJob ? "Kaydediliyor" : `${selectedPackage.label} ilanı kaydet`}
                   </Button>
                   <Button variant="outline">Taslak kaydet</Button>
                 </div>
@@ -664,12 +762,22 @@ export default function App() {
                 ) : (
                   pendingJobs.map((job) => (
                     <div key={job.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column" }}>
-                      <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center" }}>
+                      <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
                         <strong>{job.title}</strong>
-                        <Badge className="pending">pending</Badge>
+                        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                          <Badge className="pending">pending</Badge>
+                          {job.package_type === "premium" ? (
+                            <Badge className="premium-badge"><Sparkles size={13} /> Premium</Badge>
+                          ) : (
+                            <Badge className="soft">Standart</Badge>
+                          )}
+                        </div>
                       </div>
+
                       <div className="muted">{job.company} • {job.city} / {job.district}</div>
                       <div className="muted">{job.pay} • {job.hours}</div>
+                      <div className="muted">Paket fiyatı: {job.price || "Ücretsiz"}</div>
+
                       <div style={{ display: "flex", gap: "10px", marginTop: "12px", flexWrap: "wrap" }}>
                         <Button
                           onClick={() => handleApproveJob(job.id)}
@@ -790,7 +898,7 @@ export default function App() {
         )}
 
         <footer className="footer">
-          Admin panel aktif. Bekleyen ilanları onaylayabilir, silebilir ve son başvuruları görüntüleyebilirsin.
+          Premium sistem aktif. Premium ilanlar öne çıkar, panelde paket tipi görünür ve satış akışı hazırdır.
         </footer>
       </div>
     </div>
