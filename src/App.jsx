@@ -46,7 +46,7 @@ const initialJobs = [
     status: "active",
     package_type: "premium",
     featured: true,
-    price: "99 TL",
+    price: "399 TL",
     employer_email: "demo@ekis.com",
     payment_status: "paid",
     payment_note: "Demo ödeme tamamlandı",
