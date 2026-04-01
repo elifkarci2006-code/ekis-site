@@ -15,6 +15,9 @@ import {
   CheckCircle2,
   Database,
   Loader2,
+  Check,
+  Trash2,
+  FileText,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -30,6 +33,7 @@ const initialJobs = [
     hours: "18:00 - 23:00",
     tags: ["Öğrenciye uygun", "Akşam", "Hızlı başlangıç"],
     description: "Yoğun saatlerde servis desteği verecek, güler yüzlü ekip arkadaşı aranıyor.",
+    status: "active",
   },
   {
     id: 2,
@@ -42,54 +46,7 @@ const initialJobs = [
     hours: "10:00 - 19:00",
     tags: ["Hafta sonu", "Deneyim şart değil"],
     description: "Kasa ve reyon düzenine destek olacak ekip arkadaşı aranıyor.",
-  },
-  {
-    id: 3,
-    title: "Etkinlik Karşılama Hostesi",
-    company: "Delta Organizasyon",
-    city: "İstanbul",
-    district: "Şişli",
-    type: "Günlük iş",
-    pay: "Günlük 1500 TL",
-    hours: "14:00 - 22:00",
-    tags: ["Etkinlik", "1 gün", "Prim olabilir"],
-    description: "Kurumsal etkinlikte misafir yönlendirme ve karşılama yapacak kişiler aranıyor.",
-  },
-  {
-    id: 4,
-    title: "Kurye Yardımcısı",
-    company: "PaketJet",
-    city: "İzmir",
-    district: "Bornova",
-    type: "Yarı zamanlı",
-    pay: "Saatlik 190 TL",
-    hours: "12:00 - 17:00",
-    tags: ["Ehliyet avantaj", "Hızlı ödeme"],
-    description: "Yoğun teslimat saatlerinde paket ayrıştırma ve saha desteği verilecek.",
-  },
-  {
-    id: 5,
-    title: "Stand Tanıtım Personeli",
-    company: "PromoX",
-    city: "Bursa",
-    district: "Nilüfer",
-    type: "Ek iş",
-    pay: "Günlük 1400 TL",
-    hours: "11:00 - 20:00",
-    tags: ["İletişim becerisi", "2 gün"],
-    description: "AVM içindeki standda ürün tanıtımı ve yönlendirme yapılacak.",
-  },
-  {
-    id: 6,
-    title: "Akşam Depo Destek Elemanı",
-    company: "HızlıSepet",
-    city: "Kocaeli",
-    district: "İzmit",
-    type: "Part-time",
-    pay: "Saatlik 180 TL",
-    hours: "19:00 - 00:00",
-    tags: ["Akşam", "Fiziksel iş", "Ertesi gün ödeme"],
-    description: "Sipariş toplama ve paketleme süreçlerinde akşam vardiyası desteği aranıyor.",
+    status: "active",
   },
 ];
 
@@ -125,7 +82,9 @@ function SelectField({ value, onChange, options }) {
   return (
     <select className="input" value={value} onChange={(e) => onChange(e.target.value)}>
       {options.map((option) => (
-        <option key={option.value} value={option.value}>{option.label}</option>
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
       ))}
     </select>
   );
@@ -179,6 +138,7 @@ function JobCard({ job, onApply }) {
 
 export default function App() {
   const [jobs, setJobs] = useState(initialJobs);
+  const [applications, setApplications] = useState([]);
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("all");
   const [type, setType] = useState("all");
@@ -186,8 +146,10 @@ export default function App() {
   const [appliedJob, setAppliedJob] = useState(null);
   const [applicationSent, setApplicationSent] = useState(false);
   const [loadingJobs, setLoadingJobs] = useState(false);
+  const [loadingApplications, setLoadingApplications] = useState(false);
   const [savingJob, setSavingJob] = useState(false);
   const [sendingApplication, setSendingApplication] = useState(false);
+  const [actionLoadingId, setActionLoadingId] = useState(null);
   const [dbStatus, setDbStatus] = useState(supabase ? "Supabase bağlı" : "Demo modunda çalışıyor");
   const [applicationForm, setApplicationForm] = useState({ full_name: "", phone: "", note: "" });
   const [jobForm, setJobForm] = useState({
@@ -206,6 +168,7 @@ export default function App() {
 
   useEffect(() => {
     loadJobs();
+    loadApplications();
   }, []);
 
   async function loadJobs() {
@@ -216,6 +179,7 @@ export default function App() {
     }
 
     setLoadingJobs(true);
+
     const { data, error } = await supabase
       .from("jobs")
       .select("*")
@@ -238,7 +202,7 @@ export default function App() {
       pay: job.pay,
       hours: job.hours,
       description: job.description,
-      tags: job.tags || [],
+      tags: Array.isArray(job.tags) ? job.tags : job.tags ? [job.tags] : [],
       status: job.status || "active",
     }));
 
@@ -247,8 +211,34 @@ export default function App() {
     setDbStatus("Supabase bağlı");
   }
 
+  async function loadApplications() {
+    if (!supabase) {
+      const stored = localStorage.getItem("ekis_demo_applications");
+      if (stored) setApplications(JSON.parse(stored));
+      return;
+    }
+
+    setLoadingApplications(true);
+
+    const { data, error } = await supabase
+      .from("applications")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    setLoadingApplications(false);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    setApplications(data || []);
+  }
+
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
+      if (job.status !== "active" && job.status !== undefined) return false;
+
       const q = search.toLowerCase();
       const searchMatch =
         !q ||
@@ -256,11 +246,15 @@ export default function App() {
           .join(" ")
           .toLowerCase()
           .includes(q);
+
       const cityMatch = city === "all" ? true : job.city === city;
       const typeMatch = type === "all" ? true : job.type === type;
+
       return searchMatch && cityMatch && typeMatch;
     });
   }, [jobs, search, city, type]);
+
+  const pendingJobs = useMemo(() => jobs.filter((job) => job.status === "pending"), [jobs]);
 
   function resetJobForm() {
     setJobForm({
@@ -294,6 +288,7 @@ export default function App() {
     }
 
     setSavingJob(true);
+
     const { data, error } = await supabase
       .from("jobs")
       .insert({
@@ -321,6 +316,7 @@ export default function App() {
 
     setJobs((prev) => [{ ...data, tags: data.tags || [] }, ...prev]);
     resetJobForm();
+    setTab("dashboard");
   }
 
   async function handleApplicationSubmit() {
@@ -328,20 +324,35 @@ export default function App() {
 
     if (!supabase) {
       const existing = JSON.parse(localStorage.getItem("ekis_demo_applications") || "[]");
-      const next = [...existing, { ...applicationForm, job_id: appliedJob.id, created_at: new Date().toISOString() }];
+      const next = [
+        {
+          id: Date.now(),
+          ...applicationForm,
+          job_id: appliedJob.id,
+          created_at: new Date().toISOString(),
+        },
+        ...existing,
+      ];
       localStorage.setItem("ekis_demo_applications", JSON.stringify(next));
+      setApplications(next);
       setApplicationSent(true);
       setApplicationForm({ full_name: "", phone: "", note: "" });
       return;
     }
 
     setSendingApplication(true);
-    const { error } = await supabase.from("applications").insert({
-      job_id: appliedJob.id,
-      full_name: applicationForm.full_name,
-      phone: applicationForm.phone,
-      note: applicationForm.note,
-    });
+
+    const { data, error } = await supabase
+      .from("applications")
+      .insert({
+        job_id: appliedJob.id,
+        full_name: applicationForm.full_name,
+        phone: applicationForm.phone,
+        note: applicationForm.note,
+      })
+      .select()
+      .single();
+
     setSendingApplication(false);
 
     if (error) {
@@ -350,12 +361,74 @@ export default function App() {
       return;
     }
 
+    setApplications((prev) => [data, ...prev]);
     setApplicationSent(true);
     setApplicationForm({ full_name: "", phone: "", note: "" });
   }
 
-  const cities = [...new Set(jobs.map((j) => j.city))];
-  const types = [...new Set(jobs.map((j) => j.type))];
+  async function handleApproveJob(jobId) {
+    if (!supabase) {
+      const next = jobs.map((job) =>
+        job.id === jobId ? { ...job, status: "active", tags: ["Yayınlandı"] } : job
+      );
+      setJobs(next);
+      localStorage.setItem("ekis_demo_jobs", JSON.stringify(next));
+      return;
+    }
+
+    setActionLoadingId(jobId);
+
+    const { error } = await supabase
+      .from("jobs")
+      .update({
+        status: "active",
+        tags: ["Yayınlandı"],
+      })
+      .eq("id", jobId);
+
+    setActionLoadingId(null);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    setJobs((prev) =>
+      prev.map((job) =>
+        job.id === jobId ? { ...job, status: "active", tags: ["Yayınlandı"] } : job
+      )
+    );
+  }
+
+  async function handleDeleteJob(jobId) {
+    if (!window.confirm("Bu ilan silinsin mi?")) return;
+
+    if (!supabase) {
+      const next = jobs.filter((job) => job.id !== jobId);
+      setJobs(next);
+      localStorage.setItem("ekis_demo_jobs", JSON.stringify(next));
+      return;
+    }
+
+    setActionLoadingId(jobId);
+
+    const { error } = await supabase
+      .from("jobs")
+      .delete()
+      .eq("id", jobId);
+
+    setActionLoadingId(null);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    setJobs((prev) => prev.filter((job) => job.id !== jobId));
+  }
+
+  const cities = [...new Set(jobs.map((j) => j.city).filter(Boolean))];
+  const types = [...new Set(jobs.map((j) => j.type).filter(Boolean))];
 
   return (
     <div className="page">
@@ -431,9 +504,9 @@ export default function App() {
           </motion.div>
 
           <div className="stats">
-            <Stat label="Aktif ilan" value={String(jobs.length)} icon={Briefcase} />
-            <Stat label="Bugün başvuru" value="184" icon={Send} />
-            <Stat label="Veri durumu" value={supabase ? "Canlı" : "Demo"} icon={Database} />
+            <Stat label="Aktif ilan" value={String(filteredJobs.length)} icon={Briefcase} />
+            <Stat label="Bekleyen ilan" value={String(pendingJobs.length)} icon={ShieldCheck} />
+            <Stat label="Başvuru sayısı" value={String(applications.length)} icon={FileText} />
           </div>
         </section>
 
@@ -445,8 +518,8 @@ export default function App() {
           </Card>
           <Card>
             <ShieldCheck className="feature-icon" />
-            <div className="feature-title">Onay akışına hazır</div>
-            <p className="muted">Yeni ilanlar pending durumuyla kaydedilir, sonra admin tarafından onaylanabilir.</p>
+            <div className="feature-title">Onay akışı aktif</div>
+            <p className="muted">Yeni ilanlar panelde bekler, admin onayı sonrası yayına alınır.</p>
           </Card>
           <Card>
             <Wallet className="feature-icon" />
@@ -489,7 +562,7 @@ export default function App() {
               <div className="section-head">
                 <div>
                   <h2>İlan listesi</h2>
-                  <p className="muted">Arama ve filtrelere göre güncellenen canlı liste</p>
+                  <p className="muted">Sadece onaylanmış ilanlar burada görünür</p>
                 </div>
                 <div className="result-wrap">
                   {loadingJobs ? <Loader2 size={16} className="spin" /> : null}
@@ -499,7 +572,14 @@ export default function App() {
 
               <div className="job-list">
                 {filteredJobs.map((job) => (
-                  <JobCard key={job.id} job={job} onApply={(selected) => { setAppliedJob(selected); setApplicationSent(false); }} />
+                  <JobCard
+                    key={job.id}
+                    job={job}
+                    onApply={(selected) => {
+                      setAppliedJob(selected);
+                      setApplicationSent(false);
+                    }}
+                  />
                 ))}
               </div>
             </section>
@@ -547,28 +627,68 @@ export default function App() {
         {tab === "dashboard" && (
           <section className="dashboard-grid">
             <Card>
-              <h2>Admin / işveren panel önizleme</h2>
+              <h2>Bekleyen ilanlar</h2>
               <div className="panel-list">
-                {[
-                  ["Bekleyen ilan onayı", jobs.filter((j) => j.status === "pending").length],
-                  ["Yeni başvurular", "Veritabanından okunacak"],
-                  ["Premium ilanlar", "Sonraki aşama"],
-                  ["Bağlantı durumu", dbStatus],
-                ].map(([k, v]) => (
-                  <div key={k} className="panel-row">
-                    <span className="muted">{k}</span>
-                    <strong>{String(v)}</strong>
+                {pendingJobs.length === 0 ? (
+                  <div className="panel-row">
+                    <span className="muted">Şu an bekleyen ilan yok</span>
+                    <strong>0</strong>
                   </div>
-                ))}
+                ) : (
+                  pendingJobs.map((job) => (
+                    <div key={job.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column" }}>
+                      <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center" }}>
+                        <strong>{job.title}</strong>
+                        <Badge className="pending">pending</Badge>
+                      </div>
+                      <div className="muted">{job.company} • {job.city} / {job.district}</div>
+                      <div className="muted">{job.pay} • {job.hours}</div>
+                      <div style={{ display: "flex", gap: "10px", marginTop: "12px", flexWrap: "wrap" }}>
+                        <Button
+                          onClick={() => handleApproveJob(job.id)}
+                          disabled={actionLoadingId === job.id}
+                        >
+                          {actionLoadingId === job.id ? <Loader2 size={16} className="spin" /> : <Check size={16} />}
+                          Onayla
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => handleDeleteJob(job.id)}
+                          disabled={actionLoadingId === job.id}
+                        >
+                          <Trash2 size={16} />
+                          Sil
+                        </Button>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </Card>
 
             <Card>
-              <h2>Supabase kurulum özeti</h2>
-              <div className="summary-list">
-                <div>1. Supabase proje aç</div>
-                <div>2. jobs ve applications tablosu oluştur</div>
-                <div>3. VITE_SUPABASE_URL ve VITE_SUPABASE_ANON_KEY ekle</div>
+              <h2>Başvurular</h2>
+              <div className="panel-list">
+                {loadingApplications ? (
+                  <div className="panel-row">
+                    <span className="muted">Başvurular yükleniyor</span>
+                    <Loader2 size={16} className="spin" />
+                  </div>
+                ) : applications.length === 0 ? (
+                  <div className="panel-row">
+                    <span className="muted">Henüz başvuru yok</span>
+                    <strong>0</strong>
+                  </div>
+                ) : (
+                  applications.slice(0, 10).map((app) => (
+                    <div key={app.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column" }}>
+                      <strong>{app.full_name}</strong>
+                      <div className="muted">Telefon: {app.phone}</div>
+                      <div className="muted">İlan ID: {app.job_id}</div>
+                      {app.note ? <div className="muted">Not: {app.note}</div> : null}
+                    </div>
+                  ))
+                )}
               </div>
             </Card>
           </section>
@@ -620,8 +740,7 @@ export default function App() {
         )}
 
         <footer className="footer">
-          Sonraki adımda üyelik sistemi, admin login, ücretli ilan, gerçek panel ve ilan onay ekranını ekleyeceğiz.
-          Bu sürüm artık demodan canlı ürüne geçiş için hazır temeldir.
+          Admin panel aktif. Bekleyen ilanları onaylayabilir, silebilir ve son başvuruları görüntüleyebilirsin.
         </footer>
       </div>
     </div>
