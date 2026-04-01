@@ -1052,7 +1052,7 @@ export default function App() {
                       onChange={(val) => setJobForm({ ...jobForm, package_type: val })}
                       options={[
                         { value: "standard", label: "Standart - Ücretsiz" },
-                        { value: "premium", label: "Premium - 99 TL" },
+                        { value: "premium", label: "Premium - 399 TL" },
                       ]}
                     />
 
