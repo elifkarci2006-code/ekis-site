@@ -1,3 +1,4 @@
+const SHOPIER_PAYMENT_URL = "https://www.shopier.com"; // şimdilik fake
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
