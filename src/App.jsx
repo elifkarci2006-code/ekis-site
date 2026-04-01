@@ -1125,28 +1125,7 @@ export default function App() {
                     <div className="muted">{selectedPackage.note}</div>
                   </div>
 
-                  {jobForm.package_type === "premium" ? (
-                    <div className="premium-plan-box" style={{ marginBottom: "16px" }}>
-                      <div className="premium-plan-title">
-                        <CreditCard size={18} />
-                        Ödeme bilgisi
-                      </div>
-                      <div className="muted" style={{ marginBottom: "8px" }}>
-                        Premium ilan ücreti 399 TL'dir. Ödeme bildirimi sonrası kontrol edilir ve admin
-                        onayıyla yayına geçer.
-                      </div>
-                      <div className="muted" style={{ marginBottom: "12px" }}>
-                        Örnek ödeme notu: "Shopier ödeme referansı", "IBAN açıklaması", "Dekont gönderildi"
-                      </div>
-                      <Textarea
-                        placeholder="Ödeme notu / referans bilgisi"
-                        value={jobForm.payment_note}
-                        onChange={(e) =>
-                          setJobForm({ ...jobForm, payment_note: e.target.value })
-                        }
-                      />
-                    </div>
-                  ) : null}
+                  jobForm.package_type === "premium
 
                   <div className="form-grid">
                     <SelectField
