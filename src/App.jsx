@@ -91,7 +91,8 @@ const PACKAGE_OPTIONS = {
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
+const supabase =
+  supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 function Card({ children, className = "" }) {
   return <div className={`card ${className}`}>{children}</div>;
@@ -103,7 +104,12 @@ function Badge({ children, variant = "default", className = "" }) {
 
 function Button({ children, variant = "solid", className = "", ...props }) {
   return (
-    <button className={`btn ${variant === "outline" ? "btn-outline" : "btn-solid"} ${className}`} {...props}>
+    <button
+      className={`btn ${
+        variant === "outline" ? "btn-outline" : "btn-solid"
+      } ${className}`}
+      {...props}
+    >
       {children}
     </button>
   );
@@ -119,7 +125,11 @@ function Textarea(props) {
 
 function SelectField({ value, onChange, options }) {
   return (
-    <select className="input" value={value} onChange={(e) => onChange(e.target.value)}>
+    <select
+      className="input"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    >
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}
@@ -155,25 +165,39 @@ function JobCard({ job, onApply }) {
                   <Sparkles size={13} /> Premium
                 </Badge>
               ) : null}
-              {job.status === "pending" ? <Badge className="pending">Onay bekliyor</Badge> : null}
+              {job.status === "pending" ? (
+                <Badge className="pending">Onay bekliyor</Badge>
+              ) : null}
             </div>
 
             <div className="company">{job.company}</div>
 
             <div className="meta-row">
-              <span><MapPin size={15} /> {job.city} / {job.district}</span>
-              <span><Clock3 size={15} /> {job.hours}</span>
-              <span><Wallet size={15} /> {job.pay}</span>
+              <span>
+                <MapPin size={15} /> {job.city} / {job.district}
+              </span>
+              <span>
+                <Clock3 size={15} /> {job.hours}
+              </span>
+              <span>
+                <Wallet size={15} /> {job.pay}
+              </span>
             </div>
 
             <p className="description">{job.description}</p>
 
             <div className="tags">
               {(job.tags || []).map((tag) => (
-                <Badge key={tag} className="soft">{tag}</Badge>
+                <Badge key={tag} className="soft">
+                  {tag}
+                </Badge>
               ))}
-              {job.featured ? <Badge className="featured-tag">Öne Çıkan</Badge> : null}
-              <Badge className="soft">{job.price || "Ücretsiz"}</Badge>
+              {job.featured ? (
+                <Badge className="featured-tag">Öne Çıkan</Badge>
+              ) : null}
+              <Badge className="soft">
+                {job.package_type === "premium" ? "399 TL" : job.price || "Ücretsiz"}
+              </Badge>
             </div>
           </div>
 
@@ -219,7 +243,9 @@ export default function App() {
   const [sendingApplication, setSendingApplication] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
   const [actionLoadingId, setActionLoadingId] = useState(null);
-  const [dbStatus, setDbStatus] = useState(supabase ? "Supabase bağlı" : "Demo modunda çalışıyor");
+  const [dbStatus, setDbStatus] = useState(
+    supabase ? "Supabase bağlı" : "Demo modunda çalışıyor"
+  );
 
   const [currentEmployer, setCurrentEmployer] = useState(() => {
     const stored = localStorage.getItem("ekis_employer_session");
@@ -237,7 +263,12 @@ export default function App() {
     password: "",
   });
 
-  const [applicationForm, setApplicationForm] = useState({ full_name: "", phone: "", note: "" });
+  const [applicationForm, setApplicationForm] = useState({
+    full_name: "",
+    phone: "",
+    note: "",
+  });
+
   const [jobForm, setJobForm] = useState({
     title: "",
     company: "",
@@ -490,12 +521,10 @@ export default function App() {
 
   const myJobIds = useMemo(() => myJobs.map((job) => String(job.id)), [myJobs]);
 
-  const pendingJobs = useMemo(() => {
-    if (!currentEmployer?.email) return [];
-    return jobs.filter((job) => job.status === "pending" && job.employer_email === currentEmployer.email);
-  }, [jobs, currentEmployer]);
-
-  const premiumJobsCount = useMemo(() => jobs.filter((job) => job.package_type === "premium").length, [jobs]);
+  const premiumJobsCount = useMemo(
+    () => jobs.filter((job) => job.package_type === "premium").length,
+    [jobs]
+  );
 
   const waitingPaymentJobs = useMemo(() => {
     if (!currentEmployer?.email) return [];
@@ -548,13 +577,12 @@ export default function App() {
 
     const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
     const paymentStatus = selectedPackage.payment_status;
-    const initialStatus = jobForm.package_type === "premium" ? "pending" : "pending";
 
     const newJob = {
       id: Date.now(),
       ...jobForm,
       tags: ["Yeni ilan", "İnceleme bekliyor"],
-      status: initialStatus,
+      status: "pending",
       featured: selectedPackage.featured,
       price: selectedPackage.price,
       employer_email: currentEmployer.email,
@@ -583,7 +611,7 @@ export default function App() {
         hours: jobForm.hours,
         description: jobForm.description,
         tags: ["Yeni ilan", "İnceleme bekliyor"],
-        status: initialStatus,
+        status: "pending",
         package_type: jobForm.package_type,
         featured: selectedPackage.featured,
         price: selectedPackage.price,
@@ -623,7 +651,6 @@ export default function App() {
       .from("jobs")
       .update({
         payment_status: "paid",
-        payment_note: "Ödeme bildirildi",
       })
       .eq("id", jobId);
 
@@ -636,7 +663,7 @@ export default function App() {
 
     setJobs((prev) =>
       prev.map((job) =>
-        job.id === jobId ? { ...job, payment_status: "paid", payment_note: "Ödeme bildirildi" } : job
+        job.id === jobId ? { ...job, payment_status: "paid" } : job
       )
     );
   }
@@ -832,13 +859,18 @@ export default function App() {
 
             {currentEmployer ? (
               <>
-                <Badge className="soft">{currentEmployer.company_name || currentEmployer.email}</Badge>
+                <Badge className="soft">
+                  {currentEmployer.company_name || currentEmployer.email}
+                </Badge>
                 <Button
                   variant="outline"
                   onClick={() => {
                     setTab("jobs");
                     setTimeout(() => {
-                      jobsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      jobsSectionRef.current?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
                     }, 50);
                   }}
                 >
@@ -848,7 +880,10 @@ export default function App() {
                   onClick={() => {
                     setTab("post");
                     setTimeout(() => {
-                      postSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      postSectionRef.current?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
                     }, 50);
                   }}
                 >
@@ -860,10 +895,23 @@ export default function App() {
               </>
             ) : (
               <>
-                <Button variant="outline" onClick={() => { setAuthMode("login"); setShowAuthModal(true); setAuthMessage(""); }}>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setAuthMode("login");
+                    setShowAuthModal(true);
+                    setAuthMessage("");
+                  }}
+                >
                   <LogIn size={16} /> Giriş
                 </Button>
-                <Button onClick={() => { setAuthMode("register"); setShowAuthModal(true); setAuthMessage(""); }}>
+                <Button
+                  onClick={() => {
+                    setAuthMode("register");
+                    setShowAuthModal(true);
+                    setAuthMessage("");
+                  }}
+                >
                   <UserPlus size={16} /> Kayıt Ol
                 </Button>
               </>
@@ -879,7 +927,8 @@ export default function App() {
                 1 dakikada <span>ilan ver</span>, başvuru al, premiumla öne çık.
               </h1>
               <p>
-                Premium ilanlar için ödeme bekleniyor akışı aktif. Ödeme sonrası admin onayıyla yayına alınır.
+                Premium ilan ücreti 399 TL'dir. Ödeme bildirimi sonrası kontrol edilir ve admin
+                onayıyla yayına geçer.
               </p>
 
               <div className="filters">
@@ -895,16 +944,24 @@ export default function App() {
                 <SelectField
                   value={city}
                   onChange={setCity}
-                  options={[{ value: "all", label: "Tüm şehirler" }, ...cities.map((c) => ({ value: c, label: c }))]}
+                  options={[
+                    { value: "all", label: "Tüm şehirler" },
+                    ...cities.map((c) => ({ value: c, label: c })),
+                  ]}
                 />
 
                 <SelectField
                   value={type}
                   onChange={setType}
-                  options={[{ value: "all", label: "Tüm türler" }, ...types.map((t) => ({ value: t, label: t }))]}
+                  options={[
+                    { value: "all", label: "Tüm türler" },
+                    ...types.map((t) => ({ value: t, label: t })),
+                  ]}
                 />
 
-                <Button><Filter size={16} /> Filtrele</Button>
+                <Button>
+                  <Filter size={16} /> Filtrele
+                </Button>
               </div>
             </Card>
           </motion.div>
@@ -920,17 +977,23 @@ export default function App() {
           <Card>
             <Briefcase className="feature-icon" />
             <div className="feature-title">İşveren hesabı</div>
-            <p className="muted">Her işveren kendi hesabıyla giriş yapar ve kendi ilanlarını görür.</p>
+            <p className="muted">
+              Her işveren kendi hesabıyla giriş yapar ve kendi ilanlarını görür.
+            </p>
           </Card>
           <Card>
             <CreditCard className="feature-icon" />
             <div className="feature-title">Ödeme akışı hazır</div>
-            <p className="muted">Premium ilanlar ödeme bekleyen duruma düşer, ödeme sonrası yayına alınır.</p>
+            <p className="muted">
+              Premium ilanlar ödeme bekleyen duruma düşer, ödeme sonrası yayına alınır.
+            </p>
           </Card>
           <Card>
             <MessageCircle className="feature-icon" />
             <div className="feature-title">Mesajlaşma sistemi</div>
-            <p className="muted">Başvuranlarla platform içinde iletişim kurabilir, numara paylaşmadan ilerleyebilirsin.</p>
+            <p className="muted">
+              Başvuranlarla platform içinde iletişim kurabilir, numara paylaşmadan ilerleyebilirsin.
+            </p>
           </Card>
         </section>
 
@@ -940,7 +1003,10 @@ export default function App() {
             onClick={() => {
               setTab("jobs");
               setTimeout(() => {
-                jobsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                jobsSectionRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
               }, 50);
             }}
           >
@@ -951,13 +1017,19 @@ export default function App() {
             onClick={() => {
               setTab("post");
               setTimeout(() => {
-                postSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                postSectionRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
               }, 50);
             }}
           >
             İlan Ver
           </button>
-          <button className={tab === "dashboard" ? "tab active" : "tab"} onClick={() => setTab("dashboard")}>
+          <button
+            className={tab === "dashboard" ? "tab active" : "tab"}
+            onClick={() => setTab("dashboard")}
+          >
             Panel
           </button>
         </div>
@@ -968,7 +1040,9 @@ export default function App() {
               <div className="section-head">
                 <div>
                   <h2>İlan listesi</h2>
-                  <p className="muted">Premium ilanlar üstte görünür, sadece onaylanmış ilanlar listelenir</p>
+                  <p className="muted">
+                    Premium ilanlar üstte görünür, sadece onaylanmış ilanlar listelenir
+                  </p>
                 </div>
                 <div className="result-wrap">
                   {loadingJobs ? <Loader2 size={16} className="spin" /> : null}
@@ -999,13 +1073,37 @@ export default function App() {
 
               {!currentEmployer ? (
                 <div className="premium-plan-box">
-                  <div className="premium-plan-title"><Lock size={18} /> Giriş gerekli</div>
-                  <div className="muted">İlan vermek için önce işveren hesabınla giriş yapman gerekiyor.</div>
-                  <div style={{ marginTop: "12px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                    <Button onClick={() => { setAuthMode("login"); setShowAuthModal(true); setAuthMessage(""); }}>
+                  <div className="premium-plan-title">
+                    <Lock size={18} /> Giriş gerekli
+                  </div>
+                  <div className="muted">
+                    İlan vermek için önce işveren hesabınla giriş yapman gerekiyor.
+                  </div>
+                  <div
+                    style={{
+                      marginTop: "12px",
+                      display: "flex",
+                      gap: "10px",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <Button
+                      onClick={() => {
+                        setAuthMode("login");
+                        setShowAuthModal(true);
+                        setAuthMessage("");
+                      }}
+                    >
                       <LogIn size={16} /> Giriş Yap
                     </Button>
-                    <Button variant="outline" onClick={() => { setAuthMode("register"); setShowAuthModal(true); setAuthMessage(""); }}>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setAuthMode("register");
+                        setShowAuthModal(true);
+                        setAuthMessage("");
+                      }}
+                    >
                       <UserPlus size={16} /> Kayıt Ol
                     </Button>
                   </div>
@@ -1033,7 +1131,8 @@ export default function App() {
                         Ödeme bilgisi
                       </div>
                       <div className="muted" style={{ marginBottom: "8px" }}>
-                        Premium ilan için ödeme alındığında admin onayı sonrası yayına geçer.
+                        Premium ilan ücreti 399 TL'dir. Ödeme bildirimi sonrası kontrol edilir ve admin
+                        onayıyla yayına geçer.
                       </div>
                       <div className="muted" style={{ marginBottom: "12px" }}>
                         Örnek ödeme notu: "Shopier ödeme referansı", "IBAN açıklaması", "Dekont gönderildi"
@@ -1041,7 +1140,9 @@ export default function App() {
                       <Textarea
                         placeholder="Ödeme notu / referans bilgisi"
                         value={jobForm.payment_note}
-                        onChange={(e) => setJobForm({ ...jobForm, payment_note: e.target.value })}
+                        onChange={(e) =>
+                          setJobForm({ ...jobForm, payment_note: e.target.value })
+                        }
                       />
                     </div>
                   ) : null}
@@ -1056,10 +1157,26 @@ export default function App() {
                       ]}
                     />
 
-                    <Input placeholder="İş başlığı" value={jobForm.title} onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })} />
-                    <Input placeholder="Firma adı" value={jobForm.company} onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })} />
-                    <Input placeholder="Şehir" value={jobForm.city} onChange={(e) => setJobForm({ ...jobForm, city: e.target.value })} />
-                    <Input placeholder="İlçe" value={jobForm.district} onChange={(e) => setJobForm({ ...jobForm, district: e.target.value })} />
+                    <Input
+                      placeholder="İş başlığı"
+                      value={jobForm.title}
+                      onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })}
+                    />
+                    <Input
+                      placeholder="Firma adı"
+                      value={jobForm.company}
+                      onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })}
+                    />
+                    <Input
+                      placeholder="Şehir"
+                      value={jobForm.city}
+                      onChange={(e) => setJobForm({ ...jobForm, city: e.target.value })}
+                    />
+                    <Input
+                      placeholder="İlçe"
+                      value={jobForm.district}
+                      onChange={(e) => setJobForm({ ...jobForm, district: e.target.value })}
+                    />
                     <SelectField
                       value={jobForm.type}
                       onChange={(val) => setJobForm({ ...jobForm, type: val })}
@@ -1070,16 +1187,34 @@ export default function App() {
                         { value: "Yarı zamanlı", label: "Yarı zamanlı" },
                       ]}
                     />
-                    <Input placeholder="Ücret bilgisi" value={jobForm.pay} onChange={(e) => setJobForm({ ...jobForm, pay: e.target.value })} />
+                    <Input
+                      placeholder="Ücret bilgisi"
+                      value={jobForm.pay}
+                      onChange={(e) => setJobForm({ ...jobForm, pay: e.target.value })}
+                    />
                     <div className="full">
-                      <Input placeholder="Çalışma saatleri" value={jobForm.hours} onChange={(e) => setJobForm({ ...jobForm, hours: e.target.value })} />
+                      <Input
+                        placeholder="Çalışma saatleri"
+                        value={jobForm.hours}
+                        onChange={(e) => setJobForm({ ...jobForm, hours: e.target.value })}
+                      />
                     </div>
                     <div className="full">
-                      <Textarea placeholder="İş açıklaması" value={jobForm.description} onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })} />
+                      <Textarea
+                        placeholder="İş açıklaması"
+                        value={jobForm.description}
+                        onChange={(e) =>
+                          setJobForm({ ...jobForm, description: e.target.value })
+                        }
+                      />
                     </div>
                     <div className="full action-row">
                       <Button onClick={handlePublish} disabled={savingJob}>
-                        {savingJob ? <Loader2 size={16} className="spin" /> : <PlusCircle size={16} />}
+                        {savingJob ? (
+                          <Loader2 size={16} className="spin" />
+                        ) : (
+                          <PlusCircle size={16} />
+                        )}
                         {savingJob ? "Kaydediliyor" : `${selectedPackage.label} ilanı kaydet`}
                       </Button>
                       <Button variant="outline">Taslak kaydet</Button>
@@ -1098,7 +1233,13 @@ export default function App() {
               {!currentEmployer ? (
                 <div className="panel-row">
                   <span className="muted">Paneli kullanmak için giriş yap.</span>
-                  <Button onClick={() => { setAuthMode("login"); setShowAuthModal(true); setAuthMessage(""); }}>
+                  <Button
+                    onClick={() => {
+                      setAuthMode("login");
+                      setShowAuthModal(true);
+                      setAuthMessage("");
+                    }}
+                  >
                     <LogIn size={16} /> Giriş
                   </Button>
                 </div>
@@ -1111,15 +1252,30 @@ export default function App() {
                     </div>
                   ) : (
                     myJobs.map((job) => (
-                      <div key={job.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column" }}>
-                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+                      <div
+                        key={job.id}
+                        className="panel-row"
+                        style={{ alignItems: "flex-start", flexDirection: "column" }}
+                      >
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            gap: "12px",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                          }}
+                        >
                           <strong>{job.title}</strong>
                           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                             <Badge className={job.status === "active" ? "soft" : "pending"}>
                               {job.status === "active" ? "yayında" : "pending"}
                             </Badge>
                             {job.package_type === "premium" ? (
-                              <Badge className="premium-badge"><Sparkles size={13} /> Premium</Badge>
+                              <Badge className="premium-badge">
+                                <Sparkles size={13} /> Premium
+                              </Badge>
                             ) : (
                               <Badge className="soft">Standart</Badge>
                             )}
@@ -1131,30 +1287,61 @@ export default function App() {
                           </div>
                         </div>
 
-                        <div className="muted">{job.company} • {job.city} / {job.district}</div>
-                        <div className="muted">{job.pay} • {job.hours}</div>
-                        <div className="muted">Paket fiyatı: {job.price || "Ücretsiz"}</div>
-                        {job.payment_note ? <div className="muted">Ödeme notu: {job.payment_note}</div> : null}
+                        <div className="muted">
+                          {job.company} • {job.city} / {job.district}
+                        </div>
+                        <div className="muted">
+                          {job.pay} • {job.hours}
+                        </div>
+                        <div className="muted">
+                          Paket fiyatı: {job.package_type === "premium" ? "399 TL" : job.price || "Ücretsiz"}
+                        </div>
+                        {job.payment_note ? (
+                          <div className="muted">Ödeme notu: {job.payment_note}</div>
+                        ) : null}
 
-                        <div style={{ display: "flex", gap: "10px", marginTop: "12px", flexWrap: "wrap" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            marginTop: "12px",
+                            flexWrap: "wrap",
+                            alignItems: "center",
+                          }}
+                        >
                           {job.package_type === "premium" && job.payment_status === "waiting_payment" ? (
-                            <Button
-                              onClick={() => handleMarkPaid(job.id)}
-                              disabled={actionLoadingId === job.id}
-                            >
-                              <CreditCard size={16} />
-                              Ödeme Bildirdim
-                            </Button>
+                            <>
+                              <Button
+                                onClick={() => handleMarkPaid(job.id)}
+                                disabled={actionLoadingId === job.id}
+                              >
+                                <CreditCard size={16} />
+                                Ödeme Bildirdim
+                              </Button>
+                              <div className="muted">Ödeme yapılmadan ilan yayına alınamaz</div>
+                            </>
                           ) : null}
 
-                          {job.status !== "active" ? (
-                            <Button onClick={() => handleApproveJob(job.id)} disabled={actionLoadingId === job.id}>
-                              {actionLoadingId === job.id ? <Loader2 size={16} className="spin" /> : <Check size={16} />}
+                          {job.status !== "active" &&
+                          (job.package_type !== "premium" || job.payment_status === "paid") ? (
+                            <Button
+                              onClick={() => handleApproveJob(job.id)}
+                              disabled={actionLoadingId === job.id}
+                            >
+                              {actionLoadingId === job.id ? (
+                                <Loader2 size={16} className="spin" />
+                              ) : (
+                                <Check size={16} />
+                              )}
                               Onayla
                             </Button>
                           ) : null}
 
-                          <Button variant="outline" onClick={() => handleDeleteJob(job.id)} disabled={actionLoadingId === job.id}>
+                          <Button
+                            variant="outline"
+                            onClick={() => handleDeleteJob(job.id)}
+                            disabled={actionLoadingId === job.id}
+                          >
                             <Trash2 size={16} />
                             Sil
                           </Button>
@@ -1171,7 +1358,13 @@ export default function App() {
               {!currentEmployer ? (
                 <div className="panel-row">
                   <span className="muted">Başvuruları görmek için giriş yap.</span>
-                  <Button onClick={() => { setAuthMode("login"); setShowAuthModal(true); setAuthMessage(""); }}>
+                  <Button
+                    onClick={() => {
+                      setAuthMode("login");
+                      setShowAuthModal(true);
+                      setAuthMessage("");
+                    }}
+                  >
                     <LogIn size={16} /> Giriş
                   </Button>
                 </div>
@@ -1189,8 +1382,21 @@ export default function App() {
                     </div>
                   ) : (
                     enrichedApplications.slice(0, 10).map((app) => (
-                      <div key={app.id} className="panel-row" style={{ alignItems: "flex-start", flexDirection: "column", gap: "8px" }}>
-                        <div style={{ width: "100%", display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+                      <div
+                        key={app.id}
+                        className="panel-row"
+                        style={{ alignItems: "flex-start", flexDirection: "column", gap: "8px" }}
+                      >
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            gap: "12px",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                          }}
+                        >
                           <strong>{app.full_name}</strong>
                           <Badge className="soft">{app.jobTitle}</Badge>
                         </div>
@@ -1212,8 +1418,18 @@ export default function App() {
                         </div>
 
                         {app.note ? (
-                          <div style={{ width: "100%", padding: "10px 12px", borderRadius: "14px", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
-                            <div className="muted" style={{ fontSize: "13px", marginBottom: "4px" }}>Başvuru notu</div>
+                          <div
+                            style={{
+                              width: "100%",
+                              padding: "10px 12px",
+                              borderRadius: "14px",
+                              background: "#f8fafc",
+                              border: "1px solid #e2e8f0",
+                            }}
+                          >
+                            <div className="muted" style={{ fontSize: "13px", marginBottom: "4px" }}>
+                              Başvuru notu
+                            </div>
                             <div>{app.note}</div>
                           </div>
                         ) : null}
@@ -1239,7 +1455,9 @@ export default function App() {
               <h2>Başvuru gönder</h2>
               <div className="job-preview">
                 <div className="preview-title">{appliedJob.title}</div>
-                <div className="muted">{appliedJob.company} • {appliedJob.city}</div>
+                <div className="muted">
+                  {appliedJob.company} • {appliedJob.city}
+                </div>
               </div>
 
               {!applicationSent ? (
@@ -1247,30 +1465,46 @@ export default function App() {
                   <Input
                     placeholder="Ad soyad"
                     value={applicationForm.full_name}
-                    onChange={(e) => setApplicationForm({ ...applicationForm, full_name: e.target.value })}
+                    onChange={(e) =>
+                      setApplicationForm({ ...applicationForm, full_name: e.target.value })
+                    }
                   />
                   <Input
                     placeholder="Telefon"
                     value={applicationForm.phone}
-                    onChange={(e) => setApplicationForm({ ...applicationForm, phone: e.target.value })}
+                    onChange={(e) =>
+                      setApplicationForm({ ...applicationForm, phone: e.target.value })
+                    }
                   />
                   <Textarea
                     placeholder="Kısa bir not yaz"
                     value={applicationForm.note}
-                    onChange={(e) => setApplicationForm({ ...applicationForm, note: e.target.value })}
+                    onChange={(e) =>
+                      setApplicationForm({ ...applicationForm, note: e.target.value })
+                    }
                   />
                   <div className="action-row">
                     <Button onClick={handleApplicationSubmit} disabled={sendingApplication}>
-                      {sendingApplication ? <Loader2 size={16} className="spin" /> : <Send size={16} />}
+                      {sendingApplication ? (
+                        <Loader2 size={16} className="spin" />
+                      ) : (
+                        <Send size={16} />
+                      )}
                       {sendingApplication ? "Gönderiliyor" : "Başvuruyu gönder"}
                     </Button>
-                    <Button variant="outline" onClick={() => setAppliedJob(null)}>Vazgeç</Button>
+                    <Button variant="outline" onClick={() => setAppliedJob(null)}>
+                      Vazgeç
+                    </Button>
                   </div>
                 </>
               ) : (
                 <div className="success-box">
-                  <div className="success-title"><CheckCircle2 size={18} /> Başvuru başarıyla gönderildi</div>
-                  <p className="muted">Supabase aktifse başvuru applications tablosuna kaydedilir.</p>
+                  <div className="success-title">
+                    <CheckCircle2 size={18} /> Başvuru başarıyla gönderildi
+                  </div>
+                  <p className="muted">
+                    Supabase aktifse başvuru applications tablosuna kaydedilir.
+                  </p>
                   <Button onClick={() => setAppliedJob(null)}>Kapat</Button>
                 </div>
               )}
@@ -1285,10 +1519,20 @@ export default function App() {
 
               <div className="job-preview">
                 <div className="preview-title">{activeChat.full_name}</div>
-                <div className="muted">{activeChat.jobTitle || `İlan #${activeChat.job_id}`}</div>
+                <div className="muted">
+                  {activeChat.jobTitle || `İlan #${activeChat.job_id}`}
+                </div>
               </div>
 
-              <div style={{ maxHeight: "280px", overflowY: "auto", display: "grid", gap: "10px", marginBottom: "14px" }}>
+              <div
+                style={{
+                  maxHeight: "280px",
+                  overflowY: "auto",
+                  display: "grid",
+                  gap: "10px",
+                  marginBottom: "14px",
+                }}
+              >
                 {loadingMessages ? (
                   <div className="muted">Mesajlar yükleniyor...</div>
                 ) : messages.length === 0 ? (
@@ -1302,7 +1546,8 @@ export default function App() {
                         borderRadius: "14px",
                         background: msg.sender === "employer" ? "#0f172a" : "#f8fafc",
                         color: msg.sender === "employer" ? "#fff" : "#0f172a",
-                        border: msg.sender === "employer" ? "none" : "1px solid #e2e8f0",
+                        border:
+                          msg.sender === "employer" ? "none" : "1px solid #e2e8f0",
                       }}
                     >
                       <div style={{ fontSize: "13px", opacity: 0.8, marginBottom: "4px" }}>
@@ -1355,7 +1600,9 @@ export default function App() {
                   <Input
                     placeholder="Firma adı"
                     value={authForm.company_name}
-                    onChange={(e) => setAuthForm({ ...authForm, company_name: e.target.value })}
+                    onChange={(e) =>
+                      setAuthForm({ ...authForm, company_name: e.target.value })
+                    }
                   />
                 </>
               ) : null}
@@ -1374,7 +1621,14 @@ export default function App() {
               />
 
               {authMessage ? (
-                <div style={{ padding: "10px 12px", borderRadius: "12px", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                <div
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: "12px",
+                    background: "#f8fafc",
+                    border: "1px solid #e2e8f0",
+                  }}
+                >
                   {authMessage}
                 </div>
               ) : null}
@@ -1409,7 +1663,13 @@ export default function App() {
                     Hesabın yok mu?{" "}
                     <button
                       type="button"
-                      style={{ background: "none", border: "none", color: "#0f172a", fontWeight: 700, cursor: "pointer" }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#0f172a",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                      }}
                       onClick={() => {
                         setAuthMode("register");
                         setAuthMessage("");
@@ -1423,7 +1683,13 @@ export default function App() {
                     Zaten hesabın var mı?{" "}
                     <button
                       type="button"
-                      style={{ background: "none", border: "none", color: "#0f172a", fontWeight: 700, cursor: "pointer" }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#0f172a",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                      }}
                       onClick={() => {
                         setAuthMode("login");
                         setAuthMessage("");
