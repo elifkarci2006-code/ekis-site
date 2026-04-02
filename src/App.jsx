@@ -35,7 +35,7 @@ import {
 import { createClient } from "@supabase/supabase-js";
 
 const SHOPIER_PAYMENT_URL = "https://www.shopier.com";
-const SUPER_ADMIN_EMAILS = ["demo@ekis.com", "admin@ekis.com"];
+const SUPER_ADMIN_EMAILS = ["demo@ekis.com", "admin@ekis.com", "elifkarci2006@gmail.com"];
 
 const initialJobs = [
   {
