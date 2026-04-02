@@ -28,10 +28,14 @@ import {
   UserPlus,
   Lock,
   CreditCard,
+  Share2,
+  Copy,
+  Crown,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
 const SHOPIER_PAYMENT_URL = "https://www.shopier.com";
+const SUPER_ADMIN_EMAILS = ["demo@ekis.com", "admin@ekis.com"];
 
 const initialJobs = [
   {
@@ -155,7 +159,7 @@ function Stat({ label, value, icon: Icon }) {
   );
 }
 
-function JobCard({ job, onApply }) {
+function JobCard({ job, onApply, onView }) {
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <Card className={`job-card ${job.featured ? "featured-card" : ""}`}>
@@ -209,7 +213,9 @@ function JobCard({ job, onApply }) {
 
           <div className="job-actions">
             <Button onClick={() => onApply(job)}>Başvur</Button>
-            <Button variant="outline">Detayı Gör</Button>
+            <Button variant="outline" onClick={() => onView(job)}>
+              Detayı Gör
+            </Button>
           </div>
         </div>
       </Card>
@@ -236,6 +242,8 @@ export default function App() {
   const [messages, setMessages] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
   const [newMessage, setNewMessage] = useState("");
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [shareMessage, setShareMessage] = useState("");
   const [search, setSearch] = useState("");
   const [city, setCity] = useState("all");
   const [type, setType] = useState("all");
@@ -291,6 +299,12 @@ export default function App() {
   const jobsSectionRef = useRef(null);
   const postSectionRef = useRef(null);
 
+  const isSuperAdmin = useMemo(() => {
+    return currentEmployer?.email
+      ? SUPER_ADMIN_EMAILS.includes(currentEmployer.email)
+      : false;
+  }, [currentEmployer]);
+
   useEffect(() => {
     loadJobs();
     loadApplications();
@@ -307,6 +321,18 @@ export default function App() {
       localStorage.removeItem("ekis_employer_session");
     }
   }, [currentEmployer]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || jobs.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    const ilanId = params.get("ilan");
+    if (!ilanId) return;
+
+    const found = jobs.find((job) => String(job.id) === String(ilanId));
+    if (found) {
+      setSelectedJob(found);
+    }
+  }, [jobs]);
 
   async function loadJobs() {
     if (!supabase) {
@@ -502,6 +528,37 @@ export default function App() {
     setTab("jobs");
   }
 
+  function getJobShareUrl(job) {
+    if (typeof window === "undefined") return `?ilan=${job.id}`;
+    return `${window.location.origin}${window.location.pathname}?ilan=${job.id}`;
+  }
+
+  async function handleShareJob(job) {
+    const shareUrl = getJobShareUrl(job);
+    const shareText = `${job.title} - ${job.company}`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: shareText,
+          text: `${job.title} ilanına göz at`,
+          url: shareUrl,
+        });
+        setShareMessage("İlan paylaşıldı");
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareMessage("İlan linki kopyalandı");
+      } else {
+        setShareMessage(shareUrl);
+      }
+    } catch (error) {
+      console.error(error);
+      setShareMessage("Paylaşım yapılamadı");
+    }
+
+    setTimeout(() => setShareMessage(""), 2500);
+  }
+
   const filteredJobs = useMemo(() => {
     return jobs
       .filter((job) => {
@@ -561,6 +618,17 @@ export default function App() {
         };
       });
   }, [applications, jobs, myJobIds]);
+
+  const superAdminStats = useMemo(() => {
+    const totalJobs = jobs.length;
+    const totalApplications = applications.length;
+    const totalEmployers = [...new Set(jobs.map((job) => job.employer_email).filter(Boolean))].length;
+    const paymentWaiting = jobs.filter(
+      (job) => job.package_type === "premium" && job.payment_status === "waiting_payment"
+    ).length;
+
+    return { totalJobs, totalApplications, totalEmployers, paymentWaiting };
+  }, [jobs, applications]);
 
   function resetJobForm() {
     setJobForm({
@@ -886,9 +954,16 @@ export default function App() {
 
             {currentEmployer ? (
               <>
+                {isSuperAdmin ? (
+                  <Badge className="premium-badge">
+                    <Crown size={13} /> Süper Admin
+                  </Badge>
+                ) : null}
+
                 <Badge className="soft">
                   {currentEmployer.company_name || currentEmployer.email}
                 </Badge>
+
                 <Button
                   variant="outline"
                   onClick={() => {
@@ -903,6 +978,7 @@ export default function App() {
                 >
                   <User size={16} /> İş Ara
                 </Button>
+
                 <Button
                   onClick={() => {
                     setTab("post");
@@ -916,6 +992,7 @@ export default function App() {
                 >
                   <Building2 size={16} /> İlan Ver
                 </Button>
+
                 <Button variant="outline" onClick={handleLogout}>
                   <LogOut size={16} /> Çıkış
                 </Button>
@@ -1052,6 +1129,7 @@ export default function App() {
           >
             İlanlar
           </button>
+
           <button
             className={tab === "post" ? "tab active" : "tab"}
             onClick={() => {
@@ -1066,12 +1144,22 @@ export default function App() {
           >
             İlan Ver
           </button>
+
           <button
             className={tab === "dashboard" ? "tab active" : "tab"}
             onClick={() => setTab("dashboard")}
           >
             Panel
           </button>
+
+          {isSuperAdmin ? (
+            <button
+              className={tab === "superadmin" ? "tab active" : "tab"}
+              onClick={() => setTab("superadmin")}
+            >
+              Süper Admin
+            </button>
+          ) : null}
         </div>
 
         {tab === "jobs" && (
@@ -1099,6 +1187,7 @@ export default function App() {
                       setAppliedJob(selected);
                       setApplicationSent(false);
                     }}
+                    onView={(jobToView) => setSelectedJob(jobToView)}
                   />
                 ))}
               </div>
@@ -1590,6 +1679,203 @@ export default function App() {
           </section>
         )}
 
+        {tab === "superadmin" && isSuperAdmin && (
+          <section className="dashboard-grid">
+            <Card>
+              <h2>Süper Admin Özeti</h2>
+              <div className="panel-list">
+                <div className="panel-row">
+                  <span className="muted">Toplam ilan</span>
+                  <strong>{superAdminStats.totalJobs}</strong>
+                </div>
+                <div className="panel-row">
+                  <span className="muted">Toplam başvuru</span>
+                  <strong>{superAdminStats.totalApplications}</strong>
+                </div>
+                <div className="panel-row">
+                  <span className="muted">İşveren sayısı</span>
+                  <strong>{superAdminStats.totalEmployers}</strong>
+                </div>
+                <div className="panel-row">
+                  <span className="muted">Ödeme bekleyen premium</span>
+                  <strong>{superAdminStats.paymentWaiting}</strong>
+                </div>
+              </div>
+            </Card>
+
+            <Card>
+              <h2>Tüm İlanlar</h2>
+              <div className="panel-list">
+                {jobs.length === 0 ? (
+                  <div className="panel-row">
+                    <span className="muted">İlan yok</span>
+                    <strong>0</strong>
+                  </div>
+                ) : (
+                  jobs.slice(0, 20).map((job) => (
+                    <div
+                      key={job.id}
+                      className="panel-row"
+                      style={{ alignItems: "flex-start", flexDirection: "column", gap: "8px" }}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          gap: "12px",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <strong>{job.title}</strong>
+                        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                          <Badge className={job.status === "active" ? "soft" : "pending"}>
+                            {job.status}
+                          </Badge>
+                          {job.package_type === "premium" ? (
+                            <Badge className="premium-badge">
+                              <Sparkles size={13} /> Premium
+                            </Badge>
+                          ) : (
+                            <Badge className="soft">Standart</Badge>
+                          )}
+                          {job.payment_status === "waiting_payment" ? (
+                            <Badge className="pending">ödeme bekleniyor</Badge>
+                          ) : job.payment_status === "paid" ? (
+                            <Badge className="soft">ödeme tamam</Badge>
+                          ) : null}
+                        </div>
+                      </div>
+
+                      <div className="muted">{job.company}</div>
+                      <div className="muted">İşveren: {job.employer_email || "-"}</div>
+                      <div className="muted">Şehir: {job.city} / {job.district}</div>
+                      <div className="muted">Paket: {job.package_type}</div>
+
+                      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                        {job.package_type === "premium" &&
+                        job.payment_status === "waiting_payment" ? (
+                          <Button
+                            onClick={() => handleMarkPaid(job.id)}
+                            disabled={actionLoadingId === job.id}
+                          >
+                            <CreditCard size={16} />
+                            Ödeme Bildirildi Yap
+                          </Button>
+                        ) : null}
+
+                        {job.status !== "active" &&
+                        (job.package_type !== "premium" ||
+                          job.payment_status === "paid") ? (
+                          <Button
+                            onClick={() => handleApproveJob(job.id)}
+                            disabled={actionLoadingId === job.id}
+                          >
+                            <Check size={16} />
+                            Yayına Al
+                          </Button>
+                        ) : null}
+
+                        <Button
+                          variant="outline"
+                          onClick={() => handleDeleteJob(job.id)}
+                          disabled={actionLoadingId === job.id}
+                        >
+                          <Trash2 size={16} />
+                          Sil
+                        </Button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </Card>
+
+            <Card>
+              <h2>Tüm Başvurular</h2>
+              <div className="panel-list">
+                {applications.length === 0 ? (
+                  <div className="panel-row">
+                    <span className="muted">Başvuru yok</span>
+                    <strong>0</strong>
+                  </div>
+                ) : (
+                  applications.slice(0, 20).map((app) => {
+                    const relatedJob = jobs.find((job) => String(job.id) === String(app.job_id));
+                    return (
+                      <div
+                        key={app.id}
+                        className="panel-row"
+                        style={{ alignItems: "flex-start", flexDirection: "column", gap: "8px" }}
+                      >
+                        <strong>{app.full_name}</strong>
+                        <div className="muted">Telefon: {app.phone}</div>
+                        <div className="muted">
+                          İlan: {relatedJob?.title || `İlan #${app.job_id}`}
+                        </div>
+                        <div className="muted">
+                          İşveren: {relatedJob?.employer_email || "-"}
+                        </div>
+                        <div className="muted">{formatDate(app.created_at)}</div>
+                        {app.note ? (
+                          <div className="muted">Not: {app.note}</div>
+                        ) : null}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </Card>
+
+            <Card>
+              <h2>Ödeme Bekleyen Premium İlanlar</h2>
+              <div className="panel-list">
+                {jobs.filter(
+                  (job) =>
+                    job.package_type === "premium" &&
+                    job.payment_status === "waiting_payment"
+                ).length === 0 ? (
+                  <div className="panel-row">
+                    <span className="muted">Bekleyen premium ödeme yok</span>
+                    <strong>0</strong>
+                  </div>
+                ) : (
+                  jobs
+                    .filter(
+                      (job) =>
+                        job.package_type === "premium" &&
+                        job.payment_status === "waiting_payment"
+                    )
+                    .map((job) => (
+                      <div
+                        key={job.id}
+                        className="panel-row"
+                        style={{ alignItems: "flex-start", flexDirection: "column", gap: "8px" }}
+                      >
+                        <strong>{job.title}</strong>
+                        <div className="muted">{job.company}</div>
+                        <div className="muted">İşveren: {job.employer_email || "-"}</div>
+                        <div className="muted">
+                          Ödeme notu: {job.payment_note || "Yok"}
+                        </div>
+                        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                          <Button
+                            onClick={() => handleMarkPaid(job.id)}
+                            disabled={actionLoadingId === job.id}
+                          >
+                            <CreditCard size={16} />
+                            Ödemeyi Onayla
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                )}
+              </div>
+            </Card>
+          </section>
+        )}
+
         {appliedJob && (
           <div className="modal-backdrop">
             <div className="modal">
@@ -1663,6 +1949,123 @@ export default function App() {
                   <Button onClick={() => setAppliedJob(null)}>Kapat</Button>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {selectedJob && (
+          <div className="modal-backdrop">
+            <div className="modal" style={{ maxWidth: "640px" }}>
+              <h2>{selectedJob.title}</h2>
+
+              <div className="job-preview">
+                <div className="preview-title">{selectedJob.company}</div>
+                <div className="muted">
+                  {selectedJob.city} / {selectedJob.district}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  flexWrap: "wrap",
+                  marginBottom: "12px",
+                }}
+              >
+                <Badge variant="secondary">{selectedJob.type}</Badge>
+                {selectedJob.package_type === "premium" ? (
+                  <Badge className="premium-badge">
+                    <Sparkles size={13} /> Premium
+                  </Badge>
+                ) : null}
+                <Badge className="soft">
+                  <Clock3 size={13} /> {selectedJob.hours}
+                </Badge>
+                <Badge className="soft">
+                  <Wallet size={13} /> {selectedJob.pay}
+                </Badge>
+              </div>
+
+              <p style={{ marginBottom: "14px" }}>{selectedJob.description}</p>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "8px",
+                  flexWrap: "wrap",
+                  marginBottom: "14px",
+                }}
+              >
+                {(selectedJob.tags || []).map((tag) => (
+                  <Badge key={tag} className="soft">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+
+              {shareMessage ? (
+                <div
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: "12px",
+                    background: "#f8fafc",
+                    border: "1px solid #e2e8f0",
+                    marginBottom: "12px",
+                  }}
+                >
+                  {shareMessage}
+                </div>
+              ) : null}
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    setAppliedJob(selectedJob);
+                    setApplicationSent(false);
+                    setSelectedJob(null);
+                  }}
+                >
+                  Başvur
+                </Button>
+
+                <Button
+                  variant="outline"
+                  onClick={() => handleShareJob(selectedJob)}
+                >
+                  <Share2 size={16} />
+                  Paylaş
+                </Button>
+
+                <Button
+                  variant="outline"
+                  onClick={async () => {
+                    const shareUrl = getJobShareUrl(selectedJob);
+                    try {
+                      if (navigator.clipboard) {
+                        await navigator.clipboard.writeText(shareUrl);
+                        setShareMessage("İlan linki kopyalandı");
+                        setTimeout(() => setShareMessage(""), 2500);
+                      }
+                    } catch (error) {
+                      console.error(error);
+                    }
+                  }}
+                >
+                  <Copy size={16} />
+                  Linki Kopyala
+                </Button>
+
+                <Button variant="outline" onClick={() => setSelectedJob(null)}>
+                  Kapat
+                </Button>
+              </div>
             </div>
           </div>
         )}
