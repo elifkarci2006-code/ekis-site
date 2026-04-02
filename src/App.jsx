@@ -31,11 +31,103 @@ import {
   Share2,
   Copy,
   Crown,
+  Pencil,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
 const SHOPIER_PAYMENT_URL = "https://www.shopier.com";
-const SUPER_ADMIN_EMAILS = ["demo@ekis.com", "admin@ekis.com", "elifkarci2006@gmail.com"];
+const SUPER_ADMIN_EMAILS = [
+  "demo@ekis.com",
+  "admin@ekis.com",
+  "elifkarci2006@gmail.com",
+];
+
+const FREE_JOB_DURATION_DAYS = 15;
+const PREMIUM_JOB_DURATION_DAYS = 30;
+
+const TURKEY_CITIES = [
+  "Adana",
+  "Adıyaman",
+  "Afyonkarahisar",
+  "Ağrı",
+  "Aksaray",
+  "Amasya",
+  "Ankara",
+  "Antalya",
+  "Ardahan",
+  "Artvin",
+  "Aydın",
+  "Balıkesir",
+  "Bartın",
+  "Batman",
+  "Bayburt",
+  "Bilecik",
+  "Bingöl",
+  "Bitlis",
+  "Bolu",
+  "Burdur",
+  "Bursa",
+  "Çanakkale",
+  "Çankırı",
+  "Çorum",
+  "Denizli",
+  "Diyarbakır",
+  "Düzce",
+  "Edirne",
+  "Elazığ",
+  "Erzincan",
+  "Erzurum",
+  "Eskişehir",
+  "Gaziantep",
+  "Giresun",
+  "Gümüşhane",
+  "Hakkari",
+  "Hatay",
+  "Iğdır",
+  "Isparta",
+  "İstanbul",
+  "İzmir",
+  "Kahramanmaraş",
+  "Karabük",
+  "Karaman",
+  "Kars",
+  "Kastamonu",
+  "Kayseri",
+  "Kırıkkale",
+  "Kırklareli",
+  "Kırşehir",
+  "Kilis",
+  "Kocaeli",
+  "Konya",
+  "Kütahya",
+  "Malatya",
+  "Manisa",
+  "Mardin",
+  "Mersin",
+  "Muğla",
+  "Muş",
+  "Nevşehir",
+  "Niğde",
+  "Ordu",
+  "Osmaniye",
+  "Rize",
+  "Sakarya",
+  "Samsun",
+  "Siirt",
+  "Sinop",
+  "Sivas",
+  "Şanlıurfa",
+  "Şırnak",
+  "Tekirdağ",
+  "Tokat",
+  "Trabzon",
+  "Tunceli",
+  "Uşak",
+  "Van",
+  "Yalova",
+  "Yozgat",
+  "Zonguldak",
+];
 
 const initialJobs = [
   {
@@ -47,7 +139,7 @@ const initialJobs = [
     type: "Part-time",
     pay: "Saatlik 170 TL",
     hours: "18:00 - 23:00",
-    tags: ["Öğrenciye uygun", "Akşam", "Hızlı başlangıç"],
+    tags: ["Öğrenciye uygun", "Akşam", "Hızlı başlangıç", "ACİL"],
     description:
       "Yoğun saatlerde servis desteği verecek, güler yüzlü ekip arkadaşı aranıyor.",
     status: "active",
@@ -57,6 +149,7 @@ const initialJobs = [
     employer_email: "demo@ekis.com",
     payment_status: "paid",
     payment_note: "Demo ödeme tamamlandı",
+    created_at: new Date().toISOString(),
   },
   {
     id: 2,
@@ -77,6 +170,7 @@ const initialJobs = [
     employer_email: "demo@ekis.com",
     payment_status: "none",
     payment_note: "",
+    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
   },
 ];
 
@@ -87,6 +181,7 @@ const PACKAGE_OPTIONS = {
     featured: false,
     note: "Normal listede yayınlanır.",
     payment_status: "none",
+    durationDays: FREE_JOB_DURATION_DAYS,
   },
   premium: {
     label: "Premium",
@@ -94,6 +189,7 @@ const PACKAGE_OPTIONS = {
     featured: true,
     note: "İlan öne çıkar, premium rozeti alır ve üst sıralarda görünür.",
     payment_status: "waiting_payment",
+    durationDays: PREMIUM_JOB_DURATION_DAYS,
   },
 };
 
@@ -147,6 +243,14 @@ function SelectField({ value, onChange, options }) {
   );
 }
 
+function Label({ children, required = false }) {
+  return (
+    <div style={{ fontWeight: 600, marginBottom: "6px" }}>
+      {children} {required ? <span style={{ color: "#dc2626" }}>*</span> : null}
+    </div>
+  );
+}
+
 function Stat({ label, value, icon: Icon }) {
   return (
     <Card>
@@ -159,7 +263,71 @@ function Stat({ label, value, icon: Icon }) {
   );
 }
 
+function getDurationDays(job) {
+  return job.package_type === "premium"
+    ? PREMIUM_JOB_DURATION_DAYS
+    : FREE_JOB_DURATION_DAYS;
+}
+
+function getRemainingDays(job) {
+  if (!job.created_at) return getDurationDays(job);
+  const created = new Date(job.created_at).getTime();
+  const now = Date.now();
+  const durationMs = getDurationDays(job) * 24 * 60 * 60 * 1000;
+  const diff = created + durationMs - now;
+  return Math.ceil(diff / (24 * 60 * 60 * 1000));
+}
+
+function isExpired(job) {
+  return getRemainingDays(job) <= 0;
+}
+
+function isNewJob(job) {
+  if (!job.created_at) return false;
+  const created = new Date(job.created_at).getTime();
+  return Date.now() - created <= 24 * 60 * 60 * 1000;
+}
+
+function normalizeTags(tags) {
+  if (Array.isArray(tags)) return tags;
+  if (!tags) return [];
+  return [tags];
+}
+
+function buildTags(existingTags, urgent, packageType, status) {
+  const base = normalizeTags(existingTags).filter(
+    (tag) =>
+      !["ACİL", "Premium", "Yayınlandı", "Öne Çıkan", "Yeni ilan", "İnceleme bekliyor"].includes(tag)
+  );
+
+  if (urgent) base.unshift("ACİL");
+  if (status === "pending") base.unshift("İnceleme bekliyor");
+  if (status === "active") base.unshift("Yayınlandı");
+  if (packageType === "premium") {
+    base.unshift("Premium");
+    if (status === "active") base.unshift("Öne Çıkan");
+  }
+
+  return [...new Set(base)];
+}
+
+function formatDate(dateString) {
+  if (!dateString) return "-";
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return "-";
+  return new Intl.DateTimeFormat("tr-TR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
 function JobCard({ job, onApply, onView }) {
+  const remainingDays = getRemainingDays(job);
+  const urgent = normalizeTags(job.tags).includes("ACİL");
+
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <Card className={`job-card ${job.featured ? "featured-card" : ""}`}>
@@ -173,9 +341,8 @@ function JobCard({ job, onApply, onView }) {
                   <Sparkles size={13} /> Premium
                 </Badge>
               ) : null}
-              {job.status === "pending" ? (
-                <Badge className="pending">Onay bekliyor</Badge>
-              ) : null}
+              {urgent ? <Badge className="pending">ACİL</Badge> : null}
+              {isNewJob(job) ? <Badge className="soft">Yeni</Badge> : null}
             </div>
 
             <div className="company">{job.company}</div>
@@ -195,7 +362,7 @@ function JobCard({ job, onApply, onView }) {
             <p className="description">{job.description}</p>
 
             <div className="tags">
-              {(job.tags || []).map((tag) => (
+              {normalizeTags(job.tags).map((tag) => (
                 <Badge key={tag} className="soft">
                   {tag}
                 </Badge>
@@ -207,6 +374,9 @@ function JobCard({ job, onApply, onView }) {
                 {job.package_type === "premium"
                   ? "399 TL"
                   : job.price || "Ücretsiz"}
+              </Badge>
+              <Badge className="soft">
+                {remainingDays > 0 ? `${remainingDays} gün kaldı` : "Süresi doldu"}
               </Badge>
             </div>
           </div>
@@ -221,19 +391,6 @@ function JobCard({ job, onApply, onView }) {
       </Card>
     </motion.div>
   );
-}
-
-function formatDate(dateString) {
-  if (!dateString) return "-";
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) return "-";
-  return new Intl.DateTimeFormat("tr-TR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(date);
 }
 
 export default function App() {
@@ -294,6 +451,24 @@ export default function App() {
     description: "",
     package_type: "standard",
     payment_note: "",
+    urgent: false,
+  });
+
+  const [editingJob, setEditingJob] = useState(null);
+  const [editForm, setEditForm] = useState({
+    title: "",
+    company: "",
+    city: "",
+    district: "",
+    type: "Part-time",
+    pay: "",
+    hours: "",
+    description: "",
+    package_type: "standard",
+    payment_note: "",
+    payment_status: "none",
+    status: "pending",
+    urgent: false,
   });
 
   const jobsSectionRef = useRef(null);
@@ -329,9 +504,7 @@ export default function App() {
     if (!ilanId) return;
 
     const found = jobs.find((job) => String(job.id) === String(ilanId));
-    if (found) {
-      setSelectedJob(found);
-    }
+    if (found) setSelectedJob(found);
   }, [jobs]);
 
   async function loadJobs() {
@@ -365,7 +538,7 @@ export default function App() {
       pay: job.pay,
       hours: job.hours,
       description: job.description,
-      tags: Array.isArray(job.tags) ? job.tags : job.tags ? [job.tags] : [],
+      tags: normalizeTags(job.tags),
       status: job.status || "active",
       package_type: job.package_type || "standard",
       featured: Boolean(job.featured),
@@ -563,11 +736,12 @@ export default function App() {
     return jobs
       .filter((job) => {
         if (job.status !== "active" && job.status !== undefined) return false;
+        if (isExpired(job)) return false;
 
         const q = search.toLowerCase();
         const searchMatch =
           !q ||
-          [job.title, job.company, job.city, job.district, ...(job.tags || [])]
+          [job.title, job.company, job.city, job.district, ...normalizeTags(job.tags)]
             .join(" ")
             .toLowerCase()
             .includes(q);
@@ -578,8 +752,8 @@ export default function App() {
         return searchMatch && cityMatch && typeMatch;
       })
       .sort((a, b) => {
-        if (a.featured === b.featured) return 0;
-        return a.featured ? -1 : 1;
+        if (a.featured !== b.featured) return a.featured ? -1 : 1;
+        return getRemainingDays(b) - getRemainingDays(a);
       });
   }, [jobs, search, city, type]);
 
@@ -622,7 +796,9 @@ export default function App() {
   const superAdminStats = useMemo(() => {
     const totalJobs = jobs.length;
     const totalApplications = applications.length;
-    const totalEmployers = [...new Set(jobs.map((job) => job.employer_email).filter(Boolean))].length;
+    const totalEmployers = [
+      ...new Set(jobs.map((job) => job.employer_email).filter(Boolean)),
+    ].length;
     const paymentWaiting = jobs.filter(
       (job) => job.package_type === "premium" && job.payment_status === "waiting_payment"
     ).length;
@@ -642,6 +818,7 @@ export default function App() {
       description: "",
       package_type: "standard",
       payment_note: "",
+      urgent: false,
     });
   }
 
@@ -653,20 +830,30 @@ export default function App() {
       return;
     }
 
-    if (!jobForm.title || !jobForm.company || !jobForm.city) return;
+    if (!jobForm.title || !jobForm.company || !jobForm.city) {
+      alert("Lütfen zorunlu alanları doldur.");
+      return;
+    }
 
     const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
     const paymentStatus = selectedPackage.payment_status;
+    const tags = buildTags(
+      ["Yeni ilan"],
+      jobForm.urgent,
+      jobForm.package_type,
+      "pending"
+    );
 
     const newJob = {
       id: Date.now(),
       ...jobForm,
-      tags: ["Yeni ilan", "İnceleme bekliyor"],
+      tags,
       status: "pending",
       featured: selectedPackage.featured,
       price: selectedPackage.price,
       employer_email: currentEmployer.email,
       payment_status: paymentStatus,
+      created_at: new Date().toISOString(),
     };
 
     if (!supabase) {
@@ -691,7 +878,7 @@ export default function App() {
         pay: jobForm.pay,
         hours: jobForm.hours,
         description: jobForm.description,
-        tags: ["Yeni ilan", "İnceleme bekliyor"],
+        tags,
         status: "pending",
         package_type: jobForm.package_type,
         featured: selectedPackage.featured,
@@ -711,7 +898,7 @@ export default function App() {
       return;
     }
 
-    setJobs((prev) => [{ ...data, tags: data.tags || [] }, ...prev]);
+    setJobs((prev) => [{ ...data, tags: normalizeTags(data.tags) }, ...prev]);
     resetJobForm();
     setTab("dashboard");
   }
@@ -720,9 +907,7 @@ export default function App() {
     if (!supabase) {
       setJobs((prev) =>
         prev.map((job) =>
-          job.id === jobId
-            ? { ...job, payment_status: "paid" }
-            : job
+          job.id === jobId ? { ...job, payment_status: "paid" } : job
         )
       );
       return;
@@ -732,9 +917,7 @@ export default function App() {
 
     const { error } = await supabase
       .from("jobs")
-      .update({
-        payment_status: "paid",
-      })
+      .update({ payment_status: "paid" })
       .eq("id", jobId);
 
     setActionLoadingId(null);
@@ -746,9 +929,7 @@ export default function App() {
 
     setJobs((prev) =>
       prev.map((job) =>
-        job.id === jobId
-          ? { ...job, payment_status: "paid" }
-          : job
+        job.id === jobId ? { ...job, payment_status: "paid" } : job
       )
     );
   }
@@ -814,16 +995,20 @@ export default function App() {
       return;
     }
 
+    const updatedTags = buildTags(
+      selected.tags,
+      normalizeTags(selected.tags).includes("ACİL"),
+      selected.package_type,
+      "active"
+    );
+
     if (!supabase) {
       const next = jobs.map((job) =>
         job.id === jobId
           ? {
               ...job,
               status: "active",
-              tags:
-                job.package_type === "premium"
-                  ? ["Premium", "Yayınlandı", "Öne Çıkan"]
-                  : ["Yayınlandı"],
+              tags: updatedTags,
             }
           : job
       );
@@ -838,10 +1023,7 @@ export default function App() {
       .from("jobs")
       .update({
         status: "active",
-        tags:
-          selected.package_type === "premium"
-            ? ["Premium", "Yayınlandı", "Öne Çıkan"]
-            : ["Yayınlandı"],
+        tags: updatedTags,
       })
       .eq("id", jobId);
 
@@ -858,10 +1040,7 @@ export default function App() {
           ? {
               ...job,
               status: "active",
-              tags:
-                job.package_type === "premium"
-                  ? ["Premium", "Yayınlandı", "Öne Çıkan"]
-                  : ["Yayınlandı"],
+              tags: updatedTags,
             }
           : job
       )
@@ -890,6 +1069,100 @@ export default function App() {
     }
 
     setJobs((prev) => prev.filter((job) => job.id !== jobId));
+  }
+
+  function openEditJob(job) {
+    setEditingJob(job);
+    setEditForm({
+      title: job.title || "",
+      company: job.company || "",
+      city: job.city || "",
+      district: job.district || "",
+      type: job.type || "Part-time",
+      pay: job.pay || "",
+      hours: job.hours || "",
+      description: job.description || "",
+      package_type: job.package_type || "standard",
+      payment_note: job.payment_note || "",
+      payment_status: job.payment_status || "none",
+      status: job.status || "pending",
+      urgent: normalizeTags(job.tags).includes("ACİL"),
+    });
+  }
+
+  async function handleSaveEditJob() {
+    if (!editingJob) return;
+    if (!editForm.title || !editForm.company || !editForm.city) {
+      alert("Lütfen zorunlu alanları doldur.");
+      return;
+    }
+
+    const selectedPackage = PACKAGE_OPTIONS[editForm.package_type];
+    const updatedTags = buildTags(
+      editingJob.tags,
+      editForm.urgent,
+      editForm.package_type,
+      editForm.status
+    );
+
+    const payload = {
+      title: editForm.title,
+      company: editForm.company,
+      city: editForm.city,
+      district: editForm.district,
+      type: editForm.type,
+      pay: editForm.pay,
+      hours: editForm.hours,
+      description: editForm.description,
+      package_type: editForm.package_type,
+      featured: selectedPackage.featured,
+      price: selectedPackage.price,
+      payment_note: editForm.payment_note,
+      payment_status: editForm.payment_status,
+      status: editForm.status,
+      tags: updatedTags,
+    };
+
+    if (!supabase) {
+      const next = jobs.map((job) =>
+        job.id === editingJob.id
+          ? {
+              ...job,
+              ...payload,
+            }
+          : job
+      );
+      setJobs(next);
+      localStorage.setItem("ekis_demo_jobs", JSON.stringify(next));
+      setEditingJob(null);
+      return;
+    }
+
+    setActionLoadingId(editingJob.id);
+
+    const { error } = await supabase
+      .from("jobs")
+      .update(payload)
+      .eq("id", editingJob.id);
+
+    setActionLoadingId(null);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    setJobs((prev) =>
+      prev.map((job) =>
+        job.id === editingJob.id
+          ? {
+              ...job,
+              ...payload,
+            }
+          : job
+      )
+    );
+    setEditingJob(null);
   }
 
   async function handleOpenChat(app) {
@@ -934,7 +1207,7 @@ export default function App() {
     await loadMessages(activeChat.id);
   }
 
-  const cities = [...new Set(jobs.map((j) => j.city).filter(Boolean))];
+  const cities = TURKEY_CITIES;
   const types = [...new Set(jobs.map((j) => j.type).filter(Boolean))];
   const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
 
@@ -1028,11 +1301,10 @@ export default function App() {
             <Card className="hero-card">
               <Badge className="hero-badge">MVP + Veritabanı</Badge>
               <h1>
-                1 dakikada <span>ilan ver</span>, başvuru al, premiumla öne çık.
+                1 dakikada <span>ilan ver</span>, aynı gün başvuru al.
               </h1>
               <p>
-                Premium ilan ücreti 399 TL'dir. Ödeme bildirimi sonrası kontrol edilir
-                ve admin onayıyla yayına geçer.
+                ✔ Gerçek işverenler &nbsp; ✔ Aracı yok &nbsp; ✔ Hızlı başvuru
               </p>
 
               <div className="filters">
@@ -1071,19 +1343,17 @@ export default function App() {
           </motion.div>
 
           <div className="stats">
-            <Stat
-              label="Aktif ilan"
-              value={String(filteredJobs.length)}
-              icon={Briefcase}
-            />
-            <Stat
-              label="Premium ilan"
-              value={String(premiumJobsCount)}
-              icon={Sparkles}
-            />
+            <Stat label="Aktif ilan" value={String(filteredJobs.length)} icon={Briefcase} />
+            <Stat label="Premium ilan" value={String(premiumJobsCount)} icon={Sparkles} />
             <Stat
               label="Ödeme bekleyen"
-              value={String(waitingPaymentJobs.length)}
+              value={String(
+                jobs.filter(
+                  (job) =>
+                    job.package_type === "premium" &&
+                    job.payment_status === "waiting_payment"
+                ).length
+              )}
               icon={CreditCard}
             />
           </div>
@@ -1092,24 +1362,23 @@ export default function App() {
         <section className="feature-grid">
           <Card>
             <Briefcase className="feature-icon" />
-            <div className="feature-title">İşveren hesabı</div>
+            <div className="feature-title">Kalıcı ilanlar</div>
             <p className="muted">
-              Her işveren kendi hesabıyla giriş yapar ve kendi ilanlarını görür.
+              İlanlar veritabanına kaydolur, sayfa yenilense de kaybolmaz.
             </p>
           </Card>
           <Card>
-            <CreditCard className="feature-icon" />
-            <div className="feature-title">Ödeme akışı hazır</div>
+            <Sparkles className="feature-icon" />
+            <div className="feature-title">Premium görünürlük</div>
             <p className="muted">
-              Premium ilanlar ödeme bekleyen duruma düşer, ödeme sonrası yayına alınır.
+              Premium ilanlar öne çıkar ve daha dikkat çekici görünür.
             </p>
           </Card>
           <Card>
             <MessageCircle className="feature-icon" />
-            <div className="feature-title">Mesajlaşma sistemi</div>
+            <div className="feature-title">Platform içi iletişim</div>
             <p className="muted">
-              Başvuranlarla platform içinde iletişim kurabilir, numara paylaşmadan
-              ilerleyebilirsin.
+              Başvuranlarla platform içinde mesajlaşabilirsin.
             </p>
           </Card>
         </section>
@@ -1169,7 +1438,7 @@ export default function App() {
                 <div>
                   <h2>İlan listesi</h2>
                   <p className="muted">
-                    Premium ilanlar üstte görünür, sadece onaylanmış ilanlar listelenir
+                    Premium ilanlar üstte görünür, süresi dolan ilanlar gizlenir
                   </p>
                 </div>
                 <div className="result-wrap">
@@ -1179,17 +1448,25 @@ export default function App() {
               </div>
 
               <div className="job-list">
-                {filteredJobs.map((job) => (
-                  <JobCard
-                    key={job.id}
-                    job={job}
-                    onApply={(selected) => {
-                      setAppliedJob(selected);
-                      setApplicationSent(false);
-                    }}
-                    onView={(jobToView) => setSelectedJob(jobToView)}
-                  />
-                ))}
+                {filteredJobs.length === 0 ? (
+                  <Card>
+                    <div className="muted">
+                      Henüz ilan yok ama sen ilk ilanı veren olabilirsin 🚀
+                    </div>
+                  </Card>
+                ) : (
+                  filteredJobs.map((job) => (
+                    <JobCard
+                      key={job.id}
+                      job={job}
+                      onApply={(selected) => {
+                        setAppliedJob(selected);
+                        setApplicationSent(false);
+                      }}
+                      onView={(jobToView) => setSelectedJob(jobToView)}
+                    />
+                  ))
+                )}
               </div>
             </section>
           </div>
@@ -1256,14 +1533,17 @@ export default function App() {
                       </Badge>
                     </div>
                     <div className="premium-plan-price">{selectedPackage.price}</div>
-                    <div className="muted">{selectedPackage.note}</div>
+                    <div className="muted">
+                      Standart ilan {FREE_JOB_DURATION_DAYS} gün, premium ilan{" "}
+                      {PREMIUM_JOB_DURATION_DAYS} gün yayında kalır.
+                    </div>
+                    <div className="muted" style={{ marginTop: "6px" }}>
+                      🔥 Premium ilan → daha fazla görünürlük
+                    </div>
                   </div>
 
                   {jobForm.package_type === "premium" ? (
-                    <div
-                      className="premium-plan-box"
-                      style={{ marginBottom: "16px" }}
-                    >
+                    <div className="premium-plan-box" style={{ marginBottom: "16px" }}>
                       <div className="premium-plan-title">
                         <CreditCard size={18} />
                         Ödeme bilgisi
@@ -1313,65 +1593,96 @@ export default function App() {
                   ) : null}
 
                   <div className="form-grid">
-                    <SelectField
-                      value={jobForm.package_type}
-                      onChange={(val) =>
-                        setJobForm({ ...jobForm, package_type: val })
-                      }
-                      options={[
-                        { value: "standard", label: "Standart - Ücretsiz" },
-                        { value: "premium", label: "Premium - 399 TL" },
-                      ]}
-                    />
+                    <div>
+                      <Label required>Paket</Label>
+                      <SelectField
+                        value={jobForm.package_type}
+                        onChange={(val) =>
+                          setJobForm({ ...jobForm, package_type: val })
+                        }
+                        options={[
+                          { value: "standard", label: "Standart - Ücretsiz" },
+                          { value: "premium", label: "Premium - 399 TL" },
+                        ]}
+                      />
+                    </div>
 
-                    <Input
-                      placeholder="İş başlığı"
-                      value={jobForm.title}
-                      onChange={(e) =>
-                        setJobForm({ ...jobForm, title: e.target.value })
-                      }
-                    />
-                    <Input
-                      placeholder="Firma adı"
-                      value={jobForm.company}
-                      onChange={(e) =>
-                        setJobForm({ ...jobForm, company: e.target.value })
-                      }
-                    />
-                    <Input
-                      placeholder="Şehir"
-                      value={jobForm.city}
-                      onChange={(e) =>
-                        setJobForm({ ...jobForm, city: e.target.value })
-                      }
-                    />
-                    <Input
-                      placeholder="İlçe"
-                      value={jobForm.district}
-                      onChange={(e) =>
-                        setJobForm({ ...jobForm, district: e.target.value })
-                      }
-                    />
-                    <SelectField
-                      value={jobForm.type}
-                      onChange={(val) =>
-                        setJobForm({ ...jobForm, type: val })
-                      }
-                      options={[
-                        { value: "Part-time", label: "Part-time" },
-                        { value: "Ek iş", label: "Ek iş" },
-                        { value: "Günlük iş", label: "Günlük iş" },
-                        { value: "Yarı zamanlı", label: "Yarı zamanlı" },
-                      ]}
-                    />
-                    <Input
-                      placeholder="Ücret bilgisi"
-                      value={jobForm.pay}
-                      onChange={(e) =>
-                        setJobForm({ ...jobForm, pay: e.target.value })
-                      }
-                    />
+                    <div>
+                      <Label required>İş başlığı</Label>
+                      <Input
+                        placeholder="İş başlığı"
+                        value={jobForm.title}
+                        onChange={(e) =>
+                          setJobForm({ ...jobForm, title: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    <div>
+                      <Label required>Firma adı</Label>
+                      <Input
+                        placeholder="Firma adı"
+                        value={jobForm.company}
+                        onChange={(e) =>
+                          setJobForm({ ...jobForm, company: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    <div>
+                      <Label required>Şehir</Label>
+                      <SelectField
+                        value={jobForm.city}
+                        onChange={(val) =>
+                          setJobForm({ ...jobForm, city: val })
+                        }
+                        options={[
+                          { value: "", label: "Şehir seç" },
+                          ...TURKEY_CITIES.map((c) => ({ value: c, label: c })),
+                        ]}
+                      />
+                    </div>
+
+                    <div>
+                      <Label>İlçe</Label>
+                      <Input
+                        placeholder="İlçe"
+                        value={jobForm.district}
+                        onChange={(e) =>
+                          setJobForm({ ...jobForm, district: e.target.value })
+                        }
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Çalışma türü</Label>
+                      <SelectField
+                        value={jobForm.type}
+                        onChange={(val) =>
+                          setJobForm({ ...jobForm, type: val })
+                        }
+                        options={[
+                          { value: "Part-time", label: "Part-time" },
+                          { value: "Ek iş", label: "Ek iş" },
+                          { value: "Günlük iş", label: "Günlük iş" },
+                          { value: "Yarı zamanlı", label: "Yarı zamanlı" },
+                        ]}
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Ücret bilgisi</Label>
+                      <Input
+                        placeholder="Ücret bilgisi"
+                        value={jobForm.pay}
+                        onChange={(e) =>
+                          setJobForm({ ...jobForm, pay: e.target.value })
+                        }
+                      />
+                    </div>
+
                     <div className="full">
+                      <Label>Çalışma saatleri</Label>
                       <Input
                         placeholder="Çalışma saatleri"
                         value={jobForm.hours}
@@ -1380,7 +1691,9 @@ export default function App() {
                         }
                       />
                     </div>
+
                     <div className="full">
+                      <Label>İş açıklaması</Label>
                       <Textarea
                         placeholder="İş açıklaması"
                         value={jobForm.description}
@@ -1392,6 +1705,30 @@ export default function App() {
                         }
                       />
                     </div>
+
+                    <div className="full">
+                      <label
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          fontWeight: 600,
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={jobForm.urgent}
+                          onChange={(e) =>
+                            setJobForm({
+                              ...jobForm,
+                              urgent: e.target.checked,
+                            })
+                          }
+                        />
+                        ACİL ilan olarak işaretle
+                      </label>
+                    </div>
+
                     <div className="full action-row">
                       <Button onClick={handlePublish} disabled={savingJob}>
                         {savingJob ? (
@@ -1472,6 +1809,14 @@ export default function App() {
                             ) : job.payment_status === "paid" ? (
                               <Badge className="soft">ödeme tamam</Badge>
                             ) : null}
+
+                            {isExpired(job) ? (
+                              <Badge className="pending">süresi doldu</Badge>
+                            ) : (
+                              <Badge className="soft">
+                                {getRemainingDays(job)} gün kaldı
+                              </Badge>
+                            )}
                           </div>
                         </div>
 
@@ -1712,7 +2057,7 @@ export default function App() {
                     <strong>0</strong>
                   </div>
                 ) : (
-                  jobs.slice(0, 20).map((job) => (
+                  jobs.slice(0, 30).map((job) => (
                     <div
                       key={job.id}
                       className="panel-row"
@@ -1745,15 +2090,35 @@ export default function App() {
                           ) : job.payment_status === "paid" ? (
                             <Badge className="soft">ödeme tamam</Badge>
                           ) : null}
+                          {isExpired(job) ? (
+                            <Badge className="pending">süresi doldu</Badge>
+                          ) : (
+                            <Badge className="soft">
+                              {getRemainingDays(job)} gün kaldı
+                            </Badge>
+                          )}
                         </div>
                       </div>
 
                       <div className="muted">{job.company}</div>
                       <div className="muted">İşveren: {job.employer_email || "-"}</div>
-                      <div className="muted">Şehir: {job.city} / {job.district}</div>
+                      <div className="muted">
+                        Şehir: {job.city} / {job.district}
+                      </div>
                       <div className="muted">Paket: {job.package_type}</div>
+                      {job.payment_note ? (
+                        <div className="muted">Ödeme notu: {job.payment_note}</div>
+                      ) : null}
 
                       <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                        <Button
+                          variant="outline"
+                          onClick={() => openEditJob(job)}
+                        >
+                          <Pencil size={16} />
+                          Düzenle
+                        </Button>
+
                         {job.package_type === "premium" &&
                         job.payment_status === "waiting_payment" ? (
                           <Button
@@ -1801,7 +2166,7 @@ export default function App() {
                     <strong>0</strong>
                   </div>
                 ) : (
-                  applications.slice(0, 20).map((app) => {
+                  applications.slice(0, 30).map((app) => {
                     const relatedJob = jobs.find((job) => String(job.id) === String(app.job_id));
                     return (
                       <div
@@ -1818,9 +2183,7 @@ export default function App() {
                           İşveren: {relatedJob?.employer_email || "-"}
                         </div>
                         <div className="muted">{formatDate(app.created_at)}</div>
-                        {app.note ? (
-                          <div className="muted">Not: {app.note}</div>
-                        ) : null}
+                        {app.note ? <div className="muted">Not: {app.note}</div> : null}
                       </div>
                     );
                   })
@@ -1867,6 +2230,13 @@ export default function App() {
                             <CreditCard size={16} />
                             Ödemeyi Onayla
                           </Button>
+                          <Button
+                            variant="outline"
+                            onClick={() => openEditJob(job)}
+                          >
+                            <Pencil size={16} />
+                            Düzenle
+                          </Button>
                         </div>
                       </div>
                     ))
@@ -1889,6 +2259,7 @@ export default function App() {
 
               {!applicationSent ? (
                 <>
+                  <Label required>Ad soyad</Label>
                   <Input
                     placeholder="Ad soyad"
                     value={applicationForm.full_name}
@@ -1899,6 +2270,8 @@ export default function App() {
                       })
                     }
                   />
+
+                  <Label required>Telefon</Label>
                   <Input
                     placeholder="Telefon"
                     value={applicationForm.phone}
@@ -1909,6 +2282,8 @@ export default function App() {
                       })
                     }
                   />
+
+                  <Label>Not</Label>
                   <Textarea
                     placeholder="Kısa bir not yaz"
                     value={applicationForm.note}
@@ -1944,7 +2319,7 @@ export default function App() {
                     <CheckCircle2 size={18} /> Başvuru başarıyla gönderildi
                   </div>
                   <p className="muted">
-                    Supabase aktifse başvuru applications tablosuna kaydedilir.
+                    🎉 Başvurun iletildi! İşveren sana kısa sürede dönüş yapacak.
                   </p>
                   <Button onClick={() => setAppliedJob(null)}>Kapat</Button>
                 </div>
@@ -1979,11 +2354,20 @@ export default function App() {
                     <Sparkles size={13} /> Premium
                   </Badge>
                 ) : null}
+                {normalizeTags(selectedJob.tags).includes("ACİL") ? (
+                  <Badge className="pending">ACİL</Badge>
+                ) : null}
+                {isNewJob(selectedJob) ? <Badge className="soft">Yeni</Badge> : null}
                 <Badge className="soft">
                   <Clock3 size={13} /> {selectedJob.hours}
                 </Badge>
                 <Badge className="soft">
                   <Wallet size={13} /> {selectedJob.pay}
+                </Badge>
+                <Badge className="soft">
+                  {getRemainingDays(selectedJob) > 0
+                    ? `${getRemainingDays(selectedJob)} gün kaldı`
+                    : "Süresi doldu"}
                 </Badge>
               </div>
 
@@ -1997,7 +2381,7 @@ export default function App() {
                   marginBottom: "14px",
                 }}
               >
-                {(selectedJob.tags || []).map((tag) => (
+                {normalizeTags(selectedJob.tags).map((tag) => (
                   <Badge key={tag} className="soft">
                     {tag}
                   </Badge>
@@ -2065,6 +2449,185 @@ export default function App() {
                 <Button variant="outline" onClick={() => setSelectedJob(null)}>
                   Kapat
                 </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {editingJob && (
+          <div className="modal-backdrop">
+            <div className="modal" style={{ maxWidth: "700px" }}>
+              <h2>İlan Düzenle</h2>
+
+              <div className="form-grid">
+                <div>
+                  <Label required>İş başlığı</Label>
+                  <Input
+                    value={editForm.title}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, title: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Label required>Firma adı</Label>
+                  <Input
+                    value={editForm.company}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, company: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Label required>Şehir</Label>
+                  <SelectField
+                    value={editForm.city}
+                    onChange={(val) => setEditForm({ ...editForm, city: val })}
+                    options={[
+                      { value: "", label: "Şehir seç" },
+                      ...TURKEY_CITIES.map((c) => ({ value: c, label: c })),
+                    ]}
+                  />
+                </div>
+
+                <div>
+                  <Label>İlçe</Label>
+                  <Input
+                    value={editForm.district}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, district: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Label>Çalışma türü</Label>
+                  <SelectField
+                    value={editForm.type}
+                    onChange={(val) => setEditForm({ ...editForm, type: val })}
+                    options={[
+                      { value: "Part-time", label: "Part-time" },
+                      { value: "Ek iş", label: "Ek iş" },
+                      { value: "Günlük iş", label: "Günlük iş" },
+                      { value: "Yarı zamanlı", label: "Yarı zamanlı" },
+                    ]}
+                  />
+                </div>
+
+                <div>
+                  <Label>Ücret bilgisi</Label>
+                  <Input
+                    value={editForm.pay}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, pay: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Label>Paket</Label>
+                  <SelectField
+                    value={editForm.package_type}
+                    onChange={(val) =>
+                      setEditForm({ ...editForm, package_type: val })
+                    }
+                    options={[
+                      { value: "standard", label: "Standart - Ücretsiz" },
+                      { value: "premium", label: "Premium - 399 TL" },
+                    ]}
+                  />
+                </div>
+
+                <div>
+                  <Label>Ödeme durumu</Label>
+                  <SelectField
+                    value={editForm.payment_status}
+                    onChange={(val) =>
+                      setEditForm({ ...editForm, payment_status: val })
+                    }
+                    options={[
+                      { value: "none", label: "Ödeme yok" },
+                      { value: "waiting_payment", label: "Ödeme bekleniyor" },
+                      { value: "paid", label: "Ödeme tamam" },
+                    ]}
+                  />
+                </div>
+
+                <div>
+                  <Label>İlan durumu</Label>
+                  <SelectField
+                    value={editForm.status}
+                    onChange={(val) =>
+                      setEditForm({ ...editForm, status: val })
+                    }
+                    options={[
+                      { value: "pending", label: "Pending" },
+                      { value: "active", label: "Active" },
+                    ]}
+                  />
+                </div>
+
+                <div className="full">
+                  <Label>Çalışma saatleri</Label>
+                  <Input
+                    value={editForm.hours}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, hours: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="full">
+                  <Label>Ödeme notu</Label>
+                  <Textarea
+                    value={editForm.payment_note}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, payment_note: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="full">
+                  <Label>İş açıklaması</Label>
+                  <Textarea
+                    value={editForm.description}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, description: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="full">
+                  <label
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={editForm.urgent}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, urgent: e.target.checked })
+                      }
+                    />
+                    ACİL ilan olarak işaretle
+                  </label>
+                </div>
+
+                <div className="full action-row">
+                  <Button onClick={handleSaveEditJob}>
+                    <Check size={16} />
+                    Kaydet
+                  </Button>
+                  <Button variant="outline" onClick={() => setEditingJob(null)}>
+                    Kapat
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -2164,6 +2727,7 @@ export default function App() {
 
               {authMode === "register" ? (
                 <>
+                  <Label required>Ad soyad</Label>
                   <Input
                     placeholder="Ad soyad"
                     value={authForm.full_name}
@@ -2171,6 +2735,7 @@ export default function App() {
                       setAuthForm({ ...authForm, full_name: e.target.value })
                     }
                   />
+                  <Label required>Firma adı</Label>
                   <Input
                     placeholder="Firma adı"
                     value={authForm.company_name}
@@ -2184,6 +2749,7 @@ export default function App() {
                 </>
               ) : null}
 
+              <Label required>E-posta</Label>
               <Input
                 placeholder="E-posta"
                 value={authForm.email}
@@ -2192,6 +2758,7 @@ export default function App() {
                 }
               />
 
+              <Label required>Şifre</Label>
               <Input
                 type="password"
                 placeholder="Şifre"
@@ -2294,8 +2861,8 @@ export default function App() {
         )}
 
         <footer className="footer">
-          Ödeme akışı aktif. Premium ilanlar ödeme bekleyen duruma düşer, ödeme
-          bildirimi sonrası yayına alınır.
+          Ödeme akışı aktif. Standart ilan {FREE_JOB_DURATION_DAYS} gün, premium ilan{" "}
+          {PREMIUM_JOB_DURATION_DAYS} gün yayında kalır. Süper admin paneli aktif.
         </footer>
       </div>
     </div>
