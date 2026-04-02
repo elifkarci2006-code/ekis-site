@@ -16,11 +16,9 @@ import {
   Loader2,
   Check,
   Trash2,
-  FileText,
   Phone,
   CalendarDays,
   Sparkles,
-  BadgeCent,
   MessageCircle,
   LogIn,
   LogOut,
@@ -35,14 +33,17 @@ import {
   Users,
   ShieldCheck,
   Eye,
+  Zap,
+  Star,
+  BadgeDollarSign,
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
 /* =========================
-   THEME
+   BRAND
 ========================= */
 const BRAND = {
-  primary: "#58d3c7",
+  primary: "#5ed7cb",
   primaryDeep: "#2fbbae",
   primarySoft: "#e9fbf8",
   ink: "#0f172a",
@@ -55,164 +56,131 @@ const BRAND = {
   bg: "#f7fbfa",
 };
 
-const SHOPIER_PAYMENT_URL = "https://www.shopier.com";
 const SUPER_ADMIN_EMAILS = [
   "demo@ekis.com",
   "admin@ekis.com",
   "elifkarci2006@gmail.com",
 ];
 
+const SHOPIER_PAYMENT_URL = "https://www.shopier.com";
+
 const FREE_JOB_DURATION_DAYS = 15;
+const BOOST_JOB_DURATION_DAYS = 20;
 const PREMIUM_JOB_DURATION_DAYS = 30;
 
 const TURKEY_CITIES = [
-  "Adana",
-  "Adıyaman",
-  "Afyonkarahisar",
-  "Ağrı",
-  "Aksaray",
-  "Amasya",
-  "Ankara",
-  "Antalya",
-  "Ardahan",
-  "Artvin",
-  "Aydın",
-  "Balıkesir",
-  "Bartın",
-  "Batman",
-  "Bayburt",
-  "Bilecik",
-  "Bingöl",
-  "Bitlis",
-  "Bolu",
-  "Burdur",
-  "Bursa",
-  "Çanakkale",
-  "Çankırı",
-  "Çorum",
-  "Denizli",
-  "Diyarbakır",
-  "Düzce",
-  "Edirne",
-  "Elazığ",
-  "Erzincan",
-  "Erzurum",
-  "Eskişehir",
-  "Gaziantep",
-  "Giresun",
-  "Gümüşhane",
-  "Hakkari",
-  "Hatay",
-  "Iğdır",
-  "Isparta",
-  "İstanbul",
-  "İzmir",
-  "Kahramanmaraş",
-  "Karabük",
-  "Karaman",
-  "Kars",
-  "Kastamonu",
-  "Kayseri",
-  "Kırıkkale",
-  "Kırklareli",
-  "Kırşehir",
-  "Kilis",
-  "Kocaeli",
-  "Konya",
-  "Kütahya",
-  "Malatya",
-  "Manisa",
-  "Mardin",
-  "Mersin",
-  "Muğla",
-  "Muş",
-  "Nevşehir",
-  "Niğde",
-  "Ordu",
-  "Osmaniye",
-  "Rize",
-  "Sakarya",
-  "Samsun",
-  "Siirt",
-  "Sinop",
-  "Sivas",
-  "Şanlıurfa",
-  "Şırnak",
-  "Tekirdağ",
-  "Tokat",
-  "Trabzon",
-  "Tunceli",
-  "Uşak",
-  "Van",
-  "Yalova",
-  "Yozgat",
-  "Zonguldak",
+  "Adana","Adıyaman","Afyonkarahisar","Ağrı","Aksaray","Amasya","Ankara","Antalya","Ardahan","Artvin","Aydın",
+  "Balıkesir","Bartın","Batman","Bayburt","Bilecik","Bingöl","Bitlis","Bolu","Burdur","Bursa","Çanakkale",
+  "Çankırı","Çorum","Denizli","Diyarbakır","Düzce","Edirne","Elazığ","Erzincan","Erzurum","Eskişehir",
+  "Gaziantep","Giresun","Gümüşhane","Hakkari","Hatay","Iğdır","Isparta","İstanbul","İzmir","Kahramanmaraş",
+  "Karabük","Karaman","Kars","Kastamonu","Kayseri","Kırıkkale","Kırklareli","Kırşehir","Kilis","Kocaeli",
+  "Konya","Kütahya","Malatya","Manisa","Mardin","Mersin","Muğla","Muş","Nevşehir","Niğde","Ordu","Osmaniye",
+  "Rize","Sakarya","Samsun","Siirt","Sinop","Sivas","Şanlıurfa","Şırnak","Tekirdağ","Tokat","Trabzon",
+  "Tunceli","Uşak","Van","Yalova","Yozgat","Zonguldak"
 ];
 
 const PACKAGE_OPTIONS = {
-  standard: {
+  free: {
     label: "Standart",
     price: "Ücretsiz",
+    numericPrice: 0,
     featured: false,
-    note: "Normal listede yayınlanır.",
+    urgentPriority: false,
     payment_status: "none",
     durationDays: FREE_JOB_DURATION_DAYS,
+    note: "Normal yayına girer.",
+  },
+  boost: {
+    label: "Öne Çıkar",
+    price: "99 TL",
+    numericPrice: 99,
+    featured: true,
+    urgentPriority: false,
+    payment_status: "waiting_payment",
+    durationDays: BOOST_JOB_DURATION_DAYS,
+    note: "İlanı daha görünür yapar.",
   },
   premium: {
     label: "Premium",
     price: "399 TL",
+    numericPrice: 399,
     featured: true,
-    note: "Ana listede üstte görünür ve daha dikkat çeker.",
+    urgentPriority: true,
     payment_status: "waiting_payment",
     durationDays: PREMIUM_JOB_DURATION_DAYS,
+    note: "Ana listede üstte çıkar ve daha çok dikkat çeker.",
   },
 };
 
 const initialJobs = [
   {
     id: 1,
-    title: "Kafe Servis Elemanı",
+    title: "Garson lazım",
     company: "Mavi Fincan Cafe",
     city: "Eskişehir",
     district: "Tepebaşı",
-    type: "Part-time",
-    pay: "Saatlik 170 TL",
-    hours: "18:00 - 23:00",
-    tags: ["Öğrenciye uygun", "Akşam", "Hızlı başlangıç", "ACİL"],
+    type: "Günlük iş",
+    pay: "900 TL / gün",
+    hours: "17:00 - 23:00",
+    duration_label: "6 saat",
+    tags: ["ACİL", "Bugün başla"],
     description:
-      "Yoğun saatlerde servis desteği verecek, güler yüzlü ekip arkadaşı aranıyor.",
+      "Akşam yoğunluğunda servis desteği verecek, hızlı adapte olabilen ekip arkadaşı aranıyor.",
     status: "active",
     package_type: "premium",
     featured: true,
-    price: "399 TL",
     employer_email: "demo@ekis.com",
     payment_status: "paid",
-    payment_note: "Demo ödeme tamamlandı",
+    payment_note: "Demo ödeme",
     created_at: new Date().toISOString(),
   },
   {
     id: 2,
-    title: "Hafta Sonu Mağaza Destek Personeli",
-    company: "Nova Outlet",
-    city: "Ankara",
-    district: "Çankaya",
-    type: "Ek iş",
-    pay: "Günlük 1200 TL",
-    hours: "10:00 - 19:00",
-    tags: ["Hafta sonu", "Deneyim şart değil"],
+    title: "Etkinlik personeli",
+    company: "Delta Organizasyon",
+    city: "İstanbul",
+    district: "Şişli",
+    type: "Saatlik iş",
+    pay: "250 TL / saat",
+    hours: "14:00 - 20:00",
+    duration_label: "6 saat",
+    tags: ["Hafta sonu"],
     description:
-      "Kasa ve reyon düzenine destek olacak ekip arkadaşı aranıyor.",
+      "Karşılama ve yönlendirme yapacak, iletişimi güçlü ekip arkadaşları aranıyor.",
     status: "active",
-    package_type: "standard",
+    package_type: "free",
     featured: false,
-    price: "Ücretsiz",
     employer_email: "demo@ekis.com",
     payment_status: "none",
     payment_note: "",
-    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    id: 3,
+    title: "Depo paketleme desteği",
+    company: "HızlıSepet",
+    city: "Ankara",
+    district: "Yenimahalle",
+    type: "Günlük iş",
+    pay: "1400 TL / gün",
+    hours: "09:00 - 18:00",
+    duration_label: "1 gün",
+    tags: ["Ertesi gün ödeme"],
+    description:
+      "Sipariş yoğunluğu için ürün ayırma ve paketleme desteği verilecek.",
+    status: "active",
+    package_type: "boost",
+    featured: true,
+    employer_email: "demo@ekis.com",
+    payment_status: "paid",
+    payment_note: "Ödeme alındı",
+    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
   },
 ];
 
+/* =========================
+   SUPABASE
+========================= */
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase =
@@ -228,9 +196,7 @@ function normalizeTags(tags) {
 }
 
 function getDurationDays(job) {
-  return job.package_type === "premium"
-    ? PREMIUM_JOB_DURATION_DAYS
-    : FREE_JOB_DURATION_DAYS;
+  return PACKAGE_OPTIONS[job.package_type]?.durationDays || FREE_JOB_DURATION_DAYS;
 }
 
 function getRemainingDays(job) {
@@ -252,6 +218,10 @@ function isNewJob(job) {
   return Date.now() - created <= 24 * 60 * 60 * 1000;
 }
 
+function isUrgentJob(job) {
+  return normalizeTags(job.tags).includes("ACİL");
+}
+
 function formatDate(dateString) {
   if (!dateString) return "-";
   const date = new Date(dateString);
@@ -268,23 +238,14 @@ function formatDate(dateString) {
 function buildTags(existingTags, urgent, packageType, status) {
   const base = normalizeTags(existingTags).filter(
     (tag) =>
-      ![
-        "ACİL",
-        "Premium",
-        "Yayınlandı",
-        "Öne Çıkan",
-        "Yeni ilan",
-        "İnceleme bekliyor",
-      ].includes(tag)
+      !["ACİL", "Premium", "Öne Çıkan", "Yayınlandı", "İnceleme bekliyor"].includes(tag)
   );
 
   if (urgent) base.unshift("ACİL");
   if (status === "pending") base.unshift("İnceleme bekliyor");
   if (status === "active") base.unshift("Yayınlandı");
-  if (packageType === "premium") {
-    base.unshift("Premium");
-    if (status === "active") base.unshift("Öne Çıkan");
-  }
+  if (packageType === "premium") base.unshift("Premium");
+  if (packageType === "boost" || packageType === "premium") base.unshift("Öne Çıkan");
 
   return [...new Set(base)];
 }
@@ -327,28 +288,24 @@ function GlobalStyles() {
         --success:${BRAND.success};
         --danger:${BRAND.danger};
       }
-
       *{box-sizing:border-box}
       body{
         margin:0;
-        background:linear-gradient(180deg,#f8fcfb 0%, #f4fbfa 100%);
+        background:linear-gradient(180deg,#f8fcfb 0%, #f3fbfa 100%);
         color:var(--ink);
         font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       }
-
       .page{
         min-height:100vh;
         background:
-          radial-gradient(circle at top left, rgba(88,211,199,.16), transparent 30%),
+          radial-gradient(circle at top left, rgba(94,215,203,.15), transparent 30%),
           radial-gradient(circle at top right, rgba(47,187,174,.10), transparent 25%);
       }
-
       .container{
         width:min(1200px, calc(100% - 24px));
         margin:0 auto;
         padding:16px 0 96px;
       }
-
       .header{
         display:flex;
         justify-content:space-between;
@@ -357,45 +314,35 @@ function GlobalStyles() {
         flex-wrap:wrap;
         margin-bottom:18px;
       }
-
       .logo{
         font-size:32px;
         font-weight:900;
         letter-spacing:-0.04em;
       }
-
       .muted{ color:var(--muted); }
-
       .header-actions{
         display:flex;
         gap:10px;
         flex-wrap:wrap;
         align-items:center;
       }
-
       .card{
         background:rgba(255,255,255,.97);
-        border:1px solid rgba(88,211,199,.18);
+        border:1px solid rgba(94,215,203,.18);
         border-radius:24px;
         padding:18px;
         box-shadow:0 12px 36px rgba(15,23,42,.06);
       }
-
       .hero-card{
-        padding:28px;
-        overflow:hidden;
-        position:relative;
+        padding:30px;
       }
-
       .hero-card h1{
         margin:10px 0 10px;
-        font-size:clamp(30px, 4vw, 52px);
+        font-size:clamp(30px, 4vw, 54px);
         line-height:1.02;
         letter-spacing:-0.04em;
       }
-
       .hero-card h1 span{ color:var(--primary-deep); }
-
       .hero-grid{
         display:grid;
         grid-template-columns:1.6fr .9fr;
@@ -403,14 +350,12 @@ function GlobalStyles() {
         align-items:start;
         margin-bottom:16px;
       }
-
       .trust-strip{
         display:flex;
         flex-wrap:wrap;
         gap:10px;
-        margin:12px 0 18px;
+        margin:14px 0 18px;
       }
-
       .trust-chip{
         display:inline-flex;
         align-items:center;
@@ -418,88 +363,74 @@ function GlobalStyles() {
         padding:10px 12px;
         border-radius:999px;
         background:var(--primary-soft);
-        border:1px solid rgba(88,211,199,.35);
+        border:1px solid rgba(94,215,203,.35);
         font-size:13px;
         font-weight:800;
       }
-
       .hero-cta{
         display:flex;
         gap:10px;
         flex-wrap:wrap;
         margin:16px 0 18px;
       }
-
       .hero-secondary-note{
         display:flex;
         flex-wrap:wrap;
         gap:12px;
         font-size:13px;
       }
-
       .stats{
         display:grid;
         gap:12px;
       }
-
       .stat-head{
         display:flex;
         justify-content:space-between;
         align-items:center;
         margin-bottom:10px;
       }
-
       .stat-value{
         font-size:28px;
         font-weight:900;
         letter-spacing:-0.03em;
       }
-
       .feature-grid{
         display:grid;
-        grid-template-columns:repeat(3,1fr);
+        grid-template-columns:repeat(4,1fr);
         gap:16px;
         margin-bottom:16px;
       }
-
       .feature-icon{
         color:var(--primary-deep);
         margin-bottom:10px;
       }
-
       .feature-title{
         font-weight:900;
         margin-bottom:8px;
       }
-
       .filters-grid{
         display:grid;
         grid-template-columns:310px 1fr;
         gap:16px;
         align-items:start;
       }
-
       .filter-panel{
         position:sticky;
         top:14px;
       }
-
       .filter-stack{
         display:grid;
         gap:12px;
       }
-
       .filters{
         display:grid;
         grid-template-columns:2fr 1fr 1fr auto;
         gap:10px;
         margin-top:12px;
       }
-
       .search-wrap{
         position:relative;
       }
-
       .search-icon{
         position:absolute;
         left:12px;
@@ -507,7 +438,6 @@ function GlobalStyles() {
         transform:translateY(-50%);
         color:var(--muted);
       }
-
       .input, .textarea, select{
         width:100%;
         border:1px solid var(--line);
@@ -519,16 +449,13 @@ function GlobalStyles() {
         outline:none;
         transition:.18s ease;
       }
-
       .input{ min-height:48px; }
       .search-wrap .input{ padding-left:38px; }
       .textarea{ min-height:120px; resize:vertical; }
-
       .input:focus, .textarea:focus, select:focus{
         border-color:var(--primary);
-        box-shadow:0 0 0 4px rgba(88,211,199,.14);
+        box-shadow:0 0 0 4px rgba(94,215,203,.14);
       }
-
       .btn{
         border:none;
         min-height:48px;
@@ -543,21 +470,17 @@ function GlobalStyles() {
         cursor:pointer;
         transition:.18s ease;
       }
-
       .btn:disabled{ opacity:.6; cursor:not-allowed; }
-
       .btn-solid{
         background:linear-gradient(180deg,var(--primary) 0%, var(--primary-deep) 100%);
         color:#062321;
         box-shadow:0 10px 24px rgba(47,187,174,.25);
       }
-
       .btn-outline{
         background:#fff;
         color:var(--ink);
         border:1px solid rgba(15,23,42,.10);
       }
-
       .badge{
         display:inline-flex;
         align-items:center;
@@ -568,57 +491,48 @@ function GlobalStyles() {
         font-weight:900;
         line-height:1;
       }
-
       .badge.default,
       .badge.soft{
         background:#f4fbfa;
         color:#114846;
-        border:1px solid rgba(88,211,199,.25);
+        border:1px solid rgba(94,215,203,.25);
       }
-
       .badge.secondary{
         background:#eef2ff;
         color:#3730a3;
         border:1px solid #c7d2fe;
       }
-
       .premium-badge{
         background:rgba(245,158,11,.12);
         color:#b45309;
         border:1px solid rgba(245,158,11,.28);
       }
-
       .pending{
         background:rgba(239,68,68,.10);
         color:#b91c1c;
         border:1px solid rgba(239,68,68,.18);
       }
-
       .featured-tag{
-        background:rgba(88,211,199,.16);
+        background:rgba(94,215,203,.16);
         color:#0f766e;
-        border:1px solid rgba(88,211,199,.35);
+        border:1px solid rgba(94,215,203,.35);
       }
-
       .live-badge{
         background:#effcf8;
         color:#0f766e;
         border:1px solid rgba(34,197,94,.25);
       }
-
       .hero-badge{
         background:linear-gradient(180deg,#edfffb 0%, #dff8f5 100%);
         color:#0f766e;
-        border:1px solid rgba(88,211,199,.32);
+        border:1px solid rgba(94,215,203,.32);
       }
-
       .tabs{
         display:flex;
         gap:10px;
         flex-wrap:wrap;
         margin:18px 0 16px;
       }
-
       .tab{
         border:none;
         background:#fff;
@@ -629,15 +543,12 @@ function GlobalStyles() {
         color:var(--ink);
         cursor:pointer;
       }
-
       .tab.active{
         background:var(--ink);
         color:#fff;
         border-color:var(--ink);
       }
-
       .section-stack{ display:grid; gap:14px; }
-
       .section-head{
         display:flex;
         justify-content:space-between;
@@ -645,35 +556,28 @@ function GlobalStyles() {
         gap:12px;
         flex-wrap:wrap;
       }
-
       .section-head h2{
         margin:0 0 4px;
         font-size:24px;
         letter-spacing:-0.03em;
       }
-
       .result-wrap{
         display:flex;
         align-items:center;
         gap:8px;
         flex-wrap:wrap;
       }
-
       .job-list{ display:grid; gap:14px; }
-      .job-card{ overflow:hidden; }
-
-      .featured-card{
-        border-color:rgba(245,158,11,.28);
-        box-shadow:0 16px 36px rgba(245,158,11,.08);
-      }
-
       .job-layout{
         display:grid;
         grid-template-columns:1fr auto;
         gap:14px;
         align-items:start;
       }
-
+      .featured-card{
+        border-color:rgba(245,158,11,.28);
+        box-shadow:0 16px 36px rgba(245,158,11,.08);
+      }
       .job-top{
         display:flex;
         align-items:center;
@@ -681,19 +585,15 @@ function GlobalStyles() {
         flex-wrap:wrap;
         margin-bottom:8px;
       }
-
       .job-top h3{
         margin:0;
         font-size:22px;
         letter-spacing:-0.03em;
       }
-
       .company{
-        color:var(--ink);
         font-weight:800;
         margin-bottom:8px;
       }
-
       .meta-row{
         display:flex;
         gap:12px;
@@ -702,69 +602,62 @@ function GlobalStyles() {
         font-size:13px;
         margin-bottom:10px;
       }
-
       .meta-row span{
         display:inline-flex;
         align-items:center;
         gap:6px;
       }
-
       .description{
         margin:0 0 10px;
         color:#334155;
         line-height:1.6;
       }
-
       .tags{
         display:flex;
         gap:8px;
         flex-wrap:wrap;
       }
-
       .job-actions{
         display:grid;
         gap:10px;
         min-width:190px;
       }
-
+      .salary-highlight{
+        font-size:18px;
+        font-weight:900;
+        color:var(--success);
+      }
       .form-grid{
         display:grid;
         grid-template-columns:repeat(2,1fr);
         gap:14px;
       }
-
       .full{ grid-column:1 / -1; }
-
       .action-row{
         display:flex;
         gap:10px;
         flex-wrap:wrap;
         margin-top:6px;
       }
-
       .dashboard-grid{
         display:grid;
         grid-template-columns:1fr 1fr;
         gap:16px;
       }
-
       .panel-list{ display:grid; gap:12px; }
-
       .panel-row{
         padding:14px;
         border-radius:18px;
         border:1px solid rgba(15,23,42,.08);
         background:#fbfdfd;
       }
-
       .premium-plan-box{
         padding:16px;
         border-radius:20px;
         background:linear-gradient(180deg,#fbfffe 0%, #f1fffd 100%);
-        border:1px solid rgba(88,211,199,.28);
+        border:1px solid rgba(94,215,203,.28);
         margin-bottom:16px;
       }
-
       .premium-plan-head{
         display:flex;
         justify-content:space-between;
@@ -773,14 +666,12 @@ function GlobalStyles() {
         flex-wrap:wrap;
         margin-bottom:10px;
       }
-
       .premium-plan-title{
         display:flex;
         align-items:center;
         gap:8px;
         font-weight:900;
       }
-
       .premium-plan-price{
         font-size:28px;
         font-weight:900;
@@ -788,20 +679,12 @@ function GlobalStyles() {
         color:var(--primary-deep);
         margin-bottom:6px;
       }
-
-      .salary-highlight{
-        font-size:18px;
-        font-weight:900;
-        color:var(--success);
-      }
-
       .role-switch{
         display:grid;
         grid-template-columns:1fr 1fr;
         gap:8px;
         margin-bottom:14px;
       }
-
       .role-pill{
         border:1px solid rgba(15,23,42,.08);
         background:#fff;
@@ -811,13 +694,11 @@ function GlobalStyles() {
         cursor:pointer;
         text-align:center;
       }
-
       .role-pill.active{
         background:var(--primary-soft);
-        border-color:rgba(88,211,199,.45);
+        border-color:rgba(94,215,203,.45);
         color:#0f766e;
       }
-
       .modal-backdrop{
         position:fixed;
         inset:0;
@@ -828,9 +709,8 @@ function GlobalStyles() {
         z-index:50;
         padding:18px;
       }
-
       .modal{
-        width:min(720px, 100%);
+        width:min(760px, 100%);
         max-height:88vh;
         overflow:auto;
         background:#fff;
@@ -838,38 +718,32 @@ function GlobalStyles() {
         padding:22px;
         box-shadow:0 30px 60px rgba(15,23,42,.25);
       }
-
       .modal.compact{
         width:min(480px, 100%);
         padding:18px;
       }
-
       .modal h2{
         margin:0 0 14px;
         font-size:28px;
         letter-spacing:-0.03em;
       }
-
       .job-preview{
         padding:14px;
         border-radius:18px;
         background:#f8fffe;
-        border:1px solid rgba(88,211,199,.18);
+        border:1px solid rgba(94,215,203,.18);
         margin-bottom:14px;
       }
-
       .preview-title{
         font-weight:900;
         margin-bottom:4px;
       }
-
       .success-box{
         padding:16px;
         border-radius:18px;
         background:#effcf6;
         border:1px solid rgba(34,197,94,.20);
       }
-
       .success-title{
         display:flex;
         align-items:center;
@@ -878,7 +752,6 @@ function GlobalStyles() {
         color:#166534;
         margin-bottom:8px;
       }
-
       .footer{
         margin-top:18px;
         padding:18px;
@@ -887,35 +760,28 @@ function GlobalStyles() {
         border:1px solid rgba(15,23,42,.06);
         color:#475569;
       }
-
       .footer-grid{
         display:grid;
         grid-template-columns:1.2fr .9fr .9fr .9fr;
         gap:16px;
         margin-top:8px;
       }
-
       .footer-title{
         font-weight:900;
         margin-bottom:8px;
       }
-
       .footer-link{
         display:block;
         color:#334155;
         text-decoration:none;
         margin:6px 0;
       }
-
       .footer-link:hover{
         color:var(--primary-deep);
       }
-
       .sticky-mobile-cta{ display:none; }
-
       .spin{ animation:spin 1s linear infinite; }
       @keyframes spin { to{transform:rotate(360deg)} }
-
       @media (max-width: 1100px){
         .hero-grid,
         .filters-grid,
@@ -923,9 +789,11 @@ function GlobalStyles() {
         .footer-grid{
           grid-template-columns:1fr;
         }
+        .feature-grid{
+          grid-template-columns:repeat(2,1fr);
+        }
         .filter-panel{ position:static; }
       }
-
       @media (max-width: 760px){
         .container{ width:min(100% - 16px, 100%); }
         .hero-card{ padding:20px; }
@@ -961,53 +829,36 @@ function GlobalStyles() {
 }
 
 /* =========================
-   COMPONENTS
+   UI
 ========================= */
 function Card({ children, className = "" }) {
   return <div className={`card ${className}`}>{children}</div>;
 }
-
 function Badge({ children, variant = "default", className = "" }) {
   return <span className={`badge ${variant} ${className}`}>{children}</span>;
 }
-
 function Button({ children, variant = "solid", className = "", ...props }) {
   return (
-    <button
-      className={`btn ${
-        variant === "outline" ? "btn-outline" : "btn-solid"
-      } ${className}`}
-      {...props}
-    >
+    <button className={`btn ${variant === "outline" ? "btn-outline" : "btn-solid"} ${className}`} {...props}>
       {children}
     </button>
   );
 }
-
 function Input(props) {
   return <input className="input" {...props} />;
 }
-
 function Textarea(props) {
   return <textarea className="textarea" {...props} />;
 }
-
 function SelectField({ value, onChange, options }) {
   return (
-    <select
-      className="input"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    >
+    <select className="input" value={value} onChange={(e) => onChange(e.target.value)}>
       {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
+        <option key={option.value} value={option.value}>{option.label}</option>
       ))}
     </select>
   );
 }
-
 function Label({ children, required = false }) {
   return (
     <div style={{ fontWeight: 800, marginBottom: "6px" }}>
@@ -1015,7 +866,6 @@ function Label({ children, required = false }) {
     </div>
   );
 }
-
 function Stat({ label, value, icon: Icon }) {
   return (
     <Card>
@@ -1027,16 +877,13 @@ function Stat({ label, value, icon: Icon }) {
     </Card>
   );
 }
-
 function JobCard({ job, onApply, onView, applicationsCount = 0 }) {
   const remainingDays = getRemainingDays(job);
-  const urgent = normalizeTags(job.tags).includes("ACİL");
-
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-      <Card className={`job-card ${job.featured ? "featured-card" : ""}`}>
+      <Card className={job.featured ? "featured-card" : ""}>
         <div className="job-layout">
-          <div className="job-main">
+          <div>
             <div className="job-top">
               <h3>{job.title}</h3>
               <Badge variant="secondary">{job.type}</Badge>
@@ -1045,42 +892,31 @@ function JobCard({ job, onApply, onView, applicationsCount = 0 }) {
                   <Sparkles size={13} /> Premium
                 </Badge>
               ) : null}
-              {urgent ? <Badge className="pending">ACİL</Badge> : null}
+              {job.package_type === "boost" ? (
+                <Badge className="featured-tag">
+                  <Star size={13} /> Öne Çıkan
+                </Badge>
+              ) : null}
+              {isUrgentJob(job) ? <Badge className="pending">ACİL</Badge> : null}
               {isNewJob(job) ? <Badge className="soft">Bugün eklendi</Badge> : null}
             </div>
 
             <div className="company">{job.company}</div>
 
             <div className="meta-row">
-              <span>
-                <MapPin size={15} /> {job.city} / {job.district || "-"}
-              </span>
-              <span>
-                <Clock3 size={15} /> {job.hours || "-"}
-              </span>
-              <span className="salary-highlight">
-                <Wallet size={15} /> {job.pay || "-"}
-              </span>
-              <span>
-                <CalendarDays size={15} /> {formatDate(job.created_at)}
-              </span>
-              <span>
-                <Users size={15} /> {applicationsCount} başvuru
-              </span>
+              <span><MapPin size={15} /> {job.city} / {job.district || "-"}</span>
+              <span><Clock3 size={15} /> {job.hours || "-"}</span>
+              <span className="salary-highlight"><Wallet size={15} /> {job.pay || "-"}</span>
+              <span><Zap size={15} /> {job.duration_label || "-"}</span>
+              <span><Users size={15} /> {applicationsCount} başvuru</span>
             </div>
 
             <p className="description">{job.description}</p>
 
             <div className="tags">
               {normalizeTags(job.tags).map((tag) => (
-                <Badge key={tag} className="soft">
-                  {tag}
-                </Badge>
+                <Badge key={tag} className="soft">{tag}</Badge>
               ))}
-              {job.featured ? <Badge className="featured-tag">Öne Çıkan</Badge> : null}
-              <Badge className="soft">
-                {job.package_type === "premium" ? "399 TL" : job.price || "Ücretsiz"}
-              </Badge>
               <Badge className="soft">
                 {remainingDays > 0 ? `${remainingDays} gün kaldı` : "Süresi doldu"}
               </Badge>
@@ -1088,7 +924,10 @@ function JobCard({ job, onApply, onView, applicationsCount = 0 }) {
           </div>
 
           <div className="job-actions">
-            <Button onClick={() => onApply(job)}>Hemen Başvur</Button>
+            <Button onClick={() => onApply(job)}>
+              <Zap size={16} />
+              Hızlı Başvur
+            </Button>
             <Button variant="outline" onClick={() => onView(job)}>
               Detayı Gör
             </Button>
@@ -1136,7 +975,7 @@ export default function App() {
   const [candidateApplications, setCandidateApplications] = useState([]);
 
   const [authMode, setAuthMode] = useState("login");
-  const [authRole, setAuthRole] = useState("candidate"); // candidate | employer
+  const [authRole, setAuthRole] = useState("candidate");
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
   const [authMessage, setAuthMessage] = useState("");
@@ -1159,11 +998,12 @@ export default function App() {
     company: "",
     city: "",
     district: "",
-    type: "Part-time",
+    type: "Günlük iş",
     pay: "",
     hours: "",
+    duration_label: "",
     description: "",
-    package_type: "standard",
+    package_type: "free",
     payment_note: "",
     urgent: false,
   });
@@ -1174,11 +1014,12 @@ export default function App() {
     company: "",
     city: "",
     district: "",
-    type: "Part-time",
+    type: "Günlük iş",
     pay: "",
     hours: "",
+    duration_label: "",
     description: "",
-    package_type: "standard",
+    package_type: "free",
     payment_note: "",
     payment_status: "none",
     status: "pending",
@@ -1248,9 +1089,7 @@ export default function App() {
   async function loadJobs() {
     if (!supabase) {
       const stored = localStorage.getItem("ekis_demo_jobs");
-      if (stored) {
-        setJobs(JSON.parse(stored));
-      }
+      if (stored) setJobs(JSON.parse(stored));
       return;
     }
 
@@ -1277,16 +1116,16 @@ export default function App() {
       type: job.type,
       pay: job.pay,
       hours: job.hours,
+      duration_label: job.duration_label,
       description: job.description,
       tags: normalizeTags(job.tags),
       status: job.status || "active",
-      package_type: job.package_type || "standard",
+      package_type: job.package_type || "free",
       featured: Boolean(job.featured),
-      price: job.price || "Ücretsiz",
-      created_at: job.created_at,
       employer_email: job.employer_email || "",
       payment_status: job.payment_status || "none",
       payment_note: job.payment_note || "",
+      created_at: job.created_at,
     }));
 
     setJobs(mapped.length ? mapped : initialJobs);
@@ -1534,20 +1373,27 @@ export default function App() {
 
         const cityMatch = city === "all" ? true : job.city === city;
         const typeMatch = type === "all" ? true : job.type === type;
-        const urgentMatch = urgentOnly
-          ? normalizeTags(job.tags).includes("ACİL")
-          : true;
+        const urgentMatch = urgentOnly ? isUrgentJob(job) : true;
 
         return searchMatch && cityMatch && typeMatch && urgentMatch;
       })
       .sort((a, b) => {
-        if (a.featured !== b.featured) return a.featured ? -1 : 1;
-        if (normalizeTags(a.tags).includes("ACİL") !== normalizeTags(b.tags).includes("ACİL")) {
-          return normalizeTags(a.tags).includes("ACİL") ? -1 : 1;
-        }
+        const aPriority =
+          (PACKAGE_OPTIONS[a.package_type]?.featured ? 2 : 0) + (isUrgentJob(a) ? 3 : 0);
+        const bPriority =
+          (PACKAGE_OPTIONS[b.package_type]?.featured ? 2 : 0) + (isUrgentJob(b) ? 3 : 0);
+
+        if (aPriority !== bPriority) return bPriority - aPriority;
         return getRemainingDays(b) - getRemainingDays(a);
       });
   }, [jobs, search, city, type, urgentOnly]);
+
+  const todayJobs = useMemo(() => filteredJobs.filter((j) => isNewJob(j)), [filteredJobs]);
+  const urgentJobs = useMemo(() => filteredJobs.filter((j) => isUrgentJob(j)), [filteredJobs]);
+  const nearbyJobs = useMemo(() => {
+    if (city === "all") return filteredJobs.slice(0, 6);
+    return filteredJobs.filter((j) => j.city === city);
+  }, [filteredJobs, city]);
 
   const myJobs = useMemo(() => {
     if (!currentUser?.email) return [];
@@ -1582,7 +1428,7 @@ export default function App() {
       ...new Set(jobs.map((job) => job.employer_email).filter(Boolean)),
     ].length;
     const paymentWaiting = jobs.filter(
-      (job) => job.package_type === "premium" && job.payment_status === "waiting_payment"
+      (job) => job.package_type !== "free" && job.payment_status === "waiting_payment"
     ).length;
 
     return { totalJobs, totalApplications, totalEmployers, paymentWaiting };
@@ -1594,11 +1440,12 @@ export default function App() {
       company: currentUser?.company_name || "",
       city: "",
       district: "",
-      type: "Part-time",
+      type: "Günlük iş",
       pay: "",
       hours: "",
+      duration_label: "",
       description: "",
-      package_type: "standard",
+      package_type: "free",
       payment_note: "",
       urgent: false,
     });
@@ -1606,9 +1453,9 @@ export default function App() {
 
   async function handlePublish() {
     if (!currentUser) {
-      setShowAuthModal(true);
       setAuthMode("login");
       setAuthRole("employer");
+      setShowAuthModal(true);
       setAuthMessage("İlan vermek için önce işveren hesabıyla giriş yap.");
       return;
     }
@@ -1625,12 +1472,7 @@ export default function App() {
 
     const selectedPackage = PACKAGE_OPTIONS[jobForm.package_type];
     const paymentStatus = selectedPackage.payment_status;
-    const tags = buildTags(
-      ["Yeni ilan"],
-      jobForm.urgent,
-      jobForm.package_type,
-      "pending"
-    );
+    const tags = buildTags([], jobForm.urgent, jobForm.package_type, "pending");
 
     const newJob = {
       id: Date.now(),
@@ -1638,7 +1480,6 @@ export default function App() {
       tags,
       status: "pending",
       featured: selectedPackage.featured,
-      price: selectedPackage.price,
       employer_email: currentUser.email,
       payment_status: paymentStatus,
       created_at: new Date().toISOString(),
@@ -1665,12 +1506,12 @@ export default function App() {
         type: jobForm.type,
         pay: jobForm.pay,
         hours: jobForm.hours,
+        duration_label: jobForm.duration_label,
         description: jobForm.description,
         tags,
         status: "pending",
         package_type: jobForm.package_type,
         featured: selectedPackage.featured,
-        price: selectedPackage.price,
         employer_email: currentUser.email,
         payment_status: paymentStatus,
         payment_note: jobForm.payment_note || "",
@@ -1740,9 +1581,7 @@ export default function App() {
     };
 
     if (!supabase) {
-      const existing = JSON.parse(
-        localStorage.getItem("ekis_demo_applications") || "[]"
-      );
+      const existing = JSON.parse(localStorage.getItem("ekis_demo_applications") || "[]");
       const next = [{ id: Date.now(), ...payload }, ...existing];
       localStorage.setItem("ekis_demo_applications", JSON.stringify(next));
       setApplications(next);
@@ -1816,29 +1655,23 @@ export default function App() {
     if (!selected) return;
 
     if (
-      selected.package_type === "premium" &&
+      selected.package_type !== "free" &&
       selected.payment_status !== "paid"
     ) {
-      alert("Premium ilanı yayına almadan önce ödeme durumu paid olmalı.");
+      alert("Ücretli ilanı yayına almadan önce ödeme durumu paid olmalı.");
       return;
     }
 
     const updatedTags = buildTags(
       selected.tags,
-      normalizeTags(selected.tags).includes("ACİL"),
+      isUrgentJob(selected),
       selected.package_type,
       "active"
     );
 
     if (!supabase) {
       const next = jobs.map((job) =>
-        job.id === jobId
-          ? {
-              ...job,
-              status: "active",
-              tags: updatedTags,
-            }
-          : job
+        job.id === jobId ? { ...job, status: "active", tags: updatedTags } : job
       );
       setJobs(next);
       localStorage.setItem("ekis_demo_jobs", JSON.stringify(next));
@@ -1849,10 +1682,7 @@ export default function App() {
 
     const { error } = await supabase
       .from("jobs")
-      .update({
-        status: "active",
-        tags: updatedTags,
-      })
+      .update({ status: "active", tags: updatedTags })
       .eq("id", jobId);
 
     setActionLoadingId(null);
@@ -1864,13 +1694,7 @@ export default function App() {
 
     setJobs((prev) =>
       prev.map((job) =>
-        job.id === jobId
-          ? {
-              ...job,
-              status: "active",
-              tags: updatedTags,
-            }
-          : job
+        job.id === jobId ? { ...job, status: "active", tags: updatedTags } : job
       )
     );
   }
@@ -1906,15 +1730,16 @@ export default function App() {
       company: job.company || "",
       city: job.city || "",
       district: job.district || "",
-      type: job.type || "Part-time",
+      type: job.type || "Günlük iş",
       pay: job.pay || "",
       hours: job.hours || "",
+      duration_label: job.duration_label || "",
       description: job.description || "",
-      package_type: job.package_type || "standard",
+      package_type: job.package_type || "free",
       payment_note: job.payment_note || "",
       payment_status: job.payment_status || "none",
       status: job.status || "pending",
-      urgent: normalizeTags(job.tags).includes("ACİL"),
+      urgent: isUrgentJob(job),
     });
   }
 
@@ -1941,10 +1766,10 @@ export default function App() {
       type: editForm.type,
       pay: editForm.pay,
       hours: editForm.hours,
+      duration_label: editForm.duration_label,
       description: editForm.description,
       package_type: editForm.package_type,
       featured: selectedPackage.featured,
-      price: selectedPackage.price,
       payment_note: editForm.payment_note,
       payment_status: editForm.payment_status,
       status: editForm.status,
@@ -1953,12 +1778,7 @@ export default function App() {
 
     if (!supabase) {
       const next = jobs.map((job) =>
-        job.id === editingJob.id
-          ? {
-              ...job,
-              ...payload,
-            }
-          : job
+        job.id === editingJob.id ? { ...job, ...payload } : job
       );
       setJobs(next);
       localStorage.setItem("ekis_demo_jobs", JSON.stringify(next));
@@ -1982,12 +1802,7 @@ export default function App() {
 
     setJobs((prev) =>
       prev.map((job) =>
-        job.id === editingJob.id
-          ? {
-              ...job,
-              ...payload,
-            }
-          : job
+        job.id === editingJob.id ? { ...job, ...payload } : job
       )
     );
     setEditingJob(null);
@@ -2077,7 +1892,7 @@ export default function App() {
           <div>
             <div className="logo">ekis</div>
             <div className="muted">
-              Günlük, hızlı ve ek iş ilanları için modern buluşma noktası
+              CV’siz, anında günlük iş bulma platformu
             </div>
           </div>
 
@@ -2098,49 +1913,40 @@ export default function App() {
                     : currentUser.full_name || currentUser.email}
                 </Badge>
 
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setTab("jobs");
-                    setTimeout(() => {
-                      jobsSectionRef.current?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }, 50);
-                  }}
-                >
-                  <User size={16} /> İş Ara
+                <Button variant="outline" onClick={() => setTab("jobs")}>
+                  <Search size={16} />
+                  İş Ara
                 </Button>
 
                 {isEmployer ? (
-                  <Button
-                    onClick={() => {
-                      setTab("post");
-                      setTimeout(() => {
-                        postSectionRef.current?.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        });
-                      }, 50);
-                    }}
-                  >
-                    <Building2 size={16} /> İlan Ver
+                  <Button onClick={() => setTab("post")}>
+                    <PlusCircle size={16} />
+                    İş Ver
                   </Button>
                 ) : null}
 
                 <Button variant="outline" onClick={() => setTab("profile")}>
-                  <User size={16} /> Profilim
+                  <User size={16} />
+                  Profilim
                 </Button>
 
-                {(isEmployer || isSuperAdmin) ? (
+                {isEmployer ? (
                   <Button variant="outline" onClick={() => setTab("dashboard")}>
-                    <FileText size={16} /> Panel
+                    <Briefcase size={16} />
+                    Panel
+                  </Button>
+                ) : null}
+
+                {isSuperAdmin ? (
+                  <Button variant="outline" onClick={() => setTab("superadmin")}>
+                    <Crown size={16} />
+                    Admin
                   </Button>
                 ) : null}
 
                 <Button variant="outline" onClick={handleLogout}>
-                  <LogOut size={16} /> Çıkış
+                  <LogOut size={16} />
+                  Çıkış
                 </Button>
               </>
             ) : (
@@ -2154,7 +1960,8 @@ export default function App() {
                     setAuthMessage("");
                   }}
                 >
-                  <LogIn size={16} /> Giriş
+                  <LogIn size={16} />
+                  Giriş
                 </Button>
                 <Button
                   onClick={() => {
@@ -2164,7 +1971,8 @@ export default function App() {
                     setAuthMessage("");
                   }}
                 >
-                  <UserPlus size={16} /> Kayıt Ol
+                  <UserPlus size={16} />
+                  Kayıt Ol
                 </Button>
               </>
             )}
@@ -2174,13 +1982,14 @@ export default function App() {
         <section className="hero-grid">
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}>
             <Card className="hero-card">
-              <Badge className="hero-badge">Türkiye’nin hızlı iş platformu</Badge>
+              <Badge className="hero-badge">Boş zamanını paraya çevir</Badge>
               <h1>
-                5 dakikada <span>iş bul</span> veya <span>iş ver</span>
+                <span>CV’siz</span> iş bul. <br />
+                Bugün çalış, <span>bugün kazan.</span>
               </h1>
               <p>
-                Günlük iş, part-time iş, ek gelir ve hızlı başvuru için tasarlandı.
-                İş arayan ve işveren doğrudan buluşur.
+                Saatlik, günlük ve kısa süreli işler için tasarlandı.
+                Karmaşık CV süreçleri yok. Hızlı başvuru, hızlı dönüş.
               </p>
 
               <div className="trust-strip">
@@ -2196,19 +2005,9 @@ export default function App() {
               </div>
 
               <div className="hero-cta">
-                <Button
-                  onClick={() => {
-                    setTab("jobs");
-                    setTimeout(() => {
-                      jobsSectionRef.current?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }, 50);
-                  }}
-                >
+                <Button onClick={() => setTab("jobs")}>
                   <Search size={16} />
-                  Hemen İş Bul
+                  İş Bul
                 </Button>
 
                 <Button
@@ -2218,31 +2017,24 @@ export default function App() {
                       setAuthMode("register");
                       setAuthRole("employer");
                       setShowAuthModal(true);
-                      setAuthMessage("");
                       return;
                     }
                     if (!isEmployer) {
-                      alert("İlan vermek için işveren hesabı kullanmalısın.");
+                      alert("İş vermek için işveren hesabı kullanmalısın.");
                       return;
                     }
                     setTab("post");
-                    setTimeout(() => {
-                      postSectionRef.current?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }, 50);
                   }}
                 >
-                  <PlusCircle size={16} />
-                  Ücretsiz İlan Ver
+                  <Building2 size={16} />
+                  İş Ver
                 </Button>
               </div>
 
               <div className="hero-secondary-note muted">
-                <span>✔ Aracı yok</span>
+                <span>✔ CV gerektirmez</span>
                 <span>✔ Hızlı başvuru</span>
-                <span>✔ Aynı gün dönüş ihtimali</span>
+                <span>✔ Aynı gün iş fırsatı</span>
               </div>
 
               <div className="filters" style={{ marginTop: 18 }}>
@@ -2251,7 +2043,7 @@ export default function App() {
                   <Input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="İş ara: kafe, kurye, mağaza, organizasyon..."
+                    placeholder="İş ara: garson, etkinlik, depo, kurye..."
                   />
                 </div>
 
@@ -2259,7 +2051,7 @@ export default function App() {
                   value={city}
                   onChange={setCity}
                   options={[
-                    { value: "all", label: "Tüm şehirler" },
+                    { value: "all", label: "Konum seç" },
                     ...TURKEY_CITIES.map((c) => ({ value: c, label: c })),
                   ]}
                 />
@@ -2268,7 +2060,7 @@ export default function App() {
                   value={type}
                   onChange={setType}
                   options={[
-                    { value: "all", label: "Tüm türler" },
+                    { value: "all", label: "İş türü" },
                     ...types.map((t) => ({ value: t, label: t })),
                   ]}
                 />
@@ -2284,105 +2076,69 @@ export default function App() {
           <div className="stats">
             <Stat label="Aktif ilan" value={String(filteredJobs.length)} icon={Briefcase} />
             <Stat label="Premium ilan" value={String(premiumJobsCount)} icon={Sparkles} />
-            <Stat
-              label="Bugün eklenen"
-              value={String(jobs.filter((j) => isNewJob(j)).length)}
-              icon={Eye}
-            />
+            <Stat label="Bugünün işleri" value={String(todayJobs.length)} icon={Zap} />
           </div>
         </section>
 
         <section className="feature-grid">
           <Card>
-            <Briefcase className="feature-icon" />
-            <div className="feature-title">Hızlı işe alım</div>
-            <p className="muted">
-              Ağır başvuru süreçleri yerine hızlı ve doğrudan akış.
-            </p>
+            <Zap className="feature-icon" />
+            <div className="feature-title">Bugün çalış</div>
+            <p className="muted">Kısa süreli işleri bul, aynı gün kazanmaya başla.</p>
           </Card>
           <Card>
-            <Sparkles className="feature-icon" />
-            <div className="feature-title">Premium görünürlük</div>
-            <p className="muted">
-              Premium ilanlar üstte çıkar, daha dikkat çekici görünür.
-            </p>
+            <User className="feature-icon" />
+            <div className="feature-title">CV gerekmez</div>
+            <p className="muted">İsim, telefon ve hızlı başvuru ile süreci başlat.</p>
           </Card>
           <Card>
-            <MessageCircle className="feature-icon" />
-            <div className="feature-title">Site içi iletişim</div>
-            <p className="muted">
-              Başvuranlarla platform içinde konuş, iletişimi kontrol et.
-            </p>
+            <Building2 className="feature-icon" />
+            <div className="feature-title">İşveren için hızlı eleman</div>
+            <p className="muted">Saatlik ve günlük işlere hızlı aday bul.</p>
+          </Card>
+          <Card>
+            <BadgeDollarSign className="feature-icon" />
+            <div className="feature-title">Katmanlı gelir modeli</div>
+            <p className="muted">Ücretsiz, öne çıkar ve premium paketlerle gelir oluştur.</p>
           </Card>
         </section>
 
         <div className="tabs">
-          <button
-            className={tab === "jobs" ? "tab active" : "tab"}
-            onClick={() => {
-              setTab("jobs");
-              setTimeout(() => {
-                jobsSectionRef.current?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-              }, 50);
-            }}
-          >
-            İlanlar
+          <button className={tab === "jobs" ? "tab active" : "tab"} onClick={() => setTab("jobs")}>
+            İşler
           </button>
 
           {isEmployer ? (
-            <button
-              className={tab === "post" ? "tab active" : "tab"}
-              onClick={() => {
-                setTab("post");
-                setTimeout(() => {
-                  postSectionRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
-                }, 50);
-              }}
-            >
-              İlan Ver
+            <button className={tab === "post" ? "tab active" : "tab"} onClick={() => setTab("post")}>
+              İş Ver
             </button>
           ) : null}
 
           {currentUser ? (
-            <button
-              className={tab === "profile" ? "tab active" : "tab"}
-              onClick={() => setTab("profile")}
-            >
+            <button className={tab === "profile" ? "tab active" : "tab"} onClick={() => setTab("profile")}>
               Profilim
             </button>
           ) : null}
 
-          {(currentUser && isEmployer) || isSuperAdmin ? (
-            <button
-              className={tab === "dashboard" ? "tab active" : "tab"}
-              onClick={() => setTab("dashboard")}
-            >
+          {isEmployer ? (
+            <button className={tab === "dashboard" ? "tab active" : "tab"} onClick={() => setTab("dashboard")}>
               Panel
             </button>
           ) : null}
 
           {isSuperAdmin ? (
-            <button
-              className={tab === "superadmin" ? "tab active" : "tab"}
-              onClick={() => setTab("superadmin")}
-            >
+            <button className={tab === "superadmin" ? "tab active" : "tab"} onClick={() => setTab("superadmin")}>
               Süper Admin
             </button>
           ) : null}
         </div>
 
         {tab === "jobs" && (
-          <div ref={jobsSectionRef} className="filters-grid">
+          <div className="filters-grid">
             <div className="filter-panel">
               <Card>
                 <div className="feature-title" style={{ marginBottom: 10 }}>
-                  Filtreler
+                  Hızlı filtreler
                 </div>
 
                 <div className="filter-stack">
@@ -2399,7 +2155,7 @@ export default function App() {
                   </div>
 
                   <div>
-                    <Label>Çalışma türü</Label>
+                    <Label>İş türü</Label>
                     <SelectField
                       value={type}
                       onChange={setType}
@@ -2423,30 +2179,36 @@ export default function App() {
                       checked={urgentOnly}
                       onChange={(e) => setUrgentOnly(e.target.checked)}
                     />
-                    Sadece ACİL ilanlar
+                    Sadece ACİL işler
                   </label>
 
                   <Card>
-                    <div className="feature-title">
-                      {currentUser?.role === "candidate"
-                        ? "İş Bakan Avantajları"
-                        : "Avantajlar"}
-                    </div>
+                    <div className="feature-title">Bu platform kimin için?</div>
                     <div className="muted" style={{ lineHeight: 1.7 }}>
-                      1 tıkla başvuru yap<br />
-                      Hızlı iletişim kur<br />
-                      Yeni ilanları kaçırma
+                      Öğrenciler<br />
+                      Ek iş isteyen çalışanlar<br />
+                      Günlük çalışanlar<br />
+                      Kısa süreli eleman arayan işletmeler
+                    </div>
+                  </Card>
+
+                  <Card>
+                    <div className="feature-title">Para kazanma modeli</div>
+                    <div className="muted" style={{ lineHeight: 1.7 }}>
+                      Standart ilan: ücretsiz<br />
+                      Öne çıkar: 99 TL<br />
+                      Premium ilan: 399 TL
                     </div>
                   </Card>
 
                   <Button
+                    variant="outline"
                     onClick={() => {
                       setSearch("");
                       setCity("all");
                       setType("all");
                       setUrgentOnly(false);
                     }}
-                    variant="outline"
                   >
                     Filtreleri Temizle
                   </Button>
@@ -2455,11 +2217,18 @@ export default function App() {
             </div>
 
             <section className="section-stack">
+              <Card>
+                <div className="feature-title">🔥 Bugünün işleri</div>
+                <div className="muted">
+                  Yeni eklenen ve hızlı dönüş ihtimali olan işler
+                </div>
+              </Card>
+
               <div className="section-head">
                 <div>
-                  <h2>İlan listesi</h2>
+                  <h2>İş listesi</h2>
                   <p className="muted">
-                    ACİL ve premium ilanlar öne çıkar. Süresi dolan ilanlar gösterilmez.
+                    CV’siz başvur, hızlı dönüş al, kısa sürede kazanmaya başla.
                   </p>
                 </div>
                 <div className="result-wrap">
@@ -2471,27 +2240,20 @@ export default function App() {
               <div className="job-list">
                 {filteredJobs.length === 0 ? (
                   <Card>
-                    <div className="feature-title">Henüz ilan yok 😕</div>
+                    <div className="feature-title">Henüz iş yok 😕</div>
                     <div className="muted" style={{ marginBottom: 12 }}>
-                      İlk ilanı sen ver veya birazdan tekrar kontrol et.
+                      Yakında yeni işler burada görünecek.
                     </div>
                     <Button
+                      variant="outline"
                       onClick={() => {
-                        if (!currentUser) {
-                          setAuthMode("register");
-                          setAuthRole("employer");
-                          setShowAuthModal(true);
-                          return;
-                        }
-                        if (!isEmployer) {
-                          alert("İlan vermek için işveren hesabı kullanmalısın.");
-                          return;
-                        }
-                        setTab("post");
+                        setSearch("");
+                        setCity("all");
+                        setType("all");
+                        setUrgentOnly(false);
                       }}
                     >
-                      <PlusCircle size={16} />
-                      İlk İlanı Ver
+                      Listeyi Yenile
                     </Button>
                   </Card>
                 ) : (
@@ -2511,83 +2273,51 @@ export default function App() {
         )}
 
         {tab === "post" && isEmployer && (
-          <div ref={postSectionRef}>
+          <div>
             <Card>
               <h2>İşveren ilan oluşturma ekranı</h2>
 
               <div className="premium-plan-box">
                 <div className="premium-plan-head">
                   <div className="premium-plan-title">
-                    <BadgeCent size={18} />
+                    <BadgeDollarSign size={18} />
                     Paket seçimi
                   </div>
-                  <Badge
-                    className={
-                      jobForm.package_type === "premium"
-                        ? "premium-badge"
-                        : "soft"
-                    }
-                  >
-                    {selectedPackage.label}
+                  <Badge className={jobForm.package_type === "premium" ? "premium-badge" : "soft"}>
+                    {PACKAGE_OPTIONS[jobForm.package_type].label}
                   </Badge>
                 </div>
-                <div className="premium-plan-price">{selectedPackage.price}</div>
-                <div className="muted">
-                  Standart ilan {FREE_JOB_DURATION_DAYS} gün, premium ilan{" "}
-                  {PREMIUM_JOB_DURATION_DAYS} gün yayında kalır.
-                </div>
+                <div className="premium-plan-price">{PACKAGE_OPTIONS[jobForm.package_type].price}</div>
+                <div className="muted">{PACKAGE_OPTIONS[jobForm.package_type].note}</div>
                 <div className="muted" style={{ marginTop: 8 }}>
-                  🔥 Premium ilan → daha fazla görünürlük ve daha yüksek tıklanma
+                  Standart: 15 gün • Öne çıkar: 20 gün • Premium: 30 gün
                 </div>
               </div>
 
-              {jobForm.package_type === "premium" ? (
-                <div className="premium-plan-box" style={{ marginBottom: 16 }}>
+              {jobForm.package_type !== "free" ? (
+                <div className="premium-plan-box">
                   <div className="premium-plan-title">
                     <CreditCard size={18} />
                     Ödeme bilgisi
                   </div>
-
-                  <div className="muted" style={{ marginBottom: 8 }}>
-                    Premium ilan ücreti 399 TL'dir. Ödemeyi yaptıktan sonra referans
-                    numarasını aşağıya yazabilirsin.
+                  <div className="muted" style={{ marginBottom: 10 }}>
+                    Ücretli paket seçtin. Ödemeyi yaptıktan sonra referans numarasını yazabilirsin.
                   </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: 10,
-                      flexWrap: "wrap",
-                      marginBottom: 12,
-                    }}
-                  >
-                    <a
-                      href={SHOPIER_PAYMENT_URL}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{ textDecoration: "none" }}
-                    >
-                      <button type="button" className="btn btn-solid">
-                        <CreditCard size={16} />
-                        Shopier ile 399 TL Öde
-                      </button>
-                    </a>
+                  <a href={SHOPIER_PAYMENT_URL} target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
+                    <button type="button" className="btn btn-solid">
+                      <CreditCard size={16} />
+                      Ödeme Linkini Aç
+                    </button>
+                  </a>
+                  <div style={{ marginTop: 12 }}>
+                    <Textarea
+                      placeholder="Örnek: Shopier sipariş no / ödeme referansı"
+                      value={jobForm.payment_note}
+                      onChange={(e) =>
+                        setJobForm({ ...jobForm, payment_note: e.target.value })
+                      }
+                    />
                   </div>
-
-                  <div className="muted" style={{ marginBottom: 12 }}>
-                    Ödeme sonrası referans numarasını buraya yazabilirsin:
-                  </div>
-
-                  <Textarea
-                    placeholder="Örnek: Shopier sipariş no / ödeme referansı"
-                    value={jobForm.payment_note}
-                    onChange={(e) =>
-                      setJobForm({
-                        ...jobForm,
-                        payment_note: e.target.value,
-                      })
-                    }
-                  />
                 </div>
               ) : null}
 
@@ -2596,11 +2326,10 @@ export default function App() {
                   <Label required>Paket</Label>
                   <SelectField
                     value={jobForm.package_type}
-                    onChange={(val) =>
-                      setJobForm({ ...jobForm, package_type: val })
-                    }
+                    onChange={(val) => setJobForm({ ...jobForm, package_type: val })}
                     options={[
-                      { value: "standard", label: "Standart - Ücretsiz" },
+                      { value: "free", label: "Standart - Ücretsiz" },
+                      { value: "boost", label: "Öne Çıkar - 99 TL" },
                       { value: "premium", label: "Premium - 399 TL" },
                     ]}
                   />
@@ -2609,11 +2338,9 @@ export default function App() {
                 <div>
                   <Label required>İş başlığı</Label>
                   <Input
-                    placeholder="Örn: Kafe Servis Elemanı"
+                    placeholder="Örn: Garson lazım"
                     value={jobForm.title}
-                    onChange={(e) =>
-                      setJobForm({ ...jobForm, title: e.target.value })
-                    }
+                    onChange={(e) => setJobForm({ ...jobForm, title: e.target.value })}
                   />
                 </div>
 
@@ -2622,9 +2349,7 @@ export default function App() {
                   <Input
                     placeholder="Firma adı"
                     value={jobForm.company}
-                    onChange={(e) =>
-                      setJobForm({ ...jobForm, company: e.target.value })
-                    }
+                    onChange={(e) => setJobForm({ ...jobForm, company: e.target.value })}
                   />
                 </div>
 
@@ -2632,9 +2357,7 @@ export default function App() {
                   <Label required>Şehir</Label>
                   <SelectField
                     value={jobForm.city}
-                    onChange={(val) =>
-                      setJobForm({ ...jobForm, city: val })
-                    }
+                    onChange={(val) => setJobForm({ ...jobForm, city: val })}
                     options={[
                       { value: "", label: "Şehir seç" },
                       ...TURKEY_CITIES.map((c) => ({ value: c, label: c })),
@@ -2647,22 +2370,17 @@ export default function App() {
                   <Input
                     placeholder="İlçe"
                     value={jobForm.district}
-                    onChange={(e) =>
-                      setJobForm({ ...jobForm, district: e.target.value })
-                    }
+                    onChange={(e) => setJobForm({ ...jobForm, district: e.target.value })}
                   />
                 </div>
 
                 <div>
-                  <Label>Çalışma türü</Label>
+                  <Label>İş türü</Label>
                   <SelectField
                     value={jobForm.type}
-                    onChange={(val) =>
-                      setJobForm({ ...jobForm, type: val })
-                    }
+                    onChange={(val) => setJobForm({ ...jobForm, type: val })}
                     options={[
-                      { value: "Part-time", label: "Part-time" },
-                      { value: "Ek iş", label: "Ek iş" },
+                      { value: "Saatlik iş", label: "Saatlik iş" },
                       { value: "Günlük iş", label: "Günlük iş" },
                       { value: "Yarı zamanlı", label: "Yarı zamanlı" },
                     ]}
@@ -2670,24 +2388,29 @@ export default function App() {
                 </div>
 
                 <div>
-                  <Label>Ücret bilgisi</Label>
+                  <Label>Ücret</Label>
                   <Input
-                    placeholder="Örn: Günlük 1500 TL"
+                    placeholder="Örn: 900 TL / gün"
                     value={jobForm.pay}
-                    onChange={(e) =>
-                      setJobForm({ ...jobForm, pay: e.target.value })
-                    }
+                    onChange={(e) => setJobForm({ ...jobForm, pay: e.target.value })}
                   />
                 </div>
 
-                <div className="full">
-                  <Label>Çalışma saatleri</Label>
+                <div>
+                  <Label>Çalışma saati</Label>
                   <Input
-                    placeholder="Örn: 10:00 - 18:00"
+                    placeholder="Örn: 17:00 - 23:00"
                     value={jobForm.hours}
-                    onChange={(e) =>
-                      setJobForm({ ...jobForm, hours: e.target.value })
-                    }
+                    onChange={(e) => setJobForm({ ...jobForm, hours: e.target.value })}
+                  />
+                </div>
+
+                <div>
+                  <Label>İş süresi</Label>
+                  <Input
+                    placeholder="Örn: 6 saat / 1 gün"
+                    value={jobForm.duration_label}
+                    onChange={(e) => setJobForm({ ...jobForm, duration_label: e.target.value })}
                   />
                 </div>
 
@@ -2696,50 +2419,25 @@ export default function App() {
                   <Textarea
                     placeholder="İşin detaylarını yaz..."
                     value={jobForm.description}
-                    onChange={(e) =>
-                      setJobForm({
-                        ...jobForm,
-                        description: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setJobForm({ ...jobForm, description: e.target.value })}
                   />
                 </div>
 
                 <div className="full">
-                  <label
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 8,
-                      fontWeight: 800,
-                    }}
-                  >
+                  <label style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 800 }}>
                     <input
                       type="checkbox"
                       checked={jobForm.urgent}
-                      onChange={(e) =>
-                        setJobForm({
-                          ...jobForm,
-                          urgent: e.target.checked,
-                        })
-                      }
+                      onChange={(e) => setJobForm({ ...jobForm, urgent: e.target.checked })}
                     />
-                    ACİL ilan olarak işaretle
+                    ACİL iş olarak işaretle
                   </label>
                 </div>
 
                 <div className="full action-row">
                   <Button onClick={handlePublish} disabled={savingJob}>
-                    {savingJob ? (
-                      <Loader2 size={16} className="spin" />
-                    ) : (
-                      <PlusCircle size={16} />
-                    )}
-                    {savingJob
-                      ? "Kaydediliyor"
-                      : jobForm.package_type === "premium"
-                      ? "İlanı Yayına Al (399 TL)"
-                      : "Ücretsiz İlan Ver"}
+                    {savingJob ? <Loader2 size={16} className="spin" /> : <PlusCircle size={16} />}
+                    {savingJob ? "Kaydediliyor" : "İlanı Kaydet"}
                   </Button>
                 </div>
               </div>
@@ -2750,15 +2448,13 @@ export default function App() {
         {tab === "profile" && currentUser && (
           <section className="dashboard-grid">
             <Card>
-              <h2>Profil Bilgilerim</h2>
+              <h2>Profilim</h2>
               <div className="form-grid">
                 <div>
                   <Label required>Ad soyad</Label>
                   <Input
                     value={profileForm.full_name}
-                    onChange={(e) =>
-                      setProfileForm({ ...profileForm, full_name: e.target.value })
-                    }
+                    onChange={(e) => setProfileForm({ ...profileForm, full_name: e.target.value })}
                   />
                 </div>
 
@@ -2771,9 +2467,7 @@ export default function App() {
                   <Label>Telefon</Label>
                   <Input
                     value={profileForm.phone}
-                    onChange={(e) =>
-                      setProfileForm({ ...profileForm, phone: e.target.value })
-                    }
+                    onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
                   />
                 </div>
 
@@ -2783,17 +2477,14 @@ export default function App() {
                     <Input
                       value={profileForm.company_name}
                       onChange={(e) =>
-                        setProfileForm({
-                          ...profileForm,
-                          company_name: e.target.value,
-                        })
+                        setProfileForm({ ...profileForm, company_name: e.target.value })
                       }
                     />
                   </div>
                 ) : (
                   <div>
                     <Label>Hesap tipi</Label>
-                    <Input value="İş Bakan" disabled />
+                    <Input value="İş Arayan" disabled />
                   </div>
                 )}
 
@@ -2807,7 +2498,7 @@ export default function App() {
             </Card>
 
             <Card>
-              <h2>{isEmployer ? "Hesap Özeti" : "Başvuru Geçmişim"}</h2>
+              <h2>{isEmployer ? "İşveren Özeti" : "Başvuru Geçmişim"}</h2>
 
               {isEmployer ? (
                 <div className="panel-list">
@@ -2881,9 +2572,13 @@ export default function App() {
                             <Badge className="premium-badge">
                               <Sparkles size={13} /> Premium
                             </Badge>
-                          ) : (
-                            <Badge className="soft">Standart</Badge>
-                          )}
+                          ) : null}
+
+                          {job.package_type === "boost" ? (
+                            <Badge className="featured-tag">
+                              <Star size={13} /> Öne Çıkan
+                            </Badge>
+                          ) : null}
 
                           {job.payment_status === "waiting_payment" ? (
                             <Badge className="pending">ödeme bekleniyor</Badge>
@@ -2907,44 +2602,23 @@ export default function App() {
                       <div className="muted">
                         {job.pay || "-"} • {job.hours || "-"}
                       </div>
-                      <div className="muted">
-                        Paket fiyatı:{" "}
-                        {job.package_type === "premium"
-                          ? "399 TL"
-                          : job.price || "Ücretsiz"}
-                      </div>
                       {job.payment_note ? (
                         <div className="muted">Ödeme notu: {job.payment_note}</div>
                       ) : null}
 
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: 10,
-                          marginTop: 12,
-                          flexWrap: "wrap",
-                          alignItems: "center",
-                        }}
-                      >
-                        {job.package_type === "premium" &&
-                        job.payment_status === "waiting_payment" ? (
-                          <>
-                            <Button
-                              onClick={() => handleMarkPaid(job.id)}
-                              disabled={actionLoadingId === job.id}
-                            >
-                              <CreditCard size={16} />
-                              Ödeme Bildirdim
-                            </Button>
-                            <div className="muted">
-                              Ödeme yapılmadan ilan yayına alınamaz
-                            </div>
-                          </>
+                      <div className="action-row">
+                        {job.package_type !== "free" && job.payment_status === "waiting_payment" ? (
+                          <Button
+                            onClick={() => handleMarkPaid(job.id)}
+                            disabled={actionLoadingId === job.id}
+                          >
+                            <CreditCard size={16} />
+                            Ödeme Bildirdim
+                          </Button>
                         ) : null}
 
                         {job.status !== "active" &&
-                        (job.package_type !== "premium" ||
-                          job.payment_status === "paid") ? (
+                        (job.package_type === "free" || job.payment_status === "paid") ? (
                           <Button
                             onClick={() => handleApproveJob(job.id)}
                             disabled={actionLoadingId === job.id}
@@ -2991,11 +2665,7 @@ export default function App() {
                     <div
                       key={app.id}
                       className="panel-row"
-                      style={{
-                        alignItems: "flex-start",
-                        flexDirection: "column",
-                        gap: 8,
-                      }}
+                      style={{ alignItems: "flex-start", flexDirection: "column", gap: 8 }}
                     >
                       <div
                         style={{
@@ -3011,10 +2681,7 @@ export default function App() {
                         <Badge className="soft">{app.jobTitle}</Badge>
                       </div>
 
-                      <div
-                        className="muted"
-                        style={{ display: "flex", gap: 14, flexWrap: "wrap" }}
-                      >
+                      <div className="muted" style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                         <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                           <Phone size={14} /> {app.phone}
                         </span>
@@ -3026,10 +2693,7 @@ export default function App() {
                         </span>
                       </div>
 
-                      <div
-                        className="muted"
-                        style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
-                      >
+                      <div className="muted" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                         <CalendarDays size={14} /> {formatDate(app.created_at)}
                       </div>
 
@@ -3043,10 +2707,7 @@ export default function App() {
                             border: "1px solid #e2e8f0",
                           }}
                         >
-                          <div
-                            className="muted"
-                            style={{ fontSize: "13px", marginBottom: "4px" }}
-                          >
+                          <div className="muted" style={{ fontSize: "13px", marginBottom: "4px" }}>
                             Başvuru notu
                           </div>
                           <div>{app.note}</div>
@@ -3085,7 +2746,7 @@ export default function App() {
                   <strong>{superAdminStats.totalEmployers}</strong>
                 </div>
                 <div className="panel-row">
-                  <span className="muted">Ödeme bekleyen premium</span>
+                  <span className="muted">Ödeme bekleyen</span>
                   <strong>{superAdminStats.paymentWaiting}</strong>
                 </div>
               </div>
@@ -3121,9 +2782,9 @@ export default function App() {
                           <Badge className={job.status === "active" ? "soft" : "pending"}>
                             {job.status}
                           </Badge>
-                          {job.package_type === "premium" ? (
+                          {job.package_type !== "free" ? (
                             <Badge className="premium-badge">
-                              <Sparkles size={13} /> Premium
+                              {job.package_type === "premium" ? "Premium" : "Öne Çıkar"}
                             </Badge>
                           ) : (
                             <Badge className="soft">Standart</Badge>
@@ -3133,46 +2794,30 @@ export default function App() {
                           ) : job.payment_status === "paid" ? (
                             <Badge className="soft">ödeme tamam</Badge>
                           ) : null}
-                          {isExpired(job) ? (
-                            <Badge className="pending">süresi doldu</Badge>
-                          ) : (
-                            <Badge className="soft">
-                              {getRemainingDays(job)} gün kaldı
-                            </Badge>
-                          )}
                         </div>
                       </div>
 
                       <div className="muted">{job.company}</div>
                       <div className="muted">İşveren: {job.employer_email || "-"}</div>
-                      <div className="muted">
-                        Şehir: {job.city} / {job.district || "-"}
-                      </div>
-                      <div className="muted">Paket: {job.package_type}</div>
-                      {job.payment_note ? (
-                        <div className="muted">Ödeme notu: {job.payment_note}</div>
-                      ) : null}
 
-                      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                      <div className="action-row">
                         <Button variant="outline" onClick={() => openEditJob(job)}>
                           <Pencil size={16} />
                           Düzenle
                         </Button>
 
-                        {job.package_type === "premium" &&
-                        job.payment_status === "waiting_payment" ? (
+                        {job.package_type !== "free" && job.payment_status === "waiting_payment" ? (
                           <Button
                             onClick={() => handleMarkPaid(job.id)}
                             disabled={actionLoadingId === job.id}
                           >
                             <CreditCard size={16} />
-                            Ödeme Bildirildi Yap
+                            Ödemeyi Onayla
                           </Button>
                         ) : null}
 
                         {job.status !== "active" &&
-                        (job.package_type !== "premium" ||
-                          job.payment_status === "paid") ? (
+                        (job.package_type === "free" || job.payment_status === "paid") ? (
                           <Button
                             onClick={() => handleApproveJob(job.id)}
                             disabled={actionLoadingId === job.id}
@@ -3199,10 +2844,100 @@ export default function App() {
           </section>
         )}
 
+        {tab === "profile" && currentUser && (
+          <section className="dashboard-grid">
+            <Card>
+              <h2>Profilim</h2>
+              <div className="form-grid">
+                <div>
+                  <Label required>Ad soyad</Label>
+                  <Input
+                    value={profileForm.full_name}
+                    onChange={(e) => setProfileForm({ ...profileForm, full_name: e.target.value })}
+                  />
+                </div>
+
+                <div>
+                  <Label required>E-posta</Label>
+                  <Input value={profileForm.email} disabled />
+                </div>
+
+                <div>
+                  <Label>Telefon</Label>
+                  <Input
+                    value={profileForm.phone}
+                    onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                  />
+                </div>
+
+                {isEmployer ? (
+                  <div>
+                    <Label required>Firma adı</Label>
+                    <Input
+                      value={profileForm.company_name}
+                      onChange={(e) =>
+                        setProfileForm({ ...profileForm, company_name: e.target.value })
+                      }
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <Label>Hesap tipi</Label>
+                    <Input value="İş Arayan" disabled />
+                  </div>
+                )}
+
+                <div className="full action-row">
+                  <Button onClick={handleSaveProfile}>
+                    <Check size={16} />
+                    Profili Kaydet
+                  </Button>
+                </div>
+              </div>
+            </Card>
+
+            <Card>
+              <h2>{isEmployer ? "İşveren Özeti" : "Başvuru Geçmişim"}</h2>
+
+              {isEmployer ? (
+                <div className="panel-list">
+                  <div className="panel-row">
+                    <span className="muted">Hesap tipi</span>
+                    <strong>İşveren</strong>
+                  </div>
+                  <div className="panel-row">
+                    <span className="muted">Yayındaki işler</span>
+                    <strong>{myJobs.filter((j) => j.status === "active").length}</strong>
+                  </div>
+                  <div className="panel-row">
+                    <span className="muted">Bekleyen işler</span>
+                    <strong>{myJobs.filter((j) => j.status === "pending").length}</strong>
+                  </div>
+                </div>
+              ) : candidateApplications.length === 0 ? (
+                <div className="panel-row">
+                  <span className="muted">Henüz başvuru geçmişin yok</span>
+                </div>
+              ) : (
+                <div className="panel-list">
+                  {candidateApplications.slice(0, 10).map((app, i) => (
+                    <div key={app.id || i} className="panel-row">
+                      <strong>{app.jobTitle || `İlan #${app.job_id}`}</strong>
+                      <div className="muted">{app.company || "-"}</div>
+                      <div className="muted">{app.city || "-"}</div>
+                      <div className="muted">{formatDate(app.created_at)}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Card>
+          </section>
+        )}
+
         {appliedJob && (
           <div className="modal-backdrop">
             <div className="modal">
-              <h2>Başvuru gönder</h2>
+              <h2>Hızlı Başvuru</h2>
               <div className="job-preview">
                 <div className="preview-title">{appliedJob.title}</div>
                 <div className="muted">
@@ -3216,55 +2951,31 @@ export default function App() {
                   <Input
                     placeholder="Ad soyad"
                     value={applicationForm.full_name}
-                    onChange={(e) =>
-                      setApplicationForm({
-                        ...applicationForm,
-                        full_name: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setApplicationForm({ ...applicationForm, full_name: e.target.value })}
                   />
 
                   <Label required>Telefon</Label>
                   <Input
                     placeholder="Telefon"
                     value={applicationForm.phone}
-                    onChange={(e) =>
-                      setApplicationForm({
-                        ...applicationForm,
-                        phone: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setApplicationForm({ ...applicationForm, phone: e.target.value })}
                   />
 
                   <div className="muted" style={{ marginBottom: 8 }}>
-                    Başvuru 1 dakikadan kısa sürer.
+                    CV gerektirmez. Başvuru 1 dakikadan kısa sürer.
                   </div>
 
                   <Label>Not</Label>
                   <Textarea
                     placeholder="Kısa bir not yaz"
                     value={applicationForm.note}
-                    onChange={(e) =>
-                      setApplicationForm({
-                        ...applicationForm,
-                        note: e.target.value,
-                      })
-                    }
+                    onChange={(e) => setApplicationForm({ ...applicationForm, note: e.target.value })}
                   />
 
                   <div className="action-row">
-                    <Button
-                      onClick={handleApplicationSubmit}
-                      disabled={sendingApplication}
-                    >
-                      {sendingApplication ? (
-                        <Loader2 size={16} className="spin" />
-                      ) : (
-                        <Send size={16} />
-                      )}
-                      {sendingApplication
-                        ? "Gönderiliyor"
-                        : "Başvuruyu gönder"}
+                    <Button onClick={handleApplicationSubmit} disabled={sendingApplication}>
+                      {sendingApplication ? <Loader2 size={16} className="spin" /> : <Send size={16} />}
+                      {sendingApplication ? "Gönderiliyor" : "Başvuruyu Gönder"}
                     </Button>
                     <Button variant="outline" onClick={() => setAppliedJob(null)}>
                       Vazgeç
@@ -3277,7 +2988,7 @@ export default function App() {
                     <CheckCircle2 size={18} /> Başvuru başarıyla gönderildi
                   </div>
                   <p className="muted">
-                    🎉 Başvurun iletildi! İşveren sana kısa sürede dönüş yapacak.
+                    🎉 Başvurun iletildi. İşveren uygun görürse seninle hızlıca iletişime geçecek.
                   </p>
                   <Button onClick={() => setAppliedJob(null)}>Kapat</Button>
                 </div>
@@ -3298,56 +3009,33 @@ export default function App() {
                 </div>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  flexWrap: "wrap",
-                  marginBottom: "12px",
-                }}
-              >
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 12 }}>
                 <Badge variant="secondary">{selectedJob.type}</Badge>
                 {selectedJob.package_type === "premium" ? (
                   <Badge className="premium-badge">
                     <Sparkles size={13} /> Premium
                   </Badge>
                 ) : null}
-                {normalizeTags(selectedJob.tags).includes("ACİL") ? (
-                  <Badge className="pending">ACİL</Badge>
+                {selectedJob.package_type === "boost" ? (
+                  <Badge className="featured-tag">
+                    <Star size={13} /> Öne Çıkan
+                  </Badge>
                 ) : null}
+                {isUrgentJob(selectedJob) ? <Badge className="pending">ACİL</Badge> : null}
                 {isNewJob(selectedJob) ? <Badge className="soft">Bugün eklendi</Badge> : null}
-                <Badge className="soft">
-                  <Clock3 size={13} /> {selectedJob.hours || "-"}
-                </Badge>
-                <Badge className="soft">
-                  <Wallet size={13} /> {selectedJob.pay || "-"}
-                </Badge>
+                <Badge className="soft"><Clock3 size={13} /> {selectedJob.hours || "-"}</Badge>
+                <Badge className="soft"><Wallet size={13} /> {selectedJob.pay || "-"}</Badge>
+                <Badge className="soft"><Zap size={13} /> {selectedJob.duration_label || "-"}</Badge>
                 <Badge className="soft">
                   <Users size={13} /> {applicationsByJobId[String(selectedJob.id)] || 0} başvuru
                 </Badge>
-                <Badge className="soft">
-                  {getRemainingDays(selectedJob) > 0
-                    ? `${getRemainingDays(selectedJob)} gün kaldı`
-                    : "Süresi doldu"}
-                </Badge>
               </div>
 
-              <p style={{ marginBottom: "14px", lineHeight: 1.7 }}>
-                {selectedJob.description}
-              </p>
+              <p style={{ marginBottom: 14, lineHeight: 1.7 }}>{selectedJob.description}</p>
 
-              <div
-                style={{
-                  display: "flex",
-                  gap: "8px",
-                  flexWrap: "wrap",
-                  marginBottom: "14px",
-                }}
-              >
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
                 {normalizeTags(selectedJob.tags).map((tag) => (
-                  <Badge key={tag} className="soft">
-                    {tag}
-                  </Badge>
+                  <Badge key={tag} className="soft">{tag}</Badge>
                 ))}
               </div>
 
@@ -3365,7 +3053,7 @@ export default function App() {
                 </div>
               ) : null}
 
-              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <div className="action-row">
                 <Button
                   onClick={() => {
                     if (currentUser?.role === "employer") {
@@ -3382,7 +3070,8 @@ export default function App() {
                     }));
                   }}
                 >
-                  Hemen Başvur
+                  <Zap size={16} />
+                  Hızlı Başvur
                 </Button>
 
                 <Button variant="outline" onClick={() => handleShareJob(selectedJob)}>
@@ -3425,22 +3114,12 @@ export default function App() {
               <div className="form-grid">
                 <div>
                   <Label required>İş başlığı</Label>
-                  <Input
-                    value={editForm.title}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, title: e.target.value })
-                    }
-                  />
+                  <Input value={editForm.title} onChange={(e) => setEditForm({ ...editForm, title: e.target.value })} />
                 </div>
 
                 <div>
                   <Label required>Firma adı</Label>
-                  <Input
-                    value={editForm.company}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, company: e.target.value })
-                    }
-                  />
+                  <Input value={editForm.company} onChange={(e) => setEditForm({ ...editForm, company: e.target.value })} />
                 </div>
 
                 <div>
@@ -3457,22 +3136,16 @@ export default function App() {
 
                 <div>
                   <Label>İlçe</Label>
-                  <Input
-                    value={editForm.district}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, district: e.target.value })
-                    }
-                  />
+                  <Input value={editForm.district} onChange={(e) => setEditForm({ ...editForm, district: e.target.value })} />
                 </div>
 
                 <div>
-                  <Label>Çalışma türü</Label>
+                  <Label>İş türü</Label>
                   <SelectField
                     value={editForm.type}
                     onChange={(val) => setEditForm({ ...editForm, type: val })}
                     options={[
-                      { value: "Part-time", label: "Part-time" },
-                      { value: "Ek iş", label: "Ek iş" },
+                      { value: "Saatlik iş", label: "Saatlik iş" },
                       { value: "Günlük iş", label: "Günlük iş" },
                       { value: "Yarı zamanlı", label: "Yarı zamanlı" },
                     ]}
@@ -3480,12 +3153,20 @@ export default function App() {
                 </div>
 
                 <div>
-                  <Label>Ücret bilgisi</Label>
+                  <Label>Ücret</Label>
+                  <Input value={editForm.pay} onChange={(e) => setEditForm({ ...editForm, pay: e.target.value })} />
+                </div>
+
+                <div>
+                  <Label>Çalışma saati</Label>
+                  <Input value={editForm.hours} onChange={(e) => setEditForm({ ...editForm, hours: e.target.value })} />
+                </div>
+
+                <div>
+                  <Label>İş süresi</Label>
                   <Input
-                    value={editForm.pay}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, pay: e.target.value })
-                    }
+                    value={editForm.duration_label}
+                    onChange={(e) => setEditForm({ ...editForm, duration_label: e.target.value })}
                   />
                 </div>
 
@@ -3493,11 +3174,10 @@ export default function App() {
                   <Label>Paket</Label>
                   <SelectField
                     value={editForm.package_type}
-                    onChange={(val) =>
-                      setEditForm({ ...editForm, package_type: val })
-                    }
+                    onChange={(val) => setEditForm({ ...editForm, package_type: val })}
                     options={[
-                      { value: "standard", label: "Standart - Ücretsiz" },
+                      { value: "free", label: "Standart - Ücretsiz" },
+                      { value: "boost", label: "Öne Çıkar - 99 TL" },
                       { value: "premium", label: "Premium - 399 TL" },
                     ]}
                   />
@@ -3507,9 +3187,7 @@ export default function App() {
                   <Label>Ödeme durumu</Label>
                   <SelectField
                     value={editForm.payment_status}
-                    onChange={(val) =>
-                      setEditForm({ ...editForm, payment_status: val })
-                    }
+                    onChange={(val) => setEditForm({ ...editForm, payment_status: val })}
                     options={[
                       { value: "none", label: "Ödeme yok" },
                       { value: "waiting_payment", label: "Ödeme bekleniyor" },
@@ -3522,9 +3200,7 @@ export default function App() {
                   <Label>İlan durumu</Label>
                   <SelectField
                     value={editForm.status}
-                    onChange={(val) =>
-                      setEditForm({ ...editForm, status: val })
-                    }
+                    onChange={(val) => setEditForm({ ...editForm, status: val })}
                     options={[
                       { value: "pending", label: "Pending" },
                       { value: "active", label: "Active" },
@@ -3533,22 +3209,10 @@ export default function App() {
                 </div>
 
                 <div className="full">
-                  <Label>Çalışma saatleri</Label>
-                  <Input
-                    value={editForm.hours}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, hours: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="full">
                   <Label>Ödeme notu</Label>
                   <Textarea
                     value={editForm.payment_note}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, payment_note: e.target.value })
-                    }
+                    onChange={(e) => setEditForm({ ...editForm, payment_note: e.target.value })}
                   />
                 </div>
 
@@ -3556,29 +3220,18 @@ export default function App() {
                   <Label>İş açıklaması</Label>
                   <Textarea
                     value={editForm.description}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, description: e.target.value })
-                    }
+                    onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                   />
                 </div>
 
                 <div className="full">
-                  <label
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      fontWeight: 800,
-                    }}
-                  >
+                  <label style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 800 }}>
                     <input
                       type="checkbox"
                       checked={editForm.urgent}
-                      onChange={(e) =>
-                        setEditForm({ ...editForm, urgent: e.target.checked })
-                      }
+                      onChange={(e) => setEditForm({ ...editForm, urgent: e.target.checked })}
                     />
-                    ACİL ilan olarak işaretle
+                    ACİL iş olarak işaretle
                   </label>
                 </div>
 
@@ -3628,24 +3281,13 @@ export default function App() {
                       style={{
                         padding: "10px 12px",
                         borderRadius: "14px",
-                        background:
-                          msg.sender === "employer" ? "#0f172a" : "#f8fafc",
+                        background: msg.sender === "employer" ? "#0f172a" : "#f8fafc",
                         color: msg.sender === "employer" ? "#fff" : "#0f172a",
-                        border:
-                          msg.sender === "employer"
-                            ? "none"
-                            : "1px solid #e2e8f0",
+                        border: msg.sender === "employer" ? "none" : "1px solid #e2e8f0",
                       }}
                     >
-                      <div
-                        style={{
-                          fontSize: "13px",
-                          opacity: 0.8,
-                          marginBottom: "4px",
-                        }}
-                      >
-                        {msg.sender === "employer" ? "Sen" : "Aday"} •{" "}
-                        {formatDate(msg.created_at)}
+                      <div style={{ fontSize: "13px", opacity: 0.8, marginBottom: "4px" }}>
+                        {msg.sender === "employer" ? "Sen" : "Aday"} • {formatDate(msg.created_at)}
                       </div>
                       <div>{msg.message}</div>
                     </div>
@@ -3661,11 +3303,7 @@ export default function App() {
 
               <div className="action-row">
                 <Button onClick={sendMessage} disabled={sendingMessage}>
-                  {sendingMessage ? (
-                    <Loader2 size={16} className="spin" />
-                  ) : (
-                    <Send size={16} />
-                  )}
+                  {sendingMessage ? <Loader2 size={16} className="spin" /> : <Send size={16} />}
                   {sendingMessage ? "Gönderiliyor" : "Gönder"}
                 </Button>
                 <Button
@@ -3694,7 +3332,7 @@ export default function App() {
                   className={`role-pill ${authRole === "candidate" ? "active" : ""}`}
                   onClick={() => setAuthRole("candidate")}
                 >
-                  İş Bakan
+                  İş Arayan
                 </button>
                 <button
                   type="button"
@@ -3711,9 +3349,7 @@ export default function App() {
                   <Input
                     placeholder={authRole === "candidate" ? "Ad soyad" : "Yetkili adı soyadı"}
                     value={authForm.full_name}
-                    onChange={(e) =>
-                      setAuthForm({ ...authForm, full_name: e.target.value })
-                    }
+                    onChange={(e) => setAuthForm({ ...authForm, full_name: e.target.value })}
                   />
 
                   {authRole === "employer" ? (
@@ -3722,12 +3358,7 @@ export default function App() {
                       <Input
                         placeholder="Firma adı"
                         value={authForm.company_name}
-                        onChange={(e) =>
-                          setAuthForm({
-                            ...authForm,
-                            company_name: e.target.value,
-                          })
-                        }
+                        onChange={(e) => setAuthForm({ ...authForm, company_name: e.target.value })}
                       />
                     </>
                   ) : null}
@@ -3736,9 +3367,7 @@ export default function App() {
                   <Input
                     placeholder="Telefon"
                     value={authForm.phone}
-                    onChange={(e) =>
-                      setAuthForm({ ...authForm, phone: e.target.value })
-                    }
+                    onChange={(e) => setAuthForm({ ...authForm, phone: e.target.value })}
                   />
                 </>
               ) : null}
@@ -3747,9 +3376,7 @@ export default function App() {
               <Input
                 placeholder="E-posta"
                 value={authForm.email}
-                onChange={(e) =>
-                  setAuthForm({ ...authForm, email: e.target.value })
-                }
+                onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
               />
 
               <Label required>Şifre</Label>
@@ -3757,9 +3384,7 @@ export default function App() {
                 type="password"
                 placeholder="Şifre"
                 value={authForm.password}
-                onChange={(e) =>
-                  setAuthForm({ ...authForm, password: e.target.value })
-                }
+                onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
               />
 
               {authMessage ? (
@@ -3779,20 +3404,12 @@ export default function App() {
               <div className="action-row" style={{ marginTop: 14 }}>
                 {authMode === "login" ? (
                   <Button onClick={handleLogin} disabled={authLoading}>
-                    {authLoading ? (
-                      <Loader2 size={16} className="spin" />
-                    ) : (
-                      <LogIn size={16} />
-                    )}
+                    {authLoading ? <Loader2 size={16} className="spin" /> : <LogIn size={16} />}
                     {authLoading ? "Giriş yapılıyor" : "Giriş Yap"}
                   </Button>
                 ) : (
                   <Button onClick={handleRegister} disabled={authLoading}>
-                    {authLoading ? (
-                      <Loader2 size={16} className="spin" />
-                    ) : (
-                      <UserPlus size={16} />
-                    )}
+                    {authLoading ? <Loader2 size={16} className="spin" /> : <UserPlus size={16} />}
                     {authLoading ? "Kayıt oluşturuluyor" : "Kayıt Ol"}
                   </Button>
                 )}
@@ -3860,15 +3477,15 @@ export default function App() {
             <div>
               <div className="footer-title">ekis</div>
               <div className="muted" style={{ lineHeight: 1.7 }}>
-                İş arayanlarla işverenleri hızlı, sade ve güvenli biçimde
-                buluşturan yeni nesil iş platformu.
+                CV’siz, anında günlük iş bulma platformu. Boş zamanını paraya çevirmek isteyenlerle
+                kısa süreli eleman arayan işletmeleri buluşturur.
               </div>
             </div>
 
             <div>
-              <div className="footer-title">Hakkımızda</div>
-              <a className="footer-link" href="#0">Platform Hakkında</a>
+              <div className="footer-title">Platform</div>
               <a className="footer-link" href="#0">Nasıl Çalışır?</a>
+              <a className="footer-link" href="#0">İşveren Çözümleri</a>
               <a className="footer-link" href="#0">Sık Sorulan Sorular</a>
             </div>
 
@@ -3895,20 +3512,9 @@ export default function App() {
       </div>
 
       <div className="sticky-mobile-cta">
-        <Button
-          variant="outline"
-          onClick={() => {
-            setTab("jobs");
-            setTimeout(() => {
-              jobsSectionRef.current?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }, 50);
-          }}
-        >
+        <Button variant="outline" onClick={() => setTab("jobs")}>
           <Search size={16} />
-          İş Ara
+          İş Bul
         </Button>
 
         <Button
@@ -3920,20 +3526,14 @@ export default function App() {
               return;
             }
             if (!isEmployer) {
-              alert("İlan vermek için işveren hesabı kullanmalısın.");
+              alert("İş vermek için işveren hesabı kullanmalısın.");
               return;
             }
             setTab("post");
-            setTimeout(() => {
-              postSectionRef.current?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              });
-            }, 50);
           }}
         >
           <PlusCircle size={16} />
-          İlan Ver
+          İş Ver
         </Button>
       </div>
     </div>
