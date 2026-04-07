@@ -1,10 +1,7 @@
-
 import React, { useEffect, useMemo, useState } from "react";
 
-const ADMIN_PASSWORD = "1234"; // Demo amaçlı. Gerçek projede frontend'de tutulmaz.
-const SHOPIFY_STANDARD_LINK = "https://your-shopify-link.com/ucretli-ilan-ver";
+const ADMIN_PASSWORD = "1234";
 const SHOPIFY_FEATURED_LINK = "https://your-shopify-link.com/one-cikan-ilan";
-const LOGO_WHITE = "/logo-white.png";
 
 const seedJobs = [
   {
@@ -58,6 +55,23 @@ const seedJobs = [
     featured: true,
     active: true,
   },
+  {
+    id: crypto.randomUUID(),
+    title: "Kurye Aranıyor",
+    company: "Hızlı Paket",
+    category: "Kurye & Dağıtım",
+    location: "Eskişehir / Yenibağlar",
+    salary: "Günlük 1.350 TL",
+    type: "Günlük",
+    description:
+      "Teslimat süreçlerinde görev alacak, bölgeye hakim, hızlı ve güvenilir kurye aranıyor.",
+    phone: "05556667788",
+    whatsapp: "905556667788",
+    mapUrl: "https://maps.google.com/?q=Yenibaglar+Eskisehir",
+    createdAt: new Date().toISOString(),
+    featured: true,
+    active: true,
+  },
 ];
 
 const categories = [
@@ -105,10 +119,9 @@ function normalizePhone(phone) {
   return phone.replace(/[^\d]/g, "");
 }
 
-function App() {
+export default function App() {
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
-
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Tümü");
   const [jobType, setJobType] = useState("Tümü");
@@ -117,6 +130,9 @@ function App() {
   const [adminLoggedIn, setAdminLoggedIn] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [adminError, setAdminError] = useState("");
+
+  const [postOpen, setPostOpen] = useState(false);
+  const [promoteChecked, setPromoteChecked] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -158,8 +174,10 @@ function App() {
       });
   }, [activeJobs, search, category, jobType]);
 
-  const featuredJobs = filteredJobs.filter((j) => j.featured).slice(0, 3);
-  const regularJobs = filteredJobs.filter((j) => !j.featured);
+  const featuredJobs = useMemo(
+    () => filteredJobs.filter((j) => j.featured).slice(0, 3),
+    [filteredJobs]
+  );
 
   function handleAdminLogin(e) {
     e.preventDefault();
@@ -173,7 +191,6 @@ function App() {
 
   function handleAddJob(e) {
     e.preventDefault();
-
     if (
       !form.title ||
       !form.company ||
@@ -197,9 +214,7 @@ function App() {
       active: true,
     };
 
-    const updated = [newJob, ...jobs];
-    setJobs(updated);
-
+    setJobs((prev) => [newJob, ...prev]);
     setForm({
       title: "",
       company: "",
@@ -218,54 +233,56 @@ function App() {
   }
 
   function toggleFeatured(id) {
-    setJobs((prev) => prev.map((job) => (job.id === id ? { ...job, featured: !job.featured } : job)));
+    setJobs((prev) =>
+      prev.map((job) => (job.id === id ? { ...job, featured: !job.featured } : job))
+    );
   }
 
   function toggleActive(id) {
-    setJobs((prev) => prev.map((job) => (job.id === id ? { ...job, active: !job.active } : job)));
+    setJobs((prev) =>
+      prev.map((job) => (job.id === id ? { ...job, active: !job.active } : job))
+    );
   }
 
   function deleteJob(id) {
-    const ok = window.confirm("Bu ilanı silmek istediğine emin misin?");
-    if (!ok) return;
+    if (!window.confirm("Bu ilanı silmek istediğine emin misin?")) return;
     setJobs((prev) => prev.filter((job) => job.id !== id));
   }
 
   return (
     <div style={styles.page}>
       <header style={styles.header}>
-        <a href="#top" style={styles.brandCard}>
-          <img src={LOGO_WHITE} alt="Ekiş logo" style={styles.brandLogoImage} />
-        </a>
+        <div style={styles.brandWrap}>
+          <div style={styles.brandBadge}>
+            <div style={styles.brandIconHead} />
+            <div style={styles.brandIconBody} />
+            <div style={styles.brandIconBag} />
+          </div>
+          <div>
+            <div style={styles.logo}>İş İlan</div>
+            <div style={styles.logoSub}>Eskişehir odaklı hızlı ilan platformu</div>
+          </div>
+        </div>
 
         <div style={styles.headerActions}>
-          <a href={SHOPIFY_STANDARD_LINK} target="_blank" rel="noreferrer" style={styles.publicCtaBtn}>
-            Ücretli İlan Ver
-          </a>
           <button style={styles.adminBtn} onClick={() => setAdminOpen(true)}>
             Admin
           </button>
         </div>
       </header>
 
-      <section id="top" style={styles.hero}>
+      <section style={styles.hero}>
         <div style={styles.heroBadge}>Eskişehir odaklı</div>
         <h1 style={styles.heroTitle}>CV’siz iş bul</h1>
         <p style={styles.heroText}>
-          Günlük, saatlik ve part time iş ilanlarını incele. İlanı aç, işverenle direkt iletişime geç.
+          Günlük, saatlik ve part time iş ilanlarını incele. İlanı aç, işverenle
+          direkt iletişime geç.
         </p>
 
-        <div style={styles.heroCtaRow}>
-          <a href={SHOPIFY_STANDARD_LINK} target="_blank" rel="noreferrer" style={styles.primaryLinkBtn}>
-            Ücretli İlan Ver
-          </a>
-          <a href={SHOPIFY_FEATURED_LINK} target="_blank" rel="noreferrer" style={styles.secondaryLinkBtn}>
-            İlanı Öne Çıkar
-          </a>
-        </div>
-
-        <div style={styles.pricingNote}>
-          Standart ilan ve öne çıkarma ödemeleri için Shopify linklerini kendi mağaza linklerinle değiştir.
+        <div style={styles.heroButtons}>
+          <button style={styles.primaryBtn} onClick={() => setPostOpen(true)}>
+            Ücretsiz İlan Ver
+          </button>
         </div>
 
         <div style={styles.searchBox}>
@@ -303,7 +320,11 @@ function App() {
           </div>
           <div style={styles.featuredGrid}>
             {featuredJobs.map((job) => (
-              <button key={job.id} style={{ ...styles.featuredCard, textAlign: "left" }} onClick={() => setSelectedJob(job)}>
+              <button
+                key={job.id}
+                style={{ ...styles.featuredCard, textAlign: "left" }}
+                onClick={() => setSelectedJob(job)}
+              >
                 <div style={styles.featuredTag}>Öne Çıkan</div>
                 <div style={styles.cardTitle}>{job.title}</div>
                 <div style={styles.cardCompany}>{job.company}</div>
@@ -318,39 +339,38 @@ function App() {
       <section style={styles.section}>
         <div style={styles.sectionHead}>
           <h2 style={styles.sectionTitle}>Tüm ilanlar</h2>
-          <div style={styles.resultCount}>{regularJobs.length} ilan bulundu</div>
+          <div style={styles.resultCount}>{filteredJobs.length} ilan bulundu</div>
         </div>
 
-        {regularJobs.length === 0 ? (
+        {filteredJobs.length === 0 ? (
           <div style={styles.emptyState}>Aramana uygun ilan bulunamadı.</div>
         ) : (
-          <div style={styles.listJobsWrap}>
-            {regularJobs.map((job) => (
-              <article key={job.id} style={styles.listJobCard}>
-                <div style={styles.listJobMain}>
-                  <div style={styles.listTopRow}>
-                    <div>
-                      <div style={styles.jobTitleRow}>
-                        <h3 style={styles.jobTitle}>{job.title}</h3>
-                      </div>
-                      <div style={styles.jobCompany}>{job.company}</div>
+          <div style={styles.jobsGrid}>
+            {filteredJobs.map((job) => (
+              <article key={job.id} style={styles.jobCard}>
+                <div style={styles.jobTop}>
+                  <div>
+                    <div style={styles.jobTitleRow}>
+                      <h3 style={styles.jobTitle}>{job.title}</h3>
+                      {job.featured && <span style={styles.badge}>Öne Çıkan</span>}
                     </div>
-                    <div style={styles.jobType}>{job.type}</div>
+                    <div style={styles.jobCompany}>{job.company}</div>
                   </div>
-
-                  <div style={styles.listMetaRow}>
-                    <div style={styles.infoItem}>📍 {job.location}</div>
-                    <div style={styles.infoItem}>💰 {job.salary}</div>
-                    <div style={styles.infoItem}>🗂️ {job.category}</div>
-                    <div style={styles.infoItem}>🕒 {formatDate(job.createdAt)}</div>
-                  </div>
-
-                  <p style={styles.listJobDesc}>
-                    {job.description.length > 180 ? job.description.slice(0, 180) + "..." : job.description}
-                  </p>
+                  <div style={styles.jobType}>{job.type}</div>
                 </div>
 
-                <div style={styles.listCardActions}>
+                <div style={styles.jobInfoList}>
+                  <div style={styles.infoItem}>📍 {job.location}</div>
+                  <div style={styles.infoItem}>💰 {job.salary}</div>
+                  <div style={styles.infoItem}>🗂️ {job.category}</div>
+                  <div style={styles.infoItem}>🕒 {formatDate(job.createdAt)}</div>
+                </div>
+
+                <p style={styles.jobDesc}>
+                  {job.description.length > 120 ? job.description.slice(0, 120) + "..." : job.description}
+                </p>
+
+                <div style={styles.cardActions}>
                   <button style={styles.primaryBtn} onClick={() => setSelectedJob(job)}>
                     İlanı İncele
                   </button>
@@ -362,8 +382,7 @@ function App() {
       </section>
 
       <footer style={styles.footer}>
-        <div>© {new Date().getFullYear()} Ekiş</div>
-        <div style={styles.footerSub}>Bu demo sürümde veriler tarayıcıda saklanır.</div>
+        <div>© {new Date().getFullYear()} İş İlan</div>
       </footer>
 
       {selectedJob && (
@@ -394,9 +413,56 @@ function App() {
                 WhatsApp
               </a>
               <a href={`tel:${selectedJob.phone}`} style={styles.secondaryBtn}>Ara</a>
-              <a href={selectedJob.mapUrl} target="_blank" rel="noreferrer" style={styles.secondaryBtn}>
-                Konum
-              </a>
+              <a href={selectedJob.mapUrl} target="_blank" rel="noreferrer" style={styles.secondaryBtn}>Konum</a>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {postOpen && (
+        <div style={styles.overlay} onClick={() => setPostOpen(false)}>
+          <div style={styles.postModal} onClick={(e) => e.stopPropagation()}>
+            <div style={styles.modalHead}>
+              <div>
+                <div style={styles.modalTitle}>Ücretsiz ilan ver</div>
+                <div style={styles.modalCompany}>İlanını ekletmek için bizimle iletişime geç.</div>
+              </div>
+              <button style={styles.closeBtn} onClick={() => setPostOpen(false)}>
+                ✕
+              </button>
+            </div>
+
+            <div style={styles.postBox}>
+              <p style={styles.postText}>
+                Ücretsiz ilan yayını için WhatsApp veya telefon üzerinden bize ilan detaylarını iletebilirsin.
+              </p>
+
+              <div style={styles.contactBar}>
+                <a href="https://wa.me/905321234567" target="_blank" rel="noreferrer" style={styles.successBtn}>
+                  WhatsApp ile Gönder
+                </a>
+                <a href="tel:05321234567" style={styles.secondaryBtn}>Telefonla Ulaş</a>
+              </div>
+
+              <div style={styles.checkboxCard}>
+                <label style={styles.checkboxWrap}>
+                  <input
+                    type="checkbox"
+                    checked={promoteChecked}
+                    onChange={(e) => setPromoteChecked(e.target.checked)}
+                  />
+                  <span>İlanı öne çıkar</span>
+                </label>
+
+                {promoteChecked && (
+                  <div style={styles.shopifyBox}>
+                    <div style={styles.shopifyTitle}>Öne çıkarma bağlantısı</div>
+                    <a href={SHOPIFY_FEATURED_LINK} target="_blank" rel="noreferrer" style={styles.primaryBtnLink}>
+                      Shopify ödeme linkine git
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -430,110 +496,84 @@ function App() {
                 <div style={styles.adminColumns}>
                   <div style={styles.adminLeft}>
                     <h3 style={styles.adminTitle}>Yeni ilan ekle</h3>
-
                     <form onSubmit={handleAddJob} style={styles.formGrid}>
                       <div style={styles.field}>
                         <label style={styles.label}>İlan başlığı</label>
                         <input style={styles.input} value={form.title} onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))} />
                       </div>
-
                       <div style={styles.field}>
                         <label style={styles.label}>Firma adı</label>
                         <input style={styles.input} value={form.company} onChange={(e) => setForm((prev) => ({ ...prev, company: e.target.value }))} />
                       </div>
-
                       <div style={styles.field}>
                         <label style={styles.label}>Kategori</label>
                         <select style={styles.input} value={form.category} onChange={(e) => setForm((prev) => ({ ...prev, category: e.target.value }))}>
-                          {categories.filter((c) => c !== "Tümü").map((c) => (
-                            <option key={c}>{c}</option>
-                          ))}
+                          {categories.filter((c) => c !== "Tümü").map((c) => <option key={c}>{c}</option>)}
                         </select>
                       </div>
-
                       <div style={styles.field}>
                         <label style={styles.label}>Çalışma tipi</label>
                         <select style={styles.input} value={form.type} onChange={(e) => setForm((prev) => ({ ...prev, type: e.target.value }))}>
-                          {jobTypes.filter((t) => t !== "Tümü").map((t) => (
-                            <option key={t}>{t}</option>
-                          ))}
+                          {jobTypes.filter((t) => t !== "Tümü").map((t) => <option key={t}>{t}</option>)}
                         </select>
                       </div>
-
                       <div style={styles.field}>
                         <label style={styles.label}>Konum</label>
                         <input style={styles.input} placeholder="Eskişehir / Tepebaşı" value={form.location} onChange={(e) => setForm((prev) => ({ ...prev, location: e.target.value }))} />
                       </div>
-
                       <div style={styles.field}>
                         <label style={styles.label}>Ücret</label>
                         <input style={styles.input} placeholder="Günlük 1.200 TL" value={form.salary} onChange={(e) => setForm((prev) => ({ ...prev, salary: e.target.value }))} />
                       </div>
-
                       <div style={styles.field}>
                         <label style={styles.label}>Telefon</label>
                         <input style={styles.input} placeholder="0532..." value={form.phone} onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))} />
                       </div>
-
                       <div style={styles.field}>
                         <label style={styles.label}>WhatsApp numarası</label>
                         <input style={styles.input} placeholder="90532..." value={form.whatsapp} onChange={(e) => setForm((prev) => ({ ...prev, whatsapp: e.target.value }))} />
                       </div>
-
                       <div style={styles.fieldFull}>
                         <label style={styles.label}>Konum linki</label>
                         <input style={styles.input} placeholder="https://maps.google.com/..." value={form.mapUrl} onChange={(e) => setForm((prev) => ({ ...prev, mapUrl: e.target.value }))} />
                       </div>
-
                       <div style={styles.fieldFull}>
                         <label style={styles.label}>Açıklama</label>
                         <textarea style={styles.textarea} rows={5} value={form.description} onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))} />
                       </div>
-
                       <div style={styles.checkboxRow}>
                         <input id="featured" type="checkbox" checked={form.featured} onChange={(e) => setForm((prev) => ({ ...prev, featured: e.target.checked }))} />
                         <label htmlFor="featured" style={styles.checkboxLabel}>Öne çıkan ilan olarak işaretle</label>
                       </div>
-
                       <button type="submit" style={styles.primaryBtn}>İlanı Kaydet</button>
                     </form>
                   </div>
 
                   <div style={styles.adminRight}>
                     <h3 style={styles.adminTitle}>İlan yönetimi</h3>
-
                     <div style={styles.adminList}>
-                      {jobs.length === 0 ? (
-                        <div style={styles.emptyMini}>Henüz ilan yok.</div>
-                      ) : (
-                        jobs.map((job) => (
-                          <div key={job.id} style={styles.adminCard}>
-                            <div style={styles.adminCardTop}>
-                              <div>
-                                <div style={styles.adminJobTitle}>{job.title}</div>
-                                <div style={styles.adminJobMeta}>{job.company} • {job.location}</div>
-                              </div>
-                              <div style={styles.stateWrap}>
-                                {job.active ? <span style={styles.stateActive}>Aktif</span> : <span style={styles.statePassive}>Pasif</span>}
-                              </div>
+                      {jobs.map((job) => (
+                        <div key={job.id} style={styles.adminCard}>
+                          <div style={styles.adminCardTop}>
+                            <div>
+                              <div style={styles.adminJobTitle}>{job.title}</div>
+                              <div style={styles.adminJobMeta}>{job.company} • {job.location}</div>
                             </div>
-
-                            <div style={styles.adminActions}>
-                              <button style={styles.smallBtn} onClick={() => toggleFeatured(job.id)}>
-                                {job.featured ? "Öne Çıkanı Kaldır" : "Öne Çıkar"}
-                              </button>
-
-                              <button style={styles.smallBtn} onClick={() => toggleActive(job.id)}>
-                                {job.active ? "Pasife Al" : "Aktifleştir"}
-                              </button>
-
-                              <button style={styles.smallDangerBtn} onClick={() => deleteJob(job.id)}>
-                                Sil
-                              </button>
+                            <div>
+                              {job.active ? <span style={styles.stateActive}>Aktif</span> : <span style={styles.statePassive}>Pasif</span>}
                             </div>
                           </div>
-                        ))
-                      )}
+                          <div style={styles.adminActions}>
+                            <button style={styles.smallBtn} onClick={() => toggleFeatured(job.id)}>
+                              {job.featured ? "Öne Çıkanı Kaldır" : "Öne Çıkar"}
+                            </button>
+                            <button style={styles.smallBtn} onClick={() => toggleActive(job.id)}>
+                              {job.active ? "Pasife Al" : "Aktifleştir"}
+                            </button>
+                            <button style={styles.smallDangerBtn} onClick={() => deleteJob(job.id)}>Sil</button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -557,63 +597,59 @@ const styles = {
   header: {
     maxWidth: 1200,
     margin: "0 auto",
-    padding: "20px 16px 10px",
+    padding: "20px 16px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: 16,
-    flexWrap: "wrap",
   },
-  brandCard: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#05070b",
-    borderRadius: 20,
-    padding: "14px 18px",
-    minHeight: 86,
-    minWidth: 240,
-    textDecoration: "none",
-    boxShadow: "0 18px 45px rgba(17,24,39,0.14)",
+  brandWrap: { display: "flex", alignItems: "center", gap: 12 },
+  brandBadge: {
+    width: 46,
+    height: 46,
+    borderRadius: 14,
+    background: "#111827",
+    position: "relative",
+    flexShrink: 0,
   },
-  brandLogoImage: {
-    display: "block",
-    width: "100%",
-    maxWidth: 185,
-    height: "auto",
-    objectFit: "contain",
+  brandIconHead: {
+    width: 9,
+    height: 9,
+    borderRadius: "50%",
+    background: "#fff",
+    position: "absolute",
+    top: 9,
+    left: 13,
   },
-  headerActions: {
-    display: "flex",
-    gap: 10,
-    flexWrap: "wrap",
+  brandIconBody: {
+    width: 10,
+    height: 18,
+    borderRadius: 6,
+    background: "#fff",
+    position: "absolute",
+    top: 18,
+    left: 12,
   },
+  brandIconBag: {
+    width: 14,
+    height: 10,
+    borderRadius: 3,
+    border: "2px solid #fff",
+    position: "absolute",
+    right: 8,
+    bottom: 10,
+  },
+  logo: { fontSize: 20, fontWeight: 800, lineHeight: 1.1 },
+  logoSub: { fontSize: 12, color: "#6b7280", marginTop: 2 },
+  headerActions: { display: "flex", gap: 10, alignItems: "center" },
   adminBtn: {
     border: "1px solid #d1d5db",
     background: "#fff",
     borderRadius: 12,
-    padding: "11px 16px",
+    padding: "10px 16px",
     cursor: "pointer",
-    fontWeight: 700,
-    color: "#111827",
+    fontWeight: 600,
   },
-  publicCtaBtn: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    textDecoration: "none",
-    borderRadius: 12,
-    padding: "11px 16px",
-    cursor: "pointer",
-    fontWeight: 700,
-    background: "#111827",
-    color: "#fff",
-  },
-  hero: {
-    maxWidth: 1200,
-    margin: "0 auto",
-    padding: "12px 16px 28px",
-  },
+  hero: { maxWidth: 1200, margin: "0 auto", padding: "12px 16px 28px" },
   heroBadge: {
     display: "inline-block",
     padding: "6px 10px",
@@ -637,45 +673,9 @@ const styles = {
     fontSize: 17,
     lineHeight: 1.6,
     marginTop: 14,
-    marginBottom: 18,
+    marginBottom: 20,
   },
-  heroCtaRow: {
-    display: "flex",
-    gap: 10,
-    flexWrap: "wrap",
-    marginBottom: 10,
-  },
-  primaryLinkBtn: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    textDecoration: "none",
-    border: "none",
-    background: "#111827",
-    color: "#fff",
-    borderRadius: 12,
-    padding: "12px 16px",
-    fontWeight: 700,
-    cursor: "pointer",
-  },
-  secondaryLinkBtn: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    textDecoration: "none",
-    border: "1px solid #d1d5db",
-    background: "#fff",
-    color: "#111827",
-    borderRadius: 12,
-    padding: "12px 16px",
-    fontWeight: 700,
-    cursor: "pointer",
-  },
-  pricingNote: {
-    color: "#6b7280",
-    fontSize: 13,
-    marginBottom: 22,
-  },
+  heroButtons: { display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 22 },
   searchBox: {
     display: "grid",
     gridTemplateColumns: "1.5fr 1fr 1fr",
@@ -687,16 +687,8 @@ const styles = {
     boxShadow: "0 10px 30px rgba(17,24,39,0.05)",
     alignItems: "end",
   },
-  filterGroup: {
-    display: "grid",
-    gap: 6,
-  },
-  filterLabel: {
-    fontSize: 13,
-    fontWeight: 700,
-    color: "#6b7280",
-    paddingLeft: 2,
-  },
+  filterGroup: { display: "grid", gap: 6 },
+  filterLabel: { fontSize: 13, fontWeight: 700, color: "#6b7280", paddingLeft: 2 },
   searchInput: {
     border: "1px solid #e5e7eb",
     borderRadius: 12,
@@ -712,11 +704,7 @@ const styles = {
     outline: "none",
     background: "#fff",
   },
-  section: {
-    maxWidth: 1200,
-    margin: "0 auto",
-    padding: "12px 16px 28px",
-  },
+  section: { maxWidth: 1200, margin: "0 auto", padding: "12px 16px 28px" },
   sectionHead: {
     display: "flex",
     justifyContent: "space-between",
@@ -724,15 +712,8 @@ const styles = {
     gap: 12,
     marginBottom: 18,
   },
-  sectionTitle: {
-    fontSize: 24,
-    margin: 0,
-    fontWeight: 800,
-  },
-  resultCount: {
-    color: "#6b7280",
-    fontSize: 14,
-  },
+  sectionTitle: { fontSize: 24, margin: 0, fontWeight: 800 },
+  resultCount: { color: "#6b7280", fontSize: 14 },
   featuredGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
@@ -756,64 +737,36 @@ const styles = {
     borderRadius: 999,
     marginBottom: 14,
   },
-  listJobsWrap: {
+  jobsGrid: {
     display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
     gap: 16,
   },
-  listJobCard: {
+  jobCard: {
     background: "#fff",
     border: "1px solid #e5e7eb",
     borderRadius: 18,
     padding: 18,
     boxShadow: "0 8px 20px rgba(17,24,39,0.04)",
-    display: "grid",
-    gridTemplateColumns: "1fr auto",
-    gap: 18,
-    alignItems: "center",
   },
-  listJobMain: {
-    minWidth: 0,
-  },
-  listTopRow: {
+  jobTop: {
     display: "flex",
     justifyContent: "space-between",
     gap: 12,
     alignItems: "flex-start",
     marginBottom: 14,
   },
-  listMetaRow: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 14,
-    marginBottom: 14,
-  },
-  listJobDesc: {
-    color: "#6b7280",
-    fontSize: 14,
-    lineHeight: 1.7,
-    margin: 0,
-  },
-  listCardActions: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  jobTitleRow: {
-    display: "flex",
-    gap: 8,
-    alignItems: "center",
-    flexWrap: "wrap",
-  },
-  jobTitle: {
-    margin: 0,
-    fontSize: 24,
+  jobTitleRow: { display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" },
+  jobTitle: { margin: 0, fontSize: 20, fontWeight: 800 },
+  badge: {
+    fontSize: 11,
     fontWeight: 800,
+    color: "#1d4ed8",
+    background: "#dbeafe",
+    padding: "5px 8px",
+    borderRadius: 999,
   },
-  jobCompany: {
-    marginTop: 6,
-    color: "#4b5563",
-    fontWeight: 600,
-  },
+  jobCompany: { marginTop: 6, color: "#4b5563", fontWeight: 600 },
   jobType: {
     fontSize: 12,
     padding: "7px 10px",
@@ -822,28 +775,14 @@ const styles = {
     fontWeight: 700,
     whiteSpace: "nowrap",
   },
-  infoItem: {
-    color: "#374151",
-    fontSize: 14,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: 800,
-    marginBottom: 6,
-  },
-  cardCompany: {
-    fontWeight: 700,
-    color: "#374151",
-    marginBottom: 8,
-  },
-  cardMeta: {
-    color: "#6b7280",
-    marginBottom: 8,
-  },
-  cardSalary: {
-    fontWeight: 800,
-    fontSize: 16,
-  },
+  jobInfoList: { display: "grid", gap: 8, marginBottom: 14 },
+  infoItem: { color: "#374151", fontSize: 14 },
+  cardTitle: { fontSize: 20, fontWeight: 800, marginBottom: 6 },
+  cardCompany: { fontWeight: 700, color: "#374151", marginBottom: 8 },
+  cardMeta: { color: "#6b7280", marginBottom: 8 },
+  cardSalary: { fontWeight: 800, fontSize: 16 },
+  jobDesc: { color: "#6b7280", fontSize: 14, lineHeight: 1.6, minHeight: 66 },
+  cardActions: { marginTop: 12 },
   primaryBtn: {
     border: "none",
     background: "#111827",
@@ -852,7 +791,20 @@ const styles = {
     padding: "12px 16px",
     fontWeight: 700,
     cursor: "pointer",
-    whiteSpace: "nowrap",
+  },
+  primaryBtnLink: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textDecoration: "none",
+    border: "none",
+    background: "#111827",
+    color: "#fff",
+    borderRadius: 12,
+    padding: "12px 16px",
+    fontWeight: 700,
+    cursor: "pointer",
+    width: "fit-content",
   },
   secondaryBtn: {
     display: "inline-flex",
@@ -880,17 +832,7 @@ const styles = {
     fontWeight: 700,
     cursor: "pointer",
   },
-  footer: {
-    maxWidth: 1200,
-    margin: "0 auto",
-    padding: "18px 16px 32px",
-    color: "#6b7280",
-    fontSize: 14,
-  },
-  footerSub: {
-    marginTop: 6,
-    fontSize: 13,
-  },
+  footer: { maxWidth: 1200, margin: "0 auto", padding: "18px 16px 32px", color: "#6b7280", fontSize: 14 },
   overlay: {
     position: "fixed",
     inset: 0,
@@ -903,6 +845,14 @@ const styles = {
   modal: {
     width: "100%",
     maxWidth: 760,
+    background: "#fff",
+    borderRadius: 24,
+    padding: 22,
+    boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+  },
+  postModal: {
+    width: "100%",
+    maxWidth: 620,
     background: "#fff",
     borderRadius: 24,
     padding: 22,
@@ -925,16 +875,8 @@ const styles = {
     gap: 16,
     marginBottom: 18,
   },
-  modalTitle: {
-    fontSize: 26,
-    fontWeight: 900,
-    lineHeight: 1.1,
-  },
-  modalCompany: {
-    color: "#6b7280",
-    marginTop: 8,
-    fontWeight: 700,
-  },
+  modalTitle: { fontSize: 26, fontWeight: 900, lineHeight: 1.1 },
+  modalCompany: { color: "#6b7280", marginTop: 8, fontWeight: 700 },
   closeBtn: {
     border: "1px solid #e5e7eb",
     background: "#fff",
@@ -958,72 +900,32 @@ const styles = {
     fontSize: 14,
     lineHeight: 1.5,
   },
-  detailText: {
-    fontSize: 15,
-    lineHeight: 1.8,
-    color: "#374151",
-    marginBottom: 22,
-  },
-  contactBar: {
-    display: "flex",
-    gap: 10,
-    flexWrap: "wrap",
-  },
-  adminLoginBox: {
-    maxWidth: 360,
-    display: "grid",
-    gap: 10,
-  },
-  errorText: {
-    color: "#dc2626",
-    fontSize: 14,
-    fontWeight: 600,
-  },
-  adminContent: {
-    marginTop: 10,
-  },
-  adminColumns: {
-    display: "grid",
-    gridTemplateColumns: "1.05fr 0.95fr",
-    gap: 24,
-  },
-  adminLeft: {
-    background: "#f9fafb",
+  detailText: { fontSize: 15, lineHeight: 1.8, color: "#374151", marginBottom: 22 },
+  contactBar: { display: "flex", gap: 10, flexWrap: "wrap" },
+  postBox: { display: "grid", gap: 18 },
+  postText: { margin: 0, color: "#374151", lineHeight: 1.7, fontSize: 15 },
+  checkboxCard: {
     border: "1px solid #e5e7eb",
     borderRadius: 18,
-    padding: 18,
-  },
-  adminRight: {
+    padding: 16,
     background: "#f9fafb",
-    border: "1px solid #e5e7eb",
-    borderRadius: 18,
-    padding: 18,
-  },
-  adminTitle: {
-    marginTop: 0,
-    marginBottom: 16,
-    fontSize: 20,
-    fontWeight: 800,
-  },
-  formGrid: {
     display: "grid",
-    gridTemplateColumns: "1fr 1fr",
     gap: 14,
   },
-  field: {
-    display: "grid",
-    gap: 8,
-  },
-  fieldFull: {
-    gridColumn: "1 / -1",
-    display: "grid",
-    gap: 8,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: 700,
-    color: "#374151",
-  },
+  checkboxWrap: { display: "flex", alignItems: "center", gap: 10, fontWeight: 700, color: "#111827" },
+  shopifyBox: { display: "grid", gap: 10 },
+  shopifyTitle: { fontWeight: 700, color: "#374151" },
+  adminLoginBox: { maxWidth: 360, display: "grid", gap: 10 },
+  errorText: { color: "#dc2626", fontSize: 14, fontWeight: 600 },
+  adminContent: { marginTop: 10 },
+  adminColumns: { display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 24 },
+  adminLeft: { background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 18, padding: 18 },
+  adminRight: { background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 18, padding: 18 },
+  adminTitle: { marginTop: 0, marginBottom: 16, fontSize: 20, fontWeight: 800 },
+  formGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 },
+  field: { display: "grid", gap: 8 },
+  fieldFull: { gridColumn: "1 / -1", display: "grid", gap: 8 },
+  label: { fontSize: 14, fontWeight: 700, color: "#374151" },
   input: {
     border: "1px solid #d1d5db",
     borderRadius: 12,
@@ -1042,69 +944,16 @@ const styles = {
     resize: "vertical",
     fontFamily: "inherit",
   },
-  checkboxRow: {
-    gridColumn: "1 / -1",
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-  },
-  checkboxLabel: {
-    fontSize: 14,
-    color: "#374151",
-    fontWeight: 600,
-  },
-  adminList: {
-    display: "grid",
-    gap: 12,
-  },
-  adminCard: {
-    background: "#fff",
-    border: "1px solid #e5e7eb",
-    borderRadius: 16,
-    padding: 14,
-  },
-  adminCardTop: {
-    display: "flex",
-    justifyContent: "space-between",
-    gap: 12,
-    alignItems: "flex-start",
-    marginBottom: 12,
-  },
-  adminJobTitle: {
-    fontWeight: 800,
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  adminJobMeta: {
-    fontSize: 13,
-    color: "#6b7280",
-    lineHeight: 1.5,
-  },
-  stateWrap: {
-    display: "flex",
-    alignItems: "center",
-  },
-  stateActive: {
-    fontSize: 12,
-    fontWeight: 800,
-    color: "#166534",
-    background: "#dcfce7",
-    padding: "6px 8px",
-    borderRadius: 999,
-  },
-  statePassive: {
-    fontSize: 12,
-    fontWeight: 800,
-    color: "#991b1b",
-    background: "#fee2e2",
-    padding: "6px 8px",
-    borderRadius: 999,
-  },
-  adminActions: {
-    display: "flex",
-    gap: 8,
-    flexWrap: "wrap",
-  },
+  checkboxRow: { gridColumn: "1 / -1", display: "flex", alignItems: "center", gap: 10 },
+  checkboxLabel: { fontSize: 14, color: "#374151", fontWeight: 600 },
+  adminList: { display: "grid", gap: 12 },
+  adminCard: { background: "#fff", border: "1px solid #e5e7eb", borderRadius: 16, padding: 14 },
+  adminCardTop: { display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", marginBottom: 12 },
+  adminJobTitle: { fontWeight: 800, fontSize: 16, marginBottom: 4 },
+  adminJobMeta: { fontSize: 13, color: "#6b7280", lineHeight: 1.5 },
+  stateActive: { fontSize: 12, fontWeight: 800, color: "#166534", background: "#dcfce7", padding: "6px 8px", borderRadius: 999 },
+  statePassive: { fontSize: 12, fontWeight: 800, color: "#991b1b", background: "#fee2e2", padding: "6px 8px", borderRadius: 999 },
+  adminActions: { display: "flex", gap: 8, flexWrap: "wrap" },
   smallBtn: {
     border: "1px solid #d1d5db",
     background: "#fff",
@@ -1133,11 +982,5 @@ const styles = {
     color: "#6b7280",
     textAlign: "center",
   },
-  emptyMini: {
-    color: "#6b7280",
-    fontSize: 14,
-  },
 };
-
-export default App;
 
