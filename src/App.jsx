@@ -14,15 +14,16 @@ export default function App() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "12px 24px",
-        background: "#fff"
+        padding: "10px 24px",
+        background: "#fff",
+        borderBottom: "1px solid #eee"
       }}>
         
-        {/* LOGO */}
+        {/* LOGO (KÜÇÜLTÜLMÜŞ & TEMİZ) */}
         <img
           src="/logo-ekis.png"
           alt="logo"
-          style={{ height: "40px" }}
+          style={{ height: "36px", objectFit: "contain" }}
         />
 
         <div style={{ display: "flex", gap: "10px" }}>
@@ -80,17 +81,61 @@ export default function App() {
       )}
 
       {/* HERO */}
-      <div style={{ padding: "20px 24px" }}>
-        <h1 style={{ marginBottom: "10px" }}>
+      <div style={{ padding: "40px 24px 20px 24px" }}>
+        <div style={{
+          display: "inline-block",
+          background: "#e0e7ff",
+          color: "#3730a3",
+          padding: "6px 12px",
+          borderRadius: "999px",
+          fontSize: "12px",
+          marginBottom: "10px"
+        }}>
+          Eskişehir odaklı
+        </div>
+
+        <h1 style={{
+          fontSize: "32px",
+          marginBottom: "10px"
+        }}>
           Eskişehir’de ek iş ilanları
         </h1>
+
         <p style={{ color: "#555" }}>
-          Günlük, saatlik ve part time iş ilanlarını incele.
+          Günlük, saatlik ve part time iş ilanlarını incele. İlan aç, işverenle direkt iletişime geç.
         </p>
       </div>
 
+      {/* FİLTRE */}
+      <div style={{
+        background: "#fff",
+        margin: "0 24px",
+        padding: "16px",
+        borderRadius: "12px",
+        display: "flex",
+        gap: "10px"
+      }}>
+        <input
+          placeholder="İş ara, firma ara, konum ara..."
+          style={{
+            flex: 1,
+            padding: "10px",
+            borderRadius: "8px",
+            border: "1px solid #ddd"
+          }}
+        />
+
+        <select style={{ padding: "10px", borderRadius: "8px" }}>
+          <option>Tümü</option>
+        </select>
+
+        <select style={{ padding: "10px", borderRadius: "8px" }}>
+          <option>Tümü</option>
+        </select>
+      </div>
+
       {/* ÖNE ÇIKAN */}
-      <div style={{ padding: "0 24px" }}>
+      <div style={{ padding: "24px" }}>
         <h2>Öne çıkan ilanlar</h2>
 
         <div style={{
@@ -98,14 +143,27 @@ export default function App() {
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "16px"
         }}>
-          {["Garson", "Etkinlik", "Kurye"].map((job, i) => (
+          {["Garson Aranıyor", "Etkinlik Karşılama", "Kurye Aranıyor"].map((job, i) => (
             <div key={i} style={{
               background: "#fff",
               padding: "16px",
-              borderRadius: "12px"
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
             }}>
-              <strong>{job} Aranıyor</strong>
-              <p>Eskişehir</p>
+              <div style={{
+                background: "#dbeafe",
+                color: "#1d4ed8",
+                display: "inline-block",
+                padding: "4px 8px",
+                borderRadius: "6px",
+                fontSize: "12px",
+                marginBottom: "8px"
+              }}>
+                Öne Çıkan
+              </div>
+
+              <strong>{job}</strong>
+              <p style={{ color: "#666" }}>Eskişehir</p>
             </div>
           ))}
         </div>
@@ -124,10 +182,11 @@ export default function App() {
             <div key={i} style={{
               background: "#fff",
               padding: "16px",
-              borderRadius: "12px"
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
             }}>
               <strong>İlan {i}</strong>
-              <p>Detay</p>
+              <p style={{ color: "#666" }}>Detay</p>
             </div>
           ))}
         </div>
