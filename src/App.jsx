@@ -283,7 +283,7 @@ export default function App() {
 
       <header style={styles.header} className="header-responsive">
         <div style={styles.brandWrap}>
-          <img src="/logo-ekis.png" alt="Ekiş logo" style={styles.logoImage} />
+          <img src="/logo-ekis.png" style={{ height: "40px" }} alt="Ekiş logo" style={styles.logoImage} />
         </div>
         <div style={styles.headerActions} className="header-actions-responsive">
           <button style={styles.primaryBtn} onClick={() => setListingOpen(true)}>Ücretsiz İlan Ver</button>
