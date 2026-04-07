@@ -1,6 +1,10 @@
+
 import React, { useEffect, useMemo, useState } from "react";
 
 const ADMIN_PASSWORD = "1234"; // Demo amaçlı. Gerçek projede frontend'de tutulmaz.
+const SHOPIFY_STANDARD_LINK = "https://your-shopify-link.com/ucretli-ilan-ver";
+const SHOPIFY_FEATURED_LINK = "https://your-shopify-link.com/one-cikan-ilan";
+const LOGO_WHITE = "/logo-white.png";
 
 const seedJobs = [
   {
@@ -141,11 +145,9 @@ function App() {
   const filteredJobs = useMemo(() => {
     return activeJobs
       .filter((job) => {
-        const text =
-          `${job.title} ${job.company} ${job.location} ${job.description}`.toLowerCase();
+        const text = `${job.title} ${job.company} ${job.location} ${job.description}`.toLowerCase();
         const matchesSearch = text.includes(search.toLowerCase());
-        const matchesCategory =
-          category === "Tümü" ? true : job.category === category;
+        const matchesCategory = category === "Tümü" ? true : job.category === category;
         const matchesType = jobType === "Tümü" ? true : job.type === jobType;
         return matchesSearch && matchesCategory && matchesType;
       })
@@ -157,6 +159,7 @@ function App() {
   }, [activeJobs, search, category, jobType]);
 
   const featuredJobs = filteredJobs.filter((j) => j.featured).slice(0, 3);
+  const regularJobs = filteredJobs.filter((j) => !j.featured);
 
   function handleAdminLogin(e) {
     e.preventDefault();
@@ -215,19 +218,11 @@ function App() {
   }
 
   function toggleFeatured(id) {
-    setJobs((prev) =>
-      prev.map((job) =>
-        job.id === id ? { ...job, featured: !job.featured } : job
-      )
-    );
+    setJobs((prev) => prev.map((job) => (job.id === id ? { ...job, featured: !job.featured } : job)));
   }
 
   function toggleActive(id) {
-    setJobs((prev) =>
-      prev.map((job) =>
-        job.id === id ? { ...job, active: !job.active } : job
-      )
-    );
+    setJobs((prev) => prev.map((job) => (job.id === id ? { ...job, active: !job.active } : job)));
   }
 
   function deleteJob(id) {
@@ -239,26 +234,39 @@ function App() {
   return (
     <div style={styles.page}>
       <header style={styles.header}>
-        <div style={styles.logoWrap}>
-          <div style={styles.logoMark}>İ</div>
-          <div>
-            <div style={styles.logo}>İş İlan</div>
-            <div style={styles.logoSub}>Eskişehir odaklı hızlı ilan platformu</div>
-          </div>
-        </div>
+        <a href="#top" style={styles.brandCard}>
+          <img src={LOGO_WHITE} alt="Ekiş logo" style={styles.brandLogoImage} />
+        </a>
 
-        <button style={styles.adminBtn} onClick={() => setAdminOpen(true)}>
-          Admin
-        </button>
+        <div style={styles.headerActions}>
+          <a href={SHOPIFY_STANDARD_LINK} target="_blank" rel="noreferrer" style={styles.publicCtaBtn}>
+            Ücretli İlan Ver
+          </a>
+          <button style={styles.adminBtn} onClick={() => setAdminOpen(true)}>
+            Admin
+          </button>
+        </div>
       </header>
 
-      <section style={styles.hero}>
+      <section id="top" style={styles.hero}>
         <div style={styles.heroBadge}>Eskişehir odaklı</div>
         <h1 style={styles.heroTitle}>CV’siz iş bul</h1>
         <p style={styles.heroText}>
-          Günlük, saatlik ve part time iş ilanlarını incele. İlanı aç, işverenle
-          direkt iletişime geç.
+          Günlük, saatlik ve part time iş ilanlarını incele. İlanı aç, işverenle direkt iletişime geç.
         </p>
+
+        <div style={styles.heroCtaRow}>
+          <a href={SHOPIFY_STANDARD_LINK} target="_blank" rel="noreferrer" style={styles.primaryLinkBtn}>
+            Ücretli İlan Ver
+          </a>
+          <a href={SHOPIFY_FEATURED_LINK} target="_blank" rel="noreferrer" style={styles.secondaryLinkBtn}>
+            İlanı Öne Çıkar
+          </a>
+        </div>
+
+        <div style={styles.pricingNote}>
+          Standart ilan ve öne çıkarma ödemeleri için Shopify linklerini kendi mağaza linklerinle değiştir.
+        </div>
 
         <div style={styles.searchBox}>
           <input
@@ -270,11 +278,7 @@ function App() {
 
           <div style={styles.filterGroup}>
             <label style={styles.filterLabel}>Meslek seç</label>
-            <select
-              style={styles.select}
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
+            <select style={styles.select} value={category} onChange={(e) => setCategory(e.target.value)}>
               {categories.map((c) => (
                 <option key={c}>{c}</option>
               ))}
@@ -283,11 +287,7 @@ function App() {
 
           <div style={styles.filterGroup}>
             <label style={styles.filterLabel}>Çalışma tipi seç</label>
-            <select
-              style={styles.select}
-              value={jobType}
-              onChange={(e) => setJobType(e.target.value)}
-            >
+            <select style={styles.select} value={jobType} onChange={(e) => setJobType(e.target.value)}>
               {jobTypes.map((t) => (
                 <option key={t}>{t}</option>
               ))}
@@ -303,11 +303,7 @@ function App() {
           </div>
           <div style={styles.featuredGrid}>
             {featuredJobs.map((job) => (
-              <button
-                key={job.id}
-                style={{ ...styles.featuredCard, textAlign: "left" }}
-                onClick={() => setSelectedJob(job)}
-              >
+              <button key={job.id} style={{ ...styles.featuredCard, textAlign: "left" }} onClick={() => setSelectedJob(job)}>
                 <div style={styles.featuredTag}>Öne Çıkan</div>
                 <div style={styles.cardTitle}>{job.title}</div>
                 <div style={styles.cardCompany}>{job.company}</div>
@@ -322,44 +318,40 @@ function App() {
       <section style={styles.section}>
         <div style={styles.sectionHead}>
           <h2 style={styles.sectionTitle}>Tüm ilanlar</h2>
-          <div style={styles.resultCount}>{filteredJobs.length} ilan bulundu</div>
+          <div style={styles.resultCount}>{regularJobs.length} ilan bulundu</div>
         </div>
 
-        {filteredJobs.length === 0 ? (
+        {regularJobs.length === 0 ? (
           <div style={styles.emptyState}>Aramana uygun ilan bulunamadı.</div>
         ) : (
-          <div style={styles.jobsGrid}>
-            {filteredJobs.map((job) => (
-              <article key={job.id} style={styles.jobCard}>
-                <div style={styles.jobTop}>
-                  <div>
-                    <div style={styles.jobTitleRow}>
-                      <h3 style={styles.jobTitle}>{job.title}</h3>
-                      {job.featured && <span style={styles.badge}>Öne Çıkan</span>}
+          <div style={styles.listJobsWrap}>
+            {regularJobs.map((job) => (
+              <article key={job.id} style={styles.listJobCard}>
+                <div style={styles.listJobMain}>
+                  <div style={styles.listTopRow}>
+                    <div>
+                      <div style={styles.jobTitleRow}>
+                        <h3 style={styles.jobTitle}>{job.title}</h3>
+                      </div>
+                      <div style={styles.jobCompany}>{job.company}</div>
                     </div>
-                    <div style={styles.jobCompany}>{job.company}</div>
+                    <div style={styles.jobType}>{job.type}</div>
                   </div>
-                  <div style={styles.jobType}>{job.type}</div>
+
+                  <div style={styles.listMetaRow}>
+                    <div style={styles.infoItem}>📍 {job.location}</div>
+                    <div style={styles.infoItem}>💰 {job.salary}</div>
+                    <div style={styles.infoItem}>🗂️ {job.category}</div>
+                    <div style={styles.infoItem}>🕒 {formatDate(job.createdAt)}</div>
+                  </div>
+
+                  <p style={styles.listJobDesc}>
+                    {job.description.length > 180 ? job.description.slice(0, 180) + "..." : job.description}
+                  </p>
                 </div>
 
-                <div style={styles.jobInfoList}>
-                  <div style={styles.infoItem}>📍 {job.location}</div>
-                  <div style={styles.infoItem}>💰 {job.salary}</div>
-                  <div style={styles.infoItem}>🗂️ {job.category}</div>
-                  <div style={styles.infoItem}>🕒 {formatDate(job.createdAt)}</div>
-                </div>
-
-                <p style={styles.jobDesc}>
-                  {job.description.length > 120
-                    ? job.description.slice(0, 120) + "..."
-                    : job.description}
-                </p>
-
-                <div style={styles.cardActions}>
-                  <button
-                    style={styles.primaryBtn}
-                    onClick={() => setSelectedJob(job)}
-                  >
+                <div style={styles.listCardActions}>
+                  <button style={styles.primaryBtn} onClick={() => setSelectedJob(job)}>
                     İlanı İncele
                   </button>
                 </div>
@@ -370,10 +362,8 @@ function App() {
       </section>
 
       <footer style={styles.footer}>
-        <div>© {new Date().getFullYear()} İş İlan</div>
-        <div style={styles.footerSub}>
-          Bu demo sürümde veriler tarayıcıda saklanır.
-        </div>
+        <div>© {new Date().getFullYear()} Ekiş</div>
+        <div style={styles.footerSub}>Bu demo sürümde veriler tarayıcıda saklanır.</div>
       </footer>
 
       {selectedJob && (
@@ -384,54 +374,27 @@ function App() {
                 <div style={styles.modalTitle}>{selectedJob.title}</div>
                 <div style={styles.modalCompany}>{selectedJob.company}</div>
               </div>
-              <button
-                style={styles.closeBtn}
-                onClick={() => setSelectedJob(null)}
-              >
+              <button style={styles.closeBtn} onClick={() => setSelectedJob(null)}>
                 ✕
               </button>
             </div>
 
             <div style={styles.detailGrid}>
-              <div style={styles.detailItem}>
-                <strong>Konum:</strong> {selectedJob.location}
-              </div>
-              <div style={styles.detailItem}>
-                <strong>Ücret:</strong> {selectedJob.salary}
-              </div>
-              <div style={styles.detailItem}>
-                <strong>Kategori:</strong> {selectedJob.category}
-              </div>
-              <div style={styles.detailItem}>
-                <strong>Çalışma tipi:</strong> {selectedJob.type}
-              </div>
-              <div style={styles.detailItem}>
-                <strong>İlan tarihi:</strong> {formatDate(selectedJob.createdAt)}
-              </div>
+              <div style={styles.detailItem}><strong>Konum:</strong> {selectedJob.location}</div>
+              <div style={styles.detailItem}><strong>Ücret:</strong> {selectedJob.salary}</div>
+              <div style={styles.detailItem}><strong>Kategori:</strong> {selectedJob.category}</div>
+              <div style={styles.detailItem}><strong>Çalışma tipi:</strong> {selectedJob.type}</div>
+              <div style={styles.detailItem}><strong>İlan tarihi:</strong> {formatDate(selectedJob.createdAt)}</div>
             </div>
 
             <div style={styles.detailText}>{selectedJob.description}</div>
 
             <div style={styles.contactBar}>
-              <a
-                href={`https://wa.me/${selectedJob.whatsapp}`}
-                target="_blank"
-                rel="noreferrer"
-                style={styles.successBtn}
-              >
+              <a href={`https://wa.me/${selectedJob.whatsapp}`} target="_blank" rel="noreferrer" style={styles.successBtn}>
                 WhatsApp
               </a>
-
-              <a href={`tel:${selectedJob.phone}`} style={styles.secondaryBtn}>
-                Ara
-              </a>
-
-              <a
-                href={selectedJob.mapUrl}
-                target="_blank"
-                rel="noreferrer"
-                style={styles.secondaryBtn}
-              >
+              <a href={`tel:${selectedJob.phone}`} style={styles.secondaryBtn}>Ara</a>
+              <a href={selectedJob.mapUrl} target="_blank" rel="noreferrer" style={styles.secondaryBtn}>
                 Konum
               </a>
             </div>
@@ -460,9 +423,7 @@ function App() {
                   placeholder="Admin şifresi"
                 />
                 {adminError ? <div style={styles.errorText}>{adminError}</div> : null}
-                <button type="submit" style={styles.primaryBtn}>
-                  Giriş Yap
-                </button>
+                <button type="submit" style={styles.primaryBtn}>Giriş Yap</button>
               </form>
             ) : (
               <div style={styles.adminContent}>
@@ -473,155 +434,68 @@ function App() {
                     <form onSubmit={handleAddJob} style={styles.formGrid}>
                       <div style={styles.field}>
                         <label style={styles.label}>İlan başlığı</label>
-                        <input
-                          style={styles.input}
-                          value={form.title}
-                          onChange={(e) =>
-                            setForm((prev) => ({ ...prev, title: e.target.value }))
-                          }
-                        />
+                        <input style={styles.input} value={form.title} onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))} />
                       </div>
 
                       <div style={styles.field}>
                         <label style={styles.label}>Firma adı</label>
-                        <input
-                          style={styles.input}
-                          value={form.company}
-                          onChange={(e) =>
-                            setForm((prev) => ({ ...prev, company: e.target.value }))
-                          }
-                        />
+                        <input style={styles.input} value={form.company} onChange={(e) => setForm((prev) => ({ ...prev, company: e.target.value }))} />
                       </div>
 
                       <div style={styles.field}>
                         <label style={styles.label}>Kategori</label>
-                        <select
-                          style={styles.input}
-                          value={form.category}
-                          onChange={(e) =>
-                            setForm((prev) => ({ ...prev, category: e.target.value }))
-                          }
-                        >
-                          {categories
-                            .filter((c) => c !== "Tümü")
-                            .map((c) => (
-                              <option key={c}>{c}</option>
-                            ))}
+                        <select style={styles.input} value={form.category} onChange={(e) => setForm((prev) => ({ ...prev, category: e.target.value }))}>
+                          {categories.filter((c) => c !== "Tümü").map((c) => (
+                            <option key={c}>{c}</option>
+                          ))}
                         </select>
                       </div>
 
                       <div style={styles.field}>
                         <label style={styles.label}>Çalışma tipi</label>
-                        <select
-                          style={styles.input}
-                          value={form.type}
-                          onChange={(e) =>
-                            setForm((prev) => ({ ...prev, type: e.target.value }))
-                          }
-                        >
-                          {jobTypes
-                            .filter((t) => t !== "Tümü")
-                            .map((t) => (
-                              <option key={t}>{t}</option>
-                            ))}
+                        <select style={styles.input} value={form.type} onChange={(e) => setForm((prev) => ({ ...prev, type: e.target.value }))}>
+                          {jobTypes.filter((t) => t !== "Tümü").map((t) => (
+                            <option key={t}>{t}</option>
+                          ))}
                         </select>
                       </div>
 
                       <div style={styles.field}>
                         <label style={styles.label}>Konum</label>
-                        <input
-                          style={styles.input}
-                          placeholder="Eskişehir / Tepebaşı"
-                          value={form.location}
-                          onChange={(e) =>
-                            setForm((prev) => ({ ...prev, location: e.target.value }))
-                          }
-                        />
+                        <input style={styles.input} placeholder="Eskişehir / Tepebaşı" value={form.location} onChange={(e) => setForm((prev) => ({ ...prev, location: e.target.value }))} />
                       </div>
 
                       <div style={styles.field}>
                         <label style={styles.label}>Ücret</label>
-                        <input
-                          style={styles.input}
-                          placeholder="Günlük 1.200 TL"
-                          value={form.salary}
-                          onChange={(e) =>
-                            setForm((prev) => ({ ...prev, salary: e.target.value }))
-                          }
-                        />
+                        <input style={styles.input} placeholder="Günlük 1.200 TL" value={form.salary} onChange={(e) => setForm((prev) => ({ ...prev, salary: e.target.value }))} />
                       </div>
 
                       <div style={styles.field}>
                         <label style={styles.label}>Telefon</label>
-                        <input
-                          style={styles.input}
-                          placeholder="0532..."
-                          value={form.phone}
-                          onChange={(e) =>
-                            setForm((prev) => ({ ...prev, phone: e.target.value }))
-                          }
-                        />
+                        <input style={styles.input} placeholder="0532..." value={form.phone} onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))} />
                       </div>
 
                       <div style={styles.field}>
                         <label style={styles.label}>WhatsApp numarası</label>
-                        <input
-                          style={styles.input}
-                          placeholder="90532..."
-                          value={form.whatsapp}
-                          onChange={(e) =>
-                            setForm((prev) => ({ ...prev, whatsapp: e.target.value }))
-                          }
-                        />
+                        <input style={styles.input} placeholder="90532..." value={form.whatsapp} onChange={(e) => setForm((prev) => ({ ...prev, whatsapp: e.target.value }))} />
                       </div>
 
                       <div style={styles.fieldFull}>
                         <label style={styles.label}>Konum linki</label>
-                        <input
-                          style={styles.input}
-                          placeholder="https://maps.google.com/..."
-                          value={form.mapUrl}
-                          onChange={(e) =>
-                            setForm((prev) => ({ ...prev, mapUrl: e.target.value }))
-                          }
-                        />
+                        <input style={styles.input} placeholder="https://maps.google.com/..." value={form.mapUrl} onChange={(e) => setForm((prev) => ({ ...prev, mapUrl: e.target.value }))} />
                       </div>
 
                       <div style={styles.fieldFull}>
                         <label style={styles.label}>Açıklama</label>
-                        <textarea
-                          style={styles.textarea}
-                          rows={5}
-                          value={form.description}
-                          onChange={(e) =>
-                            setForm((prev) => ({
-                              ...prev,
-                              description: e.target.value,
-                            }))
-                          }
-                        />
+                        <textarea style={styles.textarea} rows={5} value={form.description} onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))} />
                       </div>
 
                       <div style={styles.checkboxRow}>
-                        <input
-                          id="featured"
-                          type="checkbox"
-                          checked={form.featured}
-                          onChange={(e) =>
-                            setForm((prev) => ({
-                              ...prev,
-                              featured: e.target.checked,
-                            }))
-                          }
-                        />
-                        <label htmlFor="featured" style={styles.checkboxLabel}>
-                          Öne çıkan ilan olarak işaretle
-                        </label>
+                        <input id="featured" type="checkbox" checked={form.featured} onChange={(e) => setForm((prev) => ({ ...prev, featured: e.target.checked }))} />
+                        <label htmlFor="featured" style={styles.checkboxLabel}>Öne çıkan ilan olarak işaretle</label>
                       </div>
 
-                      <button type="submit" style={styles.primaryBtn}>
-                        İlanı Kaydet
-                      </button>
+                      <button type="submit" style={styles.primaryBtn}>İlanı Kaydet</button>
                     </form>
                   </div>
 
@@ -637,38 +511,23 @@ function App() {
                             <div style={styles.adminCardTop}>
                               <div>
                                 <div style={styles.adminJobTitle}>{job.title}</div>
-                                <div style={styles.adminJobMeta}>
-                                  {job.company} • {job.location}
-                                </div>
+                                <div style={styles.adminJobMeta}>{job.company} • {job.location}</div>
                               </div>
                               <div style={styles.stateWrap}>
-                                {job.active ? (
-                                  <span style={styles.stateActive}>Aktif</span>
-                                ) : (
-                                  <span style={styles.statePassive}>Pasif</span>
-                                )}
+                                {job.active ? <span style={styles.stateActive}>Aktif</span> : <span style={styles.statePassive}>Pasif</span>}
                               </div>
                             </div>
 
                             <div style={styles.adminActions}>
-                              <button
-                                style={styles.smallBtn}
-                                onClick={() => toggleFeatured(job.id)}
-                              >
+                              <button style={styles.smallBtn} onClick={() => toggleFeatured(job.id)}>
                                 {job.featured ? "Öne Çıkanı Kaldır" : "Öne Çıkar"}
                               </button>
 
-                              <button
-                                style={styles.smallBtn}
-                                onClick={() => toggleActive(job.id)}
-                              >
+                              <button style={styles.smallBtn} onClick={() => toggleActive(job.id)}>
                                 {job.active ? "Pasife Al" : "Aktifleştir"}
                               </button>
 
-                              <button
-                                style={styles.smallDangerBtn}
-                                onClick={() => deleteJob(job.id)}
-                              >
+                              <button style={styles.smallDangerBtn} onClick={() => deleteJob(job.id)}>
                                 Sil
                               </button>
                             </div>
@@ -698,43 +557,57 @@ const styles = {
   header: {
     maxWidth: 1200,
     margin: "0 auto",
-    padding: "20px 16px",
+    padding: "20px 16px 10px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: 16,
+    flexWrap: "wrap",
   },
-  logoWrap: {
-    display: "flex",
+  brandCard: {
+    display: "inline-flex",
     alignItems: "center",
-    gap: 12,
+    justifyContent: "center",
+    background: "#05070b",
+    borderRadius: 20,
+    padding: "14px 18px",
+    minHeight: 86,
+    minWidth: 240,
+    textDecoration: "none",
+    boxShadow: "0 18px 45px rgba(17,24,39,0.14)",
   },
-  logoMark: {
-    width: 42,
-    height: 42,
-    borderRadius: 14,
-    background: "#111827",
-    color: "#fff",
-    display: "grid",
-    placeItems: "center",
-    fontWeight: 800,
+  brandLogoImage: {
+    display: "block",
+    width: "100%",
+    maxWidth: 185,
+    height: "auto",
+    objectFit: "contain",
   },
-  logo: {
-    fontSize: 20,
-    fontWeight: 800,
-    lineHeight: 1.1,
-  },
-  logoSub: {
-    fontSize: 12,
-    color: "#6b7280",
-    marginTop: 2,
+  headerActions: {
+    display: "flex",
+    gap: 10,
+    flexWrap: "wrap",
   },
   adminBtn: {
     border: "1px solid #d1d5db",
     background: "#fff",
     borderRadius: 12,
-    padding: "10px 16px",
+    padding: "11px 16px",
     cursor: "pointer",
-    fontWeight: 600,
+    fontWeight: 700,
+    color: "#111827",
+  },
+  publicCtaBtn: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textDecoration: "none",
+    borderRadius: 12,
+    padding: "11px 16px",
+    cursor: "pointer",
+    fontWeight: 700,
+    background: "#111827",
+    color: "#fff",
   },
   hero: {
     maxWidth: 1200,
@@ -764,7 +637,44 @@ const styles = {
     fontSize: 17,
     lineHeight: 1.6,
     marginTop: 14,
-    marginBottom: 24,
+    marginBottom: 18,
+  },
+  heroCtaRow: {
+    display: "flex",
+    gap: 10,
+    flexWrap: "wrap",
+    marginBottom: 10,
+  },
+  primaryLinkBtn: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textDecoration: "none",
+    border: "none",
+    background: "#111827",
+    color: "#fff",
+    borderRadius: 12,
+    padding: "12px 16px",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  secondaryLinkBtn: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textDecoration: "none",
+    border: "1px solid #d1d5db",
+    background: "#fff",
+    color: "#111827",
+    borderRadius: 12,
+    padding: "12px 16px",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  pricingNote: {
+    color: "#6b7280",
+    fontSize: 13,
+    marginBottom: 22,
   },
   searchBox: {
     display: "grid",
@@ -846,24 +756,47 @@ const styles = {
     borderRadius: 999,
     marginBottom: 14,
   },
-  jobsGrid: {
+  listJobsWrap: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
     gap: 16,
   },
-  jobCard: {
+  listJobCard: {
     background: "#fff",
     border: "1px solid #e5e7eb",
     borderRadius: 18,
     padding: 18,
     boxShadow: "0 8px 20px rgba(17,24,39,0.04)",
+    display: "grid",
+    gridTemplateColumns: "1fr auto",
+    gap: 18,
+    alignItems: "center",
   },
-  jobTop: {
+  listJobMain: {
+    minWidth: 0,
+  },
+  listTopRow: {
     display: "flex",
     justifyContent: "space-between",
     gap: 12,
     alignItems: "flex-start",
     marginBottom: 14,
+  },
+  listMetaRow: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 14,
+    marginBottom: 14,
+  },
+  listJobDesc: {
+    color: "#6b7280",
+    fontSize: 14,
+    lineHeight: 1.7,
+    margin: 0,
+  },
+  listCardActions: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   jobTitleRow: {
     display: "flex",
@@ -873,16 +806,8 @@ const styles = {
   },
   jobTitle: {
     margin: 0,
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 800,
-  },
-  badge: {
-    fontSize: 11,
-    fontWeight: 800,
-    color: "#1d4ed8",
-    background: "#dbeafe",
-    padding: "5px 8px",
-    borderRadius: 999,
   },
   jobCompany: {
     marginTop: 6,
@@ -896,11 +821,6 @@ const styles = {
     background: "#f3f4f6",
     fontWeight: 700,
     whiteSpace: "nowrap",
-  },
-  jobInfoList: {
-    display: "grid",
-    gap: 8,
-    marginBottom: 14,
   },
   infoItem: {
     color: "#374151",
@@ -924,15 +844,6 @@ const styles = {
     fontWeight: 800,
     fontSize: 16,
   },
-  jobDesc: {
-    color: "#6b7280",
-    fontSize: 14,
-    lineHeight: 1.6,
-    minHeight: 66,
-  },
-  cardActions: {
-    marginTop: 12,
-  },
   primaryBtn: {
     border: "none",
     background: "#111827",
@@ -941,6 +852,7 @@ const styles = {
     padding: "12px 16px",
     fontWeight: 700,
     cursor: "pointer",
+    whiteSpace: "nowrap",
   },
   secondaryBtn: {
     display: "inline-flex",
@@ -1228,3 +1140,4 @@ const styles = {
 };
 
 export default App;
+
