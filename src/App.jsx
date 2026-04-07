@@ -41,7 +41,7 @@ const seedJobs = [
     id: crypto.randomUUID(),
     title: "Etkinlik Karşılama Elemanı",
     company: "Fuar Organizasyon",
-    category: "Etkinlik",
+    category: "Etkinlik & Organizasyon",
     location: "Eskişehir / Merkez",
     salary: "Günlük 1.500 TL",
     type: "Part Time",
@@ -59,12 +59,14 @@ const seedJobs = [
 const categories = [
   "Tümü",
   "Kafe & Restoran",
+  "Kurye & Dağıtım",
   "Depo & Lojistik",
-  "Etkinlik",
   "Temizlik",
-  "Kurye",
-  "Satış",
-  "Freelance",
+  "Etkinlik & Organizasyon",
+  "Satış & Mağaza",
+  "Ofis & Yardımcı İşler",
+  "İnşaat & Fiziksel İş",
+  "Freelance / Dijital",
 ];
 
 const jobTypes = ["Tümü", "Günlük", "Saatlik", "Part Time"];
@@ -139,9 +141,11 @@ function App() {
   const filteredJobs = useMemo(() => {
     return activeJobs
       .filter((job) => {
-        const text = `${job.title} ${job.company} ${job.location} ${job.description}`.toLowerCase();
+        const text =
+          `${job.title} ${job.company} ${job.location} ${job.description}`.toLowerCase();
         const matchesSearch = text.includes(search.toLowerCase());
-        const matchesCategory = category === "Tümü" ? true : job.category === category;
+        const matchesCategory =
+          category === "Tümü" ? true : job.category === category;
         const matchesType = jobType === "Tümü" ? true : job.type === jobType;
         return matchesSearch && matchesCategory && matchesType;
       })
@@ -263,24 +267,32 @@ function App() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <select
-            style={styles.select}
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            {categories.map((c) => (
-              <option key={c}>{c}</option>
-            ))}
-          </select>
-          <select
-            style={styles.select}
-            value={jobType}
-            onChange={(e) => setJobType(e.target.value)}
-          >
-            {jobTypes.map((t) => (
-              <option key={t}>{t}</option>
-            ))}
-          </select>
+
+          <div style={styles.filterGroup}>
+            <label style={styles.filterLabel}>Meslek seç</label>
+            <select
+              style={styles.select}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {categories.map((c) => (
+                <option key={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+
+          <div style={styles.filterGroup}>
+            <label style={styles.filterLabel}>Çalışma tipi seç</label>
+            <select
+              style={styles.select}
+              value={jobType}
+              onChange={(e) => setJobType(e.target.value)}
+            >
+              {jobTypes.map((t) => (
+                <option key={t}>{t}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </section>
 
@@ -314,9 +326,7 @@ function App() {
         </div>
 
         {filteredJobs.length === 0 ? (
-          <div style={styles.emptyState}>
-            Aramana uygun ilan bulunamadı.
-          </div>
+          <div style={styles.emptyState}>Aramana uygun ilan bulunamadı.</div>
         ) : (
           <div style={styles.jobsGrid}>
             {filteredJobs.map((job) => (
@@ -383,11 +393,21 @@ function App() {
             </div>
 
             <div style={styles.detailGrid}>
-              <div style={styles.detailItem}><strong>Konum:</strong> {selectedJob.location}</div>
-              <div style={styles.detailItem}><strong>Ücret:</strong> {selectedJob.salary}</div>
-              <div style={styles.detailItem}><strong>Kategori:</strong> {selectedJob.category}</div>
-              <div style={styles.detailItem}><strong>Çalışma tipi:</strong> {selectedJob.type}</div>
-              <div style={styles.detailItem}><strong>İlan tarihi:</strong> {formatDate(selectedJob.createdAt)}</div>
+              <div style={styles.detailItem}>
+                <strong>Konum:</strong> {selectedJob.location}
+              </div>
+              <div style={styles.detailItem}>
+                <strong>Ücret:</strong> {selectedJob.salary}
+              </div>
+              <div style={styles.detailItem}>
+                <strong>Kategori:</strong> {selectedJob.category}
+              </div>
+              <div style={styles.detailItem}>
+                <strong>Çalışma tipi:</strong> {selectedJob.type}
+              </div>
+              <div style={styles.detailItem}>
+                <strong>İlan tarihi:</strong> {formatDate(selectedJob.createdAt)}
+              </div>
             </div>
 
             <div style={styles.detailText}>{selectedJob.description}</div>
@@ -755,6 +775,17 @@ const styles = {
     padding: 12,
     borderRadius: 18,
     boxShadow: "0 10px 30px rgba(17,24,39,0.05)",
+    alignItems: "end",
+  },
+  filterGroup: {
+    display: "grid",
+    gap: 6,
+  },
+  filterLabel: {
+    fontSize: 13,
+    fontWeight: 700,
+    color: "#6b7280",
+    paddingLeft: 2,
   },
   searchInput: {
     border: "1px solid #e5e7eb",
