@@ -8,7 +8,7 @@ const seedJobs = [
     id: crypto.randomUUID(),
     title: "Garson Aranıyor",
     company: "Odunpazarı Kafe",
-    category: "Kafe & Restoran",AA
+    category: "Kafe & Restoran",
     location: "Eskişehir / Odunpazarı",
     salary: "Günlük 1.200 TL + yemek",
     type: "Günlük",
