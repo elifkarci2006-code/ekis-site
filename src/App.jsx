@@ -312,8 +312,6 @@ export default function App() {
         .btn-primary {
           color: #fff;
           background: ${PALETTE.coral};
-          padding: 16px 22px;
-          font-size: 16px;
           box-shadow: 0 12px 24px rgba(228,93,80,0.28);
         }
         .btn-secondary {
@@ -530,20 +528,40 @@ export default function App() {
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 18px;
         }
+
+        .featured-section {
+          background: ${PALETTE.coral};
+          border-radius: 36px;
+          padding: 34px 26px 30px;
+          margin-bottom: 28px;
+        }
+        .featured-section .section-head {
+          margin-bottom: 20px;
+        }
+        .featured-section .section-title {
+          color: #fff;
+        }
+        .featured-section .section-sub {
+          color: rgba(255,255,255,0.88);
+        }
+        .featured-section .featured-grid {
+          gap: 16px;
+        }
+
         .featured-card {
           position: relative;
           background: #fff;
-          border: 2px solid ${PALETTE.coral};
+          border: 2px solid rgba(255,255,255,0.72);
           border-radius: 26px;
           padding: 22px;
-          box-shadow: 0 20px 36px rgba(228,93,80,0.14);
+          box-shadow: 0 16px 30px rgba(35,48,68,0.14);
           transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
           overflow: hidden;
         }
         .featured-card:hover {
           transform: translateY(-6px);
-          box-shadow: 0 28px 44px rgba(228,93,80,0.20);
-          border-color: ${PALETTE.coral};
+          box-shadow: 0 22px 36px rgba(35,48,68,0.18);
+          border-color: rgba(255,255,255,0.95);
         }
         .featured-card::after {
           content: "";
@@ -625,54 +643,11 @@ export default function App() {
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
         .mini-salary {
-          font-size: 18px;
-          font-weight: 900;
           margin-top: 14px;
           color: ${PALETTE.teal};
           font-size: 17px;
           font-weight: 900;
         }
-        
-        .job-cta {
-          margin-top: 12px;
-          width: 100%;
-          border: none;
-          border-radius: 12px;
-          padding: 10px;
-          background: #3C4A5F;
-          color: #fff;
-          font-weight: 800;
-          cursor: pointer;
-          transition: transform 0.18s ease, box-shadow 0.18s ease;
-        }
-        .job-cta:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(60,74,95,0.2);
-        }
-
-        .job-location {
-          display: inline-block;
-          padding: 6px 10px;
-          border-radius: 999px;
-          background: rgba(60,74,95,0.08);
-          font-size: 12px;
-          font-weight: 800;
-        }
-
-        
-        .featured-section {
-          position: relative;
-          background: linear-gradient(
-            180deg,
-            rgba(228,93,80,0.05),
-            rgba(228,93,80,0.015)
-          );
-          border-radius: 32px;
-          padding: 30px 24px;
-          margin-bottom: 32px;
-          box-shadow: 0 20px 40px rgba(228,93,80,0.06);
-        }
-
         .empty-box {
           background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
           border: 1px dashed rgba(60,74,95,0.14);
@@ -804,6 +779,11 @@ export default function App() {
         }
         @media (max-width: 760px) {
           .container { width: min(100% - 20px, 1240px); }
+
+          .featured-section {
+            border-radius: 28px;
+            padding: 22px 16px 18px;
+          }
           .topbar-inner {
             min-height: auto;
             padding: 12px 0;
@@ -1078,7 +1058,7 @@ export default function App() {
 
         <div className="content-shell">
           <div>
-            <section className="section" id="one-cikanlar">
+            <section className="section featured-section" id="one-cikanlar">
               <div className="section-head">
                 <h2 className="section-title">Öne çıkan ilanlar</h2>
                 <div className="section-sub">Vitrinde daha görünür ilanlar</div>
@@ -1104,7 +1084,7 @@ export default function App() {
               </div>
 
               {filteredJobs.length === 0 ? (
-                <div className="empty-box">Aramana uygun ilan bulunamadı. Farklı şehir veya filtre deneyebilirsin.</div>
+                <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
               ) : (
                 <div className="jobs-grid">
                   {filteredJobs.map((job) => (
@@ -1115,7 +1095,6 @@ export default function App() {
                       <div className="job-location">{job.location}</div>
                       <div className="job-location">{job.category}</div>
                       <div className="mini-salary">{job.salary}</div>
-                      <button className="job-cta">Detayları Gör</button>
                     </article>
                   ))}
                 </div>
