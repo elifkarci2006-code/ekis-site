@@ -650,6 +650,7 @@ export default function App() {
           font-size: 11px;
           font-weight: 800;
           white-space: nowrap;
+          line-height: 1;
         }
 
         .job-title {
