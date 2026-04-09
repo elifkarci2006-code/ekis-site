@@ -166,6 +166,8 @@ export default function App() {
   const [headerSmall, setHeaderSmall] = useState(false);
   const [headerOpacity, setHeaderOpacity] = useState(1);
   const [showPreview, setShowPreview] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     const onScroll = () => {
@@ -185,6 +187,7 @@ export default function App() {
     if (!showForm) {
       setFeaturedChecked(false);
       setShowPreview(false);
+      setFormErrors({});
       setFormData({
         company: "",
         title: "",
@@ -206,6 +209,22 @@ export default function App() {
     setSubmittedCategory(category);
     setSubmittedJobType(jobType);
     setSubmittedCity(city);
+  };
+
+  const handleSubmit = () => {
+    const errors = {};
+
+    if (!formData.company.trim()) errors.company = true;
+    if (!formData.title.trim()) errors.title = true;
+    if (!formData.city.trim()) errors.city = true;
+    if (!formData.salary.trim()) errors.salary = true;
+    if (!formData.description.trim()) errors.description = true;
+
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length > 0) return;
+
+    setShowPreview(true);
   };
 
   const filteredJobs = useMemo(() => {
@@ -242,8 +261,7 @@ export default function App() {
             linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
         }
         .container {
-          width: calc(100% - 24px);
-          max-width: none;
+          width: min(1240px, calc(100% - 32px));
           margin: 0 auto;
         }
         .topbar {
@@ -396,7 +414,7 @@ export default function App() {
         .hero-card {
           background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 24px;
+          border-radius: 22px;
           box-shadow: 0 12px 24px rgba(60,74,95,0.06);
           padding: 14px 18px;
           margin-bottom: 10px;
@@ -557,8 +575,8 @@ export default function App() {
 
         .featured-section {
           background: ${PALETTE.coral};
-          border-radius: 28px;
-          padding: 30px 22px 26px;
+          border-radius: 36px;
+          padding: 34px 26px 30px;
           margin-bottom: 28px;
         }
         .featured-section .section-head {
@@ -611,6 +629,26 @@ export default function App() {
           font-weight: 900;
           margin-bottom: 14px;
         }
+        
+        .job-meta-top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 10px;
+          margin-bottom: 12px;
+        }
+        .job-days {
+          margin-left: auto;
+          padding: 6px 10px;
+          border-radius: 999px;
+          background: rgba(60,74,95,0.06);
+          border: 1px solid rgba(60,74,95,0.08);
+          color: ${PALETTE.softText};
+          font-size: 11px;
+          font-weight: 800;
+          white-space: nowrap;
+        }
+
         .job-title {
           margin: 0 0 8px;
           font-size: 19px;
@@ -748,6 +786,25 @@ export default function App() {
         .post-field input:focus, .post-field select:focus, .post-field textarea:focus {
           border-color: ${PALETTE.coral};
           box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
+        }
+
+        
+        .required {
+          color: ${PALETTE.coral};
+          margin-left: 4px;
+          font-weight: 900;
+        }
+        .post-field input.input-error,
+        .post-field select.input-error,
+        .post-field textarea.input-error {
+          border-color: ${PALETTE.coral};
+          box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
+        }
+        .post-error-text {
+          color: ${PALETTE.coral};
+          font-size: 12px;
+          font-weight: 800;
+          margin-top: -2px;
         }
 
         .post-title {
@@ -1036,6 +1093,76 @@ export default function App() {
           font-weight: 700;
         }
 
+        
+        .job-modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(35,48,68,0.42);
+          backdrop-filter: blur(6px);
+          z-index: 95;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 18px;
+        }
+        .job-modal {
+          width: min(620px, calc(100vw - 24px));
+          max-height: 88vh;
+          overflow-y: auto;
+          background: #fff;
+          border-radius: 28px;
+          border: 1px solid rgba(60,74,95,0.08);
+          box-shadow: 0 34px 80px rgba(35,48,68,0.24);
+          padding: 24px;
+        }
+        .job-modal-head {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 12px;
+        }
+        .job-modal-title {
+          margin: 0 0 8px;
+          font-size: 28px;
+          line-height: 1.1;
+          letter-spacing: -0.04em;
+          color: ${PALETTE.slate};
+        }
+        .job-modal-company {
+          font-size: 18px;
+          font-weight: 800;
+          margin-bottom: 12px;
+          color: ${PALETTE.text};
+        }
+        .job-modal-lines {
+          display: grid;
+          gap: 10px;
+          margin-bottom: 14px;
+        }
+        .job-modal-line {
+          color: ${PALETTE.softText};
+          font-size: 15px;
+          font-weight: 700;
+        }
+        .job-modal-salary {
+          font-size: 24px;
+          font-weight: 900;
+          color: ${PALETTE.coral};
+          margin: 14px 0;
+        }
+        .job-modal-desc {
+          color: ${PALETTE.softText};
+          line-height: 1.7;
+          font-size: 15px;
+          margin: 0 0 18px;
+        }
+        .job-modal-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
         .footer-space { height: 0; }
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
@@ -1045,7 +1172,7 @@ export default function App() {
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 760px) {
-          .container { width: calc(100% - 16px); max-width: none; }
+          .container { width: min(100% - 20px, 1240px); }
 
           .site-footer {
             border-radius: 24px 24px 0 0;
@@ -1095,7 +1222,26 @@ export default function App() {
           .post-panel-inner {
             padding: 16px;
           }
-          .post-title {
+          
+        .required {
+          color: ${PALETTE.coral};
+          margin-left: 4px;
+          font-weight: 900;
+        }
+        .post-field input.input-error,
+        .post-field select.input-error,
+        .post-field textarea.input-error {
+          border-color: ${PALETTE.coral};
+          box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
+        }
+        .post-error-text {
+          color: ${PALETTE.coral};
+          font-size: 12px;
+          font-weight: 800;
+          margin-top: -2px;
+        }
+
+        .post-title {
             font-size: 21px;
           }
           .post-desc {
@@ -1159,36 +1305,42 @@ export default function App() {
 
               <div className="post-form-grid">
                 <div className="post-field">
-                  <label>Firma adı</label>
+                  <label>Firma adı <span className="required">*</span></label>
                   <input
+                    className={formErrors.company ? "input-error" : ""}
                     name="company"
                     type="text"
                     placeholder="Örn. Nova Organizasyon"
                     value={formData.company}
                     onChange={handleFormChange}
                   />
+                  {formErrors.company && <div className="post-error-text">Bu alan zorunludur.</div>}
                 </div>
 
                 <div className="post-field">
-                  <label>İlan başlığı</label>
+                  <label>İlan başlığı <span className="required">*</span></label>
                   <input
+                    className={formErrors.title ? "input-error" : ""}
                     name="title"
                     type="text"
                     placeholder="Örn. Etkinlik Karşılama Elemanı"
                     value={formData.title}
                     onChange={handleFormChange}
                   />
+                  {formErrors.title && <div className="post-error-text">Bu alan zorunludur.</div>}
                 </div>
 
                 <div className="post-field">
-                  <label>Şehir / Konum</label>
+                  <label>Şehir / Konum <span className="required">*</span></label>
                   <input
+                    className={formErrors.city ? "input-error" : ""}
                     name="city"
                     type="text"
                     placeholder="Örn. İstanbul / Kadıköy"
                     value={formData.city}
                     onChange={handleFormChange}
                   />
+                  {formErrors.city && <div className="post-error-text">Bu alan zorunludur.</div>}
                 </div>
 
                 <div className="post-field">
@@ -1203,24 +1355,28 @@ export default function App() {
                 </div>
 
                 <div className="post-field full">
-                  <label>Ücret bilgisi</label>
+                  <label>Ücret bilgisi <span className="required">*</span></label>
                   <input
+                    className={formErrors.salary ? "input-error" : ""}
                     name="salary"
                     type="text"
                     placeholder="Örn. Günlük 1.500 TL + yemek"
                     value={formData.salary}
                     onChange={handleFormChange}
                   />
+                  {formErrors.salary && <div className="post-error-text">Bu alan zorunludur.</div>}
                 </div>
 
                 <div className="post-field full">
-                  <label>İş açıklaması</label>
+                  <label>İş açıklaması <span className="required">*</span></label>
                   <textarea
+                    className={formErrors.description ? "input-error" : ""}
                     name="description"
                     placeholder="İşin detaylarını, saat bilgisini ve adaydan beklentilerini yaz..."
                     value={formData.description}
                     onChange={handleFormChange}
                   />
+                  {formErrors.description && <div className="post-error-text">Bu alan zorunludur.</div>}
                 </div>
               </div>
 
@@ -1283,8 +1439,11 @@ export default function App() {
               )}
 
               <div className="modal-actions">
-                <button className="btn btn-primary" type="button" onClick={() => setShowPreview((prev) => !prev)}>
-                  {showPreview ? "Önizlemeyi Gizle" : "İlanı Önizle"}
+                <button className="btn btn-primary" type="button" onClick={handleSubmit}>
+                  {showPreview ? "Önizlemeyi Güncelle" : "İlanı Önizle"}
+                </button>
+                <button className="btn btn-primary" type="button">
+                  İlanı Yayınla
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={() => setShowForm(false)}>
                   Kapat
@@ -1404,7 +1563,7 @@ export default function App() {
               ) : (
                 <div className="jobs-grid">
                   {filteredJobs.map((job) => (
-                    <article key={job.id} className="job-card">
+                    <article key={job.id} className="job-card" onClick={() => setSelectedJob(job)}>
                       <div className="type-tag">{job.type}</div>
                       <h3 className="job-title">{job.title}</h3>
                       <div className="job-days">2 gündür yayında</div>
@@ -1501,6 +1660,41 @@ export default function App() {
         <div className="footer-space" />
 
       </main>
+
+      {selectedJob && (
+        <div className="job-modal-overlay" onClick={() => setSelectedJob(null)}>
+          <div className="job-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="job-modal-head">
+              <div>
+                <div className="type-tag">{selectedJob.type}</div>
+                <h3 className="job-modal-title">{selectedJob.title}</h3>
+                <div className="job-modal-company">{selectedJob.company}</div>
+              </div>
+              <div className="job-days">2 gündür yayında</div>
+            </div>
+
+            <div className="job-modal-lines">
+              <div className="job-modal-line">Konum: {selectedJob.location}</div>
+              <div className="job-modal-line">Kategori: {selectedJob.category || "Genel"}</div>
+            </div>
+
+            <div className="job-modal-salary">{selectedJob.salary}</div>
+
+            <p className="job-modal-desc">
+              Bu ilan için çalışma detayları, saat bilgisi ve başvuru koşulları burada gösterilecek.
+              Şimdilik ön izleme amaçlı örnek açıklama alanı kullanılıyor.
+            </p>
+
+            <div className="job-modal-actions">
+              <button className="btn btn-primary" type="button">Başvur</button>
+              <button className="btn btn-secondary" type="button" onClick={() => setSelectedJob(null)}>
+                Kapat
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
