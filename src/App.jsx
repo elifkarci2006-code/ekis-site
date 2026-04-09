@@ -235,7 +235,6 @@ export default function App() {
         .brand-wrap {
           display: flex;
           align-items: center;
-          gap: 14px;
           min-width: 0;
         }
         .brand-card {
@@ -248,11 +247,13 @@ export default function App() {
           align-items: center;
           justify-content: center;
           min-height: 68px;
+          min-width: 140px;
           transition: all 0.22s ease;
         }
         .topbar.small .brand-card {
           padding: 9px 12px;
           min-height: 52px;
+          min-width: 114px;
           border-radius: 16px;
         }
         .brand-logo {
@@ -263,21 +264,6 @@ export default function App() {
           transition: height 0.22s ease;
         }
         .topbar.small .brand-logo { height: 38px; }
-        .brand-texts {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-        .brand-title {
-          font-size: 20px;
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          color: ${PALETTE.slate};
-        }
-        .brand-sub {
-          font-size: 13px;
-          color: ${PALETTE.softText};
-        }
         .top-actions {
           display: flex;
           align-items: center;
@@ -311,128 +297,15 @@ export default function App() {
           border: 1px solid rgba(60,74,95,0.12);
           box-shadow: 0 8px 18px rgba(60,74,95,0.05);
         }
-        .hero {
-          padding: 18px 0 10px;
-        }
-        .hero-card {
-          background: ${PALETTE.white};
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 30px;
-          box-shadow: 0 20px 44px rgba(60,74,95,0.07);
-          padding: 28px;
-          margin-bottom: 18px;
-        }
-        .hero-grid {
-          display: grid;
-          grid-template-columns: 1.2fr 0.8fr;
-          gap: 22px;
-          align-items: center;
-        }
-        .badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          background: ${PALETTE.warm};
-          color: ${PALETTE.coral};
-          font-size: 12px;
-          font-weight: 900;
-          padding: 8px 12px;
-          border-radius: 999px;
-          border: 1px solid rgba(228,93,80,0.16);
-        }
-        .hero-title {
-          margin: 14px 0 12px;
-          font-size: clamp(34px, 5vw, 58px);
-          line-height: 0.96;
-          letter-spacing: -0.045em;
-          font-weight: 900;
-          color: ${PALETTE.slate};
-          max-width: 720px;
-        }
-        .hero-title strong { color: ${PALETTE.coral}; }
-        .hero-desc {
-          margin: 0;
-          max-width: 720px;
-          color: ${PALETTE.softText};
-          font-size: 18px;
-          line-height: 1.7;
-        }
-        .hero-cta {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 12px;
-          margin-top: 20px;
-        }
-        .hero-points {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 12px;
-          margin-top: 18px;
-        }
-        .hero-point {
-          padding: 12px 14px;
-          border-radius: 14px;
-          background: ${PALETTE.bg};
-          border: 1px solid rgba(60,74,95,0.08);
-          color: ${PALETTE.slate};
-          font-size: 14px;
-          font-weight: 800;
-        }
-        .hero-side {
-          display: grid;
-          gap: 14px;
-        }
-        .stat-grid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 12px;
-        }
-        .stat-card {
-          background: linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 22px;
-          padding: 18px;
-        }
-        .stat-value {
-          font-size: 30px;
-          font-weight: 900;
-          letter-spacing: -0.04em;
-          color: ${PALETTE.slate};
-          margin-bottom: 6px;
-        }
-        .stat-label {
-          color: ${PALETTE.softText};
-          font-size: 14px;
-          font-weight: 700;
-        }
-        .trust-card {
-          border-radius: 24px;
-          padding: 20px;
-          background: linear-gradient(135deg, ${PALETTE.slate} 0%, #50617a 100%);
-          color: #fff;
-          box-shadow: 0 18px 36px rgba(60,74,95,0.18);
-        }
-        .trust-title {
-          font-size: 18px;
-          font-weight: 900;
-          margin-bottom: 8px;
-        }
-        .trust-text {
-          margin: 0;
-          color: rgba(255,255,255,0.9);
-          line-height: 1.65;
-          font-size: 14px;
+        .top-search {
+          padding: 14px 0 10px;
         }
         .filter-wrap {
           background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 26px;
+          border-radius: 24px;
           padding: 16px;
           box-shadow: 0 14px 30px rgba(60,74,95,0.05);
-          margin-bottom: 16px;
-          position: sticky;
-          top: 88px;
-          z-index: 15;
         }
         .filter-grid {
           display: grid;
@@ -467,7 +340,192 @@ export default function App() {
           border-color: ${PALETTE.coral};
           box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
         }
-        .section { padding: 10px 0 0; }
+        .hero {
+          padding: 10px 0 10px;
+        }
+        .hero-card {
+          background: ${PALETTE.white};
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 28px;
+          box-shadow: 0 16px 34px rgba(60,74,95,0.07);
+          padding: 22px 24px;
+          margin-bottom: 12px;
+        }
+        .hero-grid {
+          display: grid;
+          grid-template-columns: 1.15fr 0.85fr;
+          gap: 18px;
+          align-items: stretch;
+        }
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: ${PALETTE.warm};
+          color: ${PALETTE.coral};
+          font-size: 12px;
+          font-weight: 900;
+          padding: 8px 12px;
+          border-radius: 999px;
+          border: 1px solid rgba(228,93,80,0.16);
+        }
+        .hero-title {
+          margin: 12px 0 10px;
+          font-size: clamp(28px, 4vw, 46px);
+          line-height: 1.02;
+          letter-spacing: -0.045em;
+          font-weight: 900;
+          color: ${PALETTE.slate};
+          max-width: 680px;
+        }
+        .hero-title strong { color: ${PALETTE.coral}; }
+        .hero-desc {
+          margin: 0;
+          max-width: 680px;
+          color: ${PALETTE.softText};
+          font-size: 16px;
+          line-height: 1.6;
+        }
+        .hero-cta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          margin-top: 16px;
+        }
+        .hero-points {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 14px;
+        }
+        .hero-point {
+          padding: 10px 12px;
+          border-radius: 14px;
+          background: ${PALETTE.bg};
+          border: 1px solid rgba(60,74,95,0.08);
+          color: ${PALETTE.slate};
+          font-size: 14px;
+          font-weight: 800;
+        }
+        .hero-side {
+          display: grid;
+          gap: 12px;
+        }
+        .stat-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+        }
+        .stat-card {
+          background: linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 20px;
+          padding: 16px;
+        }
+        .stat-value {
+          font-size: 26px;
+          font-weight: 900;
+          letter-spacing: -0.04em;
+          color: ${PALETTE.slate};
+          margin-bottom: 6px;
+        }
+        .stat-label {
+          color: ${PALETTE.softText};
+          font-size: 14px;
+          font-weight: 700;
+        }
+        .trust-card {
+          border-radius: 22px;
+          padding: 18px;
+          background: linear-gradient(135deg, ${PALETTE.slate} 0%, #50617a 100%);
+          color: #fff;
+          box-shadow: 0 18px 36px rgba(60,74,95,0.18);
+        }
+        .trust-title {
+          font-size: 17px;
+          font-weight: 900;
+          margin-bottom: 8px;
+        }
+        .trust-text {
+          margin: 0;
+          color: rgba(255,255,255,0.9);
+          line-height: 1.6;
+          font-size: 14px;
+        }
+        .content-shell {
+          display: grid;
+          grid-template-columns: 290px minmax(0, 1fr);
+          gap: 18px;
+          align-items: start;
+        }
+        .steps-sidebar {
+          position: sticky;
+          top: 102px;
+          background: ${PALETTE.white};
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 24px;
+          box-shadow: 0 14px 30px rgba(60,74,95,0.05);
+          padding: 20px;
+        }
+        .steps-head {
+          margin-bottom: 16px;
+        }
+        .steps-kicker {
+          font-size: 12px;
+          font-weight: 900;
+          color: ${PALETTE.coral};
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          margin-bottom: 8px;
+        }
+        .steps-title {
+          margin: 0 0 6px;
+          font-size: 22px;
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          color: ${PALETTE.slate};
+        }
+        .steps-sub {
+          margin: 0;
+          color: ${PALETTE.softText};
+          font-size: 14px;
+          line-height: 1.6;
+        }
+        .steps-stack {
+          display: grid;
+          gap: 12px;
+        }
+        .step-card {
+          background: linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 18px;
+          padding: 16px;
+        }
+        .step-no {
+          width: 36px;
+          height: 36px;
+          border-radius: 12px;
+          display: grid;
+          place-items: center;
+          background: ${PALETTE.coral};
+          color: #fff;
+          font-size: 16px;
+          font-weight: 900;
+          margin-bottom: 12px;
+        }
+        .step-title {
+          font-size: 17px;
+          font-weight: 900;
+          color: ${PALETTE.slate};
+          margin-bottom: 8px;
+        }
+        .step-text {
+          margin: 0;
+          color: ${PALETTE.softText};
+          font-size: 14px;
+          line-height: 1.6;
+        }
+        .section { padding: 0 0 16px; }
         .section-head {
           display: flex;
           justify-content: space-between;
@@ -486,62 +544,6 @@ export default function App() {
           color: ${PALETTE.softText};
           font-size: 14px;
           font-weight: 800;
-        }
-        .jobs-grid {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 18px;
-        }
-        .job-card {
-          background: #fff;
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 22px;
-          padding: 20px;
-          box-shadow: 0 12px 24px rgba(60,74,95,0.04);
-          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-          cursor: pointer;
-        }
-        .job-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 34px rgba(60,74,95,0.08);
-          border-color: ${PALETTE.coral};
-        }
-        .type-tag {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 7px 10px;
-          border-radius: 999px;
-          background: ${PALETTE.warm};
-          color: ${PALETTE.coral};
-          font-size: 12px;
-          font-weight: 900;
-          margin-bottom: 14px;
-          border: 1px solid rgba(228,93,80,0.16);
-        }
-        .job-title {
-          margin: 0 0 8px;
-          font-size: 19px;
-          line-height: 1.25;
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          color: ${PALETTE.slate};
-        }
-        .job-company {
-          color: ${PALETTE.text};
-          font-weight: 800;
-          margin-bottom: 10px;
-        }
-        .job-location {
-          color: ${PALETTE.softText};
-          margin-bottom: 10px;
-          font-size: 15px;
-        }
-        .mini-salary {
-          margin-top: 14px;
-          color: ${PALETTE.teal};
-          font-size: 16px;
-          font-weight: 900;
         }
         .featured-grid {
           display: grid;
@@ -584,46 +586,67 @@ export default function App() {
           font-weight: 900;
           margin-bottom: 14px;
         }
+        .job-title {
+          margin: 0 0 8px;
+          font-size: 19px;
+          line-height: 1.25;
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          color: ${PALETTE.slate};
+        }
+        .job-company {
+          color: ${PALETTE.text};
+          font-weight: 800;
+          margin-bottom: 10px;
+        }
+        .job-location {
+          color: ${PALETTE.softText};
+          margin-bottom: 10px;
+          font-size: 15px;
+        }
         .job-salary {
           color: ${PALETTE.coral};
           font-size: 20px;
           font-weight: 900;
           letter-spacing: -0.03em;
         }
-        .steps-grid {
+        .jobs-grid {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
+          grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 18px;
-          margin-top: 8px;
         }
-        .step-card {
+        .job-card {
           background: #fff;
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 24px;
-          padding: 22px;
+          border-radius: 22px;
+          padding: 20px;
           box-shadow: 0 12px 24px rgba(60,74,95,0.04);
+          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+          cursor: pointer;
         }
-        .step-no {
-          width: 42px;
-          height: 42px;
-          border-radius: 14px;
-          display: inline-grid;
-          place-items: center;
-          background: ${PALETTE.coral};
-          color: #fff;
+        .job-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 34px rgba(60,74,95,0.08);
+          border-color: ${PALETTE.coral};
+        }
+        .type-tag {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 7px 10px;
+          border-radius: 999px;
+          background: ${PALETTE.warm};
+          color: ${PALETTE.coral};
+          font-size: 12px;
           font-weight: 900;
           margin-bottom: 14px;
+          border: 1px solid rgba(228,93,80,0.16);
         }
-        .step-title {
-          font-size: 18px;
+        .mini-salary {
+          margin-top: 14px;
+          color: ${PALETTE.teal};
+          font-size: 16px;
           font-weight: 900;
-          color: ${PALETTE.slate};
-          margin-bottom: 8px;
-        }
-        .step-text {
-          margin: 0;
-          color: ${PALETTE.softText};
-          line-height: 1.65;
         }
         .empty-box {
           background: #fff;
@@ -677,7 +700,7 @@ export default function App() {
         .check-row input { width: 18px; height: 18px; }
         .feature-box {
           background: ${PALETTE.warm};
-          border: 1px solid rgba(228,93,80,0.16);
+          border: 1px solid rgba(228,93,80,0.14);
           border-radius: 18px;
           padding: 16px;
         }
@@ -707,12 +730,12 @@ export default function App() {
         }
         .footer-space { height: 42px; }
         @media (max-width: 1100px) {
+          .filter-grid { grid-template-columns: 1fr; }
           .hero-grid { grid-template-columns: 1fr; }
+          .content-shell { grid-template-columns: 1fr; }
+          .steps-sidebar { position: static; }
           .featured-grid { grid-template-columns: 1fr; }
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-          .filter-grid { grid-template-columns: 1fr; }
-          .steps-grid { grid-template-columns: 1fr; }
-          .filter-wrap { position: static; }
         }
         @media (max-width: 760px) {
           .container { width: min(100% - 20px, 1240px); }
@@ -727,6 +750,7 @@ export default function App() {
             padding: 10px 12px;
             border-radius: 18px;
             min-height: 58px;
+            min-width: 120px;
           }
           .brand-logo { height: 42px; }
           .topbar.small .brand-logo { height: 36px; }
@@ -736,9 +760,9 @@ export default function App() {
             grid-template-columns: 1fr 1fr;
           }
           .btn { width: 100%; padding: 12px 14px; }
-          .hero-card { padding: 22px; border-radius: 24px; }
-          .hero-title { font-size: 36px; }
-          .hero-desc { font-size: 16px; }
+          .hero-card { padding: 20px; border-radius: 22px; }
+          .hero-title { font-size: 34px; }
+          .hero-desc { font-size: 15px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .stat-grid { grid-template-columns: 1fr 1fr; }
         }
@@ -756,11 +780,6 @@ export default function App() {
                   if (logoSrc !== "/logo-ekis.png") setLogoSrc("/logo-ekis.png");
                 }}
               />
-            </div>
-
-            <div className="brand-texts">
-              <div className="brand-title">ekiş</div>
-              <div className="brand-sub">Türkiye geneli günlük, saatlik ve part time iş platformu</div>
             </div>
           </div>
 
@@ -815,56 +834,8 @@ export default function App() {
       )}
 
       <main className="container">
-        <section className="hero">
-          <div className="hero-card">
-            <div className="hero-grid">
-              <div>
-                <div className="badge">CV’siz • hızlı başvuru • Türkiye geneli</div>
-                <h1 className="hero-title">
-                  <strong>CV’siz, anında iş bul.</strong> Günlük, saatlik ve part time işler tek yerde.
-                </h1>
-                <p className="hero-desc">
-                  Şehrine uygun ek işi hızlıca keşfet. Karmaşık süreçlerle uğraşmadan ilanları filtrele,
-                  başvur ve hemen kazanmaya başla.
-                </p>
-
-                <div className="hero-cta">
-                  <a className="btn btn-primary" href="#ilanlar">İlanları Gör</a>
-                  <button className="btn btn-secondary" onClick={() => setShowForm(true)}>
-                    İşveren Olarak İlan Ver
-                  </button>
-                </div>
-
-                <div className="hero-points">
-                  <div className="hero-point">Günlük işler</div>
-                  <div className="hero-point">Saatlik çalışmalar</div>
-                  <div className="hero-point">Part time fırsatlar</div>
-                  <div className="hero-point">Türkiye’nin her yerinden ilanlar</div>
-                </div>
-              </div>
-
-              <div className="hero-side">
-                <div className="stat-grid">
-                  {stats.map((item) => (
-                    <div key={item.label} className="stat-card">
-                      <div className="stat-value">{item.value}</div>
-                      <div className="stat-label">{item.label}</div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="trust-card">
-                  <div className="trust-title">Neden kullanıcı daha hızlı anlar?</div>
-                  <p className="trust-text">
-                    İlk ekranda artık ne sunduğun net: CV’siz başvuru, hızlı iş bulma ve Türkiye geneli
-                    erişim. Böylece kullanıcı siteye girer girmez ne yapacağını anlıyor.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="filter-wrap" id="ilanlar">
+        <section className="top-search" id="ilanlar">
+          <div className="filter-wrap">
             <div className="filter-grid">
               <div className="field">
                 <label>İlanlarda ara</label>
@@ -901,65 +872,120 @@ export default function App() {
           </div>
         </section>
 
-        <section className="section">
-          <div className="section-head">
-            <h2 className="section-title">Tüm ilanlar</h2>
-            <div className="section-sub">{filteredJobs.length} ilan bulundu</div>
-          </div>
+        <section className="hero">
+          <div className="hero-card">
+            <div className="hero-grid">
+              <div>
+                <div className="badge">CV’siz • hızlı başvuru • Türkiye geneli</div>
+                <h1 className="hero-title">
+                  <strong>CV’siz, anında iş bul.</strong> Günlük, saatlik ve part time işler tek yerde.
+                </h1>
+                <p className="hero-desc">
+                  Şehrine uygun ek işi hızlıca keşfet. Karmaşık süreçlerle uğraşmadan ilanları filtrele,
+                  başvur ve hemen kazanmaya başla.
+                </p>
 
-          {filteredJobs.length === 0 ? (
-            <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
-          ) : (
-            <div className="jobs-grid">
-              {filteredJobs.map((job) => (
-                <article key={job.id} className="job-card">
-                  <div className="type-tag">{job.type}</div>
-                  <h3 className="job-title">{job.title}</h3>
-                  <div className="job-company">{job.company}</div>
-                  <div className="job-location">{job.location}</div>
-                  <div className="job-location">{job.category}</div>
-                  <div className="mini-salary">{job.salary}</div>
+                <div className="hero-cta">
+                  <a className="btn btn-primary" href="#one-cikanlar">Öne Çıkanlara Git</a>
+                  <button className="btn btn-secondary" onClick={() => setShowForm(true)}>
+                    İşveren Olarak İlan Ver
+                  </button>
+                </div>
+
+                <div className="hero-points">
+                  <div className="hero-point">Günlük işler</div>
+                  <div className="hero-point">Saatlik çalışmalar</div>
+                  <div className="hero-point">Part time fırsatlar</div>
+                  <div className="hero-point">Türkiye’nin her yerinden ilanlar</div>
+                </div>
+              </div>
+
+              <div className="hero-side">
+                <div className="stat-grid">
+                  {stats.map((item) => (
+                    <div key={item.label} className="stat-card">
+                      <div className="stat-value">{item.value}</div>
+                      <div className="stat-label">{item.label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="trust-card">
+                  <div className="trust-title">İlk bakışta daha net</div>
+                  <p className="trust-text">
+                    Logo sadeleşti, arama alanı yukarı taşındı ve ana mesaj daha kısa alanda daha net
+                    görünüyor. Kullanıcı sayfaya girer girmez ilan aramaya başlayabiliyor.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="content-shell">
+          <aside className="steps-sidebar">
+            <div className="steps-head">
+              <div className="steps-kicker">Nasıl çalışır?</div>
+              <h2 className="steps-title">3 adımda iş bul</h2>
+              <p className="steps-sub">Sol tarafta sabit duran kısa akış ile kullanıcı ne yapacağını hemen anlar.</p>
+            </div>
+
+            <div className="steps-stack">
+              {steps.map((step) => (
+                <article key={step.id} className="step-card">
+                  <div className="step-no">{step.id}</div>
+                  <div className="step-title">{step.title}</div>
+                  <p className="step-text">{step.text}</p>
                 </article>
               ))}
             </div>
-          )}
-        </section>
+          </aside>
 
-        <section className="section">
-          <div className="section-head">
-            <h2 className="section-title">Öne çıkan ilanlar</h2>
-            <div className="section-sub">Vitrinde daha görünür ilanlar</div>
-          </div>
+          <div>
+            <section className="section" id="one-cikanlar">
+              <div className="section-head">
+                <h2 className="section-title">Öne çıkan ilanlar</h2>
+                <div className="section-sub">Vitrinde daha görünür ilanlar</div>
+              </div>
 
-          <div className="featured-grid">
-            {featuredSeed.map((job) => (
-              <article key={job.id} className="featured-card">
-                <div className="pill">Öne Çıkan</div>
-                <h3 className="job-title">{job.title}</h3>
-                <div className="job-company">{job.company}</div>
-                <div className="job-location">{job.location}</div>
-                <div className="job-salary">{job.salary}</div>
-              </article>
-            ))}
-          </div>
-        </section>
+              <div className="featured-grid">
+                {featuredSeed.map((job) => (
+                  <article key={job.id} className="featured-card">
+                    <div className="pill">Öne Çıkan</div>
+                    <h3 className="job-title">{job.title}</h3>
+                    <div className="job-company">{job.company}</div>
+                    <div className="job-location">{job.location}</div>
+                    <div className="job-salary">{job.salary}</div>
+                  </article>
+                ))}
+              </div>
+            </section>
 
-        <section className="section">
-          <div className="section-head">
-            <h2 className="section-title">Nasıl çalışır?</h2>
-            <div className="section-sub">3 adımda iş bul veya ilan ver</div>
-          </div>
+            <section className="section">
+              <div className="section-head">
+                <h2 className="section-title">Tüm ilanlar</h2>
+                <div className="section-sub">{filteredJobs.length} ilan bulundu</div>
+              </div>
 
-          <div className="steps-grid">
-            {steps.map((step) => (
-              <article key={step.id} className="step-card">
-                <div className="step-no">{step.id}</div>
-                <div className="step-title">{step.title}</div>
-                <p className="step-text">{step.text}</p>
-              </article>
-            ))}
+              {filteredJobs.length === 0 ? (
+                <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
+              ) : (
+                <div className="jobs-grid">
+                  {filteredJobs.map((job) => (
+                    <article key={job.id} className="job-card">
+                      <div className="type-tag">{job.type}</div>
+                      <h3 className="job-title">{job.title}</h3>
+                      <div className="job-company">{job.company}</div>
+                      <div className="job-location">{job.location}</div>
+                      <div className="job-location">{job.category}</div>
+                      <div className="mini-salary">{job.salary}</div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
           </div>
-        </section>
+        </div>
 
         <div className="footer-space" />
       </main>
