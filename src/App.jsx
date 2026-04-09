@@ -1118,7 +1118,27 @@ export default function App() {
             padding-top: 10px;
           }
         }
-      `}</style>
+      `}
+/* FORCE WIDTH FIX */
+.container {
+  width: min(1440px, 100%) !important;
+  margin: 0 auto !important;
+}
+
+body {
+  padding: 0 !important;
+}
+
+#root {
+  max-width: 100% !important;
+}
+
+/* Vitrin daha yayılmış gözüksün */
+.featured-section {
+  max-width: 100%;
+}
+
+</style>
 
       <header className={`topbar ${headerSmall ? "small" : ""}`} style={{ opacity: headerOpacity }}>
         <div className="container topbar-inner">
