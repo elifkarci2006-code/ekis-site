@@ -241,24 +241,14 @@ export default function App() {
           z-index: 50;
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
-          background: linear-gradient(
-            90deg,
-            rgba(60,74,95,0.86) 0%,
-            rgba(88,173,173,0.82) 52%,
-            rgba(118,191,190,0.78) 100%
-          );
-          border-bottom: 1px solid rgba(255,255,255,0.10);
-          box-shadow: 0 10px 28px rgba(60,74,95,0.14);
-          transition: background 0.2s ease, box-shadow 0.2s ease, min-height 0.22s ease;
+          background: rgba(255,255,255,0.15);
+          border-bottom: 1px solid rgba(255,255,255,0.18);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+          transition: background 0.2s ease, box-shadow 0.2s ease;
         }
         .topbar.small {
-          background: linear-gradient(
-            90deg,
-            rgba(60,74,95,0.94) 0%,
-            rgba(88,173,173,0.90) 52%,
-            rgba(118,191,190,0.86) 100%
-          );
-          box-shadow: 0 14px 34px rgba(60,74,95,0.18);
+          background: rgba(255,255,255,0.25);
+          box-shadow: 0 10px 26px rgba(0,0,0,0.08);
         }
         .topbar-inner {
           min-height: 92px;
