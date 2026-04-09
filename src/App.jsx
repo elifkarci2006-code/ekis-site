@@ -237,37 +237,26 @@ export default function App() {
           align-items: center;
           min-width: 0;
         }
-        .brand-card {
-          background: ${PALETTE.white};
-          border: 1px solid rgba(60,74,95,0.08);
-          box-shadow: 0 10px 22px rgba(60,74,95,0.06);
-          border-radius: 20px;
-          padding: 12px 16px;
-          display: flex;
+        .brand-logo-link {
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          min-height: 68px;
-          min-width: 140px;
-          transition: all 0.22s ease;
-        }
-        .topbar.small .brand-card {
-          padding: 9px 12px;
-          min-height: 52px;
-          min-width: 114px;
-          border-radius: 16px;
+          text-decoration: none;
+          padding: 0;
+          margin: 0;
         }
         .brand-logo {
-          height: 48px;
+          height: 52px;
           width: auto;
           display: block;
           object-fit: contain;
           transition: height 0.22s ease;
         }
-        .topbar.small .brand-logo { height: 38px; }
+        .topbar.small .brand-logo { height: 42px; }
         .top-actions {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
           flex-shrink: 0;
         }
         .btn {
@@ -341,21 +330,21 @@ export default function App() {
           box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
         }
         .hero {
-          padding: 10px 0 10px;
+          padding: 8px 0 8px;
         }
         .hero-card {
           background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 28px;
-          box-shadow: 0 16px 34px rgba(60,74,95,0.07);
-          padding: 22px 24px;
-          margin-bottom: 12px;
+          border-radius: 24px;
+          box-shadow: 0 14px 28px rgba(60,74,95,0.06);
+          padding: 16px 20px;
+          margin-bottom: 10px;
         }
         .hero-grid {
           display: grid;
-          grid-template-columns: 1.15fr 0.85fr;
-          gap: 18px;
-          align-items: stretch;
+          grid-template-columns: 1.25fr 0.75fr;
+          gap: 14px;
+          align-items: start;
         }
         .badge {
           display: inline-flex;
@@ -370,8 +359,8 @@ export default function App() {
           border: 1px solid rgba(228,93,80,0.16);
         }
         .hero-title {
-          margin: 12px 0 10px;
-          font-size: clamp(28px, 4vw, 46px);
+          margin: 10px 0 8px;
+          font-size: clamp(24px, 3.4vw, 38px);
           line-height: 1.02;
           letter-spacing: -0.045em;
           font-weight: 900;
@@ -383,14 +372,14 @@ export default function App() {
           margin: 0;
           max-width: 680px;
           color: ${PALETTE.softText};
-          font-size: 16px;
+          font-size: 15px;
           line-height: 1.6;
         }
         .hero-cta {
           display: flex;
           flex-wrap: wrap;
           gap: 12px;
-          margin-top: 16px;
+          margin-top: 12px;
         }
         .hero-points {
           display: flex;
@@ -399,7 +388,7 @@ export default function App() {
           margin-top: 14px;
         }
         .hero-point {
-          padding: 10px 12px;
+          padding: 8px 11px;
           border-radius: 14px;
           background: ${PALETTE.bg};
           border: 1px solid rgba(60,74,95,0.08);
@@ -409,21 +398,21 @@ export default function App() {
         }
         .hero-side {
           display: grid;
-          gap: 12px;
+          gap: 10px;
         }
         .stat-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 12px;
+          gap: 10px;
         }
         .stat-card {
           background: linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 20px;
-          padding: 16px;
+          border-radius: 18px;
+          padding: 12px;
         }
         .stat-value {
-          font-size: 26px;
+          font-size: 22px;
           font-weight: 900;
           letter-spacing: -0.04em;
           color: ${PALETTE.slate};
@@ -435,14 +424,14 @@ export default function App() {
           font-weight: 700;
         }
         .trust-card {
-          border-radius: 22px;
-          padding: 18px;
+          border-radius: 18px;
+          padding: 14px;
           background: linear-gradient(135deg, ${PALETTE.slate} 0%, #50617a 100%);
           color: #fff;
           box-shadow: 0 18px 36px rgba(60,74,95,0.18);
         }
         .trust-title {
-          font-size: 17px;
+          font-size: 16px;
           font-weight: 900;
           margin-bottom: 8px;
         }
@@ -453,22 +442,18 @@ export default function App() {
           font-size: 14px;
         }
         .content-shell {
-          display: grid;
-          grid-template-columns: 290px minmax(0, 1fr);
-          gap: 18px;
-          align-items: start;
+          display: block;
         }
-        .steps-sidebar {
-          position: sticky;
-          top: 102px;
+        .steps-section {
           background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 24px;
-          box-shadow: 0 14px 30px rgba(60,74,95,0.05);
-          padding: 20px;
+          border-radius: 22px;
+          box-shadow: 0 12px 24px rgba(60,74,95,0.05);
+          padding: 16px 18px;
+          margin: 0 0 16px;
         }
         .steps-head {
-          margin-bottom: 16px;
+          margin-bottom: 12px;
         }
         .steps-kicker {
           font-size: 12px;
@@ -493,17 +478,18 @@ export default function App() {
         }
         .steps-stack {
           display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 12px;
         }
         .step-card {
           background: linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 18px;
-          padding: 16px;
+          border-radius: 16px;
+          padding: 14px;
         }
         .step-no {
-          width: 36px;
-          height: 36px;
+          width: 32px;
+          height: 32px;
           border-radius: 12px;
           display: grid;
           place-items: center;
@@ -732,8 +718,7 @@ export default function App() {
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
           .hero-grid { grid-template-columns: 1fr; }
-          .content-shell { grid-template-columns: 1fr; }
-          .steps-sidebar { position: static; }
+          .steps-stack { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
@@ -746,14 +731,8 @@ export default function App() {
             flex-direction: column;
           }
           .brand-wrap { width: 100%; }
-          .brand-card {
-            padding: 10px 12px;
-            border-radius: 18px;
-            min-height: 58px;
-            min-width: 120px;
-          }
-          .brand-logo { height: 42px; }
-          .topbar.small .brand-logo { height: 36px; }
+          .brand-logo { height: 44px; }
+          .topbar.small .brand-logo { height: 38px; }
           .top-actions {
             width: 100%;
             display: grid;
@@ -765,13 +744,14 @@ export default function App() {
           .hero-desc { font-size: 15px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .stat-grid { grid-template-columns: 1fr 1fr; }
+          .steps-section { padding: 14px; }
         }
       `}</style>
 
       <header className={`topbar ${headerSmall ? "small" : ""}`}>
         <div className="container topbar-inner">
           <div className="brand-wrap">
-            <div className="brand-card">
+            <a className="brand-logo-link" href="#">
               <img
                 className="brand-logo"
                 src={logoSrc}
@@ -780,7 +760,7 @@ export default function App() {
                   if (logoSrc !== "/logo-ekis.png") setLogoSrc("/logo-ekis.png");
                 }}
               />
-            </div>
+            </a>
           </div>
 
           <div className="top-actions">
@@ -896,7 +876,7 @@ export default function App() {
                   <div className="hero-point">Günlük işler</div>
                   <div className="hero-point">Saatlik çalışmalar</div>
                   <div className="hero-point">Part time fırsatlar</div>
-                  <div className="hero-point">Türkiye’nin her yerinden ilanlar</div>
+                  <div className="hero-point">Türkiye geneli ilanlar</div>
                 </div>
               </div>
 
@@ -913,8 +893,7 @@ export default function App() {
                 <div className="trust-card">
                   <div className="trust-title">İlk bakışta daha net</div>
                   <p className="trust-text">
-                    Logo sadeleşti, arama alanı yukarı taşındı ve ana mesaj daha kısa alanda daha net
-                    görünüyor. Kullanıcı sayfaya girer girmez ilan aramaya başlayabiliyor.
+                    Ana mesaj daha kısa bir yükseklikte görünüyor. Kullanıcı sayfaya girer girmez önce arama alanını, ardından öne çıkan ilanları görüyor.
                   </p>
                 </div>
               </div>
@@ -922,25 +901,25 @@ export default function App() {
           </div>
         </section>
 
+        <section className="steps-section">
+          <div className="steps-head">
+            <div className="steps-kicker">Nasıl çalışır?</div>
+            <h2 className="steps-title">3 adımda iş bul</h2>
+            <p className="steps-sub">Hero alanının hemen altında, soldan sağa kısa akışla kullanıcı ne yapacağını anında anlar.</p>
+          </div>
+
+          <div className="steps-stack">
+            {steps.map((step) => (
+              <article key={step.id} className="step-card">
+                <div className="step-no">{step.id}</div>
+                <div className="step-title">{step.title}</div>
+                <p className="step-text">{step.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <div className="content-shell">
-          <aside className="steps-sidebar">
-            <div className="steps-head">
-              <div className="steps-kicker">Nasıl çalışır?</div>
-              <h2 className="steps-title">3 adımda iş bul</h2>
-              <p className="steps-sub">Sol tarafta sabit duran kısa akış ile kullanıcı ne yapacağını hemen anlar.</p>
-            </div>
-
-            <div className="steps-stack">
-              {steps.map((step) => (
-                <article key={step.id} className="step-card">
-                  <div className="step-no">{step.id}</div>
-                  <div className="step-title">{step.title}</div>
-                  <p className="step-text">{step.text}</p>
-                </article>
-              ))}
-            </div>
-          </aside>
-
           <div>
             <section className="section" id="one-cikanlar">
               <div className="section-head">
