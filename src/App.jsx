@@ -239,26 +239,22 @@ export default function App() {
           position: sticky;
           top: 0;
           z-index: 50;
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          background: rgba(255,255,255,0.15);
-          border-bottom: 1px solid rgba(255,255,255,0.18);
-          box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-          transition: background 0.2s ease, box-shadow 0.2s ease;
+          background: #ffffff;
+          border-bottom: 1px solid rgba(0,0,0,0.06);
+          box-shadow: 0 2px 6px rgba(0,0,0,0.04);
         }
         .topbar.small {
-          background: rgba(255,255,255,0.25);
-          box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+          box-shadow: 0 10px 26px rgba(60,74,95,0.08);
         }
         .topbar-inner {
-          min-height: 92px;
+          min-height: 110px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 20px;
           transition: min-height 0.22s ease;
         }
-        .topbar.small .topbar-inner { min-height: 68px; }
+        .topbar.small .topbar-inner { min-height: 80px; }
         .brand-wrap {
           display: flex;
           align-items: center;
@@ -273,13 +269,13 @@ export default function App() {
           margin: 0;
         }
         .brand-logo {
-          height: 82px;
+          height: 90px;
           width: auto;
           display: block;
           object-fit: contain;
           transition: height 0.22s ease;
         }
-        .topbar.small .brand-logo { height: 66px; }
+        .topbar.small .brand-logo { height: 70px; }
         .top-actions {
           display: flex;
           align-items: center;
@@ -308,19 +304,13 @@ export default function App() {
           box-shadow: 0 12px 24px rgba(228,93,80,0.28);
         }
         .btn-secondary {
-          color: #fff;
-          background: rgba(255,255,255,0.10);
-          border: 1px solid rgba(255,255,255,0.22);
-          box-shadow: 0 8px 18px rgba(60,74,95,0.08);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+          color: ${PALETTE.slate};
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.12);
+          box-shadow: 0 8px 18px rgba(60,74,95,0.05);
         }
         .top-search {
           padding: 14px 0 12px;
-        }
-        .btn-secondary:hover {
-          background: rgba(255,255,255,0.16);
-          border-color: rgba(255,255,255,0.30);
         }
         .filter-wrap {
           background: ${PALETTE.teal};
@@ -760,8 +750,8 @@ export default function App() {
             flex-direction: column;
           }
           .brand-wrap { width: 100%; }
-          .brand-logo { height: 84px; }
-          .topbar.small .brand-logo { height: 66px; }
+          .brand-logo { height: 78px; }
+          .topbar.small .brand-logo { height: 70px; }
           .top-actions {
             width: 100%;
             display: grid;
