@@ -311,24 +311,24 @@ export default function App() {
         .btn:hover { transform: translateY(-1px); }
         .btn-primary {
           color: #fff;
-          background: ${PALETTE.coral};
-          box-shadow: 0 12px 24px rgba(228,93,80,0.28);
+          background: ${PALETTE.slate};
+          box-shadow: none;
         }
         .btn-secondary {
           color: ${PALETTE.slate};
           background: #fff;
           border: 1px solid rgba(60,74,95,0.12);
-          box-shadow: 0 8px 18px rgba(60,74,95,0.05);
+          box-shadow: none;
         }
         .top-search {
           padding: 14px 0 12px;
         }
         .filter-wrap {
-          background: ${PALETTE.teal};
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 24px;
-          padding: 16px;
-          box-shadow: 0 14px 30px rgba(60,74,95,0.05);
+          background: #ffffff;
+          border: 1px solid rgba(60,74,95,0.10);
+          border-radius: 22px;
+          padding: 18px;
+          box-shadow: 0 10px 24px rgba(60,74,95,0.05);
         }
         .filter-grid {
           display: grid;
@@ -344,7 +344,7 @@ export default function App() {
         .field label {
           font-size: 13px;
           font-weight: 800;
-          color: #fff;
+          color: ${PALETTE.slate};
           padding-left: 2px;
         }
         .field input, .field select {
@@ -360,8 +360,8 @@ export default function App() {
           transition: border-color 0.18s ease, box-shadow 0.18s ease;
         }
         .field input:focus, .field select:focus {
-          border-color: ${PALETTE.coral};
-          box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
+          border-color: rgba(60,74,95,0.22);
+          box-shadow: 0 0 0 4px rgba(60,74,95,0.06);
         }
 
         .search-action {
@@ -378,12 +378,12 @@ export default function App() {
           font-size: 15px;
           font-weight: 900;
           cursor: pointer;
-          box-shadow: 0 10px 22px rgba(60,74,95,0.22);
-          transition: transform 0.18s ease, box-shadow 0.18s ease;
+          box-shadow: none;
+          transition: background 0.18s ease, transform 0.18s ease;
         }
         .search-btn:hover {
           transform: translateY(-1px);
-          box-shadow: 0 14px 28px rgba(60,74,95,0.26);
+          background: #2f3949;
         }
         .hero {
           padding: 4px 0 6px;
@@ -391,10 +391,10 @@ export default function App() {
         .hero-card {
           background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 24px;
-          box-shadow: 0 14px 28px rgba(60,74,95,0.06);
-          padding: 16px 20px;
-          margin-bottom: 10px;
+          border-radius: 22px;
+          box-shadow: 0 10px 24px rgba(60,74,95,0.05);
+          padding: 18px 22px;
+          margin-bottom: 14px;
         }
         .hero-grid {
           display: grid;
@@ -406,13 +406,13 @@ export default function App() {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: ${PALETTE.warm};
-          color: ${PALETTE.coral};
+          background: rgba(60,74,95,0.06);
+          color: ${PALETTE.slate};
           font-size: 12px;
           font-weight: 900;
           padding: 8px 12px;
           border-radius: 999px;
-          border: 1px solid rgba(228,93,80,0.16);
+          border: 1px solid rgba(60,74,95,0.08);
         }
         .hero-title {
           margin: 8px 0 6px;
@@ -423,7 +423,7 @@ export default function App() {
           color: ${PALETTE.slate};
           max-width: 680px;
         }
-        .hero-title strong { color: ${PALETTE.coral}; }
+        .hero-title strong { color: ${PALETTE.slate}; }
         .hero-desc {
           margin: 0;
           max-width: 680px;
@@ -528,16 +528,17 @@ export default function App() {
         .featured-card {
           position: relative;
           background: #fff;
-          border: 2px solid ${PALETTE.coral};
-          border-radius: 24px;
+          border: 1px solid rgba(60,74,95,0.12);
+          border-radius: 22px;
           padding: 22px;
-          box-shadow: 0 18px 32px rgba(228,93,80,0.14);
-          transition: transform 0.18s ease, box-shadow 0.18s ease;
+          box-shadow: 0 10px 24px rgba(60,74,95,0.05);
+          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
           overflow: hidden;
         }
         .featured-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 24px 40px rgba(228,93,80,0.20);
+          transform: translateY(-3px);
+          box-shadow: 0 16px 30px rgba(60,74,95,0.08);
+          border-color: rgba(60,74,95,0.22);
         }
         .featured-card::after {
           content: "";
@@ -547,19 +548,20 @@ export default function App() {
           width: 110px;
           height: 110px;
           border-radius: 50%;
-          background: rgba(228,93,80,0.10);
+          background: rgba(60,74,95,0.04);
         }
         .pill {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: ${PALETTE.coral};
-          color: #fff;
+          background: rgba(60,74,95,0.08);
+          color: ${PALETTE.slate};
           border-radius: 999px;
           padding: 7px 11px;
           font-size: 12px;
           font-weight: 900;
           margin-bottom: 14px;
+          border: 1px solid rgba(60,74,95,0.08);
         }
         .job-title {
           margin: 0 0 8px;
@@ -580,7 +582,7 @@ export default function App() {
           font-size: 15px;
         }
         .job-salary {
-          color: ${PALETTE.coral};
+          color: ${PALETTE.slate};
           font-size: 20px;
           font-weight: 900;
           letter-spacing: -0.03em;
@@ -600,9 +602,9 @@ export default function App() {
           cursor: pointer;
         }
         .job-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 20px 34px rgba(60,74,95,0.08);
-          border-color: ${PALETTE.coral};
+          transform: translateY(-3px);
+          box-shadow: 0 16px 28px rgba(60,74,95,0.08);
+          border-color: rgba(60,74,95,0.18);
         }
         .type-tag {
           display: inline-flex;
@@ -610,27 +612,27 @@ export default function App() {
           justify-content: center;
           padding: 7px 10px;
           border-radius: 999px;
-          background: ${PALETTE.warm};
-          color: ${PALETTE.coral};
+          background: rgba(60,74,95,0.06);
+          color: ${PALETTE.slate};
           font-size: 12px;
           font-weight: 900;
           margin-bottom: 14px;
-          border: 1px solid rgba(228,93,80,0.16);
+          border: 1px solid rgba(60,74,95,0.08);
         }
         .mini-salary {
           margin-top: 14px;
-          color: ${PALETTE.teal};
+          color: ${PALETTE.slate};
           font-size: 16px;
           font-weight: 900;
         }
         .empty-box {
           background: #fff;
-          border: 1px dashed rgba(60,74,95,0.14);
+          border: 1px dashed rgba(60,74,95,0.18);
           border-radius: 22px;
-          padding: 28px;
+          padding: 34px;
           color: ${PALETTE.softText};
           text-align: center;
-          box-shadow: 0 10px 20px rgba(60,74,95,0.03);
+          box-shadow: none;
         }
         .post-modal-backdrop {
           position: fixed;
@@ -715,8 +717,8 @@ export default function App() {
           margin-top: 8px;
         }
         .feature-box {
-          background: ${PALETTE.warm};
-          border: 1px solid rgba(228,93,80,0.14);
+          background: rgba(60,74,95,0.04);
+          border: 1px solid rgba(60,74,95,0.10);
           border-radius: 18px;
           padding: 16px;
         }
@@ -737,7 +739,7 @@ export default function App() {
           align-items: center;
           justify-content: center;
           text-decoration: none;
-          background: ${PALETTE.coral};
+          background: ${PALETTE.slate};
           color: #fff;
           border-radius: 12px;
           padding: 11px 14px;
