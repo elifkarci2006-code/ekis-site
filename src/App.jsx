@@ -312,6 +312,8 @@ export default function App() {
         .btn-primary {
           color: #fff;
           background: ${PALETTE.coral};
+          padding: 16px 22px;
+          font-size: 16px;
           box-shadow: 0 12px 24px rgba(228,93,80,0.28);
         }
         .btn-secondary {
@@ -623,11 +625,40 @@ export default function App() {
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
         .mini-salary {
+          font-size: 18px;
+          font-weight: 900;
           margin-top: 14px;
           color: ${PALETTE.teal};
           font-size: 17px;
           font-weight: 900;
         }
+        
+        .job-cta {
+          margin-top: 12px;
+          width: 100%;
+          border: none;
+          border-radius: 12px;
+          padding: 10px;
+          background: #3C4A5F;
+          color: #fff;
+          font-weight: 800;
+          cursor: pointer;
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .job-cta:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(60,74,95,0.2);
+        }
+
+        .job-location {
+          display: inline-block;
+          padding: 6px 10px;
+          border-radius: 999px;
+          background: rgba(60,74,95,0.08);
+          font-size: 12px;
+          font-weight: 800;
+        }
+
         .empty-box {
           background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
           border: 1px dashed rgba(60,74,95,0.14);
@@ -1059,7 +1090,7 @@ export default function App() {
               </div>
 
               {filteredJobs.length === 0 ? (
-                <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
+                <div className="empty-box">Aramana uygun ilan bulunamadı. Farklı şehir veya filtre deneyebilirsin.</div>
               ) : (
                 <div className="jobs-grid">
                   {filteredJobs.map((job) => (
@@ -1070,6 +1101,7 @@ export default function App() {
                       <div className="job-location">{job.location}</div>
                       <div className="job-location">{job.category}</div>
                       <div className="mini-salary">{job.salary}</div>
+                      <button className="job-cta">Detayları Gör</button>
                     </article>
                   ))}
                 </div>
