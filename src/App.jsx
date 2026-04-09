@@ -388,21 +388,21 @@ export default function App() {
           filter: saturate(1.04);
         }
         .hero {
-          padding: 4px 0 6px;
+          padding: 2px 0 6px;
         }
         .hero-card {
           background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 28px;
-          box-shadow: 0 18px 34px rgba(60,74,95,0.07);
-          padding: 20px 24px;
-          margin-bottom: 14px;
+          border-radius: 24px;
+          box-shadow: 0 12px 24px rgba(60,74,95,0.06);
+          padding: 14px 18px;
+          margin-bottom: 12px;
         }
         .hero-grid {
           display: grid;
-          grid-template-columns: 1.25fr 0.75fr;
-          gap: 12px;
-          align-items: start;
+          grid-template-columns: 1.5fr 0.5fr;
+          gap: 10px;
+          align-items: center;
         }
         .badge {
           display: inline-flex;
@@ -410,28 +410,28 @@ export default function App() {
           gap: 8px;
           background: ${PALETTE.warm};
           color: ${PALETTE.coral};
-          font-size: 12px;
+          font-size: 11px;
           font-weight: 900;
-          padding: 8px 12px;
+          padding: 6px 10px;
           border-radius: 999px;
           border: 1px solid rgba(228,93,80,0.16);
         }
         .hero-title {
-          margin: 8px 0 6px;
-          font-size: clamp(24px, 3.4vw, 38px);
-          line-height: 1.02;
-          letter-spacing: -0.045em;
+          margin: 6px 0 4px;
+          font-size: clamp(20px, 2.3vw, 29px);
+          line-height: 1.08;
+          letter-spacing: -0.04em;
           font-weight: 900;
           color: ${PALETTE.slate};
-          max-width: 680px;
+          max-width: 760px;
         }
         .hero-title strong { color: ${PALETTE.coral}; }
         .hero-desc {
           margin: 0;
-          max-width: 680px;
+          max-width: 760px;
           color: ${PALETTE.softText};
-          font-size: 14px;
-          line-height: 1.55;
+          font-size: 13px;
+          line-height: 1.45;
         }
         .hero-cta {
           display: flex;
@@ -461,33 +461,29 @@ export default function App() {
         .stat-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 8px;
+          gap: 6px;
         }
         .stat-card {
           background: linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 18px;
-          padding: 12px 14px;
-          box-shadow: 0 12px 22px rgba(60,74,95,0.05);
+          border-radius: 16px;
+          padding: 9px 10px;
+          box-shadow: 0 8px 16px rgba(60,74,95,0.04);
         }
         .stat-value {
-          font-size: 20px;
+          font-size: 16px;
           font-weight: 900;
           letter-spacing: -0.04em;
           color: ${PALETTE.slate};
-          margin-bottom: 6px;
+          margin-bottom: 4px;
         }
         .stat-label {
           color: ${PALETTE.softText};
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 700;
         }
         .trust-card {
-          border-radius: 18px;
-          padding: 14px;
-          background: linear-gradient(135deg, ${PALETTE.slate} 0%, #50617a 100%);
-          color: #fff;
-          box-shadow: 0 22px 38px rgba(60,74,95,0.18);
+          display: none;
         }
         .trust-title {
           font-size: 16px;
@@ -799,9 +795,9 @@ export default function App() {
             grid-template-columns: 1fr 1fr;
           }
           .btn { width: 100%; padding: 12px 14px; }
-          .hero-card { padding: 18px; border-radius: 22px; }
-          .hero-title { font-size: 30px; }
-          .hero-desc { font-size: 15px; }
+          .hero-card { padding: 16px; border-radius: 20px; }
+          .hero-title { font-size: 24px; }
+          .hero-desc { font-size: 14px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .stat-grid { grid-template-columns: 1fr 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
