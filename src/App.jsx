@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-const SHOPIFY_FEATURED_LINK = "https://your-shopify-link.com/one-cikan-ilan";
+const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 const PALETTE = {
   coral: "#E45D50",
@@ -165,6 +165,7 @@ export default function App() {
   const [logoSrc, setLogoSrc] = useState("/publiclogo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
   const [headerOpacity, setHeaderOpacity] = useState(1);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -183,6 +184,7 @@ export default function App() {
   useEffect(() => {
     if (!showForm) {
       setFeaturedChecked(false);
+      setShowPreview(false);
       setFormData({
         company: "",
         title: "",
@@ -786,6 +788,89 @@ export default function App() {
           font-size: 14px;
           line-height: 1.6;
         }
+
+        .preview-card {
+          position: relative;
+          margin-top: 18px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.10);
+          border-radius: 22px;
+          padding: 18px;
+          box-shadow: 0 12px 24px rgba(60,74,95,0.06);
+          overflow: hidden;
+        }
+        .preview-card::after {
+          content: "";
+          position: absolute;
+          right: -24px;
+          bottom: -24px;
+          width: 110px;
+          height: 110px;
+          border-radius: 50%;
+          background: rgba(228,93,80,0.10);
+        }
+        .preview-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 12px;
+        }
+        .preview-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 7px 11px;
+          border-radius: 999px;
+          background: ${PALETTE.warm};
+          color: ${PALETTE.coral};
+          font-size: 12px;
+          font-weight: 900;
+          border: 1px solid rgba(228,93,80,0.16);
+        }
+        .preview-meta {
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 700;
+        }
+        .preview-title {
+          margin: 0 0 8px;
+          font-size: 22px;
+          line-height: 1.2;
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          color: ${PALETTE.slate};
+        }
+        .preview-company {
+          color: ${PALETTE.text};
+          font-weight: 800;
+          margin-bottom: 8px;
+        }
+        .preview-location {
+          color: ${PALETTE.softText};
+          margin-bottom: 10px;
+          font-size: 14px;
+        }
+        .preview-salary {
+          color: ${PALETTE.coral};
+          font-size: 20px;
+          font-weight: 900;
+          margin-bottom: 12px;
+        }
+        .preview-desc {
+          margin: 0;
+          color: ${PALETTE.softText};
+          line-height: 1.6;
+          font-size: 14px;
+          white-space: pre-wrap;
+        }
+        .preview-helper {
+          margin-top: 14px;
+          font-size: 13px;
+          color: ${PALETTE.softText};
+          font-weight: 700;
+        }
+
         .feature-link {
           display: inline-flex;
           align-items: center;
@@ -1117,18 +1202,50 @@ export default function App() {
                   </p>
                   <a
                     className="feature-link"
-                    href={SHOPIFY_FEATURED_LINK}
+                    href={SHOPIER_FEATURED_LINK}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Shopify ödeme bağlantısına git
+                    Shopier ödeme sayfasına git
                   </a>
                 </div>
               )}
 
+              {showPreview && (
+                <div className="preview-card">
+                  <div className="preview-top">
+                    <div className="preview-badge">
+                      {featuredChecked ? "Vitrin adayı" : "Standart ilan"}
+                    </div>
+                    <div className="preview-meta">{formData.workType || "Günlük"}</div>
+                  </div>
+
+                  <h4 className="preview-title">
+                    {formData.title || "İlan başlığı burada görünecek"}
+                  </h4>
+                  <div className="preview-company">
+                    {formData.company || "Firma adı burada görünecek"}
+                  </div>
+                  <div className="preview-location">
+                    {formData.city || "Şehir / Konum burada görünecek"}
+                  </div>
+                  <div className="preview-salary">
+                    {formData.salary || "Ücret bilgisi burada görünecek"}
+                  </div>
+                  <p className="preview-desc">
+                    {formData.description || "İş açıklaması burada görünecek. Kullanıcılar ilanı açtığında bu alanı okuyacak."}
+                  </p>
+                  <div className="preview-helper">
+                    {featuredChecked
+                      ? "Vitrine çıkarmak için ödeme adımını tamamladığında bu ilan öne çıkarılabilir."
+                      : "Bu görünüm standart ilan kartı ve ilan detayı için ön izleme amaçlıdır."}
+                  </div>
+                </div>
+              )}
+
               <div className="modal-actions">
-                <button className="btn btn-primary" type="button">
-                  İlanı Önizle
+                <button className="btn btn-primary" type="button" onClick={() => setShowPreview((prev) => !prev)}>
+                  {showPreview ? "Önizlemeyi Gizle" : "İlanı Önizle"}
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={() => setShowForm(false)}>
                   Kapat
