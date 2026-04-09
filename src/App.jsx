@@ -390,8 +390,28 @@ export default function App() {
         .hero {
           padding: 4px 0 6px;
         }
-        .hero-card {
-          background: ${PALETTE.white};
+        
+.hero-stats-inline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.hero-stat-bubble {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(60,74,95,0.06);
+  font-size: 12px;
+  font-weight: 800;
+  color: #3C4A5F;
+  border: 1px solid rgba(60,74,95,0.08);
+}
+
+.hero-card {
+  padding: 12px 16px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+};
           border: 1px solid rgba(60,74,95,0.08);
           border-radius: 28px;
           box-shadow: 0 18px 34px rgba(60,74,95,0.07);
@@ -399,11 +419,10 @@ export default function App() {
           margin-bottom: 14px;
         }
         .hero-grid {
-          display: grid;
-          grid-template-columns: 1.25fr 0.75fr;
-          gap: 12px;
-          align-items: start;
-        }
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
         .badge {
           display: inline-flex;
           align-items: center;
@@ -426,10 +445,7 @@ export default function App() {
           max-width: 680px;
         }
         .hero-title strong { color: ${PALETTE.coral}; }
-        .hero-desc {
-          margin: 0;
-          max-width: 680px;
-          color: ${PALETTE.softText};
+        .hero-desc { display:none; };
           font-size: 14px;
           line-height: 1.55;
         }
@@ -454,10 +470,7 @@ export default function App() {
           font-size: 14px;
           font-weight: 800;
         }
-        .hero-side {
-          display: grid;
-          gap: 8px;
-        }
+        .hero-side { display:none; }
         .stat-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -613,20 +626,17 @@ export default function App() {
           letter-spacing: -0.03em;
           color: ${PALETTE.slate};
         }
-        .job-company {
+        .job-days {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 6px;
+}
+.job-company {
           color: ${PALETTE.text};
           font-weight: 800;
           margin-bottom: 10px;
         }
-        .job-urgency {
-          display: inline-flex;
-          align-items: center;
-          margin: 0 0 10px;
-          padding: 5px 8px;
-          border-radius: 999px;
-          font-size: 11px;
-          font-weight: 800;
-          color: ${PALETTE.coral};
+        ;
           background: rgba(228,93,80,0.08);
           border: 1px solid rgba(228,93,80,0.14);
         }
@@ -804,7 +814,11 @@ export default function App() {
         .footer-space { height: 42px; }
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
-          .hero-grid { grid-template-columns: 1fr; }
+          .hero-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
           .steps-stack { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -831,9 +845,30 @@ export default function App() {
             grid-template-columns: 1fr 1fr;
           }
           .btn { width: 100%; padding: 12px 14px; }
-          .hero-card { padding: 18px; border-radius: 22px; }
+          
+.hero-stats-inline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.hero-stat-bubble {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(60,74,95,0.06);
+  font-size: 12px;
+  font-weight: 800;
+  color: #3C4A5F;
+  border: 1px solid rgba(60,74,95,0.08);
+}
+
+.hero-card {
+  padding: 12px 16px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
           .hero-title { font-size: 30px; }
-          .hero-desc { font-size: 15px; }
+          .hero-desc { display:none; }
           .jobs-grid { grid-template-columns: 1fr; }
           .stat-grid { grid-template-columns: 1fr 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
@@ -1045,6 +1080,12 @@ export default function App() {
                 <h1 className="hero-title">
                   Günlük, saatlik ve part time işleri kolayca keşfet.
                 </h1>
+<div className="hero-stats-inline">
+  <div className="hero-stat-bubble">1.200+ aktif aday</div>
+  <div className="hero-stat-bubble">320+ ilan</div>
+  <div className="hero-stat-bubble">81 bugün başvuru</div>
+  <div className="hero-stat-bubble">Türkiye geneli</div>
+</div>
                 <p className="hero-desc">
                   Şehrine uygun ek işi hızlıca keşfet. Sade arama alanıyla ilanları filtrele,
                   öne çıkan fırsatları incele ve sana uyan işi daha hızlı bul.
@@ -1088,7 +1129,8 @@ export default function App() {
                   <article key={job.id} className="featured-card">
                     <div className="pill">Öne Çıkan</div>
                     <h3 className="job-title">{job.title}</h3>
-                    <div className="job-urgency">Hızlı doluyor</div>
+<div className="job-days">{Math.floor(Math.random()*3)+1} gündür yayında</div>
+                    
                     <div className="job-company">{job.company}</div>
                     <div className="job-location">{job.location}</div>
                     <div className="job-salary">{job.salary}</div>
@@ -1111,7 +1153,8 @@ export default function App() {
                     <article key={job.id} className="job-card">
                       <div className="type-tag">{job.type}</div>
                       <h3 className="job-title">{job.title}</h3>
-                      <div className="job-urgency">Hızlı doluyor</div>
+<div className="job-days">{Math.floor(Math.random()*3)+1} gündür yayında</div>
+                      
                       <div className="job-company">{job.company}</div>
                       <div className="job-location">{job.location}</div>
                       <div className="job-location">{job.category}</div>
