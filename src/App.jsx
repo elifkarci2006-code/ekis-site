@@ -208,7 +208,7 @@ export default function App() {
 
   const filteredJobs = useMemo(() => {
     return jobsSeed.filter((job) => {
-      const text = `${job.title} <div style="font-size:12px;color:#999;">⚡ Hızlı doluyor</div> ${job.company} ${job.location} ${job.category}`.toLowerCase();
+      const text = `${job.title} ${job.company} ${job.location} ${job.category}`.toLowerCase();
       const matchesSearch = text.includes(submittedSearch.toLowerCase());
       const matchesCategory = submittedCategory === "Tümü" ? true : job.category === submittedCategory;
       const matchesType = submittedJobType === "Tümü" ? true : job.type === submittedJobType;
@@ -436,6 +436,25 @@ export default function App() {
         }
         .hero-cta {
           margin-top: 6px;
+        }
+        .hero-micro {
+          margin: 4px 0 0;
+          font-size: 12px;
+          color: ${PALETTE.softText};
+          font-weight: 700;
+        }
+        .job-urgency {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          margin: 0 0 10px;
+          padding: 5px 8px;
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 800;
+          color: ${PALETTE.coral};
+          background: rgba(228,93,80,0.08);
+          border: 1px solid rgba(228,93,80,0.14);
         }
         .hero-points {
           display: none;
@@ -962,7 +981,7 @@ export default function App() {
                 <label>İlanlarda ara</label>
                 <input
                   type="text"
-                  placeholder="İş ara, firma ara..."
+                  placeholder="Ne iş arıyorsun? (garson, kurye…)"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -1015,9 +1034,10 @@ export default function App() {
             <div className="hero-grid">
               <div>
                 <div className="badge">Hızlı başvuru • net filtreleme • Türkiye geneli</div>
-                <h1 className="hero-title">Türkiye genelinde günlük ve saatlik işler<br/>
+                <h1 className="hero-title">
                   <strong>Günlük, saatlik ve part time işleri kolayca keşfet.</strong> Türkiye genelindeki ilanlar tek yerde.
                 </h1>
+                <p className="hero-micro">Türkiye genelinde günlük ve saatlik işler</p>
                 <p className="hero-desc">
                   Şehrine uygun ek işi hızlıca keşfet. Sade arama alanıyla ilanları filtrele,
                   öne çıkan fırsatları incele ve sana uyan işi daha hızlı bul.
@@ -1072,7 +1092,7 @@ export default function App() {
                 {featuredSeed.map((job) => (
                   <article key={job.id} className="featured-card">
                     <div className="pill">Öne Çıkan</div>
-                    <h3 className="job-title">{job.title} <div style="font-size:12px;color:#999;">⚡ Hızlı doluyor</div></h3>
+                    <h3 className="job-title">{job.title}</h3>
                     <div className="job-company">{job.company}</div>
                     <div className="job-location">{job.location}</div>
                     <div className="job-salary">{job.salary}</div>
@@ -1094,7 +1114,8 @@ export default function App() {
                   {filteredJobs.map((job) => (
                     <article key={job.id} className="job-card">
                       <div className="type-tag">{job.type}</div>
-                      <h3 className="job-title">{job.title} <div style="font-size:12px;color:#999;">⚡ Hızlı doluyor</div></h3>
+                      <h3 className="job-title">{job.title}</h3>
+                      <div className="job-urgency">⚡ Hızlı doluyor</div>
                       <div className="job-company">{job.company}</div>
                       <div className="job-location">{job.location}</div>
                       <div className="job-location">{job.category}</div>
