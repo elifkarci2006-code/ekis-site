@@ -208,7 +208,7 @@ export default function App() {
 
   const filteredJobs = useMemo(() => {
     return jobsSeed.filter((job) => {
-      const text = `${job.title} ${job.company} ${job.location} ${job.category}`.toLowerCase();
+      const text = `${job.title} <div style="font-size:12px;color:#999;">⚡ Hızlı doluyor</div> ${job.company} ${job.location} ${job.category}`.toLowerCase();
       const matchesSearch = text.includes(submittedSearch.toLowerCase());
       const matchesCategory = submittedCategory === "Tümü" ? true : job.category === submittedCategory;
       const matchesType = submittedJobType === "Tümü" ? true : job.type === submittedJobType;
@@ -1015,7 +1015,7 @@ export default function App() {
             <div className="hero-grid">
               <div>
                 <div className="badge">Hızlı başvuru • net filtreleme • Türkiye geneli</div>
-                <h1 className="hero-title">
+                <h1 className="hero-title">Türkiye genelinde günlük ve saatlik işler<br/>
                   <strong>Günlük, saatlik ve part time işleri kolayca keşfet.</strong> Türkiye genelindeki ilanlar tek yerde.
                 </h1>
                 <p className="hero-desc">
@@ -1064,7 +1064,7 @@ export default function App() {
           <div>
             <section className="section featured-section" id="one-cikanlar">
               <div className="section-head">
-                <h2 className="section-title">Öne çıkan ilanlar</h2>
+                <h2 className="section-title">🔥 Vitrin ilanlar</h2>
                 <div className="section-sub">Vitrinde daha görünür ilanlar</div>
               </div>
 
@@ -1072,7 +1072,7 @@ export default function App() {
                 {featuredSeed.map((job) => (
                   <article key={job.id} className="featured-card">
                     <div className="pill">Öne Çıkan</div>
-                    <h3 className="job-title">{job.title}</h3>
+                    <h3 className="job-title">{job.title} <div style="font-size:12px;color:#999;">⚡ Hızlı doluyor</div></h3>
                     <div className="job-company">{job.company}</div>
                     <div className="job-location">{job.location}</div>
                     <div className="job-salary">{job.salary}</div>
@@ -1094,7 +1094,7 @@ export default function App() {
                   {filteredJobs.map((job) => (
                     <article key={job.id} className="job-card">
                       <div className="type-tag">{job.type}</div>
-                      <h3 className="job-title">{job.title}</h3>
+                      <h3 className="job-title">{job.title} <div style="font-size:12px;color:#999;">⚡ Hızlı doluyor</div></h3>
                       <div className="job-company">{job.company}</div>
                       <div className="job-location">{job.location}</div>
                       <div className="job-location">{job.category}</div>
