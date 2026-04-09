@@ -164,9 +164,17 @@ export default function App() {
   });
   const [logoSrc, setLogoSrc] = useState("/publiclogo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
+  const [headerOpacity, setHeaderOpacity] = useState(1);
 
   useEffect(() => {
-    const onScroll = () => setHeaderSmall(window.scrollY > 60);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setHeaderSmall(y > 60);
+      const fadeDistance = 120;
+      const nextOpacity = Math.max(0, 1 - y / fadeDistance);
+      setHeaderOpacity(nextOpacity);
+    };
+
     window.addEventListener("scroll", onScroll);
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
@@ -236,7 +244,7 @@ export default function App() {
           margin: 0 auto;
         }
         .topbar {
-          position: sticky;
+          position: relative;
           top: 0;
           z-index: 50;
           background: transparent;
@@ -244,10 +252,9 @@ export default function App() {
           -webkit-backdrop-filter: none;
           border-bottom: none;
           box-shadow: none;
-          transition: none;
+          transition: opacity 0.18s ease;
         }
         .topbar.small {
-          background: transparent;
           box-shadow: none;
         }
         .topbar-inner {
@@ -277,7 +284,7 @@ export default function App() {
           width: auto;
           display: block;
           object-fit: contain;
-          transition: height 0.22s ease;
+          transition: height 0.22s ease, opacity 0.18s ease;
         }
         .topbar.small .brand-logo { height: 78px; }
         .top-actions {
@@ -771,7 +778,7 @@ export default function App() {
         }
       `}</style>
 
-      <header className={`topbar ${headerSmall ? "small" : ""}`}>
+      <header className={`topbar ${headerSmall ? "small" : ""}`} style={{ opacity: headerOpacity }}>
         <div className="container topbar-inner">
           <div className="brand-wrap">
             <a className="brand-logo-link" href="#">
