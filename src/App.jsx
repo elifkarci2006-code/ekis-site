@@ -312,23 +312,23 @@ export default function App() {
         .btn-primary {
           color: #fff;
           background: ${PALETTE.coral};
-          box-shadow: 0 14px 26px rgba(228,93,80,0.24);
+          box-shadow: 0 12px 24px rgba(228,93,80,0.28);
         }
         .btn-secondary {
           color: ${PALETTE.slate};
           background: #fff;
-          border: 1px solid rgba(60,74,95,0.10);
-          box-shadow: 0 10px 20px rgba(60,74,95,0.05);
+          border: 1px solid rgba(60,74,95,0.12);
+          box-shadow: 0 8px 18px rgba(60,74,95,0.05);
         }
         .top-search {
           padding: 14px 0 12px;
         }
         .filter-wrap {
-          background: linear-gradient(135deg, rgba(88,173,173,0.96) 0%, rgba(118,191,190,0.96) 100%);
-          border: 1px solid rgba(60,74,95,0.06);
-          border-radius: 26px;
-          padding: 18px;
-          box-shadow: 0 18px 38px rgba(88,173,173,0.20);
+          background: ${PALETTE.teal};
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 24px;
+          padding: 16px;
+          box-shadow: 0 14px 30px rgba(60,74,95,0.05);
         }
         .filter-grid {
           display: grid;
@@ -351,8 +351,8 @@ export default function App() {
           height: 56px;
           width: 100%;
           border-radius: 18px;
-          border: 1px solid rgba(255,255,255,0.20);
-          background: rgba(255,255,255,0.96);
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
           padding: 0 16px;
           font-size: 15px;
           color: ${PALETTE.text};
@@ -360,8 +360,8 @@ export default function App() {
           transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
         }
         .field input:focus, .field select:focus {
-          border-color: rgba(228,93,80,0.42);
-          box-shadow: 0 0 0 5px rgba(228,93,80,0.14);
+          border-color: ${PALETTE.coral};
+          box-shadow: 0 0 0 5px rgba(228,93,80,0.10);
           transform: translateY(-1px);
         }
 
@@ -374,29 +374,27 @@ export default function App() {
           height: 56px;
           border: none;
           border-radius: 18px;
-          background: ${PALETTE.coral};
+          background: ${PALETTE.slate};
           color: #fff;
           font-size: 15px;
           font-weight: 900;
           cursor: pointer;
-          box-shadow: 0 16px 28px rgba(228,93,80,0.26);
+          box-shadow: 0 12px 24px rgba(60,74,95,0.22);
           transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
         }
         .search-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 20px 34px rgba(228,93,80,0.30);
-          filter: saturate(1.05);
+          box-shadow: 0 16px 30px rgba(60,74,95,0.26);
+          filter: saturate(1.04);
         }
         .hero {
           padding: 4px 0 6px;
         }
         .hero-card {
-          background:
-            radial-gradient(circle at top right, rgba(228,93,80,0.08), transparent 34%),
-            linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+          background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
           border-radius: 28px;
-          box-shadow: 0 18px 34px rgba(60,74,95,0.08);
+          box-shadow: 0 18px 34px rgba(60,74,95,0.07);
           padding: 20px 24px;
           margin-bottom: 14px;
         }
@@ -427,10 +425,7 @@ export default function App() {
           color: ${PALETTE.slate};
           max-width: 680px;
         }
-        .hero-title strong {
-          color: ${PALETTE.coral};
-          text-shadow: 0 8px 20px rgba(228,93,80,0.10);
-        }
+        .hero-title strong { color: ${PALETTE.coral}; }
         .hero-desc {
           margin: 0;
           max-width: 680px;
@@ -451,11 +446,11 @@ export default function App() {
           margin-top: 10px;
         }
         .hero-point {
-          padding: 8px 11px;
-          border-radius: 999px;
-          background: rgba(228,93,80,0.08);
-          border: 1px solid rgba(228,93,80,0.14);
-          color: ${PALETTE.coral};
+          padding: 7px 10px;
+          border-radius: 14px;
+          background: ${PALETTE.bg};
+          border: 1px solid rgba(60,74,95,0.08);
+          color: ${PALETTE.slate};
           font-size: 14px;
           font-weight: 800;
         }
@@ -490,9 +485,9 @@ export default function App() {
         .trust-card {
           border-radius: 18px;
           padding: 14px;
-          background: linear-gradient(135deg, ${PALETTE.slate} 0%, #50617a 65%, ${PALETTE.teal} 100%);
+          background: linear-gradient(135deg, ${PALETTE.slate} 0%, #50617a 100%);
           color: #fff;
-          box-shadow: 0 22px 38px rgba(60,74,95,0.20);
+          box-shadow: 0 22px 38px rgba(60,74,95,0.18);
         }
         .trust-title {
           font-size: 16px;
@@ -535,8 +530,8 @@ export default function App() {
         }
         .featured-card {
           position: relative;
-          background: linear-gradient(180deg, #fff 0%, #fff8f5 100%);
-          border: 2px solid rgba(228,93,80,0.22);
+          background: #fff;
+          border: 2px solid ${PALETTE.coral};
           border-radius: 26px;
           padding: 22px;
           box-shadow: 0 20px 36px rgba(228,93,80,0.14);
@@ -556,7 +551,7 @@ export default function App() {
           width: 130px;
           height: 130px;
           border-radius: 50%;
-          background: rgba(228,93,80,0.14);
+          background: rgba(228,93,80,0.12);
         }
         .pill {
           display: inline-flex;
@@ -619,7 +614,7 @@ export default function App() {
           justify-content: center;
           padding: 7px 10px;
           border-radius: 999px;
-          background: rgba(228,93,80,0.10);
+          background: ${PALETTE.warm};
           color: ${PALETTE.coral};
           font-size: 12px;
           font-weight: 900;
@@ -629,7 +624,7 @@ export default function App() {
         }
         .mini-salary {
           margin-top: 14px;
-          color: ${PALETTE.coral};
+          color: ${PALETTE.teal};
           font-size: 17px;
           font-weight: 900;
         }
