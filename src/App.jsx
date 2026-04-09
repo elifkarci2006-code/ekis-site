@@ -260,14 +260,14 @@ export default function App() {
           box-shadow: none;
         }
         .topbar-inner {
-          min-height: 92px;
+          min-height: 72px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 20px;
           transition: min-height 0.22s ease;
         }
-        .topbar.small .topbar-inner { min-height: 68px; }
+        .topbar.small .topbar-inner { min-height: 60px; }
         .brand-wrap {
           display: flex;
           align-items: center;
@@ -282,13 +282,13 @@ export default function App() {
           margin: 0;
         }
         .brand-logo {
-          height: 92px;
+          height: 108px;
           width: auto;
           display: block;
           object-fit: contain;
           transition: height 0.22s ease, opacity 0.18s ease;
         }
-        .topbar.small .brand-logo { height: 78px; }
+        .topbar.small .brand-logo { height: 102px; }
         .top-actions {
           display: flex;
           align-items: center;
@@ -323,7 +323,7 @@ export default function App() {
           box-shadow: 0 8px 18px rgba(60,74,95,0.05);
         }
         .top-search {
-          padding: 14px 0 12px;
+          padding: 2px 0 10px;
         }
         .filter-wrap {
           background: ${PALETTE.teal};
@@ -1067,13 +1067,13 @@ export default function App() {
           }
           .topbar-inner {
             min-height: auto;
-            padding: 12px 0;
+            padding: 4px 0 8px;
             align-items: flex-start;
             flex-direction: column;
           }
           .brand-wrap { width: 100%; }
           .brand-logo { height: 92px; }
-          .topbar.small .brand-logo { height: 78px; }
+          .topbar.small .brand-logo { height: 92px; }
           .top-actions {
             width: 100%;
             display: grid;
