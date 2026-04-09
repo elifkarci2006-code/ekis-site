@@ -239,22 +239,24 @@ export default function App() {
           position: sticky;
           top: 0;
           z-index: 50;
-          background: #ffffff;
-          border-bottom: 1px solid rgba(0,0,0,0.06);
-          box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+          background: transparent !important;
+          backdrop-filter: none !important;
+          box-shadow: none !important;
+          border-bottom: none !important;
         }
         .topbar.small {
-          box-shadow: 0 10px 26px rgba(60,74,95,0.08);
+          background: transparent !important;
+          box-shadow: none !important;
         }
         .topbar-inner {
-          min-height: 110px;
+          min-height: 92px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 20px;
           transition: min-height 0.22s ease;
         }
-        .topbar.small .topbar-inner { min-height: 80px; }
+        .topbar.small .topbar-inner { min-height: 68px; }
         .brand-wrap {
           display: flex;
           align-items: center;
@@ -269,13 +271,12 @@ export default function App() {
           margin: 0;
         }
         .brand-logo {
-          height: 90px;
+          height: 100px;
           width: auto;
           display: block;
           object-fit: contain;
-          transition: height 0.22s ease;
         }
-        .topbar.small .brand-logo { height: 70px; }
+        .topbar.small .brand-logo { height: 85px; }
         .top-actions {
           display: flex;
           align-items: center;
@@ -751,7 +752,7 @@ export default function App() {
           }
           .brand-wrap { width: 100%; }
           .brand-logo { height: 78px; }
-          .topbar.small .brand-logo { height: 70px; }
+          .topbar.small .brand-logo { height: 60px; }
           .top-actions {
             width: 100%;
             display: grid;
