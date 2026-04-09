@@ -659,6 +659,20 @@ export default function App() {
           font-weight: 800;
         }
 
+        
+        .featured-section {
+          position: relative;
+          background: linear-gradient(
+            180deg,
+            rgba(228,93,80,0.05),
+            rgba(228,93,80,0.015)
+          );
+          border-radius: 32px;
+          padding: 30px 24px;
+          margin-bottom: 32px;
+          box-shadow: 0 20px 40px rgba(228,93,80,0.06);
+        }
+
         .empty-box {
           background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
           border: 1px dashed rgba(60,74,95,0.14);
