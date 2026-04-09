@@ -388,10 +388,14 @@ export default function App() {
           filter: saturate(1.04);
         }
         .hero {
-          padding: 2px 0 6px;
+          padding: 0;
         }
         .hero-card {
-          background: ${PALETTE.white};
+          padding: 10px 14px;
+          border-radius: 18px;
+          margin-bottom: 8px;
+          box-shadow: 0 6px 12px rgba(60,74,95,0.04);
+        };
           border: 1px solid rgba(60,74,95,0.08);
           border-radius: 24px;
           box-shadow: 0 12px 24px rgba(60,74,95,0.06);
@@ -399,10 +403,10 @@ export default function App() {
           margin-bottom: 12px;
         }
         .hero-grid {
-          display: grid;
-          grid-template-columns: 1.5fr 0.5fr;
-          gap: 10px;
+          display: flex;
           align-items: center;
+          justify-content: space-between;
+          gap: 10px;
         }
         .badge {
           display: inline-flex;
@@ -417,33 +421,24 @@ export default function App() {
           border: 1px solid rgba(228,93,80,0.16);
         }
         .hero-title {
-          margin: 6px 0 4px;
-          font-size: clamp(20px, 2.3vw, 29px);
-          line-height: 1.08;
-          letter-spacing: -0.04em;
-          font-weight: 900;
-          color: ${PALETTE.slate};
+          margin: 0;
+          font-size: 20px;
+          line-height: 1.1;
+        };
           max-width: 760px;
         }
         .hero-title strong { color: ${PALETTE.coral}; }
         .hero-desc {
-          margin: 0;
-          max-width: 760px;
-          color: ${PALETTE.softText};
+          display: none;
+        };
           font-size: 13px;
           line-height: 1.45;
         }
         .hero-cta {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          margin-top: 10px;
+          margin-top: 6px;
         }
         .hero-points {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          margin-top: 10px;
+          display: none;
         }
         .hero-point {
           padding: 7px 10px;
@@ -454,10 +449,7 @@ export default function App() {
           font-size: 14px;
           font-weight: 800;
         }
-        .hero-side {
-          display: grid;
-          gap: 8px;
-        }
+        .hero-side { display:none; }
         .stat-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -768,7 +760,12 @@ export default function App() {
         .footer-space { height: 42px; }
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
-          .hero-grid { grid-template-columns: 1fr; }
+          .hero-grid {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+        }
           .steps-stack { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -795,9 +792,20 @@ export default function App() {
             grid-template-columns: 1fr 1fr;
           }
           .btn { width: 100%; padding: 12px 14px; }
-          .hero-card { padding: 16px; border-radius: 20px; }
-          .hero-title { font-size: 24px; }
-          .hero-desc { font-size: 14px; }
+          .hero-card {
+          padding: 10px 14px;
+          border-radius: 18px;
+          margin-bottom: 8px;
+          box-shadow: 0 6px 12px rgba(60,74,95,0.04);
+        }
+          .hero-title {
+          margin: 0;
+          font-size: 20px;
+          line-height: 1.1;
+        }
+          .hero-desc {
+          display: none;
+        }
           .jobs-grid { grid-template-columns: 1fr; }
           .stat-grid { grid-template-columns: 1fr 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
