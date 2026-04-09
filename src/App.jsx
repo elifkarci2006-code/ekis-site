@@ -140,23 +140,6 @@ const stats = [
   { value: "Türkiye", label: "geneli kapsama" },
 ];
 
-const steps = [
-  {
-    id: 1,
-    title: "İşini seç",
-    text: "Şehrine, çalışma tipine ve alana göre sana uygun ilanı filtrele.",
-  },
-  {
-    id: 2,
-    title: "Hızlı başvur",
-    text: "Uzun ve yorucu süreçler olmadan birkaç adımda başvurunu yap.",
-  },
-  {
-    id: 3,
-    title: "Çalış & kazan",
-    text: "Günlük, saatlik ya da part time işlerle hemen gelir oluşturmaya başla.",
-  },
-];
 
 export default function App() {
   const [search, setSearch] = useState("");
@@ -164,6 +147,14 @@ export default function App() {
   const [jobType, setJobType] = useState("Tümü");
   const [showForm, setShowForm] = useState(false);
   const [featuredChecked, setFeaturedChecked] = useState(false);
+  const [formData, setFormData] = useState({
+    company: "",
+    title: "",
+    city: "",
+    workType: "Günlük",
+    salary: "",
+    description: "",
+  });
   const [logoSrc, setLogoSrc] = useState("/publiclogo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
 
@@ -175,8 +166,23 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!showForm) setFeaturedChecked(false);
+    if (!showForm) {
+      setFeaturedChecked(false);
+      setFormData({
+        company: "",
+        title: "",
+        city: "",
+        workType: "Günlük",
+        salary: "",
+        description: "",
+      });
+    }
   }, [showForm]);
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const filteredJobs = useMemo(() => {
     return jobsSeed.filter((job) => {
@@ -246,13 +252,13 @@ export default function App() {
           margin: 0;
         }
         .brand-logo {
-          height: 52px;
+          height: 76px;
           width: auto;
           display: block;
           object-fit: contain;
           transition: height 0.22s ease;
         }
-        .topbar.small .brand-logo { height: 42px; }
+        .topbar.small .brand-logo { height: 62px; }
         .top-actions {
           display: flex;
           align-items: center;
@@ -287,7 +293,7 @@ export default function App() {
           box-shadow: 0 8px 18px rgba(60,74,95,0.05);
         }
         .top-search {
-          padding: 14px 0 10px;
+          padding: 14px 0 12px;
         }
         .filter-wrap {
           background: ${PALETTE.white};
@@ -330,7 +336,7 @@ export default function App() {
           box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
         }
         .hero {
-          padding: 8px 0 8px;
+          padding: 4px 0 6px;
         }
         .hero-card {
           background: ${PALETTE.white};
@@ -343,7 +349,7 @@ export default function App() {
         .hero-grid {
           display: grid;
           grid-template-columns: 1.25fr 0.75fr;
-          gap: 14px;
+          gap: 12px;
           align-items: start;
         }
         .badge {
@@ -359,7 +365,7 @@ export default function App() {
           border: 1px solid rgba(228,93,80,0.16);
         }
         .hero-title {
-          margin: 10px 0 8px;
+          margin: 8px 0 6px;
           font-size: clamp(24px, 3.4vw, 38px);
           line-height: 1.02;
           letter-spacing: -0.045em;
@@ -372,23 +378,23 @@ export default function App() {
           margin: 0;
           max-width: 680px;
           color: ${PALETTE.softText};
-          font-size: 15px;
-          line-height: 1.6;
+          font-size: 14px;
+          line-height: 1.55;
         }
         .hero-cta {
           display: flex;
           flex-wrap: wrap;
-          gap: 12px;
-          margin-top: 12px;
+          gap: 8px;
+          margin-top: 10px;
         }
         .hero-points {
           display: flex;
           flex-wrap: wrap;
-          gap: 10px;
-          margin-top: 14px;
+          gap: 8px;
+          margin-top: 10px;
         }
         .hero-point {
-          padding: 8px 11px;
+          padding: 7px 10px;
           border-radius: 14px;
           background: ${PALETTE.bg};
           border: 1px solid rgba(60,74,95,0.08);
@@ -398,21 +404,21 @@ export default function App() {
         }
         .hero-side {
           display: grid;
-          gap: 10px;
+          gap: 8px;
         }
         .stat-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 10px;
+          gap: 8px;
         }
         .stat-card {
           background: linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 18px;
-          padding: 12px;
+          border-radius: 16px;
+          padding: 10px 12px;
         }
         .stat-value {
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 900;
           letter-spacing: -0.04em;
           color: ${PALETTE.slate};
@@ -424,8 +430,8 @@ export default function App() {
           font-weight: 700;
         }
         .trust-card {
-          border-radius: 18px;
-          padding: 14px;
+          border-radius: 16px;
+          padding: 12px;
           background: linear-gradient(135deg, ${PALETTE.slate} 0%, #50617a 100%);
           color: #fff;
           box-shadow: 0 18px 36px rgba(60,74,95,0.18);
@@ -443,73 +449,6 @@ export default function App() {
         }
         .content-shell {
           display: block;
-        }
-        .steps-section {
-          background: ${PALETTE.white};
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 22px;
-          box-shadow: 0 12px 24px rgba(60,74,95,0.05);
-          padding: 16px 18px;
-          margin: 0 0 16px;
-        }
-        .steps-head {
-          margin-bottom: 12px;
-        }
-        .steps-kicker {
-          font-size: 12px;
-          font-weight: 900;
-          color: ${PALETTE.coral};
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          margin-bottom: 8px;
-        }
-        .steps-title {
-          margin: 0 0 6px;
-          font-size: 22px;
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          color: ${PALETTE.slate};
-        }
-        .steps-sub {
-          margin: 0;
-          color: ${PALETTE.softText};
-          font-size: 14px;
-          line-height: 1.6;
-        }
-        .steps-stack {
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 12px;
-        }
-        .step-card {
-          background: linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 16px;
-          padding: 14px;
-        }
-        .step-no {
-          width: 32px;
-          height: 32px;
-          border-radius: 12px;
-          display: grid;
-          place-items: center;
-          background: ${PALETTE.coral};
-          color: #fff;
-          font-size: 16px;
-          font-weight: 900;
-          margin-bottom: 12px;
-        }
-        .step-title {
-          font-size: 17px;
-          font-weight: 900;
-          color: ${PALETTE.slate};
-          margin-bottom: 8px;
-        }
-        .step-text {
-          margin: 0;
-          color: ${PALETTE.softText};
-          font-size: 14px;
-          line-height: 1.6;
         }
         .section { padding: 0 0 16px; }
         .section-head {
@@ -662,6 +601,41 @@ export default function App() {
           overflow: hidden;
         }
         .post-panel-inner { padding: 24px; }
+        .post-form-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+          margin-bottom: 14px;
+        }
+        .post-field {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .post-field.full { grid-column: 1 / -1; }
+        .post-field label {
+          font-size: 13px;
+          font-weight: 800;
+          color: ${PALETTE.slate};
+        }
+        .post-field input, .post-field select, .post-field textarea {
+          width: 100%;
+          border-radius: 14px;
+          border: 1px solid rgba(60,74,95,0.14);
+          background: #fff;
+          padding: 14px 14px;
+          font-size: 14px;
+          color: ${PALETTE.text};
+          outline: none;
+          resize: vertical;
+          font-family: inherit;
+        }
+        .post-field textarea { min-height: 110px; }
+        .post-field input:focus, .post-field select:focus, .post-field textarea:focus {
+          border-color: ${PALETTE.coral};
+          box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
+        }
+
         .post-title {
           margin: 0 0 8px;
           font-size: 24px;
@@ -672,18 +646,24 @@ export default function App() {
         .post-desc {
           margin: 0 0 18px;
           color: ${PALETTE.softText};
-          font-size: 15px;
-          line-height: 1.6;
+          font-size: 14px;
+          line-height: 1.55;
         }
         .check-row {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
           font-weight: 800;
           color: ${PALETTE.text};
           margin-bottom: 16px;
         }
         .check-row input { width: 18px; height: 18px; }
+        .modal-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          margin-top: 8px;
+        }
         .feature-box {
           background: ${PALETTE.warm};
           border: 1px solid rgba(228,93,80,0.14);
@@ -731,20 +711,20 @@ export default function App() {
             flex-direction: column;
           }
           .brand-wrap { width: 100%; }
-          .brand-logo { height: 44px; }
-          .topbar.small .brand-logo { height: 38px; }
+          .brand-logo { height: 60px; }
+          .topbar.small .brand-logo { height: 52px; }
           .top-actions {
             width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
           }
           .btn { width: 100%; padding: 12px 14px; }
-          .hero-card { padding: 20px; border-radius: 22px; }
-          .hero-title { font-size: 34px; }
+          .hero-card { padding: 18px; border-radius: 22px; }
+          .hero-title { font-size: 30px; }
           .hero-desc { font-size: 15px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .stat-grid { grid-template-columns: 1fr 1fr; }
-          .steps-section { padding: 14px; }
+          .post-form-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
@@ -780,8 +760,76 @@ export default function App() {
             <div className="post-panel-inner">
               <h3 className="post-title">Ücretsiz ilan ver</h3>
               <p className="post-desc">
-                İlanını ücretsiz yayınlayabilirsin. Daha fazla görünürlük istiyorsan ilanını öne çıkarabilirsin.
+                Evet, burada ilan bilgilerini doldurabileceğin alanlar da olmalıydı. Bu yüzden form yapısını ekledim.
+                Yayın akışını daha gerçekçi göstermek için temel ilan alanları artık modal içinde yer alıyor.
               </p>
+
+              <div className="post-form-grid">
+                <div className="post-field">
+                  <label>Firma adı</label>
+                  <input
+                    name="company"
+                    type="text"
+                    placeholder="Örn. Nova Organizasyon"
+                    value={formData.company}
+                    onChange={handleFormChange}
+                  />
+                </div>
+
+                <div className="post-field">
+                  <label>İlan başlığı</label>
+                  <input
+                    name="title"
+                    type="text"
+                    placeholder="Örn. Etkinlik Karşılama Elemanı"
+                    value={formData.title}
+                    onChange={handleFormChange}
+                  />
+                </div>
+
+                <div className="post-field">
+                  <label>Şehir / Konum</label>
+                  <input
+                    name="city"
+                    type="text"
+                    placeholder="Örn. İstanbul / Kadıköy"
+                    value={formData.city}
+                    onChange={handleFormChange}
+                  />
+                </div>
+
+                <div className="post-field">
+                  <label>Çalışma tipi</label>
+                  <select name="workType" value={formData.workType} onChange={handleFormChange}>
+                    {types.filter((item) => item !== "Tümü").map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="post-field full">
+                  <label>Ücret bilgisi</label>
+                  <input
+                    name="salary"
+                    type="text"
+                    placeholder="Örn. Günlük 1.500 TL + yemek"
+                    value={formData.salary}
+                    onChange={handleFormChange}
+                  />
+                </div>
+
+                <div className="post-field full">
+                  <label>İş açıklaması</label>
+                  <textarea
+                    name="description"
+                    placeholder="İşin detaylarını, saat bilgisini ve adaydan beklentilerini yaz..."
+                    value={formData.description}
+                    onChange={handleFormChange}
+                  />
+                </div>
+              </div>
 
               <label className="check-row">
                 <input
@@ -808,6 +856,15 @@ export default function App() {
                   </a>
                 </div>
               )}
+
+              <div className="modal-actions">
+                <button className="btn btn-primary" type="button">
+                  İlanı Önizle
+                </button>
+                <button className="btn btn-secondary" type="button" onClick={() => setShowForm(false)}>
+                  Kapat
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -893,7 +950,7 @@ export default function App() {
                 <div className="trust-card">
                   <div className="trust-title">İlk bakışta daha net</div>
                   <p className="trust-text">
-                    Ana mesaj daha kısa bir yükseklikte görünüyor. Kullanıcı sayfaya girer girmez önce arama alanını, ardından öne çıkan ilanları görüyor.
+                    Hero alanı daha kompakt hale geldi. Kullanıcı sayfaya girer girmez önce arama alanını, ardından öne çıkan ilanları daha hızlı görüyor.
                   </p>
                 </div>
               </div>
@@ -901,23 +958,6 @@ export default function App() {
           </div>
         </section>
 
-        <section className="steps-section">
-          <div className="steps-head">
-            <div className="steps-kicker">Nasıl çalışır?</div>
-            <h2 className="steps-title">3 adımda iş bul</h2>
-            <p className="steps-sub">Hero alanının hemen altında, soldan sağa kısa akışla kullanıcı ne yapacağını anında anlar.</p>
-          </div>
-
-          <div className="steps-stack">
-            {steps.map((step) => (
-              <article key={step.id} className="step-card">
-                <div className="step-no">{step.id}</div>
-                <div className="step-title">{step.title}</div>
-                <p className="step-text">{step.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
 
         <div className="content-shell">
           <div>
