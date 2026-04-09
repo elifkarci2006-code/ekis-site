@@ -19,25 +19,25 @@ const PALETTE = {
 const featuredSeed = [
   {
     id: 1,
-    title: "Garson AranÄ±yor",
+    title: "Garson Aranıyor",
     company: "Mavi Masa Kafe",
-    location: "Ä°stanbul / KadÄ±kÃ¶y",
-    salary: "GÃ¼nlÃ¼k 1.200 TL + yemek",
-    type: "GÃ¼nlÃ¼k",
+    location: "İstanbul / Kadıköy",
+    salary: "Günlük 1.200 TL + yemek",
+    type: "Günlük",
   },
   {
     id: 2,
-    title: "Etkinlik KarÅŸÄ±lama ElemanÄ±",
+    title: "Etkinlik Karşılama Elemanı",
     company: "Nova Organizasyon",
-    location: "Ankara / Ã‡ankaya",
-    salary: "GÃ¼nlÃ¼k 1.500 TL",
+    location: "Ankara / Çankaya",
+    salary: "Günlük 1.500 TL",
     type: "Part Time",
   },
   {
     id: 3,
-    title: "Kurye AranÄ±yor",
-    company: "HÄ±zlÄ± Paket",
-    location: "Ä°zmir / Bornova",
+    title: "Kurye Aranıyor",
+    company: "Hızlı Paket",
+    location: "İzmir / Bornova",
     salary: "Saatlik 200 TL + prim",
     type: "Saatlik",
   },
@@ -46,45 +46,45 @@ const featuredSeed = [
 const jobsSeed = [
   {
     id: 11,
-    title: "Depo DÃ¼zenleme Personeli",
+    title: "Depo Düzenleme Personeli",
     company: "Anka Lojistik",
-    location: "Bursa / NilÃ¼fer",
+    location: "Bursa / Nilüfer",
     salary: "Saatlik 180 TL",
     type: "Saatlik",
     category: "Depo & Lojistik",
   },
   {
     id: 12,
-    title: "Kasiyer AranÄ±yor",
-    company: "Ã‡arÅŸÄ± Market",
-    location: "Antalya / MuratpaÅŸa",
-    salary: "GÃ¼nlÃ¼k 1.000 TL",
-    type: "GÃ¼nlÃ¼k",
-    category: "SatÄ±ÅŸ & MaÄŸaza",
+    title: "Kasiyer Aranıyor",
+    company: "Çarşı Market",
+    location: "Antalya / Muratpaşa",
+    salary: "Günlük 1.000 TL",
+    type: "Günlük",
+    category: "Satış & Mağaza",
   },
   {
     id: 13,
-    title: "Ofis Destek ElemanÄ±",
-    company: "Vera DanÄ±ÅŸmanlÄ±k",
-    location: "Ä°stanbul / ÅžiÅŸli",
+    title: "Ofis Destek Elemanı",
+    company: "Vera Danışmanlık",
+    location: "İstanbul / Şişli",
     salary: "Part Time 12.000 TL / ay",
     type: "Part Time",
-    category: "Ofis & YardÄ±mcÄ± Ä°ÅŸler",
+    category: "Ofis & Yardımcı İşler",
   },
   {
     id: 14,
     title: "Temizlik Personeli",
     company: "Temiz Nokta",
-    location: "EskiÅŸehir / OdunpazarÄ±",
-    salary: "GÃ¼nlÃ¼k 1.100 TL",
-    type: "GÃ¼nlÃ¼k",
+    location: "Eskişehir / Odunpazarı",
+    salary: "Günlük 1.100 TL",
+    type: "Günlük",
     category: "Temizlik",
   },
   {
     id: 15,
-    title: "Barista YardÄ±mcÄ±sÄ±",
-    company: "KÃ¶pÃ¼k Kahve",
-    location: "Ä°zmir / KarÅŸÄ±yaka",
+    title: "Barista Yardımcısı",
+    company: "Köpük Kahve",
+    location: "İzmir / Karşıyaka",
     salary: "Part Time 11.500 TL / ay",
     type: "Part Time",
     category: "Kafe & Restoran",
@@ -92,7 +92,7 @@ const jobsSeed = [
   {
     id: 16,
     title: "Paketleme Personeli",
-    company: "HÄ±zlÄ± Koli",
+    company: "Hızlı Koli",
     location: "Kocaeli / Gebze",
     salary: "Saatlik 175 TL",
     type: "Saatlik",
@@ -100,18 +100,18 @@ const jobsSeed = [
   },
   {
     id: 17,
-    title: "MaÄŸaza Destek Personeli",
+    title: "Mağaza Destek Personeli",
     company: "Merkez AVM Stand",
     location: "Adana / Seyhan",
-    salary: "GÃ¼nlÃ¼k 1.250 TL",
-    type: "GÃ¼nlÃ¼k",
-    category: "SatÄ±ÅŸ & MaÄŸaza",
+    salary: "Günlük 1.250 TL",
+    type: "Günlük",
+    category: "Satış & Mağaza",
   },
   {
     id: 18,
-    title: "Sosyal Medya Ä°Ã§erik YardÄ±mcÄ±sÄ±",
+    title: "Sosyal Medya İçerik Yardımcısı",
     company: "Studio Mini",
-    location: "Uzaktan / TÃ¼rkiye",
+    location: "Uzaktan / Türkiye",
     salary: "Part Time 13.000 TL / ay",
     type: "Part Time",
     category: "Freelance / Dijital",
@@ -119,46 +119,46 @@ const jobsSeed = [
 ];
 
 const categories = [
-  "TÃ¼mÃ¼",
+  "Tümü",
   "Kafe & Restoran",
-  "Kurye & DaÄŸÄ±tÄ±m",
+  "Kurye & Dağıtım",
   "Depo & Lojistik",
   "Temizlik",
   "Etkinlik & Organizasyon",
-  "SatÄ±ÅŸ & MaÄŸaza",
-  "Ofis & YardÄ±mcÄ± Ä°ÅŸler",
-  "Ä°nÅŸaat & Fiziksel Ä°ÅŸ",
+  "Satış & Mağaza",
+  "Ofis & Yardımcı İşler",
+  "İnşaat & Fiziksel İş",
   "Freelance / Dijital",
 ];
 
-const types = ["TÃ¼mÃ¼", "GÃ¼nlÃ¼k", "Saatlik", "Part Time"];
+const types = ["Tümü", "Günlük", "Saatlik", "Part Time"];
 
-const cities = ["TÃ¼mÃ¼", "Adana", "AdÄ±yaman", "Afyonkarahisar", "AÄŸrÄ±", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin", "AydÄ±n", "BalÄ±kesir", "BartÄ±n", "Batman", "Bayburt", "Bilecik", "BingÃ¶l", "Bitlis", "Bolu", "Burdur", "Bursa", "Ã‡anakkale", "Ã‡ankÄ±rÄ±", "Ã‡orum", "Denizli", "DiyarbakÄ±r", "DÃ¼zce", "Edirne", "ElazÄ±ÄŸ", "Erzincan", "Erzurum", "EskiÅŸehir", "Gaziantep", "Giresun", "GÃ¼mÃ¼ÅŸhane", "Hakkari", "Hatay", "IÄŸdÄ±r", "Isparta", "Ä°stanbul", "Ä°zmir", "KahramanmaraÅŸ", "KarabÃ¼k", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kilis", "KÄ±rÄ±kkale", "KÄ±rklareli", "KÄ±rÅŸehir", "Kocaeli", "Konya", "KÃ¼tahya", "Malatya", "Manisa", "Mardin", "Mersin", "MuÄŸla", "MuÅŸ", "NevÅŸehir", "NiÄŸde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "ÅžanlÄ±urfa", "ÅžÄ±rnak", "TekirdaÄŸ", "Tokat", "Trabzon", "Tunceli", "UÅŸak", "Van", "Yalova", "Yozgat", "Zonguldak"];
+const cities = ["Tümü", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin", "Aydın", "Balıkesir", "Bartın", "Batman", "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Düzce", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Iğdır", "Isparta", "İstanbul", "İzmir", "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kırıkkale", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Şanlıurfa", "Şırnak", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak"];
 
 const stats = [
   { value: "1.200+", label: "aktif aday" },
-  { value: "320+", label: "yayÄ±ndaki ilan" },
-  { value: "81", label: "bugÃ¼n yeni baÅŸvuru" },
-  { value: "TÃ¼rkiye", label: "geneli kapsama" },
+  { value: "320+", label: "yayındaki ilan" },
+  { value: "81", label: "bugün yeni başvuru" },
+  { value: "Türkiye", label: "geneli kapsama" },
 ];
 
 
 export default function App() {
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("TÃ¼mÃ¼");
-  const [jobType, setJobType] = useState("TÃ¼mÃ¼");
-  const [city, setCity] = useState("TÃ¼mÃ¼");
+  const [category, setCategory] = useState("Tümü");
+  const [jobType, setJobType] = useState("Tümü");
+  const [city, setCity] = useState("Tümü");
   const [submittedSearch, setSubmittedSearch] = useState("");
-  const [submittedCategory, setSubmittedCategory] = useState("TÃ¼mÃ¼");
-  const [submittedJobType, setSubmittedJobType] = useState("TÃ¼mÃ¼");
-  const [submittedCity, setSubmittedCity] = useState("TÃ¼mÃ¼");
+  const [submittedCategory, setSubmittedCategory] = useState("Tümü");
+  const [submittedJobType, setSubmittedJobType] = useState("Tümü");
+  const [submittedCity, setSubmittedCity] = useState("Tümü");
   const [showForm, setShowForm] = useState(false);
   const [featuredChecked, setFeaturedChecked] = useState(false);
   const [formData, setFormData] = useState({
     company: "",
     title: "",
     city: "",
-    workType: "GÃ¼nlÃ¼k",
+    workType: "Günlük",
     salary: "",
     description: "",
   });
@@ -187,7 +187,7 @@ export default function App() {
         company: "",
         title: "",
         city: "",
-        workType: "GÃ¼nlÃ¼k",
+        workType: "Günlük",
         salary: "",
         description: "",
       });
@@ -210,10 +210,10 @@ export default function App() {
     return jobsSeed.filter((job) => {
       const text = `${job.title} ${job.company} ${job.location} ${job.category}`.toLowerCase();
       const matchesSearch = text.includes(submittedSearch.toLowerCase());
-      const matchesCategory = submittedCategory === "TÃ¼mÃ¼" ? true : job.category === submittedCategory;
-      const matchesType = submittedJobType === "TÃ¼mÃ¼" ? true : job.type === submittedJobType;
+      const matchesCategory = submittedCategory === "Tümü" ? true : job.category === submittedCategory;
+      const matchesType = submittedJobType === "Tümü" ? true : job.type === submittedJobType;
       const matchesCity =
-        submittedCity === "TÃ¼mÃ¼"
+        submittedCity === "Tümü"
           ? true
           : job.location.toLocaleLowerCase("tr-TR").includes(submittedCity.toLocaleLowerCase("tr-TR"));
       return matchesSearch && matchesCategory && matchesType && matchesCity;
@@ -388,25 +388,21 @@ export default function App() {
           filter: saturate(1.04);
         }
         .hero {
-          padding: 0;
+          padding: 4px 0 6px;
         }
         .hero-card {
-          padding: 10px 14px;
-          border-radius: 18px;
-          margin-bottom: 8px;
-          box-shadow: 0 6px 12px rgba(60,74,95,0.04);
-        };
+          background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 24px;
-          box-shadow: 0 12px 24px rgba(60,74,95,0.06);
-          padding: 14px 18px;
-          margin-bottom: 12px;
+          border-radius: 28px;
+          box-shadow: 0 18px 34px rgba(60,74,95,0.07);
+          padding: 20px 24px;
+          margin-bottom: 14px;
         }
         .hero-grid {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 10px;
+          display: grid;
+          grid-template-columns: 1.25fr 0.75fr;
+          gap: 12px;
+          align-items: start;
         }
         .badge {
           display: inline-flex;
@@ -414,50 +410,40 @@ export default function App() {
           gap: 8px;
           background: ${PALETTE.warm};
           color: ${PALETTE.coral};
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 900;
-          padding: 6px 10px;
+          padding: 8px 12px;
           border-radius: 999px;
           border: 1px solid rgba(228,93,80,0.16);
         }
         .hero-title {
-          margin: 0;
-          font-size: 20px;
-          line-height: 1.1;
-        };
-          max-width: 760px;
+          margin: 8px 0 6px;
+          font-size: clamp(24px, 3.4vw, 38px);
+          line-height: 1.02;
+          letter-spacing: -0.045em;
+          font-weight: 900;
+          color: ${PALETTE.slate};
+          max-width: 680px;
         }
         .hero-title strong { color: ${PALETTE.coral}; }
         .hero-desc {
-          display: none;
-        };
-          font-size: 13px;
-          line-height: 1.45;
+          margin: 0;
+          max-width: 680px;
+          color: ${PALETTE.softText};
+          font-size: 14px;
+          line-height: 1.55;
         }
         .hero-cta {
-          margin-top: 6px;
-        }
-        .hero-micro {
-          margin: 4px 0 0;
-          font-size: 12px;
-          color: ${PALETTE.softText};
-          font-weight: 700;
-        }
-        .job-urgency {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          margin: 0 0 10px;
-          padding: 5px 8px;
-          border-radius: 999px;
-          font-size: 11px;
-          font-weight: 800;
-          color: ${PALETTE.coral};
-          background: rgba(228,93,80,0.08);
-          border: 1px solid rgba(228,93,80,0.14);
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 10px;
         }
         .hero-points {
-          display: none;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 10px;
         }
         .hero-point {
           padding: 7px 10px;
@@ -468,33 +454,40 @@ export default function App() {
           font-size: 14px;
           font-weight: 800;
         }
-        .hero-side { display:none; }
+        .hero-side {
+          display: grid;
+          gap: 8px;
+        }
         .stat-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 6px;
+          gap: 8px;
         }
         .stat-card {
           background: linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 16px;
-          padding: 9px 10px;
-          box-shadow: 0 8px 16px rgba(60,74,95,0.04);
+          border-radius: 18px;
+          padding: 12px 14px;
+          box-shadow: 0 12px 22px rgba(60,74,95,0.05);
         }
         .stat-value {
-          font-size: 16px;
+          font-size: 20px;
           font-weight: 900;
           letter-spacing: -0.04em;
           color: ${PALETTE.slate};
-          margin-bottom: 4px;
+          margin-bottom: 6px;
         }
         .stat-label {
           color: ${PALETTE.softText};
-          font-size: 12px;
+          font-size: 14px;
           font-weight: 700;
         }
         .trust-card {
-          display: none;
+          border-radius: 18px;
+          padding: 14px;
+          background: linear-gradient(135deg, ${PALETTE.slate} 0%, #50617a 100%);
+          color: #fff;
+          box-shadow: 0 22px 38px rgba(60,74,95,0.18);
         }
         .trust-title {
           font-size: 16px;
@@ -529,6 +522,7 @@ export default function App() {
           display: inline-flex;
           align-items: center;
           gap: 10px;
+          color: #fff;
         }
         .section-title-vitrin::before {
           content: "";
@@ -623,6 +617,18 @@ export default function App() {
           color: ${PALETTE.text};
           font-weight: 800;
           margin-bottom: 10px;
+        }
+        .job-urgency {
+          display: inline-flex;
+          align-items: center;
+          margin: 0 0 10px;
+          padding: 5px 8px;
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 800;
+          color: ${PALETTE.coral};
+          background: rgba(228,93,80,0.08);
+          border: 1px solid rgba(228,93,80,0.14);
         }
         .job-location {
           color: ${PALETTE.softText};
@@ -798,12 +804,7 @@ export default function App() {
         .footer-space { height: 42px; }
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
-          .hero-grid {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 10px;
-        }
+          .hero-grid { grid-template-columns: 1fr; }
           .steps-stack { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -830,20 +831,9 @@ export default function App() {
             grid-template-columns: 1fr 1fr;
           }
           .btn { width: 100%; padding: 12px 14px; }
-          .hero-card {
-          padding: 10px 14px;
-          border-radius: 18px;
-          margin-bottom: 8px;
-          box-shadow: 0 6px 12px rgba(60,74,95,0.04);
-        }
-          .hero-title {
-          margin: 0;
-          font-size: 20px;
-          line-height: 1.1;
-        }
-          .hero-desc {
-          display: none;
-        }
+          .hero-card { padding: 18px; border-radius: 22px; }
+          .hero-title { font-size: 30px; }
+          .hero-desc { font-size: 15px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .stat-grid { grid-template-columns: 1fr 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
@@ -857,7 +847,7 @@ export default function App() {
               <img
                 className="brand-logo"
                 src={logoSrc}
-                alt="EkiÅŸ logo"
+                alt="Ekiş logo"
                 onError={() => {
                   if (logoSrc !== "/logo-ekis.png") setLogoSrc("/logo-ekis.png");
                 }}
@@ -867,10 +857,10 @@ export default function App() {
 
           <div className="top-actions">
             <button className="btn btn-primary" onClick={() => setShowForm(true)}>
-              Ãœcretsiz Ä°lan Ver
+              Ücretsiz İlan Ver
             </button>
             <a className="btn btn-secondary" href="#ilanlar">
-              Hemen Ä°ÅŸ Bul
+              Hemen İş Bul
             </a>
           </div>
         </div>
@@ -880,50 +870,50 @@ export default function App() {
         <div className="post-modal-backdrop" onClick={() => setShowForm(false)}>
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-panel-inner">
-              <h3 className="post-title">Ãœcretsiz ilan ver</h3>
+              <h3 className="post-title">Ücretsiz ilan ver</h3>
               <p className="post-desc">
-                Evet, burada ilan bilgilerini doldurabileceÄŸin alanlar da olmalÄ±ydÄ±. Bu yÃ¼zden form yapÄ±sÄ±nÄ± ekledim.
-                YayÄ±n akÄ±ÅŸÄ±nÄ± daha gerÃ§ekÃ§i gÃ¶stermek iÃ§in temel ilan alanlarÄ± artÄ±k modal iÃ§inde yer alÄ±yor.
+                Evet, burada ilan bilgilerini doldurabileceğin alanlar da olmalıydı. Bu yüzden form yapısını ekledim.
+                Yayın akışını daha gerçekçi göstermek için temel ilan alanları artık modal içinde yer alıyor.
               </p>
 
               <div className="post-form-grid">
                 <div className="post-field">
-                  <label>Firma adÄ±</label>
+                  <label>Firma adı</label>
                   <input
                     name="company"
                     type="text"
-                    placeholder="Ã–rn. Nova Organizasyon"
+                    placeholder="Örn. Nova Organizasyon"
                     value={formData.company}
                     onChange={handleFormChange}
                   />
                 </div>
 
                 <div className="post-field">
-                  <label>Ä°lan baÅŸlÄ±ÄŸÄ±</label>
+                  <label>İlan başlığı</label>
                   <input
                     name="title"
                     type="text"
-                    placeholder="Ã–rn. Etkinlik KarÅŸÄ±lama ElemanÄ±"
+                    placeholder="Örn. Etkinlik Karşılama Elemanı"
                     value={formData.title}
                     onChange={handleFormChange}
                   />
                 </div>
 
                 <div className="post-field">
-                  <label>Åžehir / Konum</label>
+                  <label>Şehir / Konum</label>
                   <input
                     name="city"
                     type="text"
-                    placeholder="Ã–rn. Ä°stanbul / KadÄ±kÃ¶y"
+                    placeholder="Örn. İstanbul / Kadıköy"
                     value={formData.city}
                     onChange={handleFormChange}
                   />
                 </div>
 
                 <div className="post-field">
-                  <label>Ã‡alÄ±ÅŸma tipi</label>
+                  <label>Çalışma tipi</label>
                   <select name="workType" value={formData.workType} onChange={handleFormChange}>
-                    {types.filter((item) => item !== "TÃ¼mÃ¼").map((item) => (
+                    {types.filter((item) => item !== "Tümü").map((item) => (
                       <option key={item} value={item}>
                         {item}
                       </option>
@@ -932,21 +922,21 @@ export default function App() {
                 </div>
 
                 <div className="post-field full">
-                  <label>Ãœcret bilgisi</label>
+                  <label>Ücret bilgisi</label>
                   <input
                     name="salary"
                     type="text"
-                    placeholder="Ã–rn. GÃ¼nlÃ¼k 1.500 TL + yemek"
+                    placeholder="Örn. Günlük 1.500 TL + yemek"
                     value={formData.salary}
                     onChange={handleFormChange}
                   />
                 </div>
 
                 <div className="post-field full">
-                  <label>Ä°ÅŸ aÃ§Ä±klamasÄ±</label>
+                  <label>İş açıklaması</label>
                   <textarea
                     name="description"
-                    placeholder="Ä°ÅŸin detaylarÄ±nÄ±, saat bilgisini ve adaydan beklentilerini yaz..."
+                    placeholder="İşin detaylarını, saat bilgisini ve adaydan beklentilerini yaz..."
                     value={formData.description}
                     onChange={handleFormChange}
                   />
@@ -959,14 +949,14 @@ export default function App() {
                   checked={featuredChecked}
                   onChange={(e) => setFeaturedChecked(e.target.checked)}
                 />
-                Ä°lanÄ± Ã¶ne Ã§Ä±kar
+                İlanı öne çıkar
               </label>
 
               {featuredChecked && (
                 <div className="feature-box">
-                  <div className="feature-box-title">Ã–ne Ã§Ä±karma baÄŸlantÄ±sÄ±</div>
+                  <div className="feature-box-title">Öne çıkarma bağlantısı</div>
                   <p className="feature-box-text">
-                    Ä°lanÄ±nÄ± ana vitrinde gÃ¶stermek iÃ§in aÅŸaÄŸÄ±daki baÄŸlantÄ±dan Ã¶deme adÄ±mÄ±na geÃ§ebilirsin.
+                    İlanını ana vitrinde göstermek için aşağıdaki bağlantıdan ödeme adımına geçebilirsin.
                   </p>
                   <a
                     className="feature-link"
@@ -974,14 +964,14 @@ export default function App() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Shopify Ã¶deme baÄŸlantÄ±sÄ±na git
+                    Shopify ödeme bağlantısına git
                   </a>
                 </div>
               )}
 
               <div className="modal-actions">
                 <button className="btn btn-primary" type="button">
-                  Ä°lanÄ± Ã–nizle
+                  İlanı Önizle
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={() => setShowForm(false)}>
                   Kapat
@@ -997,17 +987,17 @@ export default function App() {
           <div className="filter-wrap">
             <div className="filter-grid">
               <div className="field">
-                <label>Ä°lanlarda ara</label>
+                <label>İlanlarda ara</label>
                 <input
                   type="text"
-                  placeholder="Ne iÅŸ arÄ±yorsun? (garson, kuryeâ€¦)"
+                  placeholder="Ne iş arıyorsun? (garson, kurye…)"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
 
               <div className="field">
-                <label>Åžehir seÃ§</label>
+                <label>Şehir seç</label>
                 <select value={city} onChange={(e) => setCity(e.target.value)}>
                   {cities.map((item) => (
                     <option key={item} value={item}>
@@ -1018,7 +1008,7 @@ export default function App() {
               </div>
 
               <div className="field">
-                <label>Meslek seÃ§</label>
+                <label>Meslek seç</label>
                 <select value={category} onChange={(e) => setCategory(e.target.value)}>
                   {categories.map((item) => (
                     <option key={item} value={item}>
@@ -1029,7 +1019,7 @@ export default function App() {
               </div>
 
               <div className="field">
-                <label>Ã‡alÄ±ÅŸma tipi seÃ§</label>
+                <label>Çalışma tipi seç</label>
                 <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
                   {types.map((item) => (
                     <option key={item} value={item}>
@@ -1052,13 +1042,12 @@ export default function App() {
           <div className="hero-card">
             <div className="hero-grid">
               <div>
-                <div className="badge">HÄ±zlÄ± baÅŸvuru â€¢ net filtreleme â€¢ TÃ¼rkiye geneli</div>
                 <h1 className="hero-title">
-      GÃ¼nlÃ¼k, saatlik ve part time iÅŸleri kolayca keÅŸfet.
-    </h1>
+                  Günlük, saatlik ve part time işleri kolayca keşfet.
+                </h1>
                 <p className="hero-desc">
-                  Åžehrine uygun ek iÅŸi hÄ±zlÄ±ca keÅŸfet. Sade arama alanÄ±yla ilanlarÄ± filtrele,
-                  Ã¶ne Ã§Ä±kan fÄ±rsatlarÄ± incele ve sana uyan iÅŸi daha hÄ±zlÄ± bul.
+                  Şehrine uygun ek işi hızlıca keşfet. Sade arama alanıyla ilanları filtrele,
+                  öne çıkan fırsatları incele ve sana uyan işi daha hızlı bul.
                 </p>
 
 
@@ -1075,9 +1064,9 @@ export default function App() {
                 </div>
 
                 <div className="trust-card">
-                  <div className="trust-title">Ä°lk bakÄ±ÅŸta daha net</div>
+                  <div className="trust-title">İlk bakışta daha net</div>
                   <p className="trust-text">
-                    Hero alanÄ± daha kompakt hale geldi. KullanÄ±cÄ± sayfaya girer girmez Ã¶nce arama alanÄ±nÄ±, ardÄ±ndan Ã¶ne Ã§Ä±kan ilanlarÄ± daha hÄ±zlÄ± gÃ¶rÃ¼yor.
+                    Hero alanı daha kompakt hale geldi. Kullanıcı sayfaya girer girmez önce arama alanını, ardından öne çıkan ilanları daha hızlı görüyor.
                   </p>
                 </div>
               </div>
@@ -1097,8 +1086,9 @@ export default function App() {
               <div className="featured-grid">
                 {featuredSeed.map((job) => (
                   <article key={job.id} className="featured-card">
-                    <div className="pill">Ã–ne Ã‡Ä±kan</div>
+                    <div className="pill">Öne Çıkan</div>
                     <h3 className="job-title">{job.title}</h3>
+                    <div className="job-urgency">Hızlı doluyor</div>
                     <div className="job-company">{job.company}</div>
                     <div className="job-location">{job.location}</div>
                     <div className="job-salary">{job.salary}</div>
@@ -1109,19 +1099,19 @@ export default function App() {
 
             <section className="section">
               <div className="section-head">
-                <h2 className="section-title">TÃ¼m ilanlar</h2>
+                <h2 className="section-title">Tüm ilanlar</h2>
                 <div className="section-sub">{filteredJobs.length} ilan bulundu</div>
               </div>
 
               {filteredJobs.length === 0 ? (
-                <div className="empty-box">Aramana uygun ilan bulunamadÄ±.</div>
+                <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
               ) : (
                 <div className="jobs-grid">
                   {filteredJobs.map((job) => (
                     <article key={job.id} className="job-card">
                       <div className="type-tag">{job.type}</div>
                       <h3 className="job-title">{job.title}</h3>
-                      <div className="job-urgency">âš¡ HÄ±zlÄ± doluyor</div>
+                      <div className="job-urgency">Hızlı doluyor</div>
                       <div className="job-company">{job.company}</div>
                       <div className="job-location">{job.location}</div>
                       <div className="job-location">{job.category}</div>
