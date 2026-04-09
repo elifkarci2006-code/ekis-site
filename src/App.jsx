@@ -236,18 +236,19 @@ export default function App() {
           margin: 0 auto;
         }
         .topbar {
-          transition: transform 0.28s ease, opacity 0.28s ease;
           position: sticky;
           top: 0;
           z-index: 50;
-          backdrop-filter: blur(16px);
-          background: rgba(255,255,255,0.88);
-          border-bottom: 1px solid rgba(60,74,95,0.08);
-          transition: background 0.2s ease, box-shadow 0.2s ease;
+          background: transparent;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          border-bottom: none;
+          box-shadow: none;
+          transition: none;
         }
-
         .topbar.small {
-          box-shadow: 0 10px 26px rgba(60,74,95,0.08);
+          background: transparent;
+          box-shadow: none;
         }
         .topbar-inner {
           min-height: 92px;
@@ -272,13 +273,13 @@ export default function App() {
           margin: 0;
         }
         .brand-logo {
-          height: 74px;
+          height: 92px;
           width: auto;
           display: block;
           object-fit: contain;
           transition: height 0.22s ease;
         }
-        .topbar.small .brand-logo { height: 60px; }
+        .topbar.small .brand-logo { height: 78px; }
         .top-actions {
           display: flex;
           align-items: center;
@@ -753,8 +754,8 @@ export default function App() {
             flex-direction: column;
           }
           .brand-wrap { width: 100%; }
-          .brand-logo { height: 78px; }
-          .topbar.small .brand-logo { height: 60px; }
+          .brand-logo { height: 92px; }
+          .topbar.small .brand-logo { height: 78px; }
           .top-actions {
             width: 100%;
             display: grid;
