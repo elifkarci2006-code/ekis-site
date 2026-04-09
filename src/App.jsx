@@ -324,7 +324,7 @@ export default function App() {
           padding: 14px 0 12px;
         }
         .filter-wrap {
-          background: ${PALETTE.teal
+          background: ${PALETTE.teal};
           border: 1px solid rgba(60,74,95,0.08);
           border-radius: 24px;
           padding: 16px;
@@ -390,28 +390,8 @@ export default function App() {
         .hero {
           padding: 4px 0 6px;
         }
-        
-.hero-stats-inline {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 6px;
-}
-.hero-stat-bubble {
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(60,74,95,0.06);
-  font-size: 12px;
-  font-weight: 800;
-  color: #3C4A5F;
-  border: 1px solid rgba(60,74,95,0.08);
-}
-
-.hero-card {
-  padding: 12px 16px;
-  border-radius: 20px;
-  margin-bottom: 8px;
-
+        .hero-card {
+          background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
           border-radius: 28px;
           box-shadow: 0 18px 34px rgba(60,74,95,0.07);
@@ -419,10 +399,11 @@ export default function App() {
           margin-bottom: 14px;
         }
         .hero-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+          display: grid;
+          grid-template-columns: 1.25fr 0.75fr;
+          gap: 12px;
+          align-items: start;
+        }
         .badge {
           display: inline-flex;
           align-items: center;
@@ -445,7 +426,10 @@ export default function App() {
           max-width: 680px;
         }
         .hero-title strong { color: ${PALETTE.coral}; }
-        .hero-desc { display:none; };
+        .hero-desc {
+          margin: 0;
+          max-width: 680px;
+          color: ${PALETTE.softText};
           font-size: 14px;
           line-height: 1.55;
         }
@@ -464,13 +448,16 @@ export default function App() {
         .hero-point {
           padding: 7px 10px;
           border-radius: 14px;
-          background: ${PALETTE.bg
+          background: ${PALETTE.bg};
           border: 1px solid rgba(60,74,95,0.08);
           color: ${PALETTE.slate};
           font-size: 14px;
           font-weight: 800;
         }
-        .hero-side { display:none; }
+        .hero-side {
+          display: grid;
+          gap: 8px;
+        }
         .stat-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -563,7 +550,7 @@ export default function App() {
         }
 
         .featured-section {
-          background: ${PALETTE.coral
+          background: ${PALETTE.coral};
           border-radius: 36px;
           padding: 34px 26px 30px;
           margin-bottom: 28px;
@@ -626,17 +613,20 @@ export default function App() {
           letter-spacing: -0.03em;
           color: ${PALETTE.slate};
         }
-        .job-days {
-  font-size: 12px;
-  color: #999;
-  margin-bottom: 6px;
-}
-.job-company {
+        .job-company {
           color: ${PALETTE.text};
           font-weight: 800;
           margin-bottom: 10px;
         }
-        ;
+        .job-urgency {
+          display: inline-flex;
+          align-items: center;
+          margin: 0 0 10px;
+          padding: 5px 8px;
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 800;
+          color: ${PALETTE.coral};
           background: rgba(228,93,80,0.08);
           border: 1px solid rgba(228,93,80,0.14);
         }
@@ -782,7 +772,7 @@ export default function App() {
           margin-top: 8px;
         }
         .feature-box {
-          background: ${PALETTE.warm
+          background: ${PALETTE.warm};
           border: 1px solid rgba(228,93,80,0.14);
           border-radius: 18px;
           padding: 16px;
@@ -811,20 +801,176 @@ export default function App() {
           font-size: 14px;
           font-weight: 900;
         }
-        .footer-space { height: 42px; }
+
+        .site-footer {
+          margin-top: 34px;
+          border-radius: 34px 34px 0 0;
+          overflow: hidden;
+          background: #2F3949;
+          color: rgba(255,255,255,0.92);
+          box-shadow: 0 -10px 30px rgba(35,48,68,0.08);
+        }
+        .site-footer-topline {
+          height: 12px;
+          background: linear-gradient(90deg, ${PALETTE.coral} 0%, #f25b7a 100%);
+        }
+        .site-footer-inner {
+          padding: 34px 28px 20px;
+        }
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
+          gap: 28px;
+          align-items: start;
+        }
+        .footer-brand {
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+        }
+        .footer-logo {
+          width: 126px;
+          height: auto;
+          display: block;
+          object-fit: contain;
+          filter: brightness(0) invert(1);
+          opacity: 0.98;
+        }
+        .footer-brand-text {
+          max-width: 290px;
+          color: rgba(255,255,255,0.76);
+          font-size: 14px;
+          line-height: 1.7;
+          margin: 0;
+        }
+        .footer-subheading {
+          font-size: 16px;
+          font-weight: 900;
+          color: #fff;
+          margin: 0 0 12px;
+        }
+        .footer-links {
+          display: grid;
+          gap: 10px;
+        }
+        .footer-link {
+          color: rgba(255,255,255,0.82);
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 700;
+          transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+        .footer-link:hover {
+          opacity: 1;
+          transform: translateX(2px);
+        }
+        .footer-socials {
+          display: flex;
+          gap: 10px;
+          margin-bottom: 18px;
+        }
+        .footer-social {
+          width: 42px;
+          height: 42px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.10);
+          border: 1px solid rgba(255,255,255,0.12);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          text-decoration: none;
+          font-size: 16px;
+          font-weight: 900;
+        }
+        .footer-boxes {
+          display: grid;
+          gap: 12px;
+          margin-top: 8px;
+        }
+        .footer-app-box {
+          border: 1px solid rgba(255,255,255,0.18);
+          border-radius: 16px;
+          padding: 12px 14px;
+          color: #fff;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background: rgba(255,255,255,0.04);
+        }
+        .footer-app-icon {
+          width: 34px;
+          height: 34px;
+          border-radius: 10px;
+          background: rgba(255,255,255,0.12);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 15px;
+          font-weight: 900;
+          flex-shrink: 0;
+        }
+        .footer-app-text {
+          display: flex;
+          flex-direction: column;
+          line-height: 1.2;
+        }
+        .footer-app-text strong {
+          font-size: 15px;
+        }
+        .footer-app-text span {
+          font-size: 12px;
+          color: rgba(255,255,255,0.72);
+        }
+        .footer-bottom {
+          margin-top: 24px;
+          padding-top: 16px;
+          border-top: 1px solid rgba(255,255,255,0.10);
+          display: flex;
+          justify-content: space-between;
+          gap: 18px;
+          flex-wrap: wrap;
+          align-items: center;
+        }
+        .footer-bottom-links {
+          display: flex;
+          gap: 18px;
+          flex-wrap: wrap;
+        }
+        .footer-bottom-link,
+        .footer-copy {
+          color: rgba(255,255,255,0.62);
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 700;
+        }
+
+        .footer-space { height: 0; }
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
-          .hero-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+          .hero-grid { grid-template-columns: 1fr; }
           .steps-stack { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 760px) {
           .container { width: min(100% - 20px, 1240px); }
+
+          .site-footer {
+            border-radius: 24px 24px 0 0;
+          }
+          .site-footer-inner {
+            padding: 24px 16px 18px;
+          }
+          .footer-grid {
+            grid-template-columns: 1fr;
+            gap: 22px;
+          }
+          .footer-bottom {
+            gap: 12px;
+          }
+
 
           .featured-section {
             border-radius: 28px;
@@ -845,85 +991,14 @@ export default function App() {
             grid-template-columns: 1fr 1fr;
           }
           .btn { width: 100%; padding: 12px 14px; }
-          
-.hero-stats-inline {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 6px;
-}
-.hero-stat-bubble {
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(60,74,95,0.06);
-  font-size: 12px;
-  font-weight: 800;
-  color: #3C4A5F;
-  border: 1px solid rgba(60,74,95,0.08);
-}
-
-.hero-card {
-  padding: 12px 16px;
-  border-radius: 20px;
-  margin-bottom: 8px;
-}
+          .hero-card { padding: 18px; border-radius: 22px; }
           .hero-title { font-size: 30px; }
-          .hero-desc { display:none; }
+          .hero-desc { font-size: 15px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .stat-grid { grid-template-columns: 1fr 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
         }
-      `}
-.site-footer {
-  margin-top: 40px;
-  background: #2F3949;
-  color: #fff;
-  border-radius: 24px 24px 0 0;
-}
-.footer-topline {
-  height: 6px;
-  background: #E45D50;
-}
-.footer-inner {
-  padding: 24px;
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 30px;
-}
-.footer-logo {
-  width: 120px;
-  filter: brightness(0) invert(1);
-  margin-bottom: 10px;
-}
-.footer-grid a {
-  display: block;
-  margin-top: 6px;
-  color: rgba(255,255,255,0.8);
-  text-decoration: none;
-  font-size: 14px;
-}
-.footer-socials {
-  display: flex;
-  gap: 10px;
-}
-.social {
-  width: 36px;
-  height: 36px;
-  background: rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-}
-.footer-bottom {
-  margin-top: 20px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-}
-
-</style>
+      `}</style>
 
       <header className={`topbar ${headerSmall ? "small" : ""}`} style={{ opacity: headerOpacity }}>
         <div className="container topbar-inner">
@@ -1130,12 +1205,6 @@ export default function App() {
                 <h1 className="hero-title">
                   Günlük, saatlik ve part time işleri kolayca keşfet.
                 </h1>
-<div className="hero-stats-inline">
-  <div className="hero-stat-bubble">1.200+ aktif aday</div>
-  <div className="hero-stat-bubble">320+ ilan</div>
-  <div className="hero-stat-bubble">81 bugün başvuru</div>
-  <div className="hero-stat-bubble">Türkiye geneli</div>
-</div>
                 <p className="hero-desc">
                   Şehrine uygun ek işi hızlıca keşfet. Sade arama alanıyla ilanları filtrele,
                   öne çıkan fırsatları incele ve sana uyan işi daha hızlı bul.
@@ -1179,8 +1248,7 @@ export default function App() {
                   <article key={job.id} className="featured-card">
                     <div className="pill">Öne Çıkan</div>
                     <h3 className="job-title">{job.title}</h3>
-<div className="job-days">{Math.floor(Math.random()*3)+1} gündür yayında</div>
-                    
+                    <div className="job-urgency">Hızlı doluyor</div>
                     <div className="job-company">{job.company}</div>
                     <div className="job-location">{job.location}</div>
                     <div className="job-salary">{job.salary}</div>
@@ -1203,8 +1271,7 @@ export default function App() {
                     <article key={job.id} className="job-card">
                       <div className="type-tag">{job.type}</div>
                       <h3 className="job-title">{job.title}</h3>
-<div className="job-days">{Math.floor(Math.random()*3)+1} gündür yayında</div>
-                      
+                      <div className="job-urgency">Hızlı doluyor</div>
                       <div className="job-company">{job.company}</div>
                       <div className="job-location">{job.location}</div>
                       <div className="job-location">{job.category}</div>
@@ -1217,39 +1284,85 @@ export default function App() {
           </div>
         </div>
 
-        
-<footer className="site-footer">
-  <div className="footer-topline"></div>
-  <div className="footer-inner">
-    <div className="footer-grid">
-      <div className="footer-brand">
-        <img src={logoSrc} className="footer-logo" />
-        <p>Günlük ve saatlik iş fırsatlarını tek yerde buluşturan sade platform.</p>
-      </div>
-      <div>
-        <h4>İş Arayan</h4>
-        <a href="#ilanlar">İlanları keşfet</a>
-        <a href="#one-cikanlar">Vitrin ilanlar</a>
-      </div>
-      <div>
-        <h4>İşveren</h4>
-        <a href="#" onClick={(e)=>{e.preventDefault(); setShowForm(true);}}>İlan ver</a>
-        <a href="#">Vitrine çıkar</a>
-      </div>
-      <div>
-        <h4>Sosyal</h4>
-        <div className="footer-socials">
-          <div className="social">ig</div>
-          <div className="social">x</div>
-          <div className="social">tt</div>
-        </div>
-      </div>
-    </div>
-    <div className="footer-bottom">
-      <span>© 2026 Ekiş</span>
-    </div>
-  </div>
-</footer>
+
+        <footer className="site-footer">
+          <div className="site-footer-topline" />
+          <div className="site-footer-inner">
+            <div className="footer-grid">
+              <div className="footer-brand">
+                <img
+                  className="footer-logo"
+                  src={logoSrc}
+                  alt="Ekiş logo"
+                  onError={() => {
+                    if (logoSrc !== "/logo-ekis.png") setLogoSrc("/logo-ekis.png");
+                  }}
+                />
+                <p className="footer-brand-text">
+                  Günlük, saatlik ve part time iş fırsatlarını tek yerde buluşturan sade ve hızlı iş ilan platformu.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="footer-subheading">İş Arayan</h3>
+                <div className="footer-links">
+                  <a className="footer-link" href="#ilanlar">İlanları keşfet</a>
+                  <a className="footer-link" href="#one-cikanlar">Vitrin ilanlar</a>
+                  <a className="footer-link" href="#">Şehre göre işler</a>
+                  <a className="footer-link" href="#">Sık sorulanlar</a>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="footer-subheading">İşveren</h3>
+                <div className="footer-links">
+                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>Ücretsiz ilan ver</a>
+                  <a className="footer-link" href="#">Vitrine çıkar</a>
+                  <a className="footer-link" href="#">Fiyatlandırma</a>
+                  <a className="footer-link" href="#">Destek al</a>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="footer-subheading">Bizi takip et</h3>
+                <div className="footer-socials">
+                  <a className="footer-social" href="#" aria-label="Instagram">ig</a>
+                  <a className="footer-social" href="#" aria-label="X">x</a>
+                  <a className="footer-social" href="#" aria-label="TikTok">tt</a>
+                </div>
+
+                <div className="footer-boxes">
+                  <a className="footer-app-box" href="#">
+                    <span className="footer-app-icon">▶</span>
+                    <span className="footer-app-text">
+                      <strong>Mobil uygulama</strong>
+                      <span>Yakında yayında</span>
+                    </span>
+                  </a>
+                  <a className="footer-app-box" href="#">
+                    <span className="footer-app-icon">★</span>
+                    <span className="footer-app-text">
+                      <strong>İşveren paketi</strong>
+                      <span>Daha fazla görünürlük</span>
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="footer-bottom">
+              <div className="footer-bottom-links">
+                <a className="footer-bottom-link" href="#">Hakkımızda</a>
+                <a className="footer-bottom-link" href="#">Kullanım şartları</a>
+                <a className="footer-bottom-link" href="#">Gizlilik</a>
+                <a className="footer-bottom-link" href="#">İletişim</a>
+              </div>
+              <div className="footer-copy">Ekiş © 2026</div>
+            </div>
+          </div>
+        </footer>
+
+        <div className="footer-space" />
 
       </main>
     </div>
