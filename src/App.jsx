@@ -270,13 +270,13 @@ export default function App() {
           margin: 0;
         }
         .brand-logo {
-          height: 94px;
+          height: 74px;
           width: auto;
           display: block;
           object-fit: contain;
           transition: height 0.22s ease;
         }
-        .topbar.small .brand-logo { height: 76px; }
+        .topbar.small .brand-logo { height: 60px; }
         .top-actions {
           display: flex;
           align-items: center;
@@ -752,7 +752,7 @@ export default function App() {
           }
           .brand-wrap { width: 100%; }
           .brand-logo { height: 78px; }
-          .topbar.small .brand-logo { height: 68px; }
+          .topbar.small .brand-logo { height: 60px; }
           .top-actions {
             width: 100%;
             display: grid;
