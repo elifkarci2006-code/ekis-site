@@ -632,14 +632,17 @@ export default function App() {
         
         .job-meta-top {
           display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
-          gap: 10px;
+          align-items: center;
           margin-bottom: 12px;
         }
+        .job-badges {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
         .job-days {
-          margin-left: auto;
-          padding: 6px 10px;
+          padding: 5px 10px;
           border-radius: 999px;
           background: rgba(60,74,95,0.06);
           border: 1px solid rgba(60,74,95,0.08);
