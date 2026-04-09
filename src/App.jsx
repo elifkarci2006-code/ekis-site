@@ -133,6 +133,8 @@ const categories = [
 
 const types = ["Tümü", "Günlük", "Saatlik", "Part Time"];
 
+const cities = ["Tümü", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin", "Aydın", "Balıkesir", "Bartın", "Batman", "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Düzce", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Iğdır", "Isparta", "İstanbul", "İzmir", "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kırıkkale", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Şanlıurfa", "Şırnak", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak"];
+
 const stats = [
   { value: "1.200+", label: "aktif aday" },
   { value: "320+", label: "yayındaki ilan" },
@@ -145,6 +147,11 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Tümü");
   const [jobType, setJobType] = useState("Tümü");
+  const [city, setCity] = useState("Tümü");
+  const [submittedSearch, setSubmittedSearch] = useState("");
+  const [submittedCategory, setSubmittedCategory] = useState("Tümü");
+  const [submittedJobType, setSubmittedJobType] = useState("Tümü");
+  const [submittedCity, setSubmittedCity] = useState("Tümü");
   const [showForm, setShowForm] = useState(false);
   const [featuredChecked, setFeaturedChecked] = useState(false);
   const [formData, setFormData] = useState({
@@ -184,15 +191,26 @@ export default function App() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSearchSubmit = () => {
+    setSubmittedSearch(search);
+    setSubmittedCategory(category);
+    setSubmittedJobType(jobType);
+    setSubmittedCity(city);
+  };
+
   const filteredJobs = useMemo(() => {
     return jobsSeed.filter((job) => {
       const text = `${job.title} ${job.company} ${job.location} ${job.category}`.toLowerCase();
-      const matchesSearch = text.includes(search.toLowerCase());
-      const matchesCategory = category === "Tümü" ? true : job.category === category;
-      const matchesType = jobType === "Tümü" ? true : job.type === jobType;
-      return matchesSearch && matchesCategory && matchesType;
+      const matchesSearch = text.includes(submittedSearch.toLowerCase());
+      const matchesCategory = submittedCategory === "Tümü" ? true : job.category === submittedCategory;
+      const matchesType = submittedJobType === "Tümü" ? true : job.type === submittedJobType;
+      const matchesCity =
+        submittedCity === "Tümü"
+          ? true
+          : job.location.toLocaleLowerCase("tr-TR").includes(submittedCity.toLocaleLowerCase("tr-TR"));
+      return matchesSearch && matchesCategory && matchesType && matchesCity;
     });
-  }, [search, category, jobType]);
+  }, [submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
   return (
     <div className="app-shell">
@@ -252,13 +270,13 @@ export default function App() {
           margin: 0;
         }
         .brand-logo {
-          height: 76px;
+          height: 94px;
           width: auto;
           display: block;
           object-fit: contain;
           transition: height 0.22s ease;
         }
-        .topbar.small .brand-logo { height: 62px; }
+        .topbar.small .brand-logo { height: 76px; }
         .top-actions {
           display: flex;
           align-items: center;
@@ -296,7 +314,7 @@ export default function App() {
           padding: 14px 0 12px;
         }
         .filter-wrap {
-          background: ${PALETTE.white};
+          background: ${PALETTE.teal};
           border: 1px solid rgba(60,74,95,0.08);
           border-radius: 24px;
           padding: 16px;
@@ -304,7 +322,7 @@ export default function App() {
         }
         .filter-grid {
           display: grid;
-          grid-template-columns: 1.5fr 1fr 1fr;
+          grid-template-columns: 1.45fr 1fr 1fr 1fr 0.9fr;
           gap: 12px;
           align-items: end;
         }
@@ -316,7 +334,7 @@ export default function App() {
         .field label {
           font-size: 13px;
           font-weight: 800;
-          color: ${PALETTE.slate};
+          color: #fff;
           padding-left: 2px;
         }
         .field input, .field select {
@@ -334,6 +352,28 @@ export default function App() {
         .field input:focus, .field select:focus {
           border-color: ${PALETTE.coral};
           box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
+        }
+
+        .search-action {
+          display: flex;
+          align-items: end;
+        }
+        .search-btn {
+          width: 100%;
+          height: 56px;
+          border: none;
+          border-radius: 16px;
+          background: ${PALETTE.slate};
+          color: #fff;
+          font-size: 15px;
+          font-weight: 900;
+          cursor: pointer;
+          box-shadow: 0 10px 22px rgba(60,74,95,0.22);
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .search-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 14px 28px rgba(60,74,95,0.26);
         }
         .hero {
           padding: 4px 0 6px;
@@ -711,8 +751,8 @@ export default function App() {
             flex-direction: column;
           }
           .brand-wrap { width: 100%; }
-          .brand-logo { height: 60px; }
-          .topbar.small .brand-logo { height: 52px; }
+          .brand-logo { height: 78px; }
+          .topbar.small .brand-logo { height: 68px; }
           .top-actions {
             width: 100%;
             display: grid;
@@ -878,10 +918,21 @@ export default function App() {
                 <label>İlanlarda ara</label>
                 <input
                   type="text"
-                  placeholder="İş ara, firma ara, şehir ara..."
+                  placeholder="İş ara, firma ara..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
+              </div>
+
+              <div className="field">
+                <label>Şehir seç</label>
+                <select value={city} onChange={(e) => setCity(e.target.value)}>
+                  {cities.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="field">
@@ -905,6 +956,12 @@ export default function App() {
                   ))}
                 </select>
               </div>
+
+              <div className="search-action">
+                <button className="search-btn" type="button" onClick={handleSearchSubmit}>
+                  Ara
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -913,13 +970,13 @@ export default function App() {
           <div className="hero-card">
             <div className="hero-grid">
               <div>
-                <div className="badge">CV’siz • hızlı başvuru • Türkiye geneli</div>
+                <div className="badge">Hızlı başvuru • net filtreleme • Türkiye geneli</div>
                 <h1 className="hero-title">
-                  <strong>CV’siz, anında iş bul.</strong> Günlük, saatlik ve part time işler tek yerde.
+                  <strong>Günlük, saatlik ve part time işleri kolayca keşfet.</strong> Türkiye genelindeki ilanlar tek yerde.
                 </h1>
                 <p className="hero-desc">
-                  Şehrine uygun ek işi hızlıca keşfet. Karmaşık süreçlerle uğraşmadan ilanları filtrele,
-                  başvur ve hemen kazanmaya başla.
+                  Şehrine uygun ek işi hızlıca keşfet. Sade arama alanıyla ilanları filtrele,
+                  öne çıkan fırsatları incele ve sana uyan işi daha hızlı bul.
                 </p>
 
                 <div className="hero-cta">
