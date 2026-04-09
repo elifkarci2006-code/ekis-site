@@ -164,32 +164,12 @@ export default function App() {
   });
   const [logoSrc, setLogoSrc] = useState("/publiclogo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
-  const [headerHidden, setHeaderHidden] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setHeaderSmall(window.scrollY > 60);
     window.addEventListener("scroll", onScroll);
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-
-    const onScrollHide = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        setHeaderHidden(true);
-      } else {
-        setHeaderHidden(false);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    window.addEventListener("scroll", onScrollHide);
-    return () => window.removeEventListener("scroll", onScrollHide);
   }, []);
 
   useEffect(() => {
@@ -264,11 +244,6 @@ export default function App() {
           background: rgba(255,255,255,0.88);
           border-bottom: 1px solid rgba(60,74,95,0.08);
           transition: background 0.2s ease, box-shadow 0.2s ease;
-        }
-        .topbar.hidden {
-          transform: translateY(-100%);
-          opacity: 0;
-          pointer-events: none;
         }
 
         .topbar.small {
@@ -795,7 +770,7 @@ export default function App() {
         }
       `}</style>
 
-      <header className={`topbar ${headerSmall ? "small" : ""} ${headerHidden ? "hidden" : ""}`}>
+      <header className={`topbar ${headerSmall ? "small" : ""}`}>
         <div className="container topbar-inner">
           <div className="brand-wrap">
             <a className="brand-logo-link" href="#">
