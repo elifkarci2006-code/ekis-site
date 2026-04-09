@@ -97,7 +97,7 @@ const jobsSeed = [
     id: 18,
     title: "Sosyal Medya İçerik Yardımcısı",
     company: "Studio Mini",
-    location: "Eskişehir / Uzaktan",
+    location: "Uzaktan / Türkiye",
     salary: "Part Time 13.000 TL / ay",
     type: "Part Time",
     category: "Freelance / Dijital",
@@ -126,10 +126,18 @@ export default function App() {
   const [showForm, setShowForm] = useState(false);
   const [featuredChecked, setFeaturedChecked] = useState(false);
   const [logoSrc, setLogoSrc] = useState("/publiclogo-ekis.png");
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setFeaturedChecked(false);
   }, [showForm]);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 36);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const filteredJobs = useMemo(() => {
     return jobsSeed.filter((job) => {
@@ -168,18 +176,29 @@ export default function App() {
         .topbar {
           position: sticky;
           top: 0;
-          z-index: 20;
-          backdrop-filter: blur(12px);
-          background: rgba(248,250,252,0.82);
+          z-index: 30;
+          backdrop-filter: blur(14px);
+          background: rgba(248,250,252,0.85);
           border-bottom: 1px solid rgba(15,23,42,0.06);
+          transition: background 0.2s ease, box-shadow 0.2s ease, min-height 0.2s ease;
+        }
+
+        .topbar.scrolled {
+          background: rgba(255,255,255,0.9);
+          box-shadow: 0 10px 30px rgba(15,23,42,0.06);
         }
 
         .topbar-inner {
-          min-height: 84px;
+          min-height: 92px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 18px;
+          transition: min-height 0.2s ease, padding 0.2s ease;
+        }
+
+        .topbar.scrolled .topbar-inner {
+          min-height: 72px;
         }
 
         .brand-wrap {
@@ -193,25 +212,38 @@ export default function App() {
           background: #ffffff;
           border: 1px solid rgba(15,23,42,0.06);
           box-shadow: 0 10px 30px rgba(15,23,42,0.06);
-          border-radius: 20px;
-          padding: 12px 16px;
+          border-radius: 22px;
+          padding: 14px 18px;
           display: flex;
           align-items: center;
           justify-content: center;
-          min-height: 64px;
+          min-height: 72px;
+          transition: transform 0.2s ease, padding 0.2s ease, min-height 0.2s ease;
+        }
+
+        .topbar.scrolled .brand-card {
+          padding: 10px 14px;
+          min-height: 58px;
+          border-radius: 18px;
         }
 
         .brand-logo {
-          height: 46px;
+          height: 56px;
           width: auto;
           display: block;
           object-fit: contain;
+          transition: height 0.2s ease;
+        }
+
+        .topbar.scrolled .brand-logo {
+          height: 42px;
         }
 
         .brand-texts {
           display: flex;
           flex-direction: column;
           gap: 4px;
+          transition: opacity 0.18s ease, transform 0.18s ease;
         }
 
         .brand-title {
@@ -223,6 +255,10 @@ export default function App() {
         .brand-sub {
           font-size: 13px;
           color: #64748b;
+        }
+
+        .topbar.scrolled .brand-texts {
+          opacity: 0.88;
         }
 
         .top-actions {
@@ -261,21 +297,70 @@ export default function App() {
         }
 
         .hero {
-          padding: 42px 0 20px;
+          padding: 28px 0 8px;
+        }
+
+        .filter-wrap {
+          background: #fff;
+          border: 1px solid rgba(15,23,42,0.06);
+          border-radius: 24px;
+          padding: 16px;
+          box-shadow: 0 14px 30px rgba(15,23,42,0.05);
+          margin-bottom: 18px;
+        }
+
+        .filter-grid {
+          display: grid;
+          grid-template-columns: 1.5fr 1fr 1fr;
+          gap: 12px;
+          align-items: end;
+        }
+
+        .field {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .field label {
+          font-size: 13px;
+          font-weight: 800;
+          color: #475569;
+          padding-left: 2px;
+        }
+
+        .field input,
+        .field select {
+          height: 54px;
+          width: 100%;
+          border-radius: 16px;
+          border: 1px solid rgba(15,23,42,0.1);
+          background: #fff;
+          padding: 0 16px;
+          font-size: 15px;
+          color: #0f172a;
+          outline: none;
+          transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .field input:focus,
+        .field select:focus {
+          border-color: #93c5fd;
+          box-shadow: 0 0 0 4px rgba(59,130,246,0.10);
         }
 
         .hero-grid {
           display: grid;
-          grid-template-columns: 1.08fr 0.92fr;
-          gap: 26px;
+          grid-template-columns: 1.02fr 0.98fr;
+          gap: 22px;
           align-items: stretch;
         }
 
         .hero-left {
-          background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.82) 100%);
+          background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.84) 100%);
           border: 1px solid rgba(15,23,42,0.06);
           border-radius: 28px;
-          padding: 34px;
+          padding: 28px;
           box-shadow: 0 18px 40px rgba(15,23,42,0.06);
         }
 
@@ -293,19 +378,19 @@ export default function App() {
 
         .hero-title {
           margin: 16px 0 14px;
-          font-size: clamp(38px, 5vw, 64px);
+          font-size: clamp(34px, 4.4vw, 56px);
           line-height: 0.98;
           letter-spacing: -0.04em;
           font-weight: 900;
           color: #0f172a;
-          max-width: 720px;
+          max-width: 680px;
         }
 
         .hero-desc {
           margin: 0;
-          max-width: 760px;
+          max-width: 680px;
           color: #475569;
-          font-size: 18px;
+          font-size: 17px;
           line-height: 1.7;
         }
 
@@ -313,7 +398,7 @@ export default function App() {
           display: flex;
           flex-wrap: wrap;
           gap: 12px;
-          margin-top: 24px;
+          margin-top: 22px;
         }
 
         .hero-point {
@@ -330,7 +415,7 @@ export default function App() {
           border-radius: 28px;
           overflow: hidden;
           position: relative;
-          min-height: 360px;
+          min-height: 300px;
           border: 1px solid rgba(15,23,42,0.06);
           box-shadow: 0 18px 40px rgba(15,23,42,0.08);
           background:
@@ -341,7 +426,7 @@ export default function App() {
         .hero-overlay {
           position: absolute;
           inset: 0;
-          padding: 28px;
+          padding: 24px;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
@@ -349,7 +434,7 @@ export default function App() {
 
         .hero-glass {
           width: 100%;
-          max-width: 420px;
+          max-width: 380px;
           background: rgba(255,255,255,0.14);
           border: 1px solid rgba(255,255,255,0.18);
           backdrop-filter: blur(12px);
@@ -446,57 +531,8 @@ export default function App() {
           font-weight: 800;
         }
 
-        .filter-wrap {
-          margin-top: 22px;
-          background: #fff;
-          border: 1px solid rgba(15,23,42,0.06);
-          border-radius: 24px;
-          padding: 16px;
-          box-shadow: 0 14px 30px rgba(15,23,42,0.05);
-        }
-
-        .filter-grid {
-          display: grid;
-          grid-template-columns: 1.5fr 1fr 1fr;
-          gap: 12px;
-          align-items: end;
-        }
-
-        .field {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .field label {
-          font-size: 13px;
-          font-weight: 800;
-          color: #475569;
-          padding-left: 2px;
-        }
-
-        .field input,
-        .field select {
-          height: 54px;
-          width: 100%;
-          border-radius: 16px;
-          border: 1px solid rgba(15,23,42,0.1);
-          background: #fff;
-          padding: 0 16px;
-          font-size: 15px;
-          color: #0f172a;
-          outline: none;
-          transition: border-color 0.18s ease, box-shadow 0.18s ease;
-        }
-
-        .field input:focus,
-        .field select:focus {
-          border-color: #93c5fd;
-          box-shadow: 0 0 0 4px rgba(59,130,246,0.10);
-        }
-
         .section {
-          padding: 28px 0 0;
+          padding: 26px 0 0;
         }
 
         .section-head {
@@ -678,6 +714,10 @@ export default function App() {
             flex-direction: column;
           }
 
+          .topbar.scrolled .topbar-inner {
+            min-height: auto;
+          }
+
           .brand-wrap {
             width: 100%;
           }
@@ -688,8 +728,9 @@ export default function App() {
             min-height: 58px;
           }
 
-          .brand-logo {
-            height: 34px;
+          .brand-logo,
+          .topbar.scrolled .brand-logo {
+            height: 38px;
           }
 
           .top-actions {
@@ -704,7 +745,7 @@ export default function App() {
           }
 
           .hero {
-            padding-top: 22px;
+            padding-top: 18px;
           }
 
           .hero-left {
@@ -730,7 +771,7 @@ export default function App() {
         }
       `}</style>
 
-      <header className="topbar">
+      <header className={`topbar ${isScrolled ? "scrolled" : ""}`}>
         <div className="container topbar-inner">
           <div className="brand-wrap">
             <div className="brand-card">
@@ -746,7 +787,7 @@ export default function App() {
 
             <div className="brand-texts">
               <div className="brand-title">ekiş</div>
-              <div className="brand-sub">Eskişehir odaklı ek iş ilan platformu</div>
+              <div className="brand-sub">Türkiye geneli ek iş ilan platformu</div>
             </div>
           </div>
 
@@ -761,10 +802,46 @@ export default function App() {
 
       <main className="container">
         <section className="hero">
+          <div className="filter-wrap">
+            <div className="filter-grid">
+              <div className="field">
+                <label>İlanlarda ara</label>
+                <input
+                  type="text"
+                  placeholder="İş ara, firma ara, konum ara..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+
+              <div className="field">
+                <label>Meslek seç</label>
+                <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                  {categories.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="field">
+                <label>Çalışma tipi seç</label>
+                <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
+                  {types.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
           <div className="hero-grid">
             <div className="hero-left">
-              <div className="badge">Eskişehir odaklı</div>
-              <h1 className="hero-title">Eskişehir’de ek iş ilanlarını kolayca keşfet.</h1>
+              <div className="badge">Türkiye geneli</div>
+              <h1 className="hero-title">Ek iş ilanlarını kolayca keşfet.</h1>
               <p className="hero-desc">
                 Günlük, saatlik ve part time işler için sade, hızlı ve güven veren bir alan.
                 İlanları incele, işverenle direkt iletişime geç.
@@ -774,7 +851,7 @@ export default function App() {
                 <div className="hero-point">Günlük işler</div>
                 <div className="hero-point">Saatlik çalışmalar</div>
                 <div className="hero-point">Part time fırsatlar</div>
-                <div className="hero-point">Eskişehir odaklı</div>
+                <div className="hero-point">Türkiye geneli</div>
               </div>
             </div>
 
@@ -826,42 +903,6 @@ export default function App() {
               </div>
             </div>
           )}
-
-          <div className="filter-wrap">
-            <div className="filter-grid">
-              <div className="field">
-                <label>İlanlarda ara</label>
-                <input
-                  type="text"
-                  placeholder="İş ara, firma ara, konum ara..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-
-              <div className="field">
-                <label>Meslek seç</label>
-                <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                  {categories.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="field">
-                <label>Çalışma tipi seç</label>
-                <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
-                  {types.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
         </section>
 
         <section className="section">
@@ -912,3 +953,4 @@ export default function App() {
     </div>
   );
 }
+
