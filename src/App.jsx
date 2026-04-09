@@ -164,12 +164,32 @@ export default function App() {
   });
   const [logoSrc, setLogoSrc] = useState("/publiclogo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setHeaderSmall(window.scrollY > 60);
     window.addEventListener("scroll", onScroll);
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const onScrollHide = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        setHeaderHidden(true);
+      } else {
+        setHeaderHidden(false);
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", onScrollHide);
+    return () => window.removeEventListener("scroll", onScrollHide);
   }, []);
 
   useEffect(() => {
@@ -236,17 +256,23 @@ export default function App() {
           margin: 0 auto;
         }
         .topbar {
+          transition: transform 0.28s ease, opacity 0.28s ease;
           position: sticky;
           top: 0;
           z-index: 50;
-          background: transparent !important;
-          backdrop-filter: none !important;
-          box-shadow: none !important;
-          border-bottom: none !important;
+          backdrop-filter: blur(16px);
+          background: rgba(255,255,255,0.88);
+          border-bottom: 1px solid rgba(60,74,95,0.08);
+          transition: background 0.2s ease, box-shadow 0.2s ease;
         }
+        .topbar.hidden {
+          transform: translateY(-100%);
+          opacity: 0;
+          pointer-events: none;
+        }
+
         .topbar.small {
-          background: transparent !important;
-          box-shadow: none !important;
+          box-shadow: 0 10px 26px rgba(60,74,95,0.08);
         }
         .topbar-inner {
           min-height: 92px;
@@ -271,12 +297,13 @@ export default function App() {
           margin: 0;
         }
         .brand-logo {
-          height: 100px;
+          height: 74px;
           width: auto;
           display: block;
           object-fit: contain;
+          transition: height 0.22s ease;
         }
-        .topbar.small .brand-logo { height: 85px; }
+        .topbar.small .brand-logo { height: 60px; }
         .top-actions {
           display: flex;
           align-items: center;
@@ -768,7 +795,7 @@ export default function App() {
         }
       `}</style>
 
-      <header className={`topbar ${headerSmall ? "small" : ""}`}>
+      <header className={`topbar ${headerSmall ? "small" : ""} ${headerHidden ? "hidden" : ""}`}>
         <div className="container topbar-inner">
           <div className="brand-wrap">
             <a className="brand-logo-link" href="#">
