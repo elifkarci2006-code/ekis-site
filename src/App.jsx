@@ -242,7 +242,8 @@ export default function App() {
             linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
         }
         .container {
-          width: min(1440px, calc(100% - 28px));
+          width: calc(100% - 24px);
+          max-width: none;
           margin: 0 auto;
         }
         .topbar {
@@ -395,7 +396,7 @@ export default function App() {
         .hero-card {
           background: ${PALETTE.white};
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 22px;
+          border-radius: 24px;
           box-shadow: 0 12px 24px rgba(60,74,95,0.06);
           padding: 14px 18px;
           margin-bottom: 10px;
@@ -551,13 +552,13 @@ export default function App() {
         .featured-grid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 20px;
+          gap: 18px;
         }
 
         .featured-section {
           background: ${PALETTE.coral};
-          border-radius: 36px;
-          padding: 34px 26px 30px;
+          border-radius: 28px;
+          padding: 30px 22px 26px;
           margin-bottom: 28px;
         }
         .featured-section .section-head {
@@ -643,7 +644,7 @@ export default function App() {
         .jobs-grid {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 20px;
+          gap: 18px;
         }
         .job-card {
           background: #fff;
@@ -1044,7 +1045,7 @@ export default function App() {
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 760px) {
-          .container { width: min(100% - 16px, 1440px); }
+          .container { width: calc(100% - 16px); max-width: none; }
 
           .site-footer {
             border-radius: 24px 24px 0 0;
@@ -1118,27 +1119,7 @@ export default function App() {
             padding-top: 10px;
           }
         }
-      `}
-/* FORCE WIDTH FIX */
-.container {
-  width: min(1440px, 100%) !important;
-  margin: 0 auto !important;
-}
-
-body {
-  padding: 0 !important;
-}
-
-#root {
-  max-width: 100% !important;
-}
-
-/* Vitrin daha yayılmış gözüksün */
-.featured-section {
-  max-width: 100%;
-}
-
-</style>
+      `}</style>
 
       <header className={`topbar ${headerSmall ? "small" : ""}`} style={{ opacity: headerOpacity }}>
         <div className="container topbar-inner">
