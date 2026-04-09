@@ -699,14 +699,21 @@ export default function App() {
           padding: 18px;
         }
         .post-modal {
-          width: min(580px, 100%);
+          width: min(680px, calc(100vw - 28px));
+          max-height: min(88vh, 920px);
           background: linear-gradient(180deg, #fff 0%, #fcfcfd 100%);
           border-radius: 30px;
           border: 1px solid rgba(60,74,95,0.08);
           box-shadow: 0 34px 80px rgba(35,48,68,0.24);
           overflow: hidden;
+          display: flex;
+          flex-direction: column;
         }
-        .post-panel-inner { padding: 24px; }
+        .post-panel-inner {
+          padding: 24px;
+          overflow-y: auto;
+          overscroll-behavior: contain;
+        }
         .post-form-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -774,7 +781,7 @@ export default function App() {
           background: ${PALETTE.warm};
           border: 1px solid rgba(228,93,80,0.14);
           border-radius: 18px;
-          padding: 16px;
+          padding: 14px;
         }
         .feature-box-title {
           margin: 0 0 6px;
@@ -791,12 +798,12 @@ export default function App() {
 
         .preview-card {
           position: relative;
-          margin-top: 18px;
+          margin-top: 14px;
           background: #fff;
           border: 1px solid rgba(60,74,95,0.10);
-          border-radius: 22px;
-          padding: 18px;
-          box-shadow: 0 12px 24px rgba(60,74,95,0.06);
+          border-radius: 20px;
+          padding: 16px;
+          box-shadow: 0 10px 20px rgba(60,74,95,0.05);
           overflow: hidden;
         }
         .preview-card::after {
@@ -834,8 +841,8 @@ export default function App() {
           font-weight: 700;
         }
         .preview-title {
-          margin: 0 0 8px;
-          font-size: 22px;
+          margin: 0 0 6px;
+          font-size: 19px;
           line-height: 1.2;
           font-weight: 900;
           letter-spacing: -0.03em;
@@ -853,15 +860,15 @@ export default function App() {
         }
         .preview-salary {
           color: ${PALETTE.coral};
-          font-size: 20px;
+          font-size: 18px;
           font-weight: 900;
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
         .preview-desc {
           margin: 0;
           color: ${PALETTE.softText};
-          line-height: 1.6;
-          font-size: 14px;
+          line-height: 1.5;
+          font-size: 13px;
           white-space: pre-wrap;
         }
         .preview-helper {
@@ -1079,6 +1086,37 @@ export default function App() {
           .jobs-grid { grid-template-columns: 1fr; }
           .stat-grid { grid-template-columns: 1fr 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
+          .post-modal {
+            width: min(100vw - 16px, 680px);
+            max-height: 90vh;
+            border-radius: 22px;
+          }
+          .post-panel-inner {
+            padding: 16px;
+          }
+          .post-title {
+            font-size: 21px;
+          }
+          .post-desc {
+            font-size: 13px;
+            margin-bottom: 14px;
+          }
+          .preview-card {
+            padding: 14px;
+            border-radius: 18px;
+          }
+          .preview-title {
+            font-size: 17px;
+          }
+          .preview-salary {
+            font-size: 16px;
+          }
+          .modal-actions {
+            position: sticky;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(252,252,253,0.85), #fcfcfd 35%);
+            padding-top: 10px;
+          }
         }
       `}</style>
 
