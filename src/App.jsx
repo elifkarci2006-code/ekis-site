@@ -242,7 +242,7 @@ export default function App() {
             linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
         }
         .container {
-          width: min(1680px, calc(100% - 24px));
+          width: min(1440px, calc(100% - 28px));
           margin: 0 auto;
         }
         .topbar {
@@ -551,13 +551,13 @@ export default function App() {
         .featured-grid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 18px;
+          gap: 20px;
         }
 
         .featured-section {
           background: ${PALETTE.coral};
-          border-radius: 32px;
-          padding: 30px 22px 26px;
+          border-radius: 36px;
+          padding: 34px 26px 30px;
           margin-bottom: 28px;
         }
         .featured-section .section-head {
@@ -643,7 +643,7 @@ export default function App() {
         .jobs-grid {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 18px;
+          gap: 20px;
         }
         .job-card {
           background: #fff;
@@ -893,7 +893,7 @@ export default function App() {
 
         .site-footer {
           margin-top: 34px;
-          border-radius: 30px 30px 0 0;
+          border-radius: 34px 34px 0 0;
           overflow: hidden;
           background: #2F3949;
           color: rgba(255,255,255,0.92);
@@ -1044,7 +1044,7 @@ export default function App() {
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 760px) {
-          .container { width: min(100% - 16px, 1680px); }
+          .container { width: min(100% - 16px, 1440px); }
 
           .site-footer {
             border-radius: 24px 24px 0 0;
