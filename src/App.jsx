@@ -1054,8 +1054,8 @@ export default function App() {
               <div>
                 <div className="badge">HÄ±zlÄ± baÅŸvuru â€¢ net filtreleme â€¢ TÃ¼rkiye geneli</div>
                 <h1 className="hero-title">
-                  <strong>GÃ¼nlÃ¼k, saatlik ve part time iÅŸleri kolayca keÅŸfet.</strong> TÃ¼rkiye genelindeki ilanlar tek yerde.
-                </h1>
+      GÃ¼nlÃ¼k, saatlik ve part time iÅŸleri kolayca keÅŸfet.
+    </h1>
                 <p className="hero-desc">
                   Åžehrine uygun ek iÅŸi hÄ±zlÄ±ca keÅŸfet. Sade arama alanÄ±yla ilanlarÄ± filtrele,
                   Ã¶ne Ã§Ä±kan fÄ±rsatlarÄ± incele ve sana uyan iÅŸi daha hÄ±zlÄ± bul.
