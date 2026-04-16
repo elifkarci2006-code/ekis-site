@@ -825,33 +825,17 @@ export default function App() {
           color: ${PALETTE.softText};
           font-weight: 800;
           white-space: nowrap;
-          line-height: 32px;
-          text-align: right;
-          margin-left: auto;
         }
         .job-meta-top {
           display: flex;
-          justify-content: space-between;
-          margin-bottom: 12px;
-        }
-        .job-meta-right {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 6px;
-        }
-
-          display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
+          align-items: center;
+          justify-content: flex-end;
           gap: 12px;
-          margin-bottom: 14px;
-          min-height: 32px;
+          margin-bottom: 8px;
         }
         .job-meta-top .pill,
         .job-meta-top .type-tag {
           margin-bottom: 0;
-          flex-shrink: 0;
         }
         .job-location {
           color: ${PALETTE.softText};
@@ -1664,10 +1648,7 @@ export default function App() {
                   <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
                     <div className="job-meta-top">
                       <div className="pill">Öne Çıkan</div>
-                      <div className="job-meta-right">
-                        <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
-                        <div className="type-tag">{job.type}</div>
-                      </div>
+                      <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
                     </div>
                     <div className="type-tag">{job.type}</div>
                     <div className="job-company">{job.company}</div>
@@ -1692,11 +1673,9 @@ export default function App() {
                   {filteredJobs.map((job) => (
                     <article key={job.id} className="job-card" onClick={() => setSelectedJob(job)}>
                       <div className="job-meta-top">
-                        <div className="job-meta-right">
-                          <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
-                          <div className="type-tag">{job.type}</div>
-                        </div>
+                        <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
                       </div>
+                      <div className="type-tag">{job.type}</div>
                       <div className="job-company">{job.company}</div>
                       <h3 className="job-title">{job.title}</h3>
                       <div className="job-location">{job.location}</div>
