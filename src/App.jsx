@@ -480,6 +480,20 @@ export default function App() {
     });
   }, [jobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
+  const filteredFeaturedJobs = useMemo(() => {
+    return featuredJobs.filter((job) => {
+      const text = `${job.title} ${job.company} ${job.location} ${job.category || ""}`.toLowerCase();
+      const matchesSearch = text.includes(submittedSearch.toLowerCase());
+      const matchesCategory = submittedCategory === "Tümü" ? true : (job.category || inferCategory(job.title)) === submittedCategory;
+      const matchesType = submittedJobType === "Tümü" ? true : job.type === submittedJobType;
+      const matchesCity =
+        submittedCity === "Tümü"
+          ? true
+          : job.location.toLocaleLowerCase("tr-TR").includes(submittedCity.toLocaleLowerCase("tr-TR"));
+      return matchesSearch && matchesCategory && matchesType && matchesCity;
+    });
+  }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
+
   const previewSalary = formatSalaryPreview(formData.workType, formData.salary);
 
   return (
@@ -1624,11 +1638,11 @@ export default function App() {
             <section className="section featured-section" id="one-cikanlar">
               <div className="section-head">
                 <h2 className="section-title section-title-vitrin">Vitrin ilanlar</h2>
-                <div className="section-sub">{featuredJobs.length} ilan</div>
+                <div className="section-sub">{filteredFeaturedJobs.length} ilan</div>
               </div>
 
               <div className="featured-grid">
-                {featuredJobs.map((job) => (
+                {filteredFeaturedJobs.map((job) => (
                   <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
                     <div className="job-meta-top">
                       <div className="pill">Öne Çıkan</div>
