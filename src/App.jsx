@@ -825,28 +825,24 @@ export default function App() {
           color: ${PALETTE.softText};
           font-weight: 800;
           white-space: nowrap;
-          line-height: 32px;
           text-align: right;
-          margin-left: auto;
+          margin: 0;
+          line-height: 1.2;
         }
         .job-meta-top {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 12px;
-        }
-        .job-meta-right {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 6px;
-        }
-
           display: flex;
           align-items: flex-start;
           justify-content: space-between;
           gap: 12px;
           margin-bottom: 14px;
           min-height: 32px;
+        }
+        .job-meta-right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 6px;
+          margin-left: auto;
         }
         .job-meta-top .pill,
         .job-meta-top .type-tag {
@@ -1669,7 +1665,6 @@ export default function App() {
                         <div className="type-tag">{job.type}</div>
                       </div>
                     </div>
-                    <div className="type-tag">{job.type}</div>
                     <div className="job-company">{job.company}</div>
                     <h3 className="job-title">{job.title}</h3>
                     <div className="job-location">{job.location}</div>
