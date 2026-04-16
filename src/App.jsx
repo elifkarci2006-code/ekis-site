@@ -27,7 +27,7 @@ const featuredSeed = [
     description:
       "Servis ve karşılama süreçlerinde destek olacak, güler yüzlü ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: true,
+    category: "Kafe & Restoran",
   },
   {
     id: 2,
@@ -39,7 +39,7 @@ const featuredSeed = [
     description:
       "Etkinlik giriş alanında misafir karşılama ve yönlendirme görevlerinde çalışacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: true,
+    category: "Etkinlik & Organizasyon",
   },
   {
     id: 3,
@@ -51,7 +51,7 @@ const featuredSeed = [
     description:
       "Yoğun saatlerde teslimat süreçlerinde görev alacak, hızlı ve dikkatli kurye aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: true,
+    category: "Kurye & Dağıtım",
   },
 ];
 
@@ -67,7 +67,6 @@ const jobsSeed = [
     description:
       "Ürün yerleştirme, raf düzenleme ve temel depo operasyonlarında görev alacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: false,
   },
   {
     id: 12,
@@ -80,7 +79,6 @@ const jobsSeed = [
     description:
       "Yoğun mağaza temposuna uyum sağlayabilecek, kasa deneyimi olan ya da öğrenmeye açık ekip arkadaşı.",
     createdAt: "2026-04-14T10:00:00",
-    featured: false,
   },
   {
     id: 13,
@@ -93,7 +91,6 @@ const jobsSeed = [
     description:
       "Dosyalama, evrak takibi ve günlük ofis işlerine destek verecek ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: false,
   },
   {
     id: 14,
@@ -106,7 +103,6 @@ const jobsSeed = [
     description:
       "Ofis ve ortak kullanım alanlarının günlük temizliğinden sorumlu olacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: false,
   },
   {
     id: 15,
@@ -119,7 +115,6 @@ const jobsSeed = [
     description:
       "Kahve hazırlık süreçlerinde destek verecek, müşteri ilişkileri güçlü ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: false,
   },
   {
     id: 16,
@@ -132,7 +127,6 @@ const jobsSeed = [
     description:
       "Sipariş paketleme, etiketleme ve sevkiyat hazırlığında görev alacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: false,
   },
   {
     id: 17,
@@ -145,7 +139,6 @@ const jobsSeed = [
     description:
       "Stand düzeni, ürün tanıtımı ve müşteri yönlendirme alanlarında görev alacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: false,
   },
   {
     id: 18,
@@ -158,7 +151,6 @@ const jobsSeed = [
     description:
       "Temel içerik hazırlama, paylaşım planlama ve dijital destek süreçlerinde çalışacak ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
-    featured: false,
   },
 ];
 
@@ -177,90 +169,7 @@ const categories = [
 
 const types = ["Tümü", "Günlük", "Saatlik", "Part Time"];
 
-const cities = [
-  "Tümü",
-  "Adana",
-  "Adıyaman",
-  "Afyonkarahisar",
-  "Ağrı",
-  "Aksaray",
-  "Amasya",
-  "Ankara",
-  "Antalya",
-  "Ardahan",
-  "Artvin",
-  "Aydın",
-  "Balıkesir",
-  "Bartın",
-  "Batman",
-  "Bayburt",
-  "Bilecik",
-  "Bingöl",
-  "Bitlis",
-  "Bolu",
-  "Burdur",
-  "Bursa",
-  "Çanakkale",
-  "Çankırı",
-  "Çorum",
-  "Denizli",
-  "Diyarbakır",
-  "Düzce",
-  "Edirne",
-  "Elazığ",
-  "Erzincan",
-  "Erzurum",
-  "Eskişehir",
-  "Gaziantep",
-  "Giresun",
-  "Gümüşhane",
-  "Hakkari",
-  "Hatay",
-  "Iğdır",
-  "Isparta",
-  "İstanbul",
-  "İzmir",
-  "Kahramanmaraş",
-  "Karabük",
-  "Karaman",
-  "Kars",
-  "Kastamonu",
-  "Kayseri",
-  "Kilis",
-  "Kırıkkale",
-  "Kırklareli",
-  "Kırşehir",
-  "Kocaeli",
-  "Konya",
-  "Kütahya",
-  "Malatya",
-  "Manisa",
-  "Mardin",
-  "Mersin",
-  "Muğla",
-  "Muş",
-  "Nevşehir",
-  "Niğde",
-  "Ordu",
-  "Osmaniye",
-  "Rize",
-  "Sakarya",
-  "Samsun",
-  "Siirt",
-  "Sinop",
-  "Sivas",
-  "Şanlıurfa",
-  "Şırnak",
-  "Tekirdağ",
-  "Tokat",
-  "Trabzon",
-  "Tunceli",
-  "Uşak",
-  "Van",
-  "Yalova",
-  "Yozgat",
-  "Zonguldak",
-];
+const cities = ["Tümü", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin", "Aydın", "Balıkesir", "Bartın", "Batman", "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Düzce", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Iğdır", "Isparta", "İstanbul", "İzmir", "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kırıkkale", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Şanlıurfa", "Şırnak", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak"];
 
 function getDaysAgoLabel(createdAt) {
   const created = new Date(createdAt);
@@ -274,53 +183,14 @@ function getDaysAgoLabel(createdAt) {
 
 function inferCategory(title) {
   const lower = title.toLocaleLowerCase("tr-TR");
-  if (
-    lower.includes("garson") ||
-    lower.includes("barista") ||
-    lower.includes("komi") ||
-    lower.includes("restoran") ||
-    lower.includes("kafe")
-  ) {
-    return "Kafe & Restoran";
-  }
-  if (
-    lower.includes("kurye") ||
-    lower.includes("dağıtım") ||
-    lower.includes("moto")
-  ) {
-    return "Kurye & Dağıtım";
-  }
-  if (
-    lower.includes("depo") ||
-    lower.includes("paketleme") ||
-    lower.includes("lojistik")
-  ) {
-    return "Depo & Lojistik";
-  }
-  if (lower.includes("temizlik")) {
-    return "Temizlik";
-  }
-  if (
-    lower.includes("etkinlik") ||
-    lower.includes("organizasyon") ||
-    lower.includes("karşılama")
-  ) {
-    return "Etkinlik & Organizasyon";
-  }
-  if (
-    lower.includes("mağaza") ||
-    lower.includes("kasiyer") ||
-    lower.includes("satış") ||
-    lower.includes("stand")
-  ) {
-    return "Satış & Mağaza";
-  }
-  if (lower.includes("ofis") || lower.includes("destek")) {
-    return "Ofis & Yardımcı İşler";
-  }
-  if (lower.includes("içerik") || lower.includes("sosyal medya") || lower.includes("dijital")) {
-    return "Freelance / Dijital";
-  }
+  if (lower.includes("garson") || lower.includes("barista") || lower.includes("kafe")) return "Kafe & Restoran";
+  if (lower.includes("kurye") || lower.includes("dağıtım")) return "Kurye & Dağıtım";
+  if (lower.includes("depo") || lower.includes("paketleme") || lower.includes("lojistik")) return "Depo & Lojistik";
+  if (lower.includes("temizlik")) return "Temizlik";
+  if (lower.includes("etkinlik") || lower.includes("organizasyon") || lower.includes("karşılama")) return "Etkinlik & Organizasyon";
+  if (lower.includes("mağaza") || lower.includes("kasiyer") || lower.includes("satış") || lower.includes("stand")) return "Satış & Mağaza";
+  if (lower.includes("ofis") || lower.includes("destek")) return "Ofis & Yardımcı İşler";
+  if (lower.includes("içerik") || lower.includes("dijital")) return "Freelance / Dijital";
   return "Ofis & Yardımcı İşler";
 }
 
@@ -423,9 +293,7 @@ export default function App() {
   };
 
   const handleSearchKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearchSubmit();
-    }
+    if (e.key === "Enter") handleSearchSubmit();
   };
 
   const clearFilters = () => {
@@ -452,7 +320,6 @@ export default function App() {
       category: inferCategory(formData.title),
       description: formData.description.trim(),
       createdAt: new Date().toISOString(),
-      featured: featuredChecked,
     };
 
     if (featuredChecked) {
@@ -463,8 +330,6 @@ export default function App() {
 
     setShowForm(false);
   };
-
-  const allJobsForCount = [...featuredJobs, ...jobs];
 
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
@@ -495,6 +360,7 @@ export default function App() {
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
   const previewSalary = formatSalaryPreview(formData.workType, formData.salary);
+  const totalCount = filteredFeaturedJobs.length + filteredJobs.length;
 
   return (
     <div className="app-shell">
@@ -525,14 +391,7 @@ export default function App() {
           top: 0;
           z-index: 50;
           background: transparent;
-          backdrop-filter: none;
-          -webkit-backdrop-filter: none;
-          border-bottom: none;
-          box-shadow: none;
           transition: opacity 0.18s ease;
-        }
-        .topbar.small {
-          box-shadow: none;
         }
         .topbar-inner {
           min-height: 72px;
@@ -634,12 +493,6 @@ export default function App() {
           font-size: 15px;
           color: ${PALETTE.text};
           outline: none;
-          transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
-        }
-        .field input:focus, .field select:focus {
-          border-color: ${PALETTE.coral};
-          box-shadow: 0 0 0 5px rgba(228,93,80,0.10);
-          transform: translateY(-1px);
         }
         .search-action {
           display: flex;
@@ -656,12 +509,6 @@ export default function App() {
           font-weight: 900;
           cursor: pointer;
           box-shadow: 0 12px 24px rgba(60,74,95,0.22);
-          transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-        }
-        .search-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 16px 30px rgba(60,74,95,0.26);
-          filter: saturate(1.04);
         }
         .hero {
           padding: 4px 0 6px;
@@ -673,9 +520,6 @@ export default function App() {
           box-shadow: 0 12px 24px rgba(60,74,95,0.06);
           padding: 14px 18px;
           margin-bottom: 10px;
-        }
-        .hero-grid {
-          display: block;
         }
         .hero-title {
           margin: 0;
@@ -700,9 +544,6 @@ export default function App() {
           font-size: 12px;
           font-weight: 800;
           color: ${PALETTE.slate};
-        }
-        .content-shell {
-          display: block;
         }
         .section { padding: 0 0 16px; }
         .section-head {
@@ -736,9 +577,6 @@ export default function App() {
             0 0 18px rgba(255,255,255,0.22);
           flex-shrink: 0;
         }
-        .featured-section .section-sub:empty {
-          display: none;
-        }
         .section-sub {
           color: ${PALETTE.softText};
           font-size: 14px;
@@ -747,7 +585,7 @@ export default function App() {
         .featured-grid {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 18px;
+          gap: 16px;
         }
         .featured-section {
           background: ${PALETTE.coral};
@@ -755,33 +593,25 @@ export default function App() {
           padding: 30px 22px 26px;
           margin-bottom: 28px;
         }
-        .featured-section .section-head {
-          margin-bottom: 20px;
-        }
-        .featured-section .section-title {
-          color: #fff;
-        }
-        .featured-section .section-sub {
-          color: rgba(255,255,255,0.88);
-        }
-        .featured-section .featured-grid {
-          gap: 16px;
-        }
-        .featured-card {
+        .featured-section .section-title { color: #fff; }
+        .featured-section .section-sub { color: rgba(255,255,255,0.88); }
+
+        .featured-card,
+        .job-card {
           position: relative;
           background: #fff;
-          border: 2px solid rgba(255,255,255,0.72);
+          border: 1px solid rgba(60,74,95,0.08);
           border-radius: 26px;
           padding: 22px;
-          box-shadow: 0 16px 30px rgba(35,48,68,0.14);
-          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+          box-shadow: 0 14px 28px rgba(60,74,95,0.05);
           overflow: hidden;
           cursor: pointer;
+          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
         }
-        .featured-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 22px 36px rgba(35,48,68,0.18);
-          border-color: rgba(255,255,255,0.95);
+        .featured-card:hover,
+        .job-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 36px rgba(60,74,95,0.10);
         }
         .featured-card::after {
           content: "";
@@ -793,6 +623,23 @@ export default function App() {
           border-radius: 50%;
           background: rgba(228,93,80,0.12);
         }
+
+        .card-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 14px;
+          margin-bottom: 18px;
+          min-height: 42px;
+        }
+        .card-top-right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 6px;
+          flex-shrink: 0;
+          padding-top: 2px;
+        }
         .pill {
           display: inline-flex;
           align-items: center;
@@ -803,103 +650,6 @@ export default function App() {
           padding: 7px 11px;
           font-size: 12px;
           font-weight: 900;
-          margin-bottom: 14px;
-        }
-        .job-title {
-          margin: 0 0 10px;
-          font-size: 19px;
-          line-height: 1.2;
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          color: ${PALETTE.slate};
-          min-height: 46px;
-        }
-        .job-company {
-          color: ${PALETTE.slate};
-          font-weight: 900;
-          font-size: 15px;
-          margin-bottom: 8px;
-          line-height: 1.2;
-        }
-        .job-days {
-          font-size: 12px;
-          color: ${PALETTE.softText};
-          font-weight: 800;
-          white-space: nowrap;
-          text-align: right;
-          margin: 0;
-          line-height: 1.2;
-        }
-        .job-meta-top {
-          display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
-          gap: 12px;
-          margin-bottom: 8px;
-        }
-        .job-top-spacer {
-          display: flex;
-          justify-content: flex-end;
-          min-height: 0;
-          margin-bottom: 0;
-        }
-        .job-meta-right {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          justify-content: flex-start;
-          gap: 6px;
-          margin-left: auto;
-          min-width: 128px;
-          transform: translateY(18px);
-        }
-        .job-meta-top .pill,
-        .job-meta-top .type-tag {
-          margin-bottom: 0;
-          flex-shrink: 0;
-        }
-        .job-location {
-          color: ${PALETTE.softText};
-          margin-bottom: 8px;
-          font-size: 15px;
-        }
-        .job-description {
-          color: ${PALETTE.softText};
-          font-size: 13px;
-          line-height: 1.45;
-          margin-bottom: 10px;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        .job-salary {
-          color: ${PALETTE.coral};
-          font-size: 20px;
-          font-weight: 900;
-          letter-spacing: -0.03em;
-        }
-        .jobs-grid {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 18px;
-        }
-        .job-card {
-          background: #fff;
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 24px;
-          padding: 20px;
-          box-shadow: 0 14px 28px rgba(60,74,95,0.05);
-          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-          cursor: pointer;
-          display: flex;
-          flex-direction: column;
-          min-height: 232px;
-        }
-        .job-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 22px 38px rgba(60,74,95,0.10);
-          border-color: rgba(228,93,80,0.28);
         }
         .type-tag {
           display: inline-flex;
@@ -911,21 +661,52 @@ export default function App() {
           color: ${PALETTE.coral};
           font-size: 12px;
           font-weight: 900;
-          margin-bottom: 12px;
           border: 1px solid rgba(228,93,80,0.16);
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
+        .job-days {
+          font-size: 12px;
+          color: ${PALETTE.softText};
+          font-weight: 700;
+          white-space: nowrap;
+        }
+        .job-company {
+          color: ${PALETTE.text};
+          font-weight: 800;
+          margin-bottom: 8px;
+          font-size: 15px;
+          line-height: 1.25;
+        }
+        .job-title {
+          margin: 0 0 8px;
+          font-size: 19px;
+          line-height: 1.25;
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          color: ${PALETTE.slate};
+        }
+        .job-location {
+          color: ${PALETTE.softText};
+          margin-bottom: 10px;
+          font-size: 15px;
+        }
+        .job-salary {
+          color: ${PALETTE.coral};
+          font-size: 20px;
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          margin-top: 8px;
+        }
         .mini-salary {
-          margin-top: auto;
-          padding-top: 14px;
+          margin-top: 14px;
           color: ${PALETTE.teal};
           font-size: 17px;
           font-weight: 900;
         }
-        .job-body {
-          display: flex;
-          flex-direction: column;
-          flex: 1;
+        .jobs-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 18px;
         }
         .empty-box {
           background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
@@ -936,6 +717,7 @@ export default function App() {
           text-align: center;
           box-shadow: 0 14px 24px rgba(60,74,95,0.04);
         }
+
         .post-modal-backdrop,
         .detail-modal-backdrop {
           position: fixed;
@@ -963,7 +745,6 @@ export default function App() {
         .detail-panel-inner {
           padding: 24px;
           overflow-y: auto;
-          overscroll-behavior: contain;
         }
         .post-form-grid {
           display: grid;
@@ -999,10 +780,6 @@ export default function App() {
           font-family: inherit;
         }
         .post-field textarea { min-height: 110px; }
-        .post-field input:focus, .post-field select:focus, .post-field textarea:focus {
-          border-color: ${PALETTE.coral};
-          box-shadow: 0 0 0 4px rgba(228,93,80,0.10);
-        }
         .field-error {
           border-color: #dc2626 !important;
           box-shadow: 0 0 0 4px rgba(220,38,38,0.08) !important;
@@ -1068,16 +845,6 @@ export default function App() {
           padding: 16px;
           box-shadow: 0 10px 20px rgba(60,74,95,0.05);
           overflow: hidden;
-        }
-        .preview-card::after {
-          content: "";
-          position: absolute;
-          right: -24px;
-          bottom: -24px;
-          width: 110px;
-          height: 110px;
-          border-radius: 50%;
-          background: rgba(228,93,80,0.10);
         }
         .preview-top {
           display: flex;
@@ -1186,15 +953,12 @@ export default function App() {
           overflow: hidden;
           background: #2F3949;
           color: rgba(255,255,255,0.92);
-          box-shadow: 0 -10px 30px rgba(35,48,68,0.08);
         }
         .site-footer-topline {
           height: 12px;
           background: linear-gradient(90deg, ${PALETTE.coral} 0%, #f25b7a 100%);
         }
-        .site-footer-inner {
-          padding: 34px 28px 20px;
-        }
+        .site-footer-inner { padding: 34px 28px 20px; }
         .footer-grid {
           display: grid;
           grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
@@ -1236,11 +1000,6 @@ export default function App() {
           text-decoration: none;
           font-size: 15px;
           font-weight: 700;
-          transition: opacity 0.18s ease, transform 0.18s ease;
-        }
-        .footer-link:hover {
-          opacity: 1;
-          transform: translateX(2px);
         }
         .footer-socials {
           display: flex;
@@ -1294,9 +1053,7 @@ export default function App() {
           flex-direction: column;
           line-height: 1.2;
         }
-        .footer-app-text strong {
-          font-size: 15px;
-        }
+        .footer-app-text strong { font-size: 15px; }
         .footer-app-text span {
           font-size: 12px;
           color: rgba(255,255,255,0.72);
@@ -1323,7 +1080,6 @@ export default function App() {
           font-size: 13px;
           font-weight: 700;
         }
-        .footer-space { height: 0; }
 
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
@@ -1332,11 +1088,7 @@ export default function App() {
         }
         @media (max-width: 760px) {
           .container { width: calc(100% - 16px); max-width: none; }
-          .site-footer { border-radius: 24px 24px 0 0; }
-          .site-footer-inner { padding: 24px 16px 18px; }
           .footer-grid { grid-template-columns: 1fr; gap: 22px; }
-          .footer-bottom { gap: 12px; }
-          .featured-section { border-radius: 28px; padding: 22px 16px 18px; }
           .topbar-inner {
             min-height: auto;
             padding: 4px 0 8px;
@@ -1356,27 +1108,6 @@ export default function App() {
           .hero-title { font-size: 24px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
-          .post-modal,
-          .detail-modal {
-            width: min(100vw - 16px, 680px);
-            max-height: 90vh;
-            border-radius: 22px;
-          }
-          .post-panel-inner,
-          .detail-panel-inner {
-            padding: 16px;
-          }
-          .post-title { font-size: 21px; }
-          .post-desc { font-size: 13px; margin-bottom: 14px; }
-          .preview-card { padding: 14px; border-radius: 18px; }
-          .preview-title { font-size: 17px; }
-          .preview-salary { font-size: 16px; }
-          .modal-actions {
-            position: sticky;
-            bottom: 0;
-            background: linear-gradient(180deg, rgba(252,252,253,0.85), #fcfcfd 35%);
-            padding-top: 10px;
-          }
         }
       `}</style>
 
@@ -1411,9 +1142,7 @@ export default function App() {
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-panel-inner">
               <h3 className="post-title">Ücretsiz ilan ver</h3>
-              <p className="post-desc">
-                Formu doldur, istersen ilanını vitrine çıkar ve ön izlemesini gör.
-              </p>
+              <p className="post-desc">Formu doldur, istersen ilanını vitrine çıkar ve ön izlemesini gör.</p>
 
               <div className="post-form-grid">
                 <div className="post-field">
@@ -1459,9 +1188,7 @@ export default function App() {
                   <label>Çalışma tipi</label>
                   <select name="workType" value={formData.workType} onChange={handleFormChange}>
                     {types.filter((item) => item !== "Tümü").map((item) => (
-                      <option key={item} value={item}>
-                        {item}
-                      </option>
+                      <option key={item} value={item}>{item}</option>
                     ))}
                   </select>
                 </div>
@@ -1508,12 +1235,7 @@ export default function App() {
                   <p className="feature-box-text">
                     İlanını ana vitrinde göstermek için aşağıdaki bağlantıdan ödeme adımına geçebilirsin.
                   </p>
-                  <a
-                    className="feature-link"
-                    href={SHOPIER_FEATURED_LINK}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a className="feature-link" href={SHOPIER_FEATURED_LINK} target="_blank" rel="noreferrer">
                     Shopier ödeme sayfasına git
                   </a>
                 </div>
@@ -1522,32 +1244,17 @@ export default function App() {
               {showPreview && (
                 <div className="preview-card">
                   <div className="preview-top">
-                    <div className="preview-badge">
-                      {featuredChecked ? "Vitrin adayı" : "Standart ilan"}
-                    </div>
+                    <div className="preview-badge">{featuredChecked ? "Vitrin adayı" : "Standart ilan"}</div>
                     <div className="preview-meta">{formData.workType || "Günlük"}</div>
                   </div>
 
-                  <h4 className="preview-title">
-                    {formData.title || "İlan başlığı burada görünecek"}
-                  </h4>
-                  <div className="preview-company">
-                    {formData.company || "Firma adı burada görünecek"}
-                  </div>
-                  <div className="preview-location">
-                    {formData.city || "Şehir / Konum burada görünecek"}
-                  </div>
-                  <div className="preview-salary">
-                    {previewSalary || "Ücret bilgisi burada görünecek"}
-                  </div>
+                  <h4 className="preview-title">{formData.title || "İlan başlığı burada görünecek"}</h4>
+                  <div className="preview-company">{formData.company || "Firma adı burada görünecek"}</div>
+                  <div className="preview-location">{formData.city || "Şehir / Konum burada görünecek"}</div>
+                  <div className="preview-salary">{previewSalary || "Ücret bilgisi burada görünecek"}</div>
                   <p className="preview-desc">
                     {formData.description || "İş açıklaması burada görünecek. Kullanıcılar ilanı açtığında bu alanı okuyacak."}
                   </p>
-                  <div className="preview-helper">
-                    {featuredChecked
-                      ? "Vitrine çıkarmak için ödeme adımını tamamladığında bu ilan öne çıkarılabilir."
-                      : "Bu görünüm standart ilan kartı ve ilan detayı için ön izleme amaçlıdır."}
-                  </div>
                 </div>
               )}
 
@@ -1583,7 +1290,6 @@ export default function App() {
               <div className="detail-description">
                 {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
               </div>
-
               <div className="modal-actions">
                 <button className="btn btn-secondary" type="button" onClick={() => setSelectedJob(null)}>
                   Kapat
@@ -1613,9 +1319,7 @@ export default function App() {
                 <label>Şehir seç</label>
                 <select value={city} onChange={(e) => setCity(e.target.value)}>
                   {cities.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
+                    <option key={item} value={item}>{item}</option>
                   ))}
                 </select>
               </div>
@@ -1624,9 +1328,7 @@ export default function App() {
                 <label>Meslek seç</label>
                 <select value={category} onChange={(e) => setCategory(e.target.value)}>
                   {categories.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
+                    <option key={item} value={item}>{item}</option>
                   ))}
                 </select>
               </div>
@@ -1635,23 +1337,17 @@ export default function App() {
                 <label>Çalışma tipi seç</label>
                 <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
                   {types.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
+                    <option key={item} value={item}>{item}</option>
                   ))}
                 </select>
               </div>
 
               <div className="search-action">
-                <button className="search-btn" type="button" onClick={handleSearchSubmit}>
-                  Ara
-                </button>
+                <button className="search-btn" type="button" onClick={handleSearchSubmit}>Ara</button>
               </div>
 
               <div className="search-action">
-                <button className="search-btn" type="button" onClick={clearFilters}>
-                  Temizle
-                </button>
+                <button className="search-btn" type="button" onClick={clearFilters}>Temizle</button>
               </div>
             </div>
           </div>
@@ -1659,87 +1355,70 @@ export default function App() {
 
         <section className="hero">
           <div className="hero-card">
-            <div className="hero-grid">
-              <div>
-                <h1 className="hero-title">
-                  Günlük, saatlik ve part time işleri kolayca keşfet.
-                </h1>
-                <div className="hero-stats-inline">
-                  <div className="hero-stat-bubble">{allJobsForCount.length}+ aktif ilan</div>
-                  <div className="hero-stat-bubble">{featuredJobs.length}+ vitrin ilanı</div>
-                  <div className="hero-stat-bubble">{jobs.length}+ standart ilan</div>
-                  <div className="hero-stat-bubble">Türkiye geneli kapsama</div>
-                </div>
-              </div>
+            <h1 className="hero-title">Günlük, saatlik ve part time işleri kolayca keşfet.</h1>
+            <div className="hero-stats-inline">
+              <div className="hero-stat-bubble">{totalCount}+ aktif ilan</div>
+              <div className="hero-stat-bubble">{filteredFeaturedJobs.length}+ vitrin ilanı</div>
+              <div className="hero-stat-bubble">{filteredJobs.length}+ standart ilan</div>
+              <div className="hero-stat-bubble">Türkiye geneli kapsama</div>
             </div>
           </div>
         </section>
 
-        <div className="content-shell">
-          <div>
-            <section className="section featured-section" id="one-cikanlar">
-              <div className="section-head">
-                <h2 className="section-title section-title-vitrin">Vitrin ilanlar</h2>
-                <div className="section-sub">{filteredFeaturedJobs.length} ilan</div>
-              </div>
-
-              <div className="featured-grid">
-                {filteredFeaturedJobs.map((job) => (
-                  <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
-                    <div className="job-meta-top">
-                      <div className="pill">Öne Çıkan</div>
-                      <div className="job-meta-right">
-                        <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
-                        <div className="type-tag">{job.type}</div>
-                      </div>
-                    </div>
-                    <div className="job-company">{job.company}</div>
-                    <h3 className="job-title">{job.title}</h3>
-                    <div className="job-location">{job.location}</div>
-                    <div className="job-description">
-                      {job.description || "İş açıklaması kart üzerinde burada görünecek."}
-                    </div>
-                    <div className="job-salary">{job.salary}</div>
-                  </article>
-                ))}
-              </div>
-            </section>
-
-            <section className="section">
-              <div className="section-head">
-                <h2 className="section-title">Tüm ilanlar</h2>
-                <div className="section-sub">{filteredJobs.length} ilan bulundu</div>
-              </div>
-
-              {filteredJobs.length === 0 ? (
-                <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
-              ) : (
-                <div className="jobs-grid">
-                  {filteredJobs.map((job) => (
-                    <article key={job.id} className="job-card" onClick={() => setSelectedJob(job)}>
-                      <div className="job-top-spacer">
-                        <div className="job-meta-right">
-                          <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
-                          <div className="type-tag">{job.type}</div>
-                        </div>
-                      </div>
-                      <div className="job-body">
-                        <div className="job-company">{job.company}</div>
-                        <h3 className="job-title">{job.title}</h3>
-                        <div className="job-location">{job.location}</div>
-                        <div className="job-location">{job.category}</div>
-                        <div className="job-description">
-                          {job.description || "İş açıklaması kart üzerinde burada görünecek."}
-                        </div>
-                        <div className="mini-salary">{job.salary}</div>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              )}
-            </section>
+        <section className="section featured-section" id="one-cikanlar">
+          <div className="section-head">
+            <h2 className="section-title section-title-vitrin">Vitrin ilanlar</h2>
+            <div className="section-sub">{filteredFeaturedJobs.length} ilan</div>
           </div>
-        </div>
+
+          <div className="featured-grid">
+            {filteredFeaturedJobs.map((job) => (
+              <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
+                <div className="card-top">
+                  <div className="pill">Öne Çıkan</div>
+                  <div className="card-top-right">
+                    <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
+                    <div className="type-tag">{job.type}</div>
+                  </div>
+                </div>
+                <div className="job-company">{job.company}</div>
+                <h3 className="job-title">{job.title}</h3>
+                <div className="job-location">{job.location}</div>
+                <div className="job-salary">{job.salary}</div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2 className="section-title">Tüm ilanlar</h2>
+            <div className="section-sub">{filteredJobs.length} ilan bulundu</div>
+          </div>
+
+          {filteredJobs.length === 0 ? (
+            <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
+          ) : (
+            <div className="jobs-grid">
+              {filteredJobs.map((job) => (
+                <article key={job.id} className="job-card" onClick={() => setSelectedJob(job)}>
+                  <div className="card-top">
+                    <div />
+                    <div className="card-top-right">
+                      <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
+                      <div className="type-tag">{job.type}</div>
+                    </div>
+                  </div>
+                  <div className="job-company">{job.company}</div>
+                  <h3 className="job-title">{job.title}</h3>
+                  <div className="job-location">{job.location}</div>
+                  <div className="job-location">{job.category}</div>
+                  <div className="mini-salary">{job.salary}</div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
 
         <footer className="site-footer">
           <div className="site-footer-topline" />
@@ -1817,8 +1496,6 @@ export default function App() {
             </div>
           </div>
         </footer>
-
-        <div className="footer-space" />
       </main>
     </div>
   );
