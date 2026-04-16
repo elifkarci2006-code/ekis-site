@@ -812,12 +812,13 @@ export default function App() {
           font-weight: 900;
           letter-spacing: -0.03em;
           color: ${PALETTE.slate};
+          min-height: 46px;
         }
         .job-company {
           color: ${PALETTE.slate};
           font-weight: 900;
           font-size: 15px;
-          margin-bottom: 6px;
+          margin-bottom: 8px;
           line-height: 1.2;
         }
         .job-days {
@@ -834,15 +835,17 @@ export default function App() {
           align-items: flex-start;
           justify-content: space-between;
           gap: 12px;
-          margin-bottom: 14px;
-          min-height: 32px;
+          margin-bottom: 16px;
+          min-height: 52px;
         }
         .job-meta-right {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
+          justify-content: flex-start;
           gap: 6px;
           margin-left: auto;
+          min-width: 128px;
         }
         .job-meta-top .pill,
         .job-meta-top .type-tag {
@@ -873,6 +876,9 @@ export default function App() {
           box-shadow: 0 14px 28px rgba(60,74,95,0.05);
           transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
           cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          min-height: 232px;
         }
         .job-card:hover {
           transform: translateY(-5px);
@@ -894,10 +900,16 @@ export default function App() {
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
         .mini-salary {
-          margin-top: 14px;
+          margin-top: auto;
+          padding-top: 14px;
           color: ${PALETTE.teal};
           font-size: 17px;
           font-weight: 900;
+        }
+        .job-body {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
         }
         .empty-box {
           background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
@@ -1692,11 +1704,13 @@ export default function App() {
                           <div className="type-tag">{job.type}</div>
                         </div>
                       </div>
-                      <div className="job-company">{job.company}</div>
-                      <h3 className="job-title">{job.title}</h3>
-                      <div className="job-location">{job.location}</div>
-                      <div className="job-location">{job.category}</div>
-                      <div className="mini-salary">{job.salary}</div>
+                      <div className="job-body">
+                        <div className="job-company">{job.company}</div>
+                        <h3 className="job-title">{job.title}</h3>
+                        <div className="job-location">{job.location}</div>
+                        <div className="job-location">{job.category}</div>
+                        <div className="mini-salary">{job.salary}</div>
+                      </div>
                     </article>
                   ))}
                 </div>
