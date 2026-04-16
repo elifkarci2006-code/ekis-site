@@ -806,30 +806,32 @@ export default function App() {
           margin-bottom: 14px;
         }
         .job-title {
-          margin: 0 0 8px;
+          margin: 0 0 10px;
           font-size: 19px;
-          line-height: 1.25;
+          line-height: 1.2;
           font-weight: 900;
           letter-spacing: -0.03em;
           color: ${PALETTE.slate};
         }
         .job-company {
-          color: ${PALETTE.text};
-          font-weight: 800;
-          margin-bottom: 10px;
+          color: ${PALETTE.slate};
+          font-weight: 900;
+          font-size: 15px;
+          margin-bottom: 6px;
+          line-height: 1.2;
         }
         .job-days {
           font-size: 12px;
           color: ${PALETTE.softText};
-          font-weight: 700;
+          font-weight: 800;
           white-space: nowrap;
         }
         .job-meta-top {
           display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
+          align-items: center;
+          justify-content: flex-end;
           gap: 12px;
-          margin-bottom: 10px;
+          margin-bottom: 8px;
         }
         .job-meta-top .pill,
         .job-meta-top .type-tag {
@@ -875,7 +877,7 @@ export default function App() {
           color: ${PALETTE.coral};
           font-size: 12px;
           font-weight: 900;
-          margin-bottom: 14px;
+          margin-bottom: 12px;
           border: 1px solid rgba(228,93,80,0.16);
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
@@ -1649,7 +1651,7 @@ export default function App() {
                       <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
                     </div>
                     <div className="type-tag">{job.type}</div>
-                    <div className="job-company" style={{fontWeight:900}}>{job.company}</div>
+                    <div className="job-company">{job.company}</div>
                     <h3 className="job-title">{job.title}</h3>
                     <div className="job-location">{job.location}</div>
                     <div className="job-salary">{job.salary}</div>
@@ -1674,7 +1676,7 @@ export default function App() {
                         <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
                       </div>
                       <div className="type-tag">{job.type}</div>
-                      <div className="job-company" style={{fontWeight:900}}>{job.company}</div>
+                      <div className="job-company">{job.company}</div>
                       <h3 className="job-title">{job.title}</h3>
                       <div className="job-location">{job.location}</div>
                       <div className="job-location">{job.category}</div>
