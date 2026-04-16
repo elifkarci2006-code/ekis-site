@@ -625,21 +625,17 @@ export default function App() {
         }
 
         .card-top {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 14px;
-          margin-bottom: 18px;
-          min-height: 42px;
+          margin-bottom: 0;
         }
         .card-top-right {
+          position: absolute;
+          top: 34px;
+          right: 22px;
           display: flex;
           flex-direction: column;
           align-items: flex-end;
-          gap: 6px;
-          flex-shrink: 0;
-          padding-top: 2px;
-          margin-top: 18px;
+          gap: 8px;
+          z-index: 2;
         }
         .pill {
           display: inline-flex;
@@ -678,6 +674,17 @@ export default function App() {
           font-size: 15px;
           line-height: 1.25;
         }
+        .job-card .job-title {
+          padding-top: 40px;
+          max-width: calc(100% - 170px);
+        }
+        .featured-card .job-company,
+        .featured-card .job-title,
+        .featured-card .job-location,
+        .featured-card .job-salary {
+          position: relative;
+          z-index: 1;
+        }
         .job-title {
           margin: 0 0 8px;
           font-size: 19px;
@@ -685,6 +692,9 @@ export default function App() {
           font-weight: 900;
           letter-spacing: -0.03em;
           color: ${PALETTE.slate};
+        }
+        .featured-card .job-title {
+          max-width: calc(100% - 170px);
         }
         .job-location {
           color: ${PALETTE.softText};
@@ -1404,13 +1414,11 @@ export default function App() {
               {filteredJobs.map((job) => (
                 <article key={job.id} className="job-card" onClick={() => setSelectedJob(job)}>
                   <div className="card-top">
-                    <div />
                     <div className="card-top-right">
                       <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
                       <div className="type-tag">{job.type}</div>
                     </div>
                   </div>
-                  <div className="job-company">{job.company}</div>
                   <h3 className="job-title">{job.title}</h3>
                   <div className="job-location">{job.location}</div>
                   <div className="job-location">{job.category}</div>
