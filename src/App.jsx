@@ -703,6 +703,118 @@ export default function App() {
           font-size: 17px;
           font-weight: 900;
         }
+        .soft-job-card {
+          position: relative;
+          background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 28px;
+          padding: 22px 22px 20px;
+          box-shadow:
+            0 16px 34px rgba(60,74,95,0.06),
+            inset 0 1px 0 rgba(255,255,255,0.95);
+          overflow: hidden;
+          cursor: pointer;
+          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+        .soft-job-card:hover {
+          transform: translateY(-4px);
+          box-shadow:
+            0 22px 40px rgba(60,74,95,0.10),
+            inset 0 1px 0 rgba(255,255,255,0.95);
+          border-color: rgba(228,93,80,0.16);
+        }
+        .soft-job-card::after {
+          content: "";
+          position: absolute;
+          left: 22px;
+          right: 22px;
+          bottom: 60px;
+          height: 1px;
+          background: rgba(60,74,95,0.08);
+        }
+        .soft-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 12px;
+          margin-bottom: 10px;
+        }
+        .soft-company {
+          color: #6D7A8F;
+          font-size: 15px;
+          font-weight: 800;
+          line-height: 1.2;
+        }
+        .soft-days {
+          color: #7B879A;
+          font-size: 12px;
+          font-weight: 800;
+          white-space: nowrap;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .soft-days::before {
+          content: "•";
+          font-size: 16px;
+          line-height: 1;
+        }
+        .soft-title {
+          margin: 0 0 10px;
+          font-size: 19px;
+          line-height: 1.2;
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          color: ${PALETTE.slate};
+        }
+        .soft-salary {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: ${PALETTE.teal};
+          font-size: 17px;
+          font-weight: 900;
+          margin-bottom: 16px;
+        }
+        .soft-salary svg,
+        .soft-detail svg {
+          width: 15px;
+          height: 15px;
+          flex-shrink: 0;
+        }
+        .soft-details {
+          display: grid;
+          gap: 8px;
+          margin-top: 18px;
+          margin-bottom: 10px;
+        }
+        .soft-detail {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: ${PALETTE.softText};
+          font-size: 15px;
+          line-height: 1.35;
+        }
+        .soft-badge-wrap {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 10px;
+        }
+        .soft-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 86px;
+          padding: 8px 14px;
+          border-radius: 999px;
+          background: ${PALETTE.warm};
+          color: ${PALETTE.coral};
+          border: 1px solid rgba(228,93,80,0.22);
+          font-size: 12px;
+          font-weight: 900;
+          box-shadow: 0 4px 10px rgba(228,93,80,0.08);
+        }
         .jobs-grid {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1401,19 +1513,42 @@ export default function App() {
           ) : (
             <div className="jobs-grid">
               {filteredJobs.map((job) => (
-                <article key={job.id} className="job-card" onClick={() => setSelectedJob(job)}>
-                  <div className="card-top">
-                    <div />
-                    <div className="card-top-right">
-                      <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
-                      <div className="type-tag">{job.type}</div>
+                <article key={job.id} className="soft-job-card" onClick={() => setSelectedJob(job)}>
+                  <div className="soft-top">
+                    <div className="soft-company">{job.company}</div>
+                    <div className="soft-days">{getDaysAgoLabel(job.createdAt)}</div>
+                  </div>
+
+                  <h3 className="soft-title">{job.title}</h3>
+
+                  <div className="soft-salary">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.18"></circle>
+                      <path d="M13.5 7.5c-1.9 0-3.2.95-3.2 2.3 0 1.24.95 1.8 2.67 2.15 1.49.3 1.93.6 1.93 1.22 0 .71-.73 1.18-1.84 1.18-1.13 0-2.09-.44-2.95-1.12l-1.06 1.34c.97.84 2.16 1.35 3.55 1.48V18h1.57v-1.95c1.92-.24 3.16-1.3 3.16-2.82 0-1.47-.86-2.16-2.94-2.64-1.43-.33-1.67-.58-1.67-1.08 0-.46.45-.96 1.51-.96.91 0 1.72.31 2.51.88l.95-1.42c-.89-.71-1.95-1.08-3.08-1.19V6h-1.57v1.55Z" fill="currentColor"></path>
+                    </svg>
+                    <span>{job.salary}</span>
+                  </div>
+
+                  <div className="soft-details">
+                    <div className="soft-detail">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z" fill="currentColor" opacity="0.22"></path>
+                        <circle cx="12" cy="10" r="2.6" fill="currentColor"></circle>
+                      </svg>
+                      <span>{job.location}</span>
+                    </div>
+                    <div className="soft-detail">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 3 4 8l8 5 8-5-8-5Z" fill="currentColor" opacity="0.22"></path>
+                        <path d="m4 12 8 5 8-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"></path>
+                      </svg>
+                      <span>{job.category}</span>
                     </div>
                   </div>
-                  <div className="job-company">{job.company}</div>
-                  <h3 className="job-title">{job.title}</h3>
-                  <div className="job-location">{job.location}</div>
-                  <div className="job-location">{job.category}</div>
-                  <div className="mini-salary">{job.salary}</div>
+
+                  <div className="soft-badge-wrap">
+                    <div className="soft-badge">{job.type}</div>
+                  </div>
                 </article>
               ))}
             </div>
