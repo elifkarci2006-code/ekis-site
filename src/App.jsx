@@ -703,117 +703,6 @@ export default function App() {
           font-size: 17px;
           font-weight: 900;
         }
-        .modern-job-card {
-          position: relative;
-          background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 30px;
-          padding: 22px 22px 18px;
-          box-shadow: 0 18px 36px rgba(60,74,95,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
-          overflow: hidden;
-          cursor: pointer;
-          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-        }
-        .modern-job-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 24px 42px rgba(60,74,95,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
-          border-color: rgba(228,93,80,0.18);
-        }
-        .modern-job-card::after {
-          content: "";
-          position: absolute;
-          left: 18px;
-          right: 18px;
-          bottom: 58px;
-          height: 1px;
-          background: rgba(60,74,95,0.08);
-        }
-        .modern-card-top {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 14px;
-          margin-bottom: 8px;
-        }
-        .modern-company {
-          color: ${PALETTE.softText};
-          font-weight: 800;
-          font-size: 15px;
-          line-height: 1.2;
-          margin-bottom: 10px;
-        }
-        .modern-days {
-          color: ${PALETTE.softText};
-          font-size: 12px;
-          font-weight: 800;
-          white-space: nowrap;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-        }
-        .modern-days::before {
-          content: "•";
-          font-size: 18px;
-          line-height: 1;
-          color: ${PALETTE.softText};
-          transform: translateY(-1px);
-        }
-        .modern-title {
-          margin: 0 0 10px;
-          font-size: 20px;
-          line-height: 1.18;
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          color: ${PALETTE.slate};
-        }
-        .modern-salary {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          color: ${PALETTE.teal};
-          font-size: 17px;
-          font-weight: 900;
-          margin-bottom: 20px;
-        }
-        .modern-salary svg,
-        .modern-detail-row svg {
-          width: 15px;
-          height: 15px;
-          flex-shrink: 0;
-        }
-        .modern-details {
-          display: grid;
-          gap: 8px;
-          margin-top: 18px;
-          margin-bottom: 10px;
-        }
-        .modern-detail-row {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          color: ${PALETTE.softText};
-          font-size: 15px;
-          line-height: 1.35;
-        }
-        .modern-badge-wrap {
-          display: flex;
-          justify-content: flex-end;
-          margin-top: 12px;
-        }
-        .modern-badge {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-width: 92px;
-          padding: 8px 14px;
-          border-radius: 999px;
-          background: ${PALETTE.warm};
-          color: ${PALETTE.coral};
-          border: 1px solid rgba(228,93,80,0.22);
-          box-shadow: 0 4px 12px rgba(228,93,80,0.08);
-          font-size: 12px;
-          font-weight: 900;
-        }
         .jobs-grid {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1512,38 +1401,19 @@ export default function App() {
           ) : (
             <div className="jobs-grid">
               {filteredJobs.map((job) => (
-                <article key={job.id} className="modern-job-card" onClick={() => setSelectedJob(job)}>
-                  <div className="modern-card-top">
-                    <div className="modern-company">{job.company}</div>
-                    <div className="modern-days">{getDaysAgoLabel(job.createdAt)}</div>
-                  </div>
-                  <h3 className="modern-title">{job.title}</h3>
-                  <div className="modern-salary">
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.18"></circle>
-                      <path d="M13.5 7.5c-1.9 0-3.2.95-3.2 2.3 0 1.24.95 1.8 2.67 2.15 1.49.3 1.93.6 1.93 1.22 0 .71-.73 1.18-1.84 1.18-1.13 0-2.09-.44-2.95-1.12l-1.06 1.34c.97.84 2.16 1.35 3.55 1.48V18h1.57v-1.95c1.92-.24 3.16-1.3 3.16-2.82 0-1.47-.86-2.16-2.94-2.64-1.43-.33-1.67-.58-1.67-1.08 0-.46.45-.96 1.51-.96.91 0 1.72.31 2.51.88l.95-1.42c-.89-.71-1.95-1.08-3.08-1.19V6h-1.57v1.55Z" fill="currentColor"></path>
-                    </svg>
-                    <span>{job.salary}</span>
-                  </div>
-                  <div className="modern-details">
-                    <div className="modern-detail-row">
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z" fill="currentColor" opacity="0.22"></path>
-                        <circle cx="12" cy="10" r="2.6" fill="currentColor"></circle>
-                      </svg>
-                      <span>{job.location}</span>
-                    </div>
-                    <div className="modern-detail-row">
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 3 4 8l8 5 8-5-8-5Z" fill="currentColor" opacity="0.22"></path>
-                        <path d="m4 12 8 5 8-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"></path>
-                      </svg>
-                      <span>{job.category}</span>
+                <article key={job.id} className="job-card" onClick={() => setSelectedJob(job)}>
+                  <div className="card-top">
+                    <div />
+                    <div className="card-top-right">
+                      <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
+                      <div className="type-tag">{job.type}</div>
                     </div>
                   </div>
-                  <div className="modern-badge-wrap">
-                    <div className="modern-badge">{job.type}</div>
-                  </div>
+                  <div className="job-company">{job.company}</div>
+                  <h3 className="job-title">{job.title}</h3>
+                  <div className="job-location">{job.location}</div>
+                  <div className="job-location">{job.category}</div>
+                  <div className="mini-salary">{job.salary}</div>
                 </article>
               ))}
             </div>
