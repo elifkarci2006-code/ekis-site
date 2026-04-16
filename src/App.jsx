@@ -836,7 +836,12 @@ export default function App() {
           justify-content: space-between;
           gap: 12px;
           margin-bottom: 8px;
-          min-height: 0;
+        }
+        .job-top-spacer {
+          display: flex;
+          justify-content: flex-end;
+          min-height: 54px;
+          margin-bottom: 2px;
         }
         .job-meta-right {
           display: flex;
@@ -851,9 +856,6 @@ export default function App() {
         .job-meta-top .type-tag {
           margin-bottom: 0;
           flex-shrink: 0;
-        }
-        .job-meta-top .pill {
-          margin-bottom: 10px;
         }
         .job-location {
           color: ${PALETTE.softText};
@@ -1674,15 +1676,13 @@ export default function App() {
                 {filteredFeaturedJobs.map((job) => (
                   <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
                     <div className="job-meta-top">
-                      <div>
-                        <div className="pill">Öne Çıkan</div>
-                        <div className="job-company">{job.company}</div>
-                      </div>
+                      <div className="pill">Öne Çıkan</div>
                       <div className="job-meta-right">
                         <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
                         <div className="type-tag">{job.type}</div>
                       </div>
                     </div>
+                    <div className="job-company">{job.company}</div>
                     <h3 className="job-title">{job.title}</h3>
                     <div className="job-location">{job.location}</div>
                     <div className="job-salary">{job.salary}</div>
@@ -1703,14 +1703,14 @@ export default function App() {
                 <div className="jobs-grid">
                   {filteredJobs.map((job) => (
                     <article key={job.id} className="job-card" onClick={() => setSelectedJob(job)}>
-                      <div className="job-body">
-                        <div className="job-meta-top">
-                          <div className="job-company">{job.company}</div>
-                          <div className="job-meta-right">
-                            <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
-                            <div className="type-tag">{job.type}</div>
-                          </div>
+                      <div className="job-top-spacer">
+                        <div className="job-meta-right">
+                          <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
+                          <div className="type-tag">{job.type}</div>
                         </div>
+                      </div>
+                      <div className="job-body">
+                        <div className="job-company">{job.company}</div>
                         <h3 className="job-title">{job.title}</h3>
                         <div className="job-location">{job.location}</div>
                         <div className="job-location">{job.category}</div>
