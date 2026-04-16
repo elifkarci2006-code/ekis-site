@@ -649,7 +649,8 @@ export default function App() {
           border-radius: 999px;
           padding: 7px 11px;
           font-size: 12px;
-          font-weight: 900;
+          font-weight: 800;
+          letter-spacing: -0.01em;
         }
         .type-tag {
           display: inline-flex;
@@ -660,7 +661,8 @@ export default function App() {
           background: ${PALETTE.warm};
           color: ${PALETTE.coral};
           font-size: 12px;
-          font-weight: 900;
+          font-weight: 800;
+          letter-spacing: -0.01em;
           border: 1px solid rgba(228,93,80,0.16);
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
@@ -668,19 +670,21 @@ export default function App() {
           font-size: 12px;
           color: ${PALETTE.softText};
           font-weight: 700;
+          letter-spacing: -0.01em;
           white-space: nowrap;
         }
         .job-company {
-          color: ${PALETTE.text};
+          color: ${PALETTE.slate};
           font-weight: 800;
           margin-bottom: 8px;
           font-size: 15px;
-          line-height: 1.25;
+          line-height: 1.3;
+          letter-spacing: -0.01em;
         }
         .job-title {
           margin: 0 0 8px;
           font-size: 19px;
-          line-height: 1.25;
+          line-height: 1.22;
           font-weight: 900;
           letter-spacing: -0.03em;
           color: ${PALETTE.slate};
@@ -689,11 +693,15 @@ export default function App() {
           color: ${PALETTE.softText};
           margin-bottom: 10px;
           font-size: 15px;
+          line-height: 1.4;
+          font-weight: 500;
+          letter-spacing: -0.01em;
         }
         .job-salary {
           color: ${PALETTE.coral};
           font-size: 20px;
           font-weight: 900;
+          line-height: 1.2;
           letter-spacing: -0.03em;
           margin-top: 8px;
         }
@@ -746,9 +754,10 @@ export default function App() {
           line-height: 1.2;
         }
         .soft-days {
-          color: #7B879A;
+          color: ${PALETTE.softText};
           font-size: 12px;
-          font-weight: 800;
+          font-weight: 700;
+          letter-spacing: -0.01em;
           white-space: nowrap;
           display: inline-flex;
           align-items: center;
@@ -762,7 +771,7 @@ export default function App() {
         .soft-title {
           margin: 0 0 10px;
           font-size: 19px;
-          line-height: 1.2;
+          line-height: 1.22;
           font-weight: 900;
           letter-spacing: -0.03em;
           color: ${PALETTE.slate};
@@ -774,6 +783,8 @@ export default function App() {
           color: ${PALETTE.teal};
           font-size: 17px;
           font-weight: 900;
+          line-height: 1.2;
+          letter-spacing: -0.02em;
           margin-bottom: 16px;
         }
         .soft-salary svg,
@@ -794,7 +805,9 @@ export default function App() {
           gap: 8px;
           color: ${PALETTE.softText};
           font-size: 15px;
-          line-height: 1.35;
+          line-height: 1.4;
+          font-weight: 500;
+          letter-spacing: -0.01em;
         }
         .soft-badge-wrap {
           display: flex;
@@ -812,7 +825,8 @@ export default function App() {
           color: ${PALETTE.coral};
           border: 1px solid rgba(228,93,80,0.22);
           font-size: 12px;
-          font-weight: 900;
+          font-weight: 800;
+          letter-spacing: -0.01em;
           box-shadow: 0 4px 10px rgba(228,93,80,0.08);
         }
         .jobs-grid {
