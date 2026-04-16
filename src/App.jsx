@@ -639,6 +639,7 @@ export default function App() {
           gap: 6px;
           flex-shrink: 0;
           padding-top: 2px;
+          margin-top: 18px;
         }
         .pill {
           display: inline-flex;
