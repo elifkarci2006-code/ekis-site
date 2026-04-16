@@ -1648,8 +1648,9 @@ export default function App() {
                       <div className="pill">Öne Çıkan</div>
                       <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
                     </div>
+                    <div className="type-tag">{job.type}</div>
+                    <div className="job-company" style={{fontWeight:900}}>{job.company}</div>
                     <h3 className="job-title">{job.title}</h3>
-                    <div className="job-company">{job.company}</div>
                     <div className="job-location">{job.location}</div>
                     <div className="job-salary">{job.salary}</div>
                   </article>
@@ -1670,11 +1671,11 @@ export default function App() {
                   {filteredJobs.map((job) => (
                     <article key={job.id} className="job-card" onClick={() => setSelectedJob(job)}>
                       <div className="job-meta-top">
-                        <div className="type-tag">{job.type}</div>
                         <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
                       </div>
+                      <div className="type-tag">{job.type}</div>
+                      <div className="job-company" style={{fontWeight:900}}>{job.company}</div>
                       <h3 className="job-title">{job.title}</h3>
-                      <div className="job-company">{job.company}</div>
                       <div className="job-location">{job.location}</div>
                       <div className="job-location">{job.category}</div>
                       <div className="mini-salary">{job.salary}</div>
