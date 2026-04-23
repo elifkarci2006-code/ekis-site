@@ -14,6 +14,10 @@ const PALETTE = {
   softText: "#5D6B7F",
   border: "#DDE5EA",
   warm: "#FFF2EC",
+  green: "#16a34a",
+  yellow: "#f59e0b",
+  red: "#dc2626",
+  blue: "#2563eb",
 };
 
 const featuredSeed = [
@@ -28,6 +32,10 @@ const featuredSeed = [
       "Servis ve karşılama süreçlerinde destek olacak, güler yüzlü ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
     category: "Kafe & Restoran",
+    plan: "featured",
+    status: "active",
+    paymentStatus: "paid",
+    featuredStatus: "live",
   },
   {
     id: 2,
@@ -40,6 +48,10 @@ const featuredSeed = [
       "Etkinlik giriş alanında misafir karşılama ve yönlendirme görevlerinde çalışacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
     category: "Etkinlik & Organizasyon",
+    plan: "featured",
+    status: "active",
+    paymentStatus: "paid",
+    featuredStatus: "live",
   },
   {
     id: 3,
@@ -52,6 +64,10 @@ const featuredSeed = [
       "Yoğun saatlerde teslimat süreçlerinde görev alacak, hızlı ve dikkatli kurye aranıyor.",
     createdAt: "2026-04-14T10:00:00",
     category: "Kurye & Dağıtım",
+    plan: "featured",
+    status: "active",
+    paymentStatus: "paid",
+    featuredStatus: "live",
   },
 ];
 
@@ -67,6 +83,10 @@ const jobsSeed = [
     description:
       "Ürün yerleştirme, raf düzenleme ve temel depo operasyonlarında görev alacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
+    plan: "free",
+    status: "active",
+    paymentStatus: "none",
+    featuredStatus: "none",
   },
   {
     id: 12,
@@ -79,6 +99,10 @@ const jobsSeed = [
     description:
       "Yoğun mağaza temposuna uyum sağlayabilecek, kasa deneyimi olan ya da öğrenmeye açık ekip arkadaşı.",
     createdAt: "2026-04-14T10:00:00",
+    plan: "free",
+    status: "active",
+    paymentStatus: "none",
+    featuredStatus: "none",
   },
   {
     id: 13,
@@ -91,6 +115,10 @@ const jobsSeed = [
     description:
       "Dosyalama, evrak takibi ve günlük ofis işlerine destek verecek ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
+    plan: "free",
+    status: "active",
+    paymentStatus: "none",
+    featuredStatus: "none",
   },
   {
     id: 14,
@@ -103,6 +131,10 @@ const jobsSeed = [
     description:
       "Ofis ve ortak kullanım alanlarının günlük temizliğinden sorumlu olacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
+    plan: "free",
+    status: "active",
+    paymentStatus: "none",
+    featuredStatus: "none",
   },
   {
     id: 15,
@@ -115,6 +147,10 @@ const jobsSeed = [
     description:
       "Kahve hazırlık süreçlerinde destek verecek, müşteri ilişkileri güçlü ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
+    plan: "free",
+    status: "active",
+    paymentStatus: "none",
+    featuredStatus: "none",
   },
   {
     id: 16,
@@ -127,6 +163,10 @@ const jobsSeed = [
     description:
       "Sipariş paketleme, etiketleme ve sevkiyat hazırlığında görev alacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
+    plan: "free",
+    status: "active",
+    paymentStatus: "none",
+    featuredStatus: "none",
   },
   {
     id: 17,
@@ -139,6 +179,10 @@ const jobsSeed = [
     description:
       "Stand düzeni, ürün tanıtımı ve müşteri yönlendirme alanlarında görev alacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
+    plan: "free",
+    status: "active",
+    paymentStatus: "none",
+    featuredStatus: "none",
   },
   {
     id: 18,
@@ -151,6 +195,10 @@ const jobsSeed = [
     description:
       "Temel içerik hazırlama, paylaşım planlama ve dijital destek süreçlerinde çalışacak ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
+    plan: "free",
+    status: "active",
+    paymentStatus: "none",
+    featuredStatus: "none",
   },
 ];
 
@@ -169,7 +217,90 @@ const categories = [
 
 const types = ["Tümü", "Günlük", "Saatlik", "Part Time"];
 
-const cities = ["Tümü", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin", "Aydın", "Balıkesir", "Bartın", "Batman", "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Düzce", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Iğdır", "Isparta", "İstanbul", "İzmir", "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kırıkkale", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Şanlıurfa", "Şırnak", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak"];
+const cities = [
+  "Tümü",
+  "Adana",
+  "Adıyaman",
+  "Afyonkarahisar",
+  "Ağrı",
+  "Aksaray",
+  "Amasya",
+  "Ankara",
+  "Antalya",
+  "Ardahan",
+  "Artvin",
+  "Aydın",
+  "Balıkesir",
+  "Bartın",
+  "Batman",
+  "Bayburt",
+  "Bilecik",
+  "Bingöl",
+  "Bitlis",
+  "Bolu",
+  "Burdur",
+  "Bursa",
+  "Çanakkale",
+  "Çankırı",
+  "Çorum",
+  "Denizli",
+  "Diyarbakır",
+  "Düzce",
+  "Edirne",
+  "Elazığ",
+  "Erzincan",
+  "Erzurum",
+  "Eskişehir",
+  "Gaziantep",
+  "Giresun",
+  "Gümüşhane",
+  "Hakkari",
+  "Hatay",
+  "Iğdır",
+  "Isparta",
+  "İstanbul",
+  "İzmir",
+  "Kahramanmaraş",
+  "Karabük",
+  "Karaman",
+  "Kars",
+  "Kastamonu",
+  "Kayseri",
+  "Kilis",
+  "Kırıkkale",
+  "Kırklareli",
+  "Kırşehir",
+  "Kocaeli",
+  "Konya",
+  "Kütahya",
+  "Malatya",
+  "Manisa",
+  "Mardin",
+  "Mersin",
+  "Muğla",
+  "Muş",
+  "Nevşehir",
+  "Niğde",
+  "Ordu",
+  "Osmaniye",
+  "Rize",
+  "Sakarya",
+  "Samsun",
+  "Siirt",
+  "Sinop",
+  "Sivas",
+  "Şanlıurfa",
+  "Şırnak",
+  "Tekirdağ",
+  "Tokat",
+  "Trabzon",
+  "Tunceli",
+  "Uşak",
+  "Van",
+  "Yalova",
+  "Yozgat",
+  "Zonguldak",
+];
 
 function getDaysAgoLabel(createdAt) {
   const created = new Date(createdAt);
@@ -202,17 +333,143 @@ function formatSalaryPreview(workType, salary) {
   return `Günlük ${formatted} TL`;
 }
 
+function getStatusText(status) {
+  if (status === "pending") return "Onay bekliyor";
+  if (status === "rejected") return "Reddedildi";
+  if (status === "expired") return "Süresi doldu";
+  return "Yayında";
+}
+
+function getPlanText(plan) {
+  return plan === "featured" ? "Vitrin" : "Standart";
+}
+
+function getPaymentText(paymentStatus) {
+  if (paymentStatus === "paid") return "Ödendi";
+  if (paymentStatus === "pending") return "Ödeme bekleniyor";
+  if (paymentStatus === "failed") return "Başarısız";
+  return "Yok";
+}
+
+function StatusBadge({ label, tone = "default" }) {
+  const toneMap = {
+    default: { bg: "rgba(60,74,95,0.08)", color: PALETTE.slate },
+    success: { bg: "rgba(22,163,74,0.12)", color: PALETTE.green },
+    warning: { bg: "rgba(245,158,11,0.16)", color: "#b45309" },
+    danger: { bg: "rgba(220,38,38,0.12)", color: PALETTE.red },
+    info: { bg: "rgba(37,99,235,0.12)", color: PALETTE.blue },
+    coral: { bg: "rgba(228,93,80,0.14)", color: PALETTE.coral },
+  };
+
+  const selected = toneMap[tone] || toneMap.default;
+
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "7px 10px",
+        borderRadius: "999px",
+        background: selected.bg,
+        color: selected.color,
+        fontSize: 12,
+        fontWeight: 800,
+        whiteSpace: "nowrap",
+      }}
+    >
+      {label}
+    </span>
+  );
+}
+
+function AdminTable({ columns, rows, emptyText }) {
+  return (
+    <div style={{ overflowX: "auto" }}>
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "separate",
+          borderSpacing: 0,
+          minWidth: 860,
+          background: "#fff",
+          border: `1px solid ${PALETTE.border}`,
+          borderRadius: 18,
+          overflow: "hidden",
+        }}
+      >
+        <thead>
+          <tr style={{ background: "#f8fafc" }}>
+            {columns.map((col) => (
+              <th
+                key={col.key}
+                style={{
+                  textAlign: "left",
+                  padding: "14px 16px",
+                  fontSize: 13,
+                  fontWeight: 900,
+                  color: PALETTE.slate,
+                  borderBottom: `1px solid ${PALETTE.border}`,
+                }}
+              >
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.length === 0 ? (
+            <tr>
+              <td
+                colSpan={columns.length}
+                style={{
+                  padding: "22px 16px",
+                  color: PALETTE.softText,
+                  fontWeight: 700,
+                }}
+              >
+                {emptyText}
+              </td>
+            </tr>
+          ) : (
+            rows.map((row, index) => (
+              <tr key={row.id || index}>
+                {columns.map((col) => (
+                  <td
+                    key={col.key}
+                    style={{
+                      padding: "14px 16px",
+                      borderBottom:
+                        index === rows.length - 1 ? "none" : `1px solid ${PALETTE.border}`,
+                      verticalAlign: "top",
+                      fontSize: 14,
+                      color: PALETTE.text,
+                    }}
+                  >
+                    {col.render ? col.render(row) : row[col.key]}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function App() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Tümü");
   const [jobType, setJobType] = useState("Tümü");
   const [city, setCity] = useState("Tümü");
+
   const [submittedSearch, setSubmittedSearch] = useState("");
   const [submittedCategory, setSubmittedCategory] = useState("Tümü");
   const [submittedJobType, setSubmittedJobType] = useState("Tümü");
   const [submittedCity, setSubmittedCity] = useState("Tümü");
+
   const [showForm, setShowForm] = useState(false);
-  const [featuredChecked, setFeaturedChecked] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [logoSrc, setLogoSrc] = useState("/logo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
@@ -221,6 +478,14 @@ export default function App() {
   const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
   const [selectedJob, setSelectedJob] = useState(null);
   const [errors, setErrors] = useState({});
+
+  const [showPlanModal, setShowPlanModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("free");
+  const [pendingJob, setPendingJob] = useState(null);
+
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [adminTab, setAdminTab] = useState("dashboard");
+
   const [formData, setFormData] = useState({
     company: "",
     title: "",
@@ -228,6 +493,8 @@ export default function App() {
     workType: "Günlük",
     salary: "",
     description: "",
+    contactName: "",
+    contactPhone: "",
   });
 
   useEffect(() => {
@@ -246,9 +513,11 @@ export default function App() {
 
   useEffect(() => {
     if (!showForm) {
-      setFeaturedChecked(false);
       setShowPreview(false);
       setErrors({});
+      setSelectedPlan("free");
+      setPendingJob(null);
+      setShowPlanModal(false);
       setFormData({
         company: "",
         title: "",
@@ -256,9 +525,41 @@ export default function App() {
         workType: "Günlük",
         salary: "",
         description: "",
+        contactName: "",
+        contactPhone: "",
       });
     }
   }, [showForm]);
+
+  useEffect(() => {
+    const pendingFeatured = localStorage.getItem("ekis_pending_featured_job");
+    if (pendingFeatured) {
+      try {
+        const parsed = JSON.parse(pendingFeatured);
+        if (parsed && parsed.id) {
+          const existsInJobs = jobs.some((item) => item.id === parsed.id);
+          const existsInFeatured = featuredJobs.some((item) => item.id === parsed.id);
+
+          if (!existsInJobs && !existsInFeatured) {
+            setJobs((prev) => [
+              {
+                ...parsed,
+                plan: "featured",
+                status: "pending",
+                paymentStatus: "pending",
+                featuredStatus: "waiting_approval",
+              },
+              ...prev,
+            ]);
+          }
+
+          localStorage.removeItem("ekis_pending_featured_job");
+        }
+      } catch (error) {
+        localStorage.removeItem("ekis_pending_featured_job");
+      }
+    }
+  }, []);
 
   const validateForm = () => {
     const nextErrors = {};
@@ -267,6 +568,8 @@ export default function App() {
     if (!formData.city.trim()) nextErrors.city = "Şehir / konum zorunludur.";
     if (!formData.salary.trim()) nextErrors.salary = "Ücret bilgisi zorunludur.";
     if (!formData.description.trim()) nextErrors.description = "İş açıklaması zorunludur.";
+    if (!formData.contactName.trim()) nextErrors.contactName = "Yetkili adı zorunludur.";
+    if (!formData.contactPhone.trim()) nextErrors.contactPhone = "Telefon zorunludur.";
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -278,6 +581,13 @@ export default function App() {
       const onlyNumbers = value.replace(/[^0-9]/g, "");
       setFormData((prev) => ({ ...prev, salary: onlyNumbers }));
       setErrors((prev) => ({ ...prev, salary: "" }));
+      return;
+    }
+
+    if (name === "contactPhone") {
+      const cleaned = value.replace(/[^\d+\s()-]/g, "");
+      setFormData((prev) => ({ ...prev, [name]: cleaned }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
       return;
     }
 
@@ -307,10 +617,8 @@ export default function App() {
     setSubmittedCity("Tümü");
   };
 
-  const handlePublish = () => {
-    if (!validateForm()) return;
-
-    const newJob = {
+  const buildJobFromForm = () => {
+    return {
       id: Date.now(),
       title: formData.title.trim(),
       company: formData.company.trim(),
@@ -320,19 +628,137 @@ export default function App() {
       category: inferCategory(formData.title),
       description: formData.description.trim(),
       createdAt: new Date().toISOString(),
+      contactName: formData.contactName.trim(),
+      contactPhone: formData.contactPhone.trim(),
+      plan: selectedPlan,
+      status: "pending",
+      paymentStatus: selectedPlan === "featured" ? "pending" : "none",
+      featuredStatus: selectedPlan === "featured" ? "waiting_approval" : "none",
     };
+  };
 
-    if (featuredChecked) {
-      setFeaturedJobs((prev) => [newJob, ...prev]);
-    } else {
-      setJobs((prev) => [newJob, ...prev]);
+  const handlePublishClick = () => {
+    if (!validateForm()) return;
+    const newJob = buildJobFromForm();
+    setPendingJob(newJob);
+    setShowPlanModal(true);
+  };
+
+  const handlePlanContinue = () => {
+    if (!pendingJob) return;
+
+    if (selectedPlan === "free") {
+      setJobs((prev) => [
+        {
+          ...pendingJob,
+          plan: "free",
+          status: "pending",
+          paymentStatus: "none",
+          featuredStatus: "none",
+        },
+        ...prev,
+      ]);
+      setShowPlanModal(false);
+      setShowForm(false);
+      setPendingJob(null);
+      return;
     }
 
-    setShowForm(false);
+    if (selectedPlan === "featured") {
+      const featuredPending = {
+        ...pendingJob,
+        plan: "featured",
+        status: "pending",
+        paymentStatus: "pending",
+        featuredStatus: "waiting_approval",
+      };
+
+      localStorage.setItem("ekis_pending_featured_job", JSON.stringify(featuredPending));
+
+      setJobs((prev) => [featuredPending, ...prev]);
+      setShowPlanModal(false);
+      setShowForm(false);
+      setPendingJob(null);
+      window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const updateJobStatus = (jobId, updates) => {
+    setJobs((prev) =>
+      prev.map((job) => (job.id === jobId ? { ...job, ...updates } : job))
+    );
+
+    setFeaturedJobs((prev) =>
+      prev.map((job) => (job.id === jobId ? { ...job, ...updates } : job))
+    );
+  };
+
+  const approveJob = (job) => {
+    if (job.plan === "featured") {
+      updateJobStatus(job.id, {
+        status: "active",
+        paymentStatus: job.paymentStatus === "pending" ? "paid" : job.paymentStatus,
+        featuredStatus: "live",
+      });
+
+      const alreadyFeatured = featuredJobs.some((item) => item.id === job.id);
+      if (!alreadyFeatured) {
+        const upgradedJob = {
+          ...job,
+          status: "active",
+          paymentStatus: job.paymentStatus === "pending" ? "paid" : job.paymentStatus,
+          featuredStatus: "live",
+          plan: "featured",
+        };
+        setFeaturedJobs((prev) => [upgradedJob, ...prev]);
+      }
+    } else {
+      updateJobStatus(job.id, { status: "active" });
+    }
+  };
+
+  const rejectJob = (jobId) => {
+    updateJobStatus(jobId, {
+      status: "rejected",
+      featuredStatus: "none",
+    });
+
+    setFeaturedJobs((prev) => prev.filter((item) => item.id !== jobId));
+  };
+
+  const expireJob = (jobId) => {
+    updateJobStatus(jobId, { status: "expired" });
+    setFeaturedJobs((prev) => prev.filter((item) => item.id !== jobId));
+  };
+
+  const removeJob = (jobId) => {
+    setJobs((prev) => prev.filter((job) => job.id !== jobId));
+    setFeaturedJobs((prev) => prev.filter((job) => job.id !== jobId));
+    if (selectedJob?.id === jobId) setSelectedJob(null);
+  };
+
+  const moveToFeatured = (job) => {
+    const upgradedJob = {
+      ...job,
+      plan: "featured",
+      paymentStatus: "paid",
+      featuredStatus: "live",
+      status: "active",
+    };
+
+    updateJobStatus(job.id, upgradedJob);
+
+    const alreadyFeatured = featuredJobs.some((item) => item.id === job.id);
+    if (!alreadyFeatured) {
+      setFeaturedJobs((prev) => [upgradedJob, ...prev]);
+    }
   };
 
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
+      if (job.status !== "active") return false;
+      if (job.plan === "featured" && job.featuredStatus === "live") return false;
+
       const text = `${job.title} ${job.company} ${job.location} ${job.category}`.toLowerCase();
       const matchesSearch = text.includes(submittedSearch.toLowerCase());
       const matchesCategory = submittedCategory === "Tümü" ? true : job.category === submittedCategory;
@@ -347,6 +773,9 @@ export default function App() {
 
   const filteredFeaturedJobs = useMemo(() => {
     return featuredJobs.filter((job) => {
+      if (job.status !== "active") return false;
+      if (job.featuredStatus !== "live") return false;
+
       const text = `${job.title} ${job.company} ${job.location} ${job.category || ""}`.toLowerCase();
       const matchesSearch = text.includes(submittedSearch.toLowerCase());
       const matchesCategory = submittedCategory === "Tümü" ? true : (job.category || inferCategory(job.title)) === submittedCategory;
@@ -362,6 +791,48 @@ export default function App() {
   const previewSalary = formatSalaryPreview(formData.workType, formData.salary);
   const totalCount = filteredFeaturedJobs.length + filteredJobs.length;
 
+  const allAdminJobs = useMemo(() => {
+    const featuredIds = new Set(featuredJobs.map((item) => item.id));
+    const baseJobs = jobs.map((job) => {
+      if (featuredIds.has(job.id)) {
+        const sameFeatured = featuredJobs.find((f) => f.id === job.id);
+        return sameFeatured || job;
+      }
+      return job;
+    });
+
+    const extraFeatured = featuredJobs.filter(
+      (featured) => !baseJobs.some((job) => job.id === featured.id)
+    );
+
+    return [...extraFeatured, ...baseJobs].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+  }, [jobs, featuredJobs]);
+
+  const adminStats = useMemo(() => {
+    const all = allAdminJobs.length;
+    const active = allAdminJobs.filter((job) => job.status === "active").length;
+    const pending = allAdminJobs.filter((job) => job.status === "pending").length;
+    const featuredLive = allAdminJobs.filter(
+      (job) => job.plan === "featured" && job.featuredStatus === "live"
+    ).length;
+    const paymentPending = allAdminJobs.filter(
+      (job) => job.plan === "featured" && job.paymentStatus === "pending"
+    ).length;
+
+    const today = new Date().toDateString();
+    const todayCount = allAdminJobs.filter(
+      (job) => new Date(job.createdAt).toDateString() === today
+    ).length;
+
+    return { all, active, pending, featuredLive, paymentPending, todayCount };
+  }, [allAdminJobs]);
+
+  const paymentRequests = useMemo(() => {
+    return allAdminJobs.filter((job) => job.plan === "featured");
+  }, [allAdminJobs]);
+
   return (
     <div className="app-shell">
       <style>{`
@@ -374,6 +845,7 @@ export default function App() {
           color: ${PALETTE.text};
         }
         a { color: inherit; }
+        button { font-family: inherit; }
         .app-shell {
           min-height: 100vh;
           background:
@@ -455,6 +927,21 @@ export default function App() {
           background: #fff;
           border: 1px solid rgba(60,74,95,0.12);
           box-shadow: 0 8px 18px rgba(60,74,95,0.05);
+        }
+        .btn-dark {
+          color: #fff;
+          background: ${PALETTE.slate};
+          box-shadow: 0 12px 24px rgba(60,74,95,0.22);
+        }
+        .btn-danger {
+          color: #fff;
+          background: ${PALETTE.red};
+          box-shadow: 0 10px 22px rgba(220,38,38,0.22);
+        }
+        .btn-success {
+          color: #fff;
+          background: ${PALETTE.green};
+          box-shadow: 0 10px 22px rgba(22,163,74,0.22);
         }
         .top-search {
           padding: 2px 0 10px;
@@ -705,12 +1192,6 @@ export default function App() {
           letter-spacing: -0.03em;
           margin-top: 8px;
         }
-        .mini-salary {
-          margin-top: 14px;
-          color: ${PALETTE.teal};
-          font-size: 17px;
-          font-weight: 900;
-        }
         .soft-job-card {
           position: relative;
           background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
@@ -857,7 +1338,7 @@ export default function App() {
         }
         .post-modal,
         .detail-modal {
-          width: min(680px, calc(100vw - 28px));
+          width: min(760px, calc(100vw - 28px));
           max-height: min(88vh, 920px);
           background: linear-gradient(180deg, #fff 0%, #fcfcfd 100%);
           border-radius: 30px;
@@ -929,38 +1410,11 @@ export default function App() {
           font-size: 14px;
           line-height: 1.55;
         }
-        .check-row {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-weight: 800;
-          color: ${PALETTE.text};
-          margin-bottom: 16px;
-        }
-        .check-row input { width: 18px; height: 18px; }
         .modal-actions {
           display: flex;
           flex-wrap: wrap;
           gap: 12px;
           margin-top: 8px;
-        }
-        .feature-box {
-          background: ${PALETTE.warm};
-          border: 1px solid rgba(228,93,80,0.14);
-          border-radius: 18px;
-          padding: 14px;
-        }
-        .feature-box-title {
-          margin: 0 0 6px;
-          font-size: 15px;
-          font-weight: 900;
-          color: ${PALETTE.slate};
-        }
-        .feature-box-text {
-          margin: 0 0 12px;
-          color: ${PALETTE.slate};
-          font-size: 14px;
-          line-height: 1.6;
         }
         .preview-card {
           position: relative;
@@ -1027,24 +1481,49 @@ export default function App() {
           font-size: 13px;
           white-space: pre-wrap;
         }
-        .preview-helper {
-          margin-top: 14px;
-          font-size: 13px;
-          color: ${PALETTE.softText};
-          font-weight: 700;
+
+        .plan-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+          margin-top: 8px;
         }
-        .feature-link {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-          background: ${PALETTE.coral};
-          color: #fff;
-          border-radius: 12px;
-          padding: 11px 14px;
-          font-size: 14px;
+        .plan-card {
+          border: 2px solid rgba(60,74,95,0.10);
+          border-radius: 22px;
+          padding: 18px;
+          background: #fff;
+          cursor: pointer;
+          transition: 0.18s ease;
+        }
+        .plan-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px rgba(60,74,95,0.08);
+        }
+        .plan-card.active {
+          border-color: ${PALETTE.coral};
+          box-shadow: 0 12px 28px rgba(228,93,80,0.12);
+          background: linear-gradient(180deg, #fff 0%, #fff8f5 100%);
+        }
+        .plan-title {
+          margin: 0 0 6px;
+          font-size: 17px;
           font-weight: 900;
+          color: ${PALETTE.slate};
         }
+        .plan-price {
+          font-size: 22px;
+          font-weight: 900;
+          color: ${PALETTE.coral};
+          margin-bottom: 10px;
+        }
+        .plan-text {
+          color: ${PALETTE.softText};
+          font-size: 14px;
+          line-height: 1.6;
+          margin: 0;
+        }
+
         .detail-title {
           margin: 0 0 10px;
           font-size: 28px;
@@ -1073,6 +1552,127 @@ export default function App() {
           line-height: 1.7;
           white-space: pre-wrap;
         }
+
+        .admin-shell {
+          margin-top: 28px;
+          background: #fff;
+          border-radius: 28px;
+          border: 1px solid rgba(60,74,95,0.08);
+          box-shadow: 0 18px 38px rgba(60,74,95,0.08);
+          overflow: hidden;
+        }
+        .admin-top {
+          padding: 22px;
+          border-bottom: 1px solid ${PALETTE.border};
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          gap: 16px;
+          align-items: center;
+        }
+        .admin-title {
+          margin: 0;
+          font-size: 28px;
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          color: ${PALETTE.slate};
+        }
+        .admin-sub {
+          margin: 6px 0 0;
+          font-size: 14px;
+          color: ${PALETTE.softText};
+          font-weight: 700;
+        }
+        .admin-tabs {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          padding: 18px 22px 0;
+        }
+        .admin-tab {
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          color: ${PALETTE.slate};
+          border-radius: 999px;
+          padding: 10px 14px;
+          font-size: 13px;
+          font-weight: 900;
+          cursor: pointer;
+        }
+        .admin-tab.active {
+          background: ${PALETTE.coral};
+          color: #fff;
+          border-color: ${PALETTE.coral};
+        }
+        .admin-body {
+          padding: 22px;
+        }
+        .admin-cards {
+          display: grid;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 22px;
+        }
+        .admin-card {
+          background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
+          border: 1px solid ${PALETTE.border};
+          border-radius: 20px;
+          padding: 18px;
+          box-shadow: 0 10px 24px rgba(60,74,95,0.04);
+        }
+        .admin-card-label {
+          font-size: 13px;
+          font-weight: 800;
+          color: ${PALETTE.softText};
+          margin-bottom: 8px;
+        }
+        .admin-card-value {
+          font-size: 28px;
+          font-weight: 900;
+          color: ${PALETTE.slate};
+          line-height: 1;
+        }
+        .admin-section-title {
+          margin: 0 0 14px;
+          font-size: 20px;
+          font-weight: 900;
+          color: ${PALETTE.slate};
+        }
+        .admin-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .mini-btn {
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          border-radius: 12px;
+          padding: 8px 10px;
+          font-size: 12px;
+          font-weight: 800;
+          cursor: pointer;
+        }
+        .mini-btn.success {
+          background: rgba(22,163,74,0.10);
+          color: ${PALETTE.green};
+          border-color: rgba(22,163,74,0.18);
+        }
+        .mini-btn.warning {
+          background: rgba(245,158,11,0.12);
+          color: #b45309;
+          border-color: rgba(245,158,11,0.20);
+        }
+        .mini-btn.danger {
+          background: rgba(220,38,38,0.10);
+          color: ${PALETTE.red};
+          border-color: rgba(220,38,38,0.18);
+        }
+        .mini-btn.coral {
+          background: rgba(228,93,80,0.10);
+          color: ${PALETTE.coral};
+          border-color: rgba(228,93,80,0.18);
+        }
+
         .site-footer {
           margin-top: 34px;
           border-radius: 34px 34px 0 0;
@@ -1207,10 +1807,11 @@ export default function App() {
           font-weight: 700;
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1180px) {
           .filter-grid { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .admin-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
         @media (max-width: 760px) {
           .container { width: calc(100% - 16px); max-width: none; }
@@ -1234,6 +1835,8 @@ export default function App() {
           .hero-title { font-size: 24px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
+          .plan-grid { grid-template-columns: 1fr; }
+          .admin-cards { grid-template-columns: 1fr; }
         }
       `}</style>
 
@@ -1259,6 +1862,9 @@ export default function App() {
             <a className="btn btn-secondary" href="#ilanlar">
               Hemen İş Bul
             </a>
+            <button className="btn btn-dark" onClick={() => setAdminOpen((prev) => !prev)}>
+              {adminOpen ? "Admini Kapat" : "Admin Paneli"}
+            </button>
           </div>
         </div>
       </header>
@@ -1267,8 +1873,10 @@ export default function App() {
         <div className="post-modal-backdrop" onClick={() => setShowForm(false)}>
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-panel-inner">
-              <h3 className="post-title">Ücretsiz ilan ver</h3>
-              <p className="post-desc">Formu doldur, istersen ilanını vitrine çıkar ve ön izlemesini gör.</p>
+              <h3 className="post-title">İlan ver</h3>
+              <p className="post-desc">
+                Formu doldur, ön izlemeni gör ve yayın planını seç.
+              </p>
 
               <div className="post-form-grid">
                 <div className="post-field">
@@ -1319,6 +1927,32 @@ export default function App() {
                   </select>
                 </div>
 
+                <div className="post-field">
+                  <label>Yetkili adı<span className="required-star">*</span></label>
+                  <input
+                    className={errors.contactName ? "field-error" : ""}
+                    name="contactName"
+                    type="text"
+                    placeholder="Örn. Ahmet Yılmaz"
+                    value={formData.contactName}
+                    onChange={handleFormChange}
+                  />
+                  {errors.contactName && <div className="error-text">{errors.contactName}</div>}
+                </div>
+
+                <div className="post-field">
+                  <label>Telefon<span className="required-star">*</span></label>
+                  <input
+                    className={errors.contactPhone ? "field-error" : ""}
+                    name="contactPhone"
+                    type="text"
+                    placeholder="Örn. 0555 555 55 55"
+                    value={formData.contactPhone}
+                    onChange={handleFormChange}
+                  />
+                  {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>}
+                </div>
+
                 <div className="post-field full">
                   <label>Ücret bilgisi<span className="required-star">*</span></label>
                   <input
@@ -1346,31 +1980,10 @@ export default function App() {
                 </div>
               </div>
 
-              <label className="check-row">
-                <input
-                  type="checkbox"
-                  checked={featuredChecked}
-                  onChange={(e) => setFeaturedChecked(e.target.checked)}
-                />
-                İlanı öne çıkar
-              </label>
-
-              {featuredChecked && (
-                <div className="feature-box">
-                  <div className="feature-box-title">Öne çıkarma bağlantısı</div>
-                  <p className="feature-box-text">
-                    İlanını ana vitrinde göstermek için aşağıdaki bağlantıdan ödeme adımına geçebilirsin.
-                  </p>
-                  <a className="feature-link" href={SHOPIER_FEATURED_LINK} target="_blank" rel="noreferrer">
-                    Shopier ödeme sayfasına git
-                  </a>
-                </div>
-              )}
-
               {showPreview && (
                 <div className="preview-card">
                   <div className="preview-top">
-                    <div className="preview-badge">{featuredChecked ? "Vitrin adayı" : "Standart ilan"}</div>
+                    <div className="preview-badge">İlan ön izlemesi</div>
                     <div className="preview-meta">{formData.workType || "Günlük"}</div>
                   </div>
 
@@ -1388,11 +2001,57 @@ export default function App() {
                 <button className="btn btn-primary" type="button" onClick={() => setShowPreview((prev) => !prev)}>
                   {showPreview ? "Önizlemeyi Gizle" : "İlanı Önizle"}
                 </button>
-                <button className="btn btn-secondary" type="button" onClick={handlePublish}>
-                  İlanı Yayınla
+                <button className="btn btn-secondary" type="button" onClick={handlePublishClick}>
+                  Devam Et
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={() => setShowForm(false)}>
                   Kapat
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showPlanModal && (
+        <div className="post-modal-backdrop" onClick={() => setShowPlanModal(false)}>
+          <div className="post-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="post-panel-inner">
+              <h3 className="post-title">İlanını nasıl yayınlamak istersin?</h3>
+              <p className="post-desc">
+                Standart ilanı ücretsiz yayınlayabilir ya da vitrinde öne çıkarabilirsin.
+              </p>
+
+              <div className="plan-grid">
+                <div
+                  className={`plan-card ${selectedPlan === "free" ? "active" : ""}`}
+                  onClick={() => setSelectedPlan("free")}
+                >
+                  <h4 className="plan-title">Standart İlan</h4>
+                  <div className="plan-price">Ücretsiz</div>
+                  <p className="plan-text">
+                    İlanın admin onayından sonra standart listede yayına alınır.
+                  </p>
+                </div>
+
+                <div
+                  className={`plan-card ${selectedPlan === "featured" ? "active" : ""}`}
+                  onClick={() => setSelectedPlan("featured")}
+                >
+                  <h4 className="plan-title">Vitrin İlanı</h4>
+                  <div className="plan-price">Ücretli</div>
+                  <p className="plan-text">
+                    İlanın daha görünür olur. Ödeme adımından sonra admin onayı ile vitrinde yayınlanır.
+                  </p>
+                </div>
+              </div>
+
+              <div className="modal-actions" style={{ marginTop: 18 }}>
+                <button className="btn btn-primary" type="button" onClick={handlePlanContinue}>
+                  {selectedPlan === "free" ? "Ücretsiz Yayınla" : "Ödeme Adımına Geç"}
+                </button>
+                <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
+                  Geri
                 </button>
               </div>
             </div>
@@ -1411,6 +2070,8 @@ export default function App() {
                 <div className="detail-line"><strong>Çalışma tipi:</strong> {selectedJob.type}</div>
                 <div className="detail-line"><strong>Kategori:</strong> {selectedJob.category || "Vitrin ilan"}</div>
                 <div className="detail-line"><strong>Yayın:</strong> {getDaysAgoLabel(selectedJob.createdAt)}</div>
+                <div className="detail-line"><strong>Plan:</strong> {getPlanText(selectedJob.plan)}</div>
+                <div className="detail-line"><strong>Durum:</strong> {getStatusText(selectedJob.status)}</div>
                 <div className="detail-salary">{selectedJob.salary}</div>
               </div>
               <div className="detail-description">
@@ -1569,6 +2230,334 @@ export default function App() {
           )}
         </section>
 
+        {adminOpen && (
+          <section className="admin-shell">
+            <div className="admin-top">
+              <div>
+                <h2 className="admin-title">Admin Paneli</h2>
+                <p className="admin-sub">İlanları, vitrin taleplerini ve durumları buradan yönetebilirsin.</p>
+              </div>
+              <div className="modal-actions" style={{ marginTop: 0 }}>
+                <button className="btn btn-secondary" onClick={() => setAdminOpen(false)}>
+                  Paneli Kapat
+                </button>
+              </div>
+            </div>
+
+            <div className="admin-tabs">
+              <button className={`admin-tab ${adminTab === "dashboard" ? "active" : ""}`} onClick={() => setAdminTab("dashboard")}>
+                Dashboard
+              </button>
+              <button className={`admin-tab ${adminTab === "jobs" ? "active" : ""}`} onClick={() => setAdminTab("jobs")}>
+                İlan Yönetimi
+              </button>
+              <button className={`admin-tab ${adminTab === "payments" ? "active" : ""}`} onClick={() => setAdminTab("payments")}>
+                Vitrin Talepleri
+              </button>
+              <button className={`admin-tab ${adminTab === "settings" ? "active" : ""}`} onClick={() => setAdminTab("settings")}>
+                Ayarlar
+              </button>
+            </div>
+
+            <div className="admin-body">
+              {adminTab === "dashboard" && (
+                <>
+                  <div className="admin-cards">
+                    <div className="admin-card">
+                      <div className="admin-card-label">Toplam ilan</div>
+                      <div className="admin-card-value">{adminStats.all}</div>
+                    </div>
+                    <div className="admin-card">
+                      <div className="admin-card-label">Aktif ilan</div>
+                      <div className="admin-card-value">{adminStats.active}</div>
+                    </div>
+                    <div className="admin-card">
+                      <div className="admin-card-label">Onay bekleyen</div>
+                      <div className="admin-card-value">{adminStats.pending}</div>
+                    </div>
+                    <div className="admin-card">
+                      <div className="admin-card-label">Vitrin ilan</div>
+                      <div className="admin-card-value">{adminStats.featuredLive}</div>
+                    </div>
+                    <div className="admin-card">
+                      <div className="admin-card-label">Ödeme bekleyen</div>
+                      <div className="admin-card-value">{adminStats.paymentPending}</div>
+                    </div>
+                  </div>
+
+                  <h3 className="admin-section-title">Son ilanlar</h3>
+
+                  <AdminTable
+                    emptyText="Henüz ilan yok."
+                    columns={[
+                      {
+                        key: "title",
+                        label: "İlan",
+                        render: (row) => (
+                          <div>
+                            <div style={{ fontWeight: 900, marginBottom: 4 }}>{row.title}</div>
+                            <div style={{ color: PALETTE.softText, fontWeight: 700 }}>{row.company}</div>
+                          </div>
+                        ),
+                      },
+                      { key: "location", label: "Konum" },
+                      {
+                        key: "plan",
+                        label: "Plan",
+                        render: (row) => (
+                          <StatusBadge
+                            label={getPlanText(row.plan)}
+                            tone={row.plan === "featured" ? "coral" : "default"}
+                          />
+                        ),
+                      },
+                      {
+                        key: "status",
+                        label: "Durum",
+                        render: (row) => (
+                          <StatusBadge
+                            label={getStatusText(row.status)}
+                            tone={
+                              row.status === "active"
+                                ? "success"
+                                : row.status === "pending"
+                                ? "warning"
+                                : row.status === "rejected"
+                                ? "danger"
+                                : "default"
+                            }
+                          />
+                        ),
+                      },
+                      {
+                        key: "createdAt",
+                        label: "Tarih",
+                        render: (row) => getDaysAgoLabel(row.createdAt),
+                      },
+                    ]}
+                    rows={allAdminJobs.slice(0, 8)}
+                  />
+                </>
+              )}
+
+              {adminTab === "jobs" && (
+                <>
+                  <h3 className="admin-section-title">İlan Yönetimi</h3>
+
+                  <AdminTable
+                    emptyText="İlan bulunamadı."
+                    columns={[
+                      {
+                        key: "job",
+                        label: "İlan",
+                        render: (row) => (
+                          <div>
+                            <div style={{ fontWeight: 900, marginBottom: 4 }}>{row.title}</div>
+                            <div style={{ color: PALETTE.softText, fontWeight: 700 }}>{row.company}</div>
+                          </div>
+                        ),
+                      },
+                      { key: "location", label: "Konum" },
+                      { key: "type", label: "Çalışma Tipi" },
+                      {
+                        key: "plan",
+                        label: "Plan",
+                        render: (row) => (
+                          <StatusBadge
+                            label={getPlanText(row.plan)}
+                            tone={row.plan === "featured" ? "coral" : "default"}
+                          />
+                        ),
+                      },
+                      {
+                        key: "status",
+                        label: "Durum",
+                        render: (row) => (
+                          <StatusBadge
+                            label={getStatusText(row.status)}
+                            tone={
+                              row.status === "active"
+                                ? "success"
+                                : row.status === "pending"
+                                ? "warning"
+                                : row.status === "rejected"
+                                ? "danger"
+                                : "default"
+                            }
+                          />
+                        ),
+                      },
+                      {
+                        key: "actions",
+                        label: "İşlemler",
+                        render: (row) => (
+                          <div className="admin-actions">
+                            <button className="mini-btn success" onClick={() => approveJob(row)}>
+                              Onayla
+                            </button>
+                            <button className="mini-btn coral" onClick={() => moveToFeatured(row)}>
+                              Vitrine Taşı
+                            </button>
+                            <button className="mini-btn warning" onClick={() => expireJob(row.id)}>
+                              Pasife Al
+                            </button>
+                            <button className="mini-btn danger" onClick={() => rejectJob(row.id)}>
+                              Reddet
+                            </button>
+                            <button className="mini-btn danger" onClick={() => removeJob(row.id)}>
+                              Sil
+                            </button>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    rows={allAdminJobs}
+                  />
+                </>
+              )}
+
+              {adminTab === "payments" && (
+                <>
+                  <h3 className="admin-section-title">Vitrin Talepleri</h3>
+
+                  <AdminTable
+                    emptyText="Vitrin talebi bulunamadı."
+                    columns={[
+                      {
+                        key: "job",
+                        label: "İlan",
+                        render: (row) => (
+                          <div>
+                            <div style={{ fontWeight: 900, marginBottom: 4 }}>{row.title}</div>
+                            <div style={{ color: PALETTE.softText, fontWeight: 700 }}>{row.company}</div>
+                          </div>
+                        ),
+                      },
+                      {
+                        key: "contact",
+                        label: "İletişim",
+                        render: (row) => (
+                          <div>
+                            <div style={{ fontWeight: 800 }}>{row.contactName || "-"}</div>
+                            <div style={{ color: PALETTE.softText }}>{row.contactPhone || "-"}</div>
+                          </div>
+                        ),
+                      },
+                      {
+                        key: "paymentStatus",
+                        label: "Ödeme",
+                        render: (row) => (
+                          <StatusBadge
+                            label={getPaymentText(row.paymentStatus)}
+                            tone={
+                              row.paymentStatus === "paid"
+                                ? "success"
+                                : row.paymentStatus === "pending"
+                                ? "warning"
+                                : row.paymentStatus === "failed"
+                                ? "danger"
+                                : "default"
+                            }
+                          />
+                        ),
+                      },
+                      {
+                        key: "featuredStatus",
+                        label: "Vitrin Durumu",
+                        render: (row) => (
+                          <StatusBadge
+                            label={
+                              row.featuredStatus === "live"
+                                ? "Vitrinde"
+                                : row.featuredStatus === "waiting_approval"
+                                ? "Onay bekliyor"
+                                : "Yok"
+                            }
+                            tone={
+                              row.featuredStatus === "live"
+                                ? "coral"
+                                : row.featuredStatus === "waiting_approval"
+                                ? "warning"
+                                : "default"
+                            }
+                          />
+                        ),
+                      },
+                      {
+                        key: "actions",
+                        label: "İşlemler",
+                        render: (row) => (
+                          <div className="admin-actions">
+                            <button
+                              className="mini-btn success"
+                              onClick={() => {
+                                updateJobStatus(row.id, { paymentStatus: "paid" });
+                                approveJob({ ...row, paymentStatus: "paid" });
+                              }}
+                            >
+                              Ödendi + Yayına Al
+                            </button>
+                            <button
+                              className="mini-btn warning"
+                              onClick={() => updateJobStatus(row.id, { paymentStatus: "pending" })}
+                            >
+                              Beklemeye Al
+                            </button>
+                            <button
+                              className="mini-btn danger"
+                              onClick={() =>
+                                updateJobStatus(row.id, {
+                                  paymentStatus: "failed",
+                                  featuredStatus: "none",
+                                  status: "rejected",
+                                })
+                              }
+                            >
+                              Başarısız İşaretle
+                            </button>
+                          </div>
+                        ),
+                      },
+                    ]}
+                    rows={paymentRequests}
+                  />
+                </>
+              )}
+
+              {adminTab === "settings" && (
+                <>
+                  <h3 className="admin-section-title">Ayarlar</h3>
+                  <div className="admin-cards" style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}>
+                    <div className="admin-card">
+                      <div className="admin-card-label">Vitrin İlan Fiyatı</div>
+                      <div className="admin-card-value" style={{ fontSize: 22 }}>Shopier</div>
+                      <div style={{ marginTop: 10, color: PALETTE.softText, fontWeight: 700 }}>
+                        Link: {SHOPIER_FEATURED_LINK}
+                      </div>
+                    </div>
+
+                    <div className="admin-card">
+                      <div className="admin-card-label">Moderasyon Mantığı</div>
+                      <div style={{ color: PALETTE.text, fontWeight: 800, lineHeight: 1.7 }}>
+                        Ücretsiz ilanlar admin onayıyla,
+                        <br />
+                        vitrin ilanları ödeme + admin onayıyla yayına alınır.
+                      </div>
+                    </div>
+
+                    <div className="admin-card">
+                      <div className="admin-card-label">Geliştirilecek Sonraki Adım</div>
+                      <div style={{ color: PALETTE.text, fontWeight: 800, lineHeight: 1.7 }}>
+                        Supabase bağlayıp bu admin panelini gerçek veritabanına geçirmek.
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </section>
+        )}
+
         <footer className="site-footer">
           <div className="site-footer-topline" />
           <div className="site-footer-inner">
@@ -1600,10 +2589,18 @@ export default function App() {
               <div>
                 <h3 className="footer-subheading">İşveren</h3>
                 <div className="footer-links">
-                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>Ücretsiz ilan ver</a>
-                  <a className="footer-link" href="#">Vitrine çıkar</a>
-                  <a className="footer-link" href="#">Fiyatlandırma</a>
-                  <a className="footer-link" href="#">Destek al</a>
+                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>
+                    İlan ver
+                  </a>
+                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setAdminOpen(true); setAdminTab("payments"); }}>
+                    Vitrine çıkar
+                  </a>
+                  <a className="footer-link" href="#" onClick={(e) => e.preventDefault()}>
+                    Fiyatlandırma
+                  </a>
+                  <a className="footer-link" href="#" onClick={(e) => e.preventDefault()}>
+                    Destek al
+                  </a>
                 </div>
               </div>
 
