@@ -28,6 +28,9 @@ const featuredSeed = [
       "Servis ve karşılama süreçlerinde destek olacak, güler yüzlü ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
     category: "Kafe & Restoran",
+    address: "Kadıköy / Moda civarı",
+    contactName: "Mavi Masa Kafe Yetkilisi",
+    contactPhone: "",
   },
   {
     id: 2,
@@ -40,6 +43,9 @@ const featuredSeed = [
       "Etkinlik giriş alanında misafir karşılama ve yönlendirme görevlerinde çalışacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
     category: "Etkinlik & Organizasyon",
+    address: "Çankaya / Etkinlik alanı girişi",
+    contactName: "Nova Organizasyon",
+    contactPhone: "",
   },
   {
     id: 3,
@@ -52,6 +58,9 @@ const featuredSeed = [
       "Yoğun saatlerde teslimat süreçlerinde görev alacak, hızlı ve dikkatli kurye aranıyor.",
     createdAt: "2026-04-14T10:00:00",
     category: "Kurye & Dağıtım",
+    address: "Bornova / Dağıtım noktası",
+    contactName: "Hızlı Paket",
+    contactPhone: "",
   },
 ];
 
@@ -300,12 +309,16 @@ export default function App() {
   const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
   const [selectedJob, setSelectedJob] = useState(null);
   const [errors, setErrors] = useState({});
+  const [showContactInfo, setShowContactInfo] = useState(false);
   const [formData, setFormData] = useState({
     company: "",
     title: "",
     city: "",
+    address: "",
     workType: "Günlük",
     salary: "",
+    contactName: "",
+    contactPhone: "",
     description: "",
   });
 
@@ -332,8 +345,11 @@ export default function App() {
         company: "",
         title: "",
         city: "",
+        address: "",
         workType: "Günlük",
         salary: "",
+        contactName: "",
+        contactPhone: "",
         description: "",
       });
     }
@@ -344,6 +360,7 @@ export default function App() {
     if (!formData.company.trim()) nextErrors.company = "Firma adı zorunludur.";
     if (!formData.title.trim()) nextErrors.title = "İlan başlığı zorunludur.";
     if (!formData.city.trim()) nextErrors.city = "Şehir / konum zorunludur.";
+    if (!formData.address.trim()) nextErrors.address = "İş adresi / buluşma noktası zorunludur.";
     if (!formData.salary.trim()) nextErrors.salary = "Ücret bilgisi zorunludur.";
     if (!formData.description.trim()) nextErrors.description = "İş açıklaması zorunludur.";
     setErrors(nextErrors);
@@ -352,6 +369,13 @@ export default function App() {
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "contactPhone") {
+      const cleanedPhone = value.replace(/[^0-9+\s()-]/g, "");
+      setFormData((prev) => ({ ...prev, contactPhone: cleanedPhone }));
+      setErrors((prev) => ({ ...prev, contactPhone: "" }));
+      return;
+    }
 
     if (name === "salary") {
       const onlyNumbers = value.replace(/[^0-9]/g, "");
@@ -394,10 +418,13 @@ export default function App() {
       title: formData.title.trim(),
       company: formData.company.trim(),
       location: formData.city.trim(),
+      address: formData.address.trim(),
       salary: formatSalaryPreview(formData.workType, formData.salary),
       type: formData.workType,
       category: inferCategory(formData.title),
       description: formData.description.trim(),
+      contactName: formData.contactName.trim(),
+      contactPhone: formData.contactPhone.trim(),
       createdAt: new Date().toISOString(),
     };
 
@@ -459,6 +486,10 @@ export default function App() {
 
   const previewSalary = formatSalaryPreview(formData.workType, formData.salary);
   const totalCount = filteredFeaturedJobs.length + filteredJobs.length;
+
+  useEffect(() => {
+    setShowContactInfo(false);
+  }, [selectedJob]);
 
   return (
     <div className="app-shell">
@@ -1449,6 +1480,218 @@ export default function App() {
           background: rgba(88,173,173,0.10);
           border: 1px solid rgba(88,173,173,0.12);
         }
+
+        .detail-modal {
+          width: min(820px, calc(100vw - 28px));
+          border-radius: 30px;
+        }
+        .detail-panel-inner {
+          padding: 0;
+          background: #fff;
+        }
+        .detail-compact-shell {
+          display: grid;
+          grid-template-columns: minmax(0, 1.25fr) 310px;
+          gap: 0;
+        }
+        .detail-main-side {
+          padding: 26px;
+          border-right: 1px solid rgba(60,74,95,0.08);
+        }
+        .detail-side-card {
+          padding: 24px;
+          background: linear-gradient(180deg, #fff8f5 0%, #ffffff 100%);
+        }
+        .detail-topline {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+          margin-bottom: 16px;
+        }
+        .detail-mini-badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .detail-mini-badge {
+          height: 30px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 11px;
+          border-radius: 999px;
+          background: #fff0eb;
+          border: 1px solid rgba(255,75,43,0.16);
+          color: #ff4b2b;
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: -0.01em;
+        }
+        .detail-close-soft {
+          width: 38px;
+          height: 38px;
+          border-radius: 999px;
+          border: 1px solid rgba(60,74,95,0.10);
+          background: #fff;
+          color: \${PALETTE.slate};
+          font-size: 22px;
+          font-weight: 900;
+          line-height: 1;
+          cursor: pointer;
+          box-shadow: 0 10px 24px rgba(60,74,95,0.08);
+          flex-shrink: 0;
+        }
+        .detail-company-clean {
+          margin: 0 0 8px;
+          color: \${PALETTE.teal};
+          font-size: 15px;
+          font-weight: 950;
+          letter-spacing: -0.02em;
+        }
+        .detail-title-clean {
+          margin: 0 0 14px;
+          color: \${PALETTE.slate};
+          font-size: clamp(25px, 3vw, 36px);
+          line-height: 1.08;
+          font-weight: 950;
+          letter-spacing: -0.045em;
+        }
+        .detail-desc-clean {
+          margin: 0;
+          color: \${PALETTE.text};
+          font-size: 15px;
+          line-height: 1.72;
+          font-weight: 600;
+          white-space: pre-wrap;
+        }
+        .detail-info-list {
+          display: grid;
+          gap: 10px;
+          margin-top: 22px;
+        }
+        .detail-info-row {
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+          padding: 12px 13px;
+          border: 1px solid rgba(60,74,95,0.08);
+          background: #fbfcfd;
+          border-radius: 16px;
+        }
+        .detail-info-icon {
+          width: 28px;
+          height: 28px;
+          border-radius: 11px;
+          background: #fff0eb;
+          color: #ff4b2b;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .detail-info-row strong {
+          display: block;
+          margin-bottom: 3px;
+          color: \${PALETTE.slate};
+          font-size: 12px;
+          font-weight: 950;
+        }
+        .detail-info-row span {
+          display: block;
+          color: \${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 800;
+          line-height: 1.35;
+        }
+        .detail-side-label {
+          color: \${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 950;
+          margin-bottom: 6px;
+        }
+        .detail-side-salary {
+          color: #ff4b2b;
+          font-size: 27px;
+          line-height: 1.08;
+          font-weight: 950;
+          letter-spacing: -0.04em;
+          margin-bottom: 16px;
+        }
+        .detail-side-divider {
+          height: 1px;
+          background: rgba(255,75,43,0.14);
+          margin: 14px 0;
+        }
+        .detail-side-stack {
+          display: grid;
+          gap: 10px;
+          margin-bottom: 16px;
+        }
+        .detail-side-chip {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 11px 12px;
+          border-radius: 15px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
+          color: \${PALETTE.slate};
+          font-size: 13px;
+          font-weight: 900;
+        }
+        .detail-side-chip span:first-child {
+          color: \${PALETTE.softText};
+          font-weight: 850;
+        }
+        .detail-contact-button {
+          width: 100%;
+          border: none;
+          border-radius: 16px;
+          padding: 14px 16px;
+          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
+          color: #fff;
+          font-size: 15px;
+          font-weight: 950;
+          cursor: pointer;
+          box-shadow: 0 16px 28px rgba(255,79,38,0.22);
+        }
+        .detail-contact-box {
+          margin-top: 12px;
+          padding: 13px;
+          border-radius: 16px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.09);
+          box-shadow: 0 12px 24px rgba(60,74,95,0.04);
+        }
+        .detail-contact-line {
+          display: grid;
+          gap: 3px;
+          margin-bottom: 10px;
+        }
+        .detail-contact-line:last-child { margin-bottom: 0; }
+        .detail-contact-line strong {
+          color: \${PALETTE.slate};
+          font-size: 12px;
+          font-weight: 950;
+        }
+        .detail-contact-line span,
+        .detail-contact-line a {
+          color: \${PALETTE.text};
+          font-size: 13px;
+          font-weight: 800;
+          line-height: 1.35;
+          text-decoration: none;
+        }
+        .detail-note-soft {
+          margin-top: 12px;
+          color: \${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 750;
+          line-height: 1.45;
+        }
+
         .site-footer {
           margin-top: 34px;
           border-radius: 34px 34px 0 0;
@@ -1829,6 +2072,9 @@ export default function App() {
           .detail-actions { grid-template-columns: 1fr; }
           .detail-hero { padding: 22px 18px 20px; }
           .detail-body { padding: 18px; }
+          .detail-compact-shell { grid-template-columns: 1fr; }
+          .detail-main-side { border-right: none; border-bottom: 1px solid rgba(60,74,95,0.08); padding: 20px; }
+          .detail-side-card { padding: 20px; }
         }
       `}</style>
 
@@ -1915,6 +2161,41 @@ export default function App() {
                 </div>
 
                 <div className="post-field full">
+                  <label>İş adresi / buluşma noktası<span className="required-star">*</span></label>
+                  <input
+                    className={errors.address ? "field-error" : ""}
+                    name="address"
+                    type="text"
+                    placeholder="Örn. Kadıköy / Moda civarı, mağaza önü, depo girişi"
+                    value={formData.address}
+                    onChange={handleFormChange}
+                  />
+                  {errors.address && <div className="error-text">{errors.address}</div>}
+                </div>
+
+                <div className="post-field">
+                  <label>Yetkili kişi adı <span style={{ color: PALETTE.softText, fontWeight: 700 }}>(isteğe bağlı)</span></label>
+                  <input
+                    name="contactName"
+                    type="text"
+                    placeholder="Örn. İşveren / firma yetkilisi"
+                    value={formData.contactName}
+                    onChange={handleFormChange}
+                  />
+                </div>
+
+                <div className="post-field">
+                  <label>Telefon / WhatsApp <span style={{ color: PALETTE.softText, fontWeight: 700 }}>(isteğe bağlı)</span></label>
+                  <input
+                    name="contactPhone"
+                    type="text"
+                    placeholder="Örn. 0555 555 55 55"
+                    value={formData.contactPhone}
+                    onChange={handleFormChange}
+                  />
+                </div>
+
+                <div className="post-field full">
                   <label>Ücret bilgisi<span className="required-star">*</span></label>
                   <input
                     className={errors.salary ? "field-error" : ""}
@@ -1972,6 +2253,7 @@ export default function App() {
                   <h4 className="preview-title">{formData.title || "İlan başlığı burada görünecek"}</h4>
                   <div className="preview-company">{formData.company || "Firma adı burada görünecek"}</div>
                   <div className="preview-location">{formData.city || "Şehir / Konum burada görünecek"}</div>
+                  <div className="preview-location">{formData.address || "İş adresi / buluşma noktası burada görünecek"}</div>
                   <div className="preview-salary">{previewSalary || "Ücret bilgisi burada görünecek"}</div>
                   <p className="preview-desc">
                     {formData.description || "İş açıklaması burada görünecek. Kullanıcılar ilanı açtığında bu alanı okuyacak."}
@@ -1999,95 +2281,112 @@ export default function App() {
         <div className="detail-modal-backdrop" onClick={() => setSelectedJob(null)}>
           <div className="detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="detail-panel-inner">
-              <div className="detail-hero">
-                <button className="detail-close" type="button" onClick={() => setSelectedJob(null)}>
-                  ×
-                </button>
-
-                <div className="detail-badge-row">
-                  {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
-                    <span className="detail-featured-badge">★ Öne Çıkan</span>
-                  ) : (
-                    <span className="detail-featured-badge">Yeni İlan</span>
-                  )}
-                  <span className="detail-type-badge">{selectedJob.type}</span>
-                  <span className="detail-type-badge">{getDaysAgoLabel(selectedJob.createdAt)}</span>
-                </div>
-
-                <p className="detail-company">{selectedJob.company}</p>
-                <h3 className="detail-title">{selectedJob.title}</h3>
-              </div>
-
-              <div className="detail-body">
-                <div className="detail-salary-card">
-                  <div>
-                    <div className="detail-salary-label">Ücret bilgisi</div>
-                    <div className="detail-salary">{selectedJob.salary}</div>
-                  </div>
-                  <div className="detail-salary-icon" aria-hidden="true">
-                    <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-                      <path d="M4 7.5h16v10H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                      <path d="M7 10.5h.01M17 14.5h.01M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="detail-meta">
-                  <div className="detail-line">
-                    <span className="detail-line-icon" aria-hidden="true">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 21s6-5.3 6-11a6 6 0 1 0-12 0c0 5.7 6 11 6 11Z" stroke="currentColor" strokeWidth="2"/>
-                        <circle cx="12" cy="10" r="2.4" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                    </span>
-                    <span><strong>Konum</strong>{selectedJob.location}</span>
+              <div className="detail-compact-shell">
+                <div className="detail-main-side">
+                  <div className="detail-topline">
+                    <div className="detail-mini-badges">
+                      {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
+                        <span className="detail-mini-badge">★ Öne Çıkan</span>
+                      ) : (
+                        <span className="detail-mini-badge">Yeni İlan</span>
+                      )}
+                      <span className="detail-mini-badge">{selectedJob.type}</span>
+                      <span className="detail-mini-badge">{getDaysAgoLabel(selectedJob.createdAt)}</span>
+                    </div>
+                    <button className="detail-close-soft" type="button" onClick={() => setSelectedJob(null)}>
+                      ×
+                    </button>
                   </div>
 
-                  <div className="detail-line">
-                    <span className="detail-line-icon" aria-hidden="true">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M4 7h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                      </svg>
-                    </span>
-                    <span><strong>Çalışma tipi</strong>{selectedJob.type}</span>
-                  </div>
-
-                  <div className="detail-line">
-                    <span className="detail-line-icon" aria-hidden="true">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                        <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                    </span>
-                    <span><strong>Kategori</strong>{selectedJob.category || "Vitrin ilan"}</span>
-                  </div>
-
-                  <div className="detail-line">
-                    <span className="detail-line-icon" aria-hidden="true">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M7 3v3M17 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                    </span>
-                    <span><strong>Yayın durumu</strong>{getDaysAgoLabel(selectedJob.createdAt)}</span>
-                  </div>
-                </div>
-
-                <div className="detail-description-box">
-                  <h4 className="detail-description-title">İş açıklaması</h4>
-                  <div className="detail-description">
+                  <p className="detail-company-clean">{selectedJob.company}</p>
+                  <h3 className="detail-title-clean">{selectedJob.title}</h3>
+                  <p className="detail-desc-clean">
                     {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
+                  </p>
+
+                  <div className="detail-info-list">
+                    <div className="detail-info-row">
+                      <span className="detail-info-icon" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                          <path d="M12 21s6-5.3 6-11a6 6 0 1 0-12 0c0 5.7 6 11 6 11Z" stroke="currentColor" strokeWidth="2"/>
+                          <circle cx="12" cy="10" r="2.4" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      </span>
+                      <div>
+                        <strong>Şehir / Konum</strong>
+                        <span>{selectedJob.location}</span>
+                      </div>
+                    </div>
+
+                    <div className="detail-info-row">
+                      <span className="detail-info-icon" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                          <path d="M4 10.5 12 4l8 6.5V20H4v-9.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                          <path d="M9 20v-6h6v6" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                      <div>
+                        <strong>İş adresi / buluşma noktası</strong>
+                        <span>{selectedJob.address || selectedJob.location}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="detail-actions">
-                  <div className="detail-apply-note">
-                    Başvuru/iletişim bilgileri yayına alma aşamasında kuzenin tarafından gerçek sisteme bağlanabilir.
+                <aside className="detail-side-card">
+                  <div className="detail-side-label">Ücret bilgisi</div>
+                  <div className="detail-side-salary">{selectedJob.salary}</div>
+
+                  <div className="detail-side-stack">
+                    <div className="detail-side-chip">
+                      <span>Çalışma tipi</span>
+                      <strong>{selectedJob.type}</strong>
+                    </div>
+                    <div className="detail-side-chip">
+                      <span>Kategori</span>
+                      <strong>{selectedJob.category || "Genel"}</strong>
+                    </div>
+                    <div className="detail-side-chip">
+                      <span>Yayın</span>
+                      <strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong>
+                    </div>
                   </div>
-                  <button className="btn btn-primary" type="button">
-                    Başvuru Bilgilerini Gör
+
+                  <div className="detail-side-divider" />
+
+                  <button
+                    className="detail-contact-button"
+                    type="button"
+                    onClick={() => setShowContactInfo((prev) => !prev)}
+                  >
+                    {showContactInfo ? "İletişimi Gizle" : "İletişim Bilgilerini Gör"}
                   </button>
-                </div>
+
+                  {showContactInfo && (
+                    <div className="detail-contact-box">
+                      <div className="detail-contact-line">
+                        <strong>Adres</strong>
+                        <span>{selectedJob.address || selectedJob.location}</span>
+                      </div>
+                      <div className="detail-contact-line">
+                        <strong>Yetkili</strong>
+                        <span>{selectedJob.contactName || selectedJob.company}</span>
+                      </div>
+                      <div className="detail-contact-line">
+                        <strong>Telefon / WhatsApp</strong>
+                        {selectedJob.contactPhone ? (
+                          <a href={"tel:" + selectedJob.contactPhone}>{selectedJob.contactPhone}</a>
+                        ) : (
+                          <span>Telefon bilgisi işveren tarafından paylaşılmamış.</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <p className="detail-note-soft">
+                    Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
+                  </p>
+                </aside>
               </div>
             </div>
           </div>
