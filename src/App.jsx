@@ -202,6 +202,84 @@ function formatSalaryPreview(workType, salary) {
   return `Günlük ${formatted} TL`;
 }
 
+function getJobVisualKey(job) {
+  const text = `${job.title || ""} ${job.category || ""}`.toLocaleLowerCase("tr-TR");
+  if (text.includes("kurye") || text.includes("dağıtım")) return "delivery";
+  if (text.includes("etkinlik") || text.includes("organizasyon") || text.includes("karşılama")) return "people";
+  if (text.includes("garson") || text.includes("barista") || text.includes("kafe") || text.includes("restoran")) return "service";
+  if (text.includes("depo") || text.includes("paketleme") || text.includes("lojistik")) return "box";
+  if (text.includes("mağaza") || text.includes("satış") || text.includes("kasiyer")) return "store";
+  return "briefcase";
+}
+
+function CategoryIcon({ job }) {
+  const key = getJobVisualKey(job);
+
+  if (key === "delivery") {
+    return (
+      <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <path d="M18 39h24l5-12h7l4 12h-6" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M13 39h5l4-18h23" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="22" cy="45" r="5" stroke="currentColor" strokeWidth="4" />
+        <circle cx="48" cy="45" r="5" stroke="currentColor" strokeWidth="4" />
+      </svg>
+    );
+  }
+
+  if (key === "people") {
+    return (
+      <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <circle cx="32" cy="22" r="8" stroke="currentColor" strokeWidth="4" />
+        <circle cx="18" cy="28" r="6" stroke="currentColor" strokeWidth="4" />
+        <circle cx="46" cy="28" r="6" stroke="currentColor" strokeWidth="4" />
+        <path d="M18 48c2-8 8-12 14-12s12 4 14 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <path d="M7 49c1.5-6 6-9 11-9" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <path d="M57 49c-1.5-6-6-9-11-9" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (key === "service") {
+    return (
+      <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <path d="M14 39c1-12 8-21 18-21s17 9 18 21" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <path d="M10 43h44" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <path d="M32 14v-4" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <path d="M18 51h28" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (key === "box") {
+    return (
+      <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <path d="M14 22l18-9 18 9v21l-18 9-18-9V22Z" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
+        <path d="M14 22l18 9 18-9" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
+        <path d="M32 31v21" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
+  if (key === "store") {
+    return (
+      <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <path d="M14 26h36l-4-11H18l-4 11Z" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
+        <path d="M18 30v20h28V30" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <path d="M25 50V38h14v12" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <path d="M20 24v-5c0-3 2-5 5-5h14c3 0 5 2 5 5v5" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      <path d="M12 24h40v26H12V24Z" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
+      <path d="M26 34h12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+
 export default function App() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Tümü");
@@ -521,12 +599,6 @@ export default function App() {
           padding: 14px 18px;
           margin-bottom: 10px;
         }
-        .hero-content {
-          display: grid;
-          grid-template-columns: 1.08fr 0.92fr;
-          align-items: center;
-          gap: 24px;
-        }
         .hero-title {
           margin: 0;
           font-size: clamp(20px, 2.5vw, 30px);
@@ -536,35 +608,20 @@ export default function App() {
           color: ${PALETTE.slate};
           max-width: 760px;
         }
-        .hero-trust-row {
+        .hero-stats-inline {
           display: flex;
-          justify-content: flex-end;
-          gap: 10px;
+          gap: 8px;
           flex-wrap: wrap;
+          margin-top: 10px;
         }
-        .hero-trust-pill {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 38px;
-          padding: 10px 14px;
+        .hero-stat-bubble {
+          padding: 6px 10px;
           border-radius: 999px;
-          background: linear-gradient(180deg, #fff7f3 0%, #ffe9df 100%);
-          color: ${PALETTE.coral};
-          border: 1px solid rgba(228,93,80,0.22);
-          box-shadow: 0 10px 22px rgba(228,93,80,0.12);
-          font-size: 13px;
-          font-weight: 900;
-          white-space: nowrap;
-        }
-        .hero-trust-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 999px;
-          background: ${PALETTE.coral};
-          margin-right: 8px;
-          box-shadow: 0 0 0 4px rgba(228,93,80,0.12);
-          flex-shrink: 0;
+          background: rgba(60,74,95,0.06);
+          border: 1px solid rgba(60,74,95,0.08);
+          font-size: 12px;
+          font-weight: 800;
+          color: ${PALETTE.slate};
         }
         .section { padding: 0 0 16px; }
         .section-head {
@@ -620,13 +677,11 @@ export default function App() {
         .featured-card,
         .job-card {
           position: relative;
-          background: linear-gradient(180deg, #ffffff 0%, #fffefe 100%);
-          border: 1px solid rgba(255,255,255,0.88);
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
           border-radius: 26px;
-          padding: 20px 20px 18px;
-          box-shadow:
-            0 18px 34px rgba(60,74,95,0.08),
-            inset 0 1px 0 rgba(255,255,255,0.95);
+          padding: 22px;
+          box-shadow: 0 14px 28px rgba(60,74,95,0.05);
           overflow: hidden;
           cursor: pointer;
           transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
@@ -634,31 +689,17 @@ export default function App() {
         .featured-card:hover,
         .job-card:hover {
           transform: translateY(-4px);
-          box-shadow:
-            0 24px 44px rgba(60,74,95,0.14),
-            inset 0 1px 0 rgba(255,255,255,0.95);
-          border-color: rgba(255,255,255,0.96);
-        }
-        .featured-card::before {
-          content: "";
-          position: absolute;
-          left: 0;
-          right: 0;
-          top: 0;
-          height: 5px;
-          background: linear-gradient(90deg, ${PALETTE.coral} 0%, #ff8b6d 100%);
+          box-shadow: 0 20px 36px rgba(60,74,95,0.10);
         }
         .featured-card::after {
           content: "";
           position: absolute;
-          right: -16px;
-          bottom: -18px;
-          width: 86px;
-          height: 86px;
+          right: -20px;
+          bottom: -24px;
+          width: 130px;
+          height: 130px;
           border-radius: 50%;
-          background:
-            radial-gradient(circle at 35% 35%, rgba(255,255,255,0.72), transparent 36%),
-            rgba(228,93,80,0.11);
+          background: rgba(228,93,80,0.12);
         }
 
         .card-top {
@@ -667,112 +708,80 @@ export default function App() {
           align-items: flex-start;
           gap: 14px;
           margin-bottom: 18px;
-          min-height: 40px;
+          min-height: 42px;
         }
         .card-top-right {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
-          gap: 7px;
+          gap: 6px;
           flex-shrink: 0;
-          padding-top: 1px;
+          padding-top: 2px;
         }
         .pill {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(180deg, ${PALETTE.coral} 0%, #d94b3f 100%);
+          background: ${PALETTE.coral};
           color: #fff;
           border-radius: 999px;
-          padding: 8px 12px;
+          padding: 7px 11px;
           font-size: 12px;
-          font-weight: 900;
+          font-weight: 800;
           letter-spacing: -0.01em;
-          box-shadow: 0 10px 18px rgba(228,93,80,0.22);
         }
         .type-tag {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          padding: 7px 11px;
+          padding: 7px 10px;
           border-radius: 999px;
-          background: linear-gradient(180deg, #fff7f3 0%, #ffece4 100%);
+          background: ${PALETTE.warm};
           color: ${PALETTE.coral};
           font-size: 12px;
-          font-weight: 900;
+          font-weight: 800;
           letter-spacing: -0.01em;
-          border: 1px solid rgba(228,93,80,0.18);
-          box-shadow: 0 6px 14px rgba(228,93,80,0.08);
+          border: 1px solid rgba(228,93,80,0.16);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
         .job-days {
           font-size: 12px;
           color: ${PALETTE.softText};
-          font-weight: 800;
+          font-weight: 700;
           letter-spacing: -0.01em;
           white-space: nowrap;
         }
         .job-company {
           color: ${PALETTE.slate};
-          font-weight: 900;
-          margin-bottom: 7px;
+          font-weight: 800;
+          margin-bottom: 8px;
           font-size: 15px;
           line-height: 1.3;
           letter-spacing: -0.01em;
-          position: relative;
-          z-index: 2;
         }
         .job-title {
-          margin: 0 0 9px;
-          font-size: 20px;
-          line-height: 1.18;
-          font-weight: 950;
-          letter-spacing: -0.035em;
+          margin: 0 0 8px;
+          font-size: 19px;
+          line-height: 1.22;
+          font-weight: 900;
+          letter-spacing: -0.03em;
           color: ${PALETTE.slate};
-          position: relative;
-          z-index: 2;
         }
         .job-location {
           color: ${PALETTE.softText};
-          margin-bottom: 12px;
+          margin-bottom: 10px;
           font-size: 15px;
           line-height: 1.4;
-          font-weight: 600;
+          font-weight: 500;
           letter-spacing: -0.01em;
-          position: relative;
-          z-index: 2;
         }
         .job-salary {
-          display: inline-flex;
-          align-items: center;
           color: ${PALETTE.coral};
           font-size: 20px;
-          font-weight: 950;
-          line-height: 1.2;
-          letter-spacing: -0.035em;
-          margin-top: 2px;
-          padding: 8px 0 0;
-          border-top: 1px solid rgba(60,74,95,0.08);
-          min-width: 70%;
-          position: relative;
-          z-index: 2;
-        }
-        .featured-more {
-          position: absolute;
-          right: 20px;
-          bottom: 18px;
-          z-index: 3;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 34px;
-          height: 34px;
-          border-radius: 999px;
-          background: #fff;
-          color: ${PALETTE.coral};
-          border: 1px solid rgba(228,93,80,0.18);
-          font-size: 18px;
           font-weight: 900;
-          box-shadow: 0 8px 18px rgba(60,74,95,0.08);
+          line-height: 1.2;
+          letter-spacing: -0.03em;
+          margin-top: 8px;
         }
         .mini-salary {
           margin-top: 14px;
@@ -1276,6 +1285,194 @@ export default function App() {
           font-weight: 700;
         }
 
+
+        /* --- Hero trust area + premium featured card revizyonu --- */
+        .hero-card {
+          padding: 18px 20px;
+        }
+        .hero-content {
+          display: grid;
+          grid-template-columns: 1.1fr 0.9fr;
+          align-items: center;
+          gap: 24px;
+        }
+        .hero-trust-row {
+          display: flex;
+          justify-content: flex-end;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+        .hero-trust-pill {
+          min-height: 58px;
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          border-radius: 18px;
+          background: linear-gradient(180deg, #fff7f3 0%, #ffece5 100%);
+          border: 1px solid rgba(228,93,80,0.18);
+          box-shadow: 0 14px 26px rgba(228,93,80,0.10);
+          color: ${PALETTE.slate};
+        }
+        .hero-trust-icon {
+          width: 34px;
+          height: 34px;
+          border-radius: 12px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: ${PALETTE.coral};
+          color: #fff;
+          font-weight: 900;
+          box-shadow: 0 10px 18px rgba(228,93,80,0.22);
+          flex-shrink: 0;
+        }
+        .hero-trust-pill strong {
+          display: block;
+          color: ${PALETTE.coral};
+          font-size: 13px;
+          line-height: 1.15;
+          font-weight: 900;
+          white-space: nowrap;
+        }
+        .hero-trust-pill small {
+          display: block;
+          margin-top: 3px;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          line-height: 1.1;
+          font-weight: 700;
+          white-space: nowrap;
+        }
+        .hero-stats-inline,
+        .hero-stat-bubble {
+          display: none;
+        }
+        .featured-section {
+          background: linear-gradient(135deg, ${PALETTE.coral} 0%, #ff5b2f 100%);
+          box-shadow: 0 20px 42px rgba(228,93,80,0.18);
+        }
+        .featured-head {
+          margin-bottom: 18px;
+        }
+        .featured-head-actions {
+          display: inline-flex;
+          align-items: center;
+          gap: 20px;
+          color: rgba(255,255,255,0.96);
+          font-size: 14px;
+          font-weight: 900;
+        }
+        .featured-head-actions a {
+          color: rgba(255,255,255,0.96);
+          text-decoration: none;
+        }
+        .section-title-vitrin::before {
+          content: "★";
+          width: auto;
+          height: auto;
+          background: transparent;
+          box-shadow: none;
+          font-size: 17px;
+          color: #fff;
+        }
+        .featured-card {
+          min-height: 206px;
+          padding: 22px 24px 24px;
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.72);
+          box-shadow: 0 18px 38px rgba(35,48,68,0.10);
+        }
+        .featured-card::after {
+          display: none;
+        }
+        .featured-card .card-top {
+          margin-bottom: 24px;
+          min-height: 34px;
+        }
+        .featured-card .pill {
+          gap: 6px;
+          padding: 9px 13px;
+          background: ${PALETTE.coral};
+          box-shadow: 0 10px 18px rgba(228,93,80,0.22);
+        }
+        .featured-card .type-tag {
+          padding: 8px 12px;
+          background: ${PALETTE.warm};
+          color: ${PALETTE.coral};
+          border-color: rgba(228,93,80,0.20);
+        }
+        .featured-company {
+          color: ${PALETTE.teal};
+          font-size: 16px;
+          margin-bottom: 6px;
+        }
+        .featured-title {
+          font-size: 21px;
+          margin-bottom: 10px;
+        }
+        .featured-location {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: ${PALETTE.softText};
+          font-size: 15px;
+          font-weight: 600;
+        }
+        .featured-location svg {
+          width: 17px;
+          height: 17px;
+          color: ${PALETTE.slate};
+          flex-shrink: 0;
+        }
+        .featured-divider {
+          width: min(76%, 360px);
+          height: 1px;
+          background: rgba(228,93,80,0.18);
+          margin: 20px 0 16px;
+        }
+        .featured-salary-row {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          position: relative;
+          z-index: 2;
+        }
+        .salary-wallet {
+          width: 24px;
+          height: 24px;
+          color: #ff4f26;
+          flex-shrink: 0;
+        }
+        .salary-wallet svg {
+          width: 100%;
+          height: 100%;
+        }
+        .featured-salary {
+          margin: 0;
+          color: #ff4f26;
+          font-size: 20px;
+        }
+        .featured-icon-circle {
+          position: absolute;
+          right: 24px;
+          bottom: 24px;
+          width: 76px;
+          height: 76px;
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(228,93,80,0.10);
+          color: ${PALETTE.slate};
+          z-index: 1;
+        }
+        .featured-icon-circle svg {
+          width: 44px;
+          height: 44px;
+          opacity: 0.94;
+        }
+
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
@@ -1300,10 +1497,14 @@ export default function App() {
           }
           .btn { width: 100%; padding: 12px 14px; }
           .hero-card { padding: 14px 16px; border-radius: 20px; }
-          .hero-content { grid-template-columns: 1fr; gap: 12px; }
           .hero-title { font-size: 24px; }
+          .hero-content { grid-template-columns: 1fr; gap: 14px; }
           .hero-trust-row { justify-content: flex-start; }
-          .hero-trust-pill { font-size: 12px; min-height: 34px; padding: 8px 11px; }
+          .hero-trust-pill { width: 100%; }
+          .featured-head-actions { gap: 12px; font-size: 12px; }
+          .featured-card { min-height: 220px; }
+          .featured-icon-circle { width: 64px; height: 64px; right: 18px; bottom: 22px; }
+          .featured-icon-circle svg { width: 38px; height: 38px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
         }
@@ -1559,35 +1760,78 @@ export default function App() {
               </div>
 
               <div className="hero-trust-row">
-                <div className="hero-trust-pill"><span className="hero-trust-dot" />Onaylı ilanlar</div>
-                <div className="hero-trust-pill"><span className="hero-trust-dot" />Türkiye geneli fırsatlar</div>
-                <div className="hero-trust-pill"><span className="hero-trust-dot" />Hızlı başvuru süreci</div>
+                <div className="hero-trust-pill">
+                  <span className="hero-trust-icon">✓</span>
+                  <span>
+                    <strong>Onaylı ilanlar</strong>
+                    <small>Güvenle başvur</small>
+                  </span>
+                </div>
+                <div className="hero-trust-pill">
+                  <span className="hero-trust-icon">%</span>
+                  <span>
+                    <strong>Türkiye geneli fırsatlar</strong>
+                    <small>Tüm şehirlerde ilanlar</small>
+                  </span>
+                </div>
+                <div className="hero-trust-pill">
+                  <span className="hero-trust-icon">⚡</span>
+                  <span>
+                    <strong>Hızlı başvuru süreci</strong>
+                    <small>İlanlara kolayca başvur</small>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         <section className="section featured-section" id="one-cikanlar">
-          <div className="section-head">
+          <div className="section-head featured-head">
             <h2 className="section-title section-title-vitrin">Vitrin ilanlar</h2>
-            <div className="section-sub">{filteredFeaturedJobs.length} ilan</div>
+            <div className="featured-head-actions">
+              <span>{filteredFeaturedJobs.length} ilan</span>
+              <a href="#ilanlar" onClick={(e) => e.preventDefault()}>Tümünü Gör →</a>
+            </div>
           </div>
 
           <div className="featured-grid">
             {filteredFeaturedJobs.map((job) => (
               <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
                 <div className="card-top">
-                  <div className="pill">Öne Çıkan</div>
+                  <div className="pill"><span>★</span> Öne Çıkan</div>
                   <div className="card-top-right">
                     <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
                     <div className="type-tag">{job.type}</div>
                   </div>
                 </div>
-                <div className="job-company">{job.company}</div>
-                <h3 className="job-title">{job.title}</h3>
-                <div className="job-location">{job.location}</div>
-                <div className="job-salary">{job.salary}</div>
-                <div className="featured-more">›</div>
+
+                <div className="job-company featured-company">{job.company}</div>
+                <h3 className="job-title featured-title">{job.title}</h3>
+                <div className="featured-location">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="2" />
+                  </svg>
+                  <span>{job.location}</span>
+                </div>
+
+                <div className="featured-divider" />
+
+                <div className="featured-salary-row">
+                  <div className="salary-wallet" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M4 8.5h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+                      <path d="M4 8.5 17 5v3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M17 13h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                  <div className="job-salary featured-salary">{job.salary}</div>
+                </div>
+
+                <div className="featured-icon-circle">
+                  <CategoryIcon job={job} />
+                </div>
               </article>
             ))}
           </div>
