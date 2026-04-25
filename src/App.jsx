@@ -304,12 +304,12 @@ export default function App() {
     company: "",
     title: "",
     city: "",
-    workAddress: "",
-    contactName: "",
-    contactPhone: "",
     workType: "Günlük",
     salary: "",
     description: "",
+    workAddress: "",
+    contactName: "",
+    contactPhone: "",
   });
 
   useEffect(() => {
@@ -335,9 +335,6 @@ export default function App() {
         company: "",
         title: "",
         city: "",
-        workAddress: "",
-        contactName: "",
-        contactPhone: "",
         workType: "Günlük",
         salary: "",
         description: "",
@@ -364,6 +361,13 @@ export default function App() {
       const onlyNumbers = value.replace(/[^0-9]/g, "");
       setFormData((prev) => ({ ...prev, salary: onlyNumbers }));
       setErrors((prev) => ({ ...prev, salary: "" }));
+      return;
+    }
+
+    if (name === "contactPhone") {
+      const cleaned = value.replace(/[^0-9+\s()-]/g, "");
+      setFormData((prev) => ({ ...prev, contactPhone: cleaned }));
+      setErrors((prev) => ({ ...prev, contactPhone: "" }));
       return;
     }
 
@@ -401,13 +405,13 @@ export default function App() {
       title: formData.title.trim(),
       company: formData.company.trim(),
       location: formData.city.trim(),
-      workAddress: formData.workAddress.trim(),
-      contactName: formData.contactName.trim(),
-      contactPhone: formData.contactPhone.trim(),
       salary: formatSalaryPreview(formData.workType, formData.salary),
       type: formData.workType,
       category: inferCategory(formData.title),
       description: formData.description.trim(),
+      workAddress: formData.workAddress.trim(),
+      contactName: formData.contactName.trim(),
+      contactPhone: formData.contactPhone.trim(),
       createdAt: new Date().toISOString(),
     };
 
@@ -1445,303 +1449,7 @@ export default function App() {
         }
         .detail-actions {
           display: grid;
-          grid-template-colu
-        .detail-modal {
-          width: min(1060px, calc(100vw - 28px));
-          max-height: min(88vh, 920px);
-        }
-        .detail-panel-inner {
-          padding: 0;
-          overflow: hidden;
-        }
-        .detail-layout {
-          display: grid;
-          grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.75fr);
-          min-height: 540px;
-          max-height: min(88vh, 920px);
-          overflow: hidden;
-        }
-        .detail-left {
-          padding: 34px 36px 30px;
-          background: #fff;
-          overflow-y: auto;
-        }
-        .detail-right {
-          padding: 34px 34px 30px;
-          background:
-            radial-gradient(circle at top right, rgba(255,75,43,0.10), transparent 34%),
-            linear-gradient(180deg, #fff9f6 0%, #fff 100%);
-          border-left: 1px solid rgba(255,75,43,0.10);
-          overflow-y: auto;
-        }
-        .detail-close {
-          position: absolute;
-          top: 22px;
-          right: 24px;
-          width: 42px;
-          height: 42px;
-          border-radius: 999px;
-          border: 1px solid rgba(60,74,95,0.10);
-          background: #fff;
-          color: ${PALETTE.slate};
-          font-size: 24px;
-          font-weight: 900;
-          line-height: 1;
-          cursor: pointer;
-          box-shadow: 0 10px 24px rgba(60,74,95,0.08);
-          z-index: 5;
-        }
-        .detail-badge-row {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          flex-wrap: wrap;
-          margin-bottom: 28px;
-          padding-right: 54px;
-        }
-        .detail-featured-badge,
-        .detail-type-badge {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          height: 34px;
-          padding: 0 13px;
-          border-radius: 999px;
-          font-size: 12px;
-          font-weight: 900;
-          letter-spacing: -0.01em;
-        }
-        .detail-featured-badge {
-          color: #fff;
-          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
-          box-shadow: 0 10px 20px rgba(255,75,43,0.18);
-        }
-        .detail-type-badge {
-          color: #ff4b2b;
-          background: #fff0eb;
-          border: 1px solid rgba(255,75,43,0.16);
-        }
-        .detail-type-badge.teal {
-          color: #187d81;
-          background: rgba(88,173,173,0.12);
-          border-color: rgba(88,173,173,0.18);
-        }
-        .detail-company {
-          margin: 0 0 10px;
-          color: ${PALETTE.teal};
-          font-size: 17px;
-          font-weight: 950;
-          letter-spacing: -0.02em;
-        }
-        .detail-title {
-          margin: 0;
-          max-width: 650px;
-          font-size: clamp(30px, 3.4vw, 48px);
-          line-height: 1.04;
-          font-weight: 950;
-          letter-spacing: -0.055em;
-          color: ${PALETTE.slate};
-        }
-        .detail-desc-lead {
-          margin: 18px 0 28px;
-          max-width: 680px;
-          color: ${PALETTE.text};
-          font-size: 18px;
-          line-height: 1.65;
-          font-weight: 600;
-        }
-        .detail-quick-meta {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 22px;
-          margin: 0 0 28px;
-          padding-bottom: 24px;
-          border-bottom: 1px solid rgba(60,74,95,0.10);
-        }
-        .detail-quick-item {
-          display: inline-flex;
-          align-items: center;
-          gap: 9px;
-          color: ${PALETTE.slate};
-          font-size: 15px;
-          font-weight: 800;
-        }
-        .detail-quick-item svg {
-          width: 18px;
-          height: 18px;
-          color: ${PALETTE.slate};
-        }
-        .detail-section-title {
-          margin: 0 0 12px;
-          color: ${PALETTE.slate};
-          font-size: 20px;
-          font-weight: 950;
-          letter-spacing: -0.025em;
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-        }
-        .detail-description-box {
-          padding: 0;
-          border: none;
-          box-shadow: none;
-          background: transparent;
-        }
-        .detail-description {
-          color: ${PALETTE.text};
-          font-size: 16px;
-          line-height: 1.75;
-          white-space: pre-wrap;
-          max-width: 680px;
-        }
-        .detail-location-cards {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 12px;
-          margin-top: 26px;
-          max-width: 680px;
-        }
-        .detail-location-card {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          padding: 16px 18px;
-          border-radius: 20px;
-          background: #fbfcfd;
-          border: 1px solid rgba(60,74,95,0.08);
-        }
-        .detail-location-icon,
-        .side-info-icon {
-          width: 42px;
-          height: 42px;
-          border-radius: 16px;
-          background: #fff0eb;
-          color: #ff4b2b;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-        .detail-location-card span,
-        .side-info-text span {
-          display: block;
-          color: ${PALETTE.softText};
-          font-size: 13px;
-          font-weight: 800;
-          margin-bottom: 4px;
-        }
-        .detail-location-card strong,
-        .side-info-text strong {
-          display: block;
-          color: ${PALETTE.slate};
-          font-size: 16px;
-          font-weight: 950;
-          line-height: 1.25;
-        }
-        .side-salary-box {
-          padding: 20px 0 24px;
-          border-bottom: 1px solid rgba(60,74,95,0.10);
-          margin-bottom: 18px;
-        }
-        .side-salary-top {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-        }
-        .side-salary-label {
-          color: ${PALETTE.slate};
-          font-size: 15px;
-          font-weight: 950;
-          margin-bottom: 12px;
-        }
-        .side-salary {
-          color: #ff4b2b;
-          font-size: clamp(26px, 2.5vw, 38px);
-          line-height: 1.12;
-          font-weight: 950;
-          letter-spacing: -0.05em;
-        }
-        .side-salary-icon {
-          width: 66px;
-          height: 66px;
-          border-radius: 24px;
-          background: #fff0eb;
-          color: #ff4b2b;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-        .side-info-list {
-          display: grid;
-          gap: 0;
-          margin-bottom: 22px;
-        }
-        .side-info-row {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          padding: 17px 0;
-          border-bottom: 1px solid rgba(60,74,95,0.10);
-        }
-        .side-contact-box {
-          border-radius: 22px;
-          padding: 18px;
-          background: rgba(88,173,173,0.10);
-          border: 1px solid rgba(88,173,173,0.14);
-          margin-top: 18px;
-        }
-        .side-contact-title {
-          margin: 0 0 12px;
-          color: #187d81;
-          font-size: 17px;
-          font-weight: 950;
-        }
-        .contact-line {
-          display: grid;
-          gap: 4px;
-          padding: 10px 0;
-          border-top: 1px solid rgba(88,173,173,0.14);
-        }
-        .contact-line:first-of-type {
-          border-top: none;
-        }
-        .contact-line span {
-          color: ${PALETTE.softText};
-          font-size: 12px;
-          font-weight: 900;
-        }
-        .contact-line strong {
-          color: ${PALETTE.slate};
-          font-size: 15px;
-          font-weight: 950;
-          line-height: 1.3;
-        }
-        .side-note {
-          margin: 14px 0 0;
-          color: ${PALETTE.softText};
-          font-size: 12px;
-          line-height: 1.55;
-          font-weight: 750;
-        }
-        @media (max-width: 900px) {
-          .detail-layout {
-            grid-template-columns: 1fr;
-            overflow-y: auto;
-          }
-          .detail-left,
-          .detail-right {
-            overflow: visible;
-            padding: 24px 20px;
-          }
-          .detail-right {
-            border-left: none;
-            border-top: 1px solid rgba(255,75,43,0.10);
-          }
-        }
-
-mns: 1fr auto;
+          grid-template-columns: 1fr auto;
           gap: 12px;
           margin-top: 18px;
         }
@@ -2091,6 +1799,307 @@ mns: 1fr auto;
           opacity: 0.94;
         }
 
+
+        /* --- Popup düzeltme: direkt iletişimli ferah iki kolon --- */
+        .detail-modal {
+          width: min(1040px, calc(100vw - 36px));
+          max-height: min(88vh, 900px);
+          border-radius: 28px;
+          overflow: hidden;
+          background: #fff;
+        }
+        .detail-panel-inner {
+          padding: 0;
+          overflow-y: auto;
+        }
+        .detail-shell {
+          display: grid;
+          grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.75fr);
+          min-height: 610px;
+        }
+        .detail-left {
+          padding: 34px 38px 28px;
+          background: linear-gradient(180deg, #fff 0%, #fcfdfe 100%);
+        }
+        .detail-right {
+          padding: 34px 36px 28px;
+          background:
+            radial-gradient(circle at top right, rgba(255,75,43,0.12), transparent 34%),
+            linear-gradient(180deg, #fff8f5 0%, #fff 100%);
+          border-left: 1px solid rgba(255,75,43,0.10);
+        }
+        .detail-close {
+          position: absolute;
+          top: 24px;
+          right: 24px;
+          width: 42px;
+          height: 42px;
+          border-radius: 999px;
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          color: #233044;
+          font-size: 24px;
+          font-weight: 900;
+          line-height: 1;
+          cursor: pointer;
+          box-shadow: 0 10px 24px rgba(60,74,95,0.08);
+          z-index: 2;
+        }
+        .detail-badge-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-bottom: 34px;
+          padding-right: 52px;
+        }
+        .detail-featured-badge,
+        .detail-type-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 36px;
+          padding: 0 16px;
+          border-radius: 999px;
+          font-size: 13px;
+          font-weight: 900;
+          letter-spacing: -0.02em;
+        }
+        .detail-featured-badge {
+          color: #fff;
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          box-shadow: 0 10px 20px rgba(255,75,43,0.18);
+        }
+        .detail-type-badge {
+          color: #ff4b2b;
+          background: #fff0eb;
+          border: 1px solid rgba(255,75,43,0.16);
+        }
+        .detail-time-badge {
+          color: #0f7778;
+          background: rgba(88,173,173,0.13);
+          border-color: rgba(88,173,173,0.18);
+        }
+        .detail-company {
+          margin: 0 0 10px;
+          color: #58ADAD;
+          font-size: 17px;
+          font-weight: 950;
+          letter-spacing: -0.02em;
+        }
+        .detail-title {
+          margin: 0 0 16px;
+          max-width: 620px;
+          font-size: clamp(32px, 4vw, 48px);
+          line-height: 1.05;
+          font-weight: 950;
+          letter-spacing: -0.055em;
+          color: #3C4A5F;
+        }
+        .detail-summary {
+          max-width: 640px;
+          margin: 0 0 26px;
+          color: #3C4A5F;
+          font-size: 17px;
+          line-height: 1.65;
+          font-weight: 550;
+        }
+        .detail-left-meta {
+          display: flex;
+          align-items: center;
+          gap: 28px;
+          flex-wrap: wrap;
+          padding-bottom: 28px;
+          border-bottom: 1px solid rgba(60,74,95,0.10);
+          margin-bottom: 28px;
+        }
+        .detail-left-meta span {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          color: #3C4A5F;
+          font-size: 15px;
+          font-weight: 750;
+        }
+        .detail-left-meta svg {
+          width: 18px;
+          height: 18px;
+          color: #233044;
+        }
+        .detail-address-grid {
+          display: grid;
+          gap: 14px;
+          margin-bottom: 24px;
+        }
+        .detail-address-card {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          min-height: 70px;
+          padding: 16px 18px;
+          border-radius: 20px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.10);
+          box-shadow: 0 12px 26px rgba(60,74,95,0.035);
+        }
+        .detail-address-icon {
+          width: 42px;
+          height: 42px;
+          border-radius: 16px;
+          background: #fff0eb;
+          color: #ff4b2b;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .detail-address-card span {
+          display: block;
+          color: #5D6B7F;
+          font-size: 13px;
+          font-weight: 850;
+          margin-bottom: 4px;
+        }
+        .detail-address-card strong {
+          display: block;
+          color: #233044;
+          font-size: 16px;
+          line-height: 1.35;
+          font-weight: 950;
+        }
+        .detail-description-box {
+          padding: 22px 24px;
+          border-radius: 22px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
+          box-shadow: 0 12px 26px rgba(60,74,95,0.04);
+        }
+        .detail-description-title {
+          margin: 0 0 12px;
+          color: #3C4A5F;
+          font-size: 19px;
+          font-weight: 950;
+          letter-spacing: -0.025em;
+        }
+        .detail-description {
+          color: #233044;
+          font-size: 15.5px;
+          line-height: 1.75;
+          white-space: pre-wrap;
+        }
+        .detail-salary-side {
+          padding-bottom: 26px;
+          border-bottom: 1px solid rgba(60,74,95,0.10);
+          margin-bottom: 22px;
+        }
+        .detail-salary-side-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+        }
+        .detail-salary-label {
+          color: #3C4A5F;
+          font-size: 15px;
+          font-weight: 950;
+          margin-bottom: 10px;
+        }
+        .detail-salary {
+          color: #ff4b2b;
+          font-size: clamp(30px, 3vw, 42px);
+          line-height: 1.12;
+          font-weight: 950;
+          letter-spacing: -0.05em;
+        }
+        .detail-salary-icon {
+          width: 72px;
+          height: 72px;
+          border-radius: 999px;
+          background: #fff0eb;
+          color: #ff4b2b;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .detail-side-list {
+          display: grid;
+          gap: 0;
+          margin-bottom: 22px;
+        }
+        .detail-side-row {
+          display: grid;
+          grid-template-columns: 52px 1fr;
+          gap: 12px;
+          align-items: center;
+          padding: 16px 0;
+          border-bottom: 1px solid rgba(60,74,95,0.10);
+        }
+        .detail-side-icon {
+          width: 46px;
+          height: 46px;
+          border-radius: 999px;
+          background: #f4f6f8;
+          color: #3C4A5F;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .detail-side-row span {
+          display: block;
+          color: #5D6B7F;
+          font-size: 13px;
+          font-weight: 800;
+          margin-bottom: 3px;
+        }
+        .detail-side-row strong {
+          display: block;
+          color: #233044;
+          font-size: 16px;
+          line-height: 1.35;
+          font-weight: 950;
+        }
+        .detail-contact-box {
+          padding: 18px 18px;
+          border-radius: 22px;
+          background: rgba(88,173,173,0.10);
+          border: 1px solid rgba(88,173,173,0.14);
+          margin-bottom: 16px;
+        }
+        .detail-contact-title {
+          color: #0f7778;
+          font-size: 16px;
+          font-weight: 950;
+          margin: 0 0 12px;
+        }
+        .detail-contact-line {
+          display: flex;
+          justify-content: space-between;
+          gap: 14px;
+          padding: 8px 0;
+          color: #3C4A5F;
+          font-size: 14px;
+          font-weight: 800;
+          border-top: 1px solid rgba(88,173,173,0.13);
+        }
+        .detail-contact-line:first-of-type {
+          border-top: none;
+        }
+        .detail-contact-line strong {
+          color: #233044;
+          text-align: right;
+          font-weight: 950;
+        }
+        .detail-apply-note {
+          color: #5D6B7F;
+          font-size: 13px;
+          font-weight: 750;
+          line-height: 1.6;
+          padding: 0;
+          border: none;
+          background: transparent;
+        }
+
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
@@ -2135,6 +2144,13 @@ mns: 1fr auto;
           .detail-actions { grid-template-columns: 1fr; }
           .detail-hero { padding: 22px 18px 20px; }
           .detail-body { padding: 18px; }
+
+          .detail-shell { grid-template-columns: 1fr; min-height: auto; }
+          .detail-left, .detail-right { padding: 22px 18px; }
+          .detail-right { border-left: none; border-top: 1px solid rgba(255,75,43,0.10); }
+          .detail-title { font-size: 32px; }
+          .detail-left-meta { gap: 14px; }
+
         }
       `}</style>
 
@@ -2212,12 +2228,21 @@ mns: 1fr auto;
                 </div>
 
                 <div className="post-field">
+                  <label>Çalışma tipi</label>
+                  <select name="workType" value={formData.workType} onChange={handleFormChange}>
+                    {types.filter((item) => item !== "Tümü").map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="post-field full">
                   <label>İş adresi / buluşma noktası<span className="required-star">*</span></label>
                   <input
                     className={errors.workAddress ? "field-error" : ""}
                     name="workAddress"
                     type="text"
-                    placeholder="Örn. Kadıköy Moda / mağaza önü"
+                    placeholder="Örn. Kadıköy / Moda, AVM önü, depo giriş kapısı"
                     value={formData.workAddress}
                     onChange={handleFormChange}
                   />
@@ -2229,7 +2254,7 @@ mns: 1fr auto;
                   <input
                     name="contactName"
                     type="text"
-                    placeholder="Örn. Ahmet Bey"
+                    placeholder="Örn. Ahmet Yılmaz"
                     value={formData.contactName}
                     onChange={handleFormChange}
                   />
@@ -2240,19 +2265,10 @@ mns: 1fr auto;
                   <input
                     name="contactPhone"
                     type="text"
-                    placeholder="İsteğe bağlı"
+                    placeholder="Örn. 0555 555 55 55"
                     value={formData.contactPhone}
                     onChange={handleFormChange}
                   />
-                </div>
-
-                <div className="post-field">
-                  <label>Çalışma tipi</label>
-                  <select name="workType" value={formData.workType} onChange={handleFormChange}>
-                    {types.filter((item) => item !== "Tümü").map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </select>
                 </div>
 
                 <div className="post-field full">
@@ -2344,7 +2360,7 @@ mns: 1fr auto;
             </button>
 
             <div className="detail-panel-inner">
-              <div className="detail-layout">
+              <div className="detail-shell">
                 <div className="detail-left">
                   <div className="detail-badge-row">
                     {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
@@ -2353,90 +2369,84 @@ mns: 1fr auto;
                       <span className="detail-featured-badge">Yeni İlan</span>
                     )}
                     <span className="detail-type-badge">{selectedJob.type}</span>
-                    <span className="detail-type-badge teal">{getDaysAgoLabel(selectedJob.createdAt)}</span>
+                    <span className="detail-type-badge detail-time-badge">{getDaysAgoLabel(selectedJob.createdAt)}</span>
                   </div>
 
                   <p className="detail-company">{selectedJob.company}</p>
                   <h3 className="detail-title">{selectedJob.title}</h3>
-
-                  <p className="detail-desc-lead">
+                  <p className="detail-summary">
                     {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
                   </p>
 
-                  <div className="detail-quick-meta">
-                    <div className="detail-quick-item">
-                      <svg viewBox="0 0 24 24" fill="none">
+                  <div className="detail-left-meta">
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 21s6-5.3 6-11a6 6 0 1 0-12 0c0 5.7 6 11 6 11Z" stroke="currentColor" strokeWidth="2"/>
                         <circle cx="12" cy="10" r="2.4" stroke="currentColor" strokeWidth="2"/>
                       </svg>
                       {selectedJob.location}
-                    </div>
-                    <div className="detail-quick-item">
-                      <svg viewBox="0 0 24 24" fill="none">
+                    </span>
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2"/>
                         <path d="M4 7h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                       </svg>
                       {selectedJob.type}
-                    </div>
-                    <div className="detail-quick-item">
-                      <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M20 7 10 17l-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </span>
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                        <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                       </svg>
                       {selectedJob.category || "Vitrin ilan"}
-                    </div>
+                    </span>
                   </div>
 
-                  <div className="detail-description-box">
-                    <h4 className="detail-section-title">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 4h14v16H5V4Z" stroke="#187d81" strokeWidth="2" strokeLinejoin="round"/>
-                        <path d="M8 8h8M8 12h8M8 16h5" stroke="#187d81" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                      İş açıklaması
-                    </h4>
-                    <div className="detail-description">
-                      {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
-                    </div>
-                  </div>
-
-                  <div className="detail-location-cards">
-                    <div className="detail-location-card">
-                      <span className="detail-location-icon" aria-hidden="true">
+                  <div className="detail-address-grid">
+                    <div className="detail-address-card">
+                      <span className="detail-address-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                           <path d="M12 21s6-5.3 6-11a6 6 0 1 0-12 0c0 5.7 6 11 6 11Z" stroke="currentColor" strokeWidth="2"/>
                           <circle cx="12" cy="10" r="2.4" stroke="currentColor" strokeWidth="2"/>
                         </svg>
                       </span>
-                      <span>
+                      <div>
                         <span>Şehir / Konum</span>
                         <strong>{selectedJob.location}</strong>
-                      </span>
+                      </div>
                     </div>
 
-                    <div className="detail-location-card">
-                      <span className="detail-location-icon" aria-hidden="true">
+                    <div className="detail-address-card">
+                      <span className="detail-address-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                          <path d="M4 10.5 12 4l8 6.5V20H4v-9.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                          <path d="M4 11.5 12 5l8 6.5V20H4v-8.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                           <path d="M9 20v-6h6v6" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                         </svg>
                       </span>
-                      <span>
+                      <div>
                         <span>İş adresi / buluşma noktası</span>
                         <strong>{selectedJob.workAddress || selectedJob.location}</strong>
-                      </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="detail-description-box">
+                    <h4 className="detail-description-title">İş açıklaması</h4>
+                    <div className="detail-description">
+                      {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
                     </div>
                   </div>
                 </div>
 
                 <aside className="detail-right">
-                  <div className="side-salary-box">
-                    <div className="side-salary-top">
+                  <div className="detail-salary-side">
+                    <div className="detail-salary-side-top">
                       <div>
-                        <div className="side-salary-label">Ücret bilgisi</div>
-                        <div className="side-salary">{selectedJob.salary}</div>
+                        <div className="detail-salary-label">Ücret bilgisi</div>
+                        <div className="detail-salary">{selectedJob.salary}</div>
                       </div>
-                      <div className="side-salary-icon" aria-hidden="true">
-                        <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+                      <div className="detail-salary-icon" aria-hidden="true">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
                           <path d="M4 7.5h16v10H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                           <path d="M7 10.5h.01M17 14.5h.01M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                         </svg>
@@ -2444,67 +2454,55 @@ mns: 1fr auto;
                     </div>
                   </div>
 
-                  <div className="side-info-list">
-                    <div className="side-info-row">
-                      <span className="side-info-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <div className="detail-side-list">
+                    <div className="detail-side-row">
+                      <span className="detail-side-icon" aria-hidden="true">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
                           <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2"/>
                           <path d="M4 7h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                         </svg>
                       </span>
-                      <span className="side-info-text">
-                        <span>Çalışma tipi</span>
-                        <strong>{selectedJob.type}</strong>
-                      </span>
+                      <div><span>Çalışma tipi</span><strong>{selectedJob.type}</strong></div>
                     </div>
 
-                    <div className="side-info-row">
-                      <span className="side-info-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <div className="detail-side-row">
+                      <span className="detail-side-icon" aria-hidden="true">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
                           <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                           <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                         </svg>
                       </span>
-                      <span className="side-info-text">
-                        <span>Kategori</span>
-                        <strong>{selectedJob.category || "Vitrin ilan"}</strong>
-                      </span>
+                      <div><span>Kategori</span><strong>{selectedJob.category || "Vitrin ilan"}</strong></div>
                     </div>
 
-                    <div className="side-info-row">
-                      <span className="side-info-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <div className="detail-side-row">
+                      <span className="detail-side-icon" aria-hidden="true">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
                           <path d="M7 3v3M17 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                         </svg>
                       </span>
-                      <span className="side-info-text">
-                        <span>Yayın</span>
-                        <strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong>
-                      </span>
+                      <div><span>Yayın</span><strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong></div>
                     </div>
                   </div>
 
-                  <div className="side-contact-box">
-                    <h4 className="side-contact-title">İletişim bilgileri</h4>
-
-                    <div className="contact-line">
+                  <div className="detail-contact-box">
+                    <h4 className="detail-contact-title">İletişim bilgileri</h4>
+                    <div className="detail-contact-line">
                       <span>Yetkili kişi</span>
                       <strong>{selectedJob.contactName || "İşveren"}</strong>
                     </div>
-
-                    <div className="contact-line">
+                    <div className="detail-contact-line">
                       <span>Telefon / WhatsApp</span>
                       <strong>{selectedJob.contactPhone || "Telefon bilgisi paylaşılmamış"}</strong>
                     </div>
-
-                    <div className="contact-line">
+                    <div className="detail-contact-line">
                       <span>Adres</span>
                       <strong>{selectedJob.workAddress || selectedJob.location}</strong>
                     </div>
+                  </div>
 
-                    <p className="side-note">
-                      Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
-                    </p>
+                  <div className="detail-apply-note">
+                    Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
                   </div>
                 </aside>
               </div>
