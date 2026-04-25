@@ -620,11 +620,13 @@ export default function App() {
         .featured-card,
         .job-card {
           position: relative;
-          background: #fff;
-          border: 1px solid rgba(60,74,95,0.08);
+          background: linear-gradient(180deg, #ffffff 0%, #fffefe 100%);
+          border: 1px solid rgba(255,255,255,0.88);
           border-radius: 26px;
-          padding: 22px;
-          box-shadow: 0 14px 28px rgba(60,74,95,0.05);
+          padding: 20px 20px 18px;
+          box-shadow:
+            0 18px 34px rgba(60,74,95,0.08),
+            inset 0 1px 0 rgba(255,255,255,0.95);
           overflow: hidden;
           cursor: pointer;
           transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
@@ -632,17 +634,31 @@ export default function App() {
         .featured-card:hover,
         .job-card:hover {
           transform: translateY(-4px);
-          box-shadow: 0 20px 36px rgba(60,74,95,0.10);
+          box-shadow:
+            0 24px 44px rgba(60,74,95,0.14),
+            inset 0 1px 0 rgba(255,255,255,0.95);
+          border-color: rgba(255,255,255,0.96);
+        }
+        .featured-card::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          height: 5px;
+          background: linear-gradient(90deg, ${PALETTE.coral} 0%, #ff8b6d 100%);
         }
         .featured-card::after {
           content: "";
           position: absolute;
-          right: -20px;
-          bottom: -24px;
-          width: 130px;
-          height: 130px;
+          right: -16px;
+          bottom: -18px;
+          width: 86px;
+          height: 86px;
           border-radius: 50%;
-          background: rgba(228,93,80,0.12);
+          background:
+            radial-gradient(circle at 35% 35%, rgba(255,255,255,0.72), transparent 36%),
+            rgba(228,93,80,0.11);
         }
 
         .card-top {
@@ -651,80 +667,112 @@ export default function App() {
           align-items: flex-start;
           gap: 14px;
           margin-bottom: 18px;
-          min-height: 42px;
+          min-height: 40px;
         }
         .card-top-right {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
-          gap: 6px;
+          gap: 7px;
           flex-shrink: 0;
-          padding-top: 2px;
+          padding-top: 1px;
         }
         .pill {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: ${PALETTE.coral};
+          background: linear-gradient(180deg, ${PALETTE.coral} 0%, #d94b3f 100%);
           color: #fff;
           border-radius: 999px;
-          padding: 7px 11px;
+          padding: 8px 12px;
           font-size: 12px;
-          font-weight: 800;
+          font-weight: 900;
           letter-spacing: -0.01em;
+          box-shadow: 0 10px 18px rgba(228,93,80,0.22);
         }
         .type-tag {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          padding: 7px 10px;
+          padding: 7px 11px;
           border-radius: 999px;
-          background: ${PALETTE.warm};
+          background: linear-gradient(180deg, #fff7f3 0%, #ffece4 100%);
           color: ${PALETTE.coral};
           font-size: 12px;
-          font-weight: 800;
+          font-weight: 900;
           letter-spacing: -0.01em;
-          border: 1px solid rgba(228,93,80,0.16);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+          border: 1px solid rgba(228,93,80,0.18);
+          box-shadow: 0 6px 14px rgba(228,93,80,0.08);
         }
         .job-days {
           font-size: 12px;
           color: ${PALETTE.softText};
-          font-weight: 700;
+          font-weight: 800;
           letter-spacing: -0.01em;
           white-space: nowrap;
         }
         .job-company {
           color: ${PALETTE.slate};
-          font-weight: 800;
-          margin-bottom: 8px;
+          font-weight: 900;
+          margin-bottom: 7px;
           font-size: 15px;
           line-height: 1.3;
           letter-spacing: -0.01em;
+          position: relative;
+          z-index: 2;
         }
         .job-title {
-          margin: 0 0 8px;
-          font-size: 19px;
-          line-height: 1.22;
-          font-weight: 900;
-          letter-spacing: -0.03em;
+          margin: 0 0 9px;
+          font-size: 20px;
+          line-height: 1.18;
+          font-weight: 950;
+          letter-spacing: -0.035em;
           color: ${PALETTE.slate};
+          position: relative;
+          z-index: 2;
         }
         .job-location {
           color: ${PALETTE.softText};
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           font-size: 15px;
           line-height: 1.4;
-          font-weight: 500;
+          font-weight: 600;
           letter-spacing: -0.01em;
+          position: relative;
+          z-index: 2;
         }
         .job-salary {
+          display: inline-flex;
+          align-items: center;
           color: ${PALETTE.coral};
           font-size: 20px;
-          font-weight: 900;
+          font-weight: 950;
           line-height: 1.2;
-          letter-spacing: -0.03em;
-          margin-top: 8px;
+          letter-spacing: -0.035em;
+          margin-top: 2px;
+          padding: 8px 0 0;
+          border-top: 1px solid rgba(60,74,95,0.08);
+          min-width: 70%;
+          position: relative;
+          z-index: 2;
+        }
+        .featured-more {
+          position: absolute;
+          right: 20px;
+          bottom: 18px;
+          z-index: 3;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 34px;
+          height: 34px;
+          border-radius: 999px;
+          background: #fff;
+          color: ${PALETTE.coral};
+          border: 1px solid rgba(228,93,80,0.18);
+          font-size: 18px;
+          font-weight: 900;
+          box-shadow: 0 8px 18px rgba(60,74,95,0.08);
         }
         .mini-salary {
           margin-top: 14px;
@@ -1539,6 +1587,7 @@ export default function App() {
                 <h3 className="job-title">{job.title}</h3>
                 <div className="job-location">{job.location}</div>
                 <div className="job-salary">{job.salary}</div>
+                <div className="featured-more">›</div>
               </article>
             ))}
           </div>
