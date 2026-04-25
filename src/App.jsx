@@ -579,14 +579,24 @@ export default function App() {
         .search-btn {
           width: 100%;
           height: 56px;
-          border: none;
           border-radius: 18px;
-          background: ${PALETTE.slate};
-          color: #fff;
           font-size: 15px;
           font-weight: 900;
           cursor: pointer;
-          box-shadow: 0 12px 24px rgba(60,74,95,0.22);
+          transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+        .search-btn:hover { transform: translateY(-1px); }
+        .search-btn-primary {
+          border: 1px solid rgba(255,255,255,0.35);
+          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
+          color: #fff;
+          box-shadow: 0 14px 28px rgba(255,79,38,0.24);
+        }
+        .search-btn-clear {
+          border: 1px solid rgba(255,255,255,0.62);
+          background: rgba(255,255,255,0.08);
+          color: #fff;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
         }
         .hero {
           padding: 4px 0 6px;
@@ -1286,116 +1296,70 @@ export default function App() {
         }
 
 
-        /* --- Final hero + vitrin tasarım revizyonu --- */
-        .top-search {
-          padding: 2px 0 18px;
-        }
-        .filter-wrap {
-          border-radius: 18px;
-          padding: 18px;
-          box-shadow: 0 18px 34px rgba(60,74,95,0.10);
-        }
-        .field label {
-          font-size: 14px;
-          font-weight: 900;
-        }
-        .field input, .field select {
-          height: 58px;
-          border-radius: 13px;
-          font-size: 15px;
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.82);
-        }
-        .search-btn {
-          height: 58px;
-          border-radius: 13px;
-          font-size: 16px;
-          box-shadow: 0 14px 24px rgba(35,48,68,0.18);
-        }
-        .search-btn:not(.search-btn-clear) {
-          background: linear-gradient(180deg, #ff6045 0%, #ff4d28 100%);
-          border: 1px solid rgba(255,255,255,0.46);
-          box-shadow: 0 14px 24px rgba(228,93,80,0.22);
-        }
-        .search-btn-clear {
-          background: rgba(255,255,255,0.06);
-          border: 1px solid rgba(255,255,255,0.62);
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
-        }
-        .hero {
-          padding: 0 0 22px;
-        }
+        /* --- Hero trust area + premium featured card revizyonu --- */
         .hero-card {
-          min-height: 156px;
-          padding: 32px 28px;
-          border-radius: 18px;
-          background: rgba(255,255,255,0.96);
-          box-shadow: 0 16px 34px rgba(60,74,95,0.08);
+          padding: 22px 22px;
+          box-shadow: 0 18px 38px rgba(60,74,95,0.08);
         }
         .hero-content {
           display: grid;
-          grid-template-columns: minmax(420px, 1fr) auto;
+          grid-template-columns: 1fr 1fr;
           align-items: center;
-          gap: 34px;
-          min-height: 92px;
+          gap: 28px;
         }
         .hero-title {
-          margin: 0;
-          max-width: 720px;
-          font-size: clamp(34px, 3.1vw, 48px);
+          font-size: clamp(28px, 3vw, 46px);
           line-height: 1.12;
           letter-spacing: -0.055em;
-          font-weight: 950;
-          color: #263247;
         }
         .hero-trust-row {
-          display: grid;
-          grid-template-columns: repeat(3, max-content);
-          justify-content: end;
-          align-items: center;
+          display: flex;
+          justify-content: flex-end;
           gap: 16px;
+          flex-wrap: wrap;
         }
         .hero-trust-pill {
-          height: 68px;
-          min-width: 190px;
+          min-height: 76px;
+          min-width: 214px;
           display: inline-flex;
           align-items: center;
           gap: 14px;
-          padding: 12px 18px;
+          padding: 14px 18px;
           border-radius: 20px;
-          background: linear-gradient(180deg, #fff7f4 0%, #fff0eb 100%);
-          border: 1px solid rgba(255,99,72,0.14);
-          box-shadow: 0 14px 28px rgba(228,93,80,0.07);
+          background: linear-gradient(180deg, #fff7f3 0%, #ffece5 100%);
+          border: 1px solid rgba(228,93,80,0.16);
+          box-shadow: 0 16px 30px rgba(228,93,80,0.09);
           color: ${PALETTE.slate};
         }
         .hero-trust-icon {
-          width: 42px;
-          height: 42px;
+          width: 44px;
+          height: 44px;
           border-radius: 16px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(180deg, #ff6247 0%, #ff4d2a 100%);
+          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
           color: #fff;
-          font-size: 21px;
-          font-weight: 950;
-          box-shadow: 0 10px 18px rgba(228,93,80,0.18);
+          font-size: 20px;
+          font-weight: 900;
+          box-shadow: 0 12px 20px rgba(228,93,80,0.24);
           flex-shrink: 0;
         }
         .hero-trust-pill strong {
           display: block;
           color: #ff4f26;
-          font-size: 14px;
-          line-height: 1.12;
-          font-weight: 950;
+          font-size: 15px;
+          line-height: 1.15;
+          font-weight: 900;
           white-space: nowrap;
         }
         .hero-trust-pill small {
           display: block;
           margin-top: 5px;
-          color: #263247;
+          color: ${PALETTE.slate};
           font-size: 13px;
-          line-height: 1.15;
-          font-weight: 750;
+          line-height: 1.1;
+          font-weight: 700;
           white-space: nowrap;
         }
         .hero-stats-inline,
@@ -1403,31 +1367,24 @@ export default function App() {
           display: none;
         }
         .featured-section {
-          background: linear-gradient(135deg, #ff6045 0%, #ff4d28 100%);
-          border-radius: 18px;
+          background: linear-gradient(135deg, #f35b4d 0%, #ff552b 100%);
           box-shadow: 0 22px 44px rgba(228,93,80,0.20);
-          padding: 26px 18px 18px;
-          margin-bottom: 26px;
+          padding: 30px 22px 24px;
         }
         .featured-head {
-          margin-bottom: 20px;
-          padding: 0 8px;
+          margin-bottom: 18px;
         }
         .featured-head-actions {
           display: inline-flex;
           align-items: center;
           gap: 20px;
           color: rgba(255,255,255,0.96);
-          font-size: 15px;
-          font-weight: 950;
+          font-size: 14px;
+          font-weight: 900;
         }
         .featured-head-actions a {
           color: rgba(255,255,255,0.96);
           text-decoration: none;
-        }
-        .section-title-vitrin {
-          font-size: 26px;
-          letter-spacing: -0.035em;
         }
         .section-title-vitrin::before {
           content: "★";
@@ -1438,83 +1395,71 @@ export default function App() {
           font-size: 17px;
           color: #fff;
         }
-        .featured-grid {
-          gap: 12px;
-        }
         .featured-card {
-          min-height: 246px;
-          padding: 25px 26px 24px;
-          border-radius: 16px;
-          border: 1px solid rgba(255,255,255,0.78);
-          box-shadow: 0 16px 34px rgba(35,48,68,0.10);
-          background: #fff;
+          min-height: 218px;
+          padding: 24px 26px 26px;
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.76);
+          box-shadow: 0 18px 38px rgba(35,48,68,0.10);
         }
         .featured-card::after {
           display: none;
         }
         .featured-card .card-top {
-          margin-bottom: 28px;
+          margin-bottom: 26px;
           min-height: 34px;
         }
         .featured-card .pill {
-          gap: 7px;
-          padding: 8px 13px;
-          border-radius: 999px;
-          background: linear-gradient(180deg, #ff6045 0%, #ff4d28 100%);
-          box-shadow: 0 10px 18px rgba(228,93,80,0.24);
-          font-size: 13px;
-          font-weight: 950;
+          gap: 6px;
+          padding: 9px 13px;
+          background: ${PALETTE.coral};
+          box-shadow: 0 10px 18px rgba(228,93,80,0.22);
         }
         .featured-card .type-tag {
-          padding: 8px 14px;
-          background: #fff2ec;
-          color: #ff4f26;
-          border-color: rgba(228,93,80,0.18);
-          box-shadow: none;
-          font-weight: 950;
+          padding: 8px 12px;
+          background: ${PALETTE.warm};
+          color: ${PALETTE.coral};
+          border-color: rgba(228,93,80,0.20);
         }
         .featured-company {
           color: ${PALETTE.teal};
-          font-size: 17px;
-          margin-bottom: 8px;
-          font-weight: 950;
+          font-size: 16px;
+          margin-bottom: 6px;
         }
         .featured-title {
-          font-size: 22px;
-          margin-bottom: 13px;
-          color: #263247;
-          letter-spacing: -0.035em;
+          font-size: 21px;
+          margin-bottom: 10px;
         }
         .featured-location {
           display: inline-flex;
           align-items: center;
           gap: 8px;
           color: ${PALETTE.softText};
-          font-size: 16px;
-          font-weight: 650;
+          font-size: 15px;
+          font-weight: 600;
         }
         .featured-location svg {
-          width: 18px;
-          height: 18px;
-          color: #263247;
+          width: 17px;
+          height: 17px;
+          color: ${PALETTE.slate};
           flex-shrink: 0;
         }
         .featured-divider {
-          width: min(68%, 340px);
+          width: min(76%, 360px);
           height: 1px;
           background: rgba(228,93,80,0.18);
-          margin: 23px 0 16px;
+          margin: 20px 0 16px;
         }
         .featured-salary-row {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 9px;
           position: relative;
           z-index: 2;
         }
         .salary-wallet {
-          width: 25px;
-          height: 25px;
+          width: 24px;
+          height: 24px;
           color: #ff4f26;
           flex-shrink: 0;
         }
@@ -1525,27 +1470,26 @@ export default function App() {
         .featured-salary {
           margin: 0;
           color: #ff4f26;
-          font-size: 21px;
-          font-weight: 950;
+          font-size: 20px;
         }
         .featured-icon-circle {
           position: absolute;
-          right: 28px;
-          bottom: 30px;
-          width: 86px;
-          height: 86px;
+          right: 26px;
+          bottom: 26px;
+          width: 82px;
+          height: 82px;
           border-radius: 999px;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: rgba(228,93,80,0.10);
-          color: #263247;
+          background: rgba(228,93,80,0.11);
+          color: ${PALETTE.slate};
           z-index: 1;
         }
         .featured-icon-circle svg {
-          width: 52px;
-          height: 52px;
-          opacity: 0.95;
+          width: 48px;
+          height: 48px;
+          opacity: 0.94;
         }
 
         @media (max-width: 1100px) {
@@ -1575,7 +1519,7 @@ export default function App() {
           .hero-title { font-size: 24px; }
           .hero-content { grid-template-columns: 1fr; gap: 14px; }
           .hero-trust-row { justify-content: flex-start; }
-          .hero-trust-pill { width: 100%; }
+          .hero-trust-pill { width: 100%; min-width: 0; }
           .featured-head-actions { gap: 12px; font-size: 12px; }
           .featured-card { min-height: 220px; }
           .featured-icon-circle { width: 64px; height: 64px; right: 18px; bottom: 22px; }
@@ -1817,11 +1761,11 @@ export default function App() {
               </div>
 
               <div className="search-action">
-                <button className="search-btn" type="button" onClick={handleSearchSubmit}>Ara</button>
+                <button className="search-btn search-btn-primary" type="button" onClick={handleSearchSubmit}>Ara</button>
               </div>
 
               <div className="search-action">
-                <button className="search-btn" type="button" onClick={clearFilters}>Temizle</button>
+                <button className="search-btn search-btn-clear" type="button" onClick={clearFilters}>Temizle</button>
               </div>
             </div>
           </div>
