@@ -28,6 +28,9 @@ const featuredSeed = [
       "Servis ve karşılama süreçlerinde destek olacak, güler yüzlü ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
     category: "Kafe & Restoran",
+    workAddress: "İstanbul / Kadıköy",
+    contactName: "Mavi Masa Yetkilisi",
+    contactPhone: "0555 111 22 33",
   },
   {
     id: 2,
@@ -40,6 +43,9 @@ const featuredSeed = [
       "Etkinlik giriş alanında misafir karşılama ve yönlendirme görevlerinde çalışacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
     category: "Etkinlik & Organizasyon",
+    workAddress: "Ankara / Çankaya",
+    contactName: "Nova Organizasyon",
+    contactPhone: "0555 222 33 44",
   },
   {
     id: 3,
@@ -52,6 +58,9 @@ const featuredSeed = [
       "Yoğun saatlerde teslimat süreçlerinde görev alacak, hızlı ve dikkatli kurye aranıyor.",
     createdAt: "2026-04-14T10:00:00",
     category: "Kurye & Dağıtım",
+    workAddress: "İzmir / Bornova",
+    contactName: "Hızlı Paket",
+    contactPhone: "0555 333 44 55",
   },
 ];
 
@@ -64,6 +73,9 @@ const jobsSeed = [
     salary: "Saatlik 180 TL",
     type: "Saatlik",
     category: "Depo & Lojistik",
+    workAddress: "Bursa / Nilüfer",
+    contactName: "Anka Lojistik",
+    contactPhone: "0555 444 55 66",
     description:
       "Ürün yerleştirme, raf düzenleme ve temel depo operasyonlarında görev alacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
@@ -76,6 +88,9 @@ const jobsSeed = [
     salary: "Günlük 1.000 TL",
     type: "Günlük",
     category: "Satış & Mağaza",
+    workAddress: "Antalya / Muratpaşa",
+    contactName: "Çarşı Market",
+    contactPhone: "0555 555 66 77",
     description:
       "Yoğun mağaza temposuna uyum sağlayabilecek, kasa deneyimi olan ya da öğrenmeye açık ekip arkadaşı.",
     createdAt: "2026-04-14T10:00:00",
@@ -88,6 +103,9 @@ const jobsSeed = [
     salary: "Part Time 12.000 TL / ay",
     type: "Part Time",
     category: "Ofis & Yardımcı İşler",
+    workAddress: "İstanbul / Şişli",
+    contactName: "Vera Danışmanlık",
+    contactPhone: "0555 666 77 88",
     description:
       "Dosyalama, evrak takibi ve günlük ofis işlerine destek verecek ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
@@ -100,6 +118,9 @@ const jobsSeed = [
     salary: "Günlük 1.100 TL",
     type: "Günlük",
     category: "Temizlik",
+    workAddress: "Eskişehir / Odunpazarı",
+    contactName: "Temiz Nokta",
+    contactPhone: "0555 777 88 99",
     description:
       "Ofis ve ortak kullanım alanlarının günlük temizliğinden sorumlu olacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
@@ -112,6 +133,9 @@ const jobsSeed = [
     salary: "Part Time 11.500 TL / ay",
     type: "Part Time",
     category: "Kafe & Restoran",
+    workAddress: "İstanbul / Kadıköy",
+    contactName: "Mavi Masa Yetkilisi",
+    contactPhone: "0555 111 22 33",
     description:
       "Kahve hazırlık süreçlerinde destek verecek, müşteri ilişkileri güçlü ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
@@ -124,6 +148,9 @@ const jobsSeed = [
     salary: "Saatlik 175 TL",
     type: "Saatlik",
     category: "Depo & Lojistik",
+    workAddress: "Bursa / Nilüfer",
+    contactName: "Anka Lojistik",
+    contactPhone: "0555 444 55 66",
     description:
       "Sipariş paketleme, etiketleme ve sevkiyat hazırlığında görev alacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
@@ -136,6 +163,9 @@ const jobsSeed = [
     salary: "Günlük 1.250 TL",
     type: "Günlük",
     category: "Satış & Mağaza",
+    workAddress: "Antalya / Muratpaşa",
+    contactName: "Çarşı Market",
+    contactPhone: "0555 555 66 77",
     description:
       "Stand düzeni, ürün tanıtımı ve müşteri yönlendirme alanlarında görev alacak personel aranıyor.",
     createdAt: "2026-04-14T10:00:00",
@@ -148,6 +178,9 @@ const jobsSeed = [
     salary: "Part Time 13.000 TL / ay",
     type: "Part Time",
     category: "Freelance / Dijital",
+    workAddress: "Uzaktan / Türkiye",
+    contactName: "Studio Mini",
+    contactPhone: "0555 000 11 22",
     description:
       "Temel içerik hazırlama, paylaşım planlama ve dijital destek süreçlerinde çalışacak ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
@@ -291,7 +324,9 @@ export default function App() {
   const [submittedCity, setSubmittedCity] = useState("Tümü");
   const [sortOption, setSortOption] = useState("newest");
   const [showForm, setShowForm] = useState(false);
-  const [featuredChecked, setFeaturedChecked] = useState(false);
+  const [showPlanModal, setShowPlanModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("free");
+  const [pendingJob, setPendingJob] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [logoSrc, setLogoSrc] = useState("/logo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
@@ -328,9 +363,11 @@ export default function App() {
 
   useEffect(() => {
     if (!showForm) {
-      setFeaturedChecked(false);
       setShowPreview(false);
       setErrors({});
+      setSelectedPlan("free");
+      setPendingJob(null);
+      setShowPlanModal(false);
       setFormData({
         company: "",
         title: "",
@@ -338,6 +375,9 @@ export default function App() {
         workType: "Günlük",
         salary: "",
         description: "",
+        workAddress: "",
+        contactName: "",
+        contactPhone: "",
       });
     }
   }, [showForm]);
@@ -348,6 +388,7 @@ export default function App() {
     if (!formData.title.trim()) nextErrors.title = "İlan başlığı zorunludur.";
     if (!formData.city.trim()) nextErrors.city = "Şehir / konum zorunludur.";
     if (!formData.workAddress.trim()) nextErrors.workAddress = "İş adresi / buluşma noktası zorunludur.";
+    if (!formData.contactPhone.trim()) nextErrors.contactPhone = "Telefon / WhatsApp zorunludur.";
     if (!formData.salary.trim()) nextErrors.salary = "Ücret bilgisi zorunludur.";
     if (!formData.description.trim()) nextErrors.description = "İş açıklaması zorunludur.";
     setErrors(nextErrors);
@@ -397,31 +438,47 @@ export default function App() {
     setSubmittedCity("Tümü");
   };
 
-  const handlePublish = () => {
+  const buildJobFromForm = () => ({
+    id: Date.now(),
+    title: formData.title.trim(),
+    company: formData.company.trim(),
+    location: formData.city.trim(),
+    salary: formatSalaryPreview(formData.workType, formData.salary),
+    type: formData.workType,
+    category: inferCategory(formData.title),
+    description: formData.description.trim(),
+    workAddress: formData.workAddress.trim(),
+    contactName: formData.contactName.trim(),
+    contactPhone: formData.contactPhone.trim(),
+    createdAt: new Date().toISOString(),
+  });
+
+  const handlePublishClick = () => {
     if (!validateForm()) return;
+    setPendingJob(buildJobFromForm());
+    setSelectedPlan("free");
+    setShowPlanModal(true);
+  };
 
-    const newJob = {
-      id: Date.now(),
-      title: formData.title.trim(),
-      company: formData.company.trim(),
-      location: formData.city.trim(),
-      salary: formatSalaryPreview(formData.workType, formData.salary),
-      type: formData.workType,
-      category: inferCategory(formData.title),
-      description: formData.description.trim(),
-      workAddress: formData.workAddress.trim(),
-      contactName: formData.contactName.trim(),
-      contactPhone: formData.contactPhone.trim(),
-      createdAt: new Date().toISOString(),
-    };
+  const handlePlanContinue = () => {
+    if (!pendingJob) return;
 
-    if (featuredChecked) {
-      setFeaturedJobs((prev) => [newJob, ...prev]);
+    if (selectedPlan === "featured") {
+      const featuredJob = {
+        ...pendingJob,
+        plan: "featured",
+        featuredStatus: "live",
+        paymentStatus: "pending",
+      };
+      setFeaturedJobs((prev) => [featuredJob, ...prev]);
+      window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     } else {
-      setJobs((prev) => [newJob, ...prev]);
+      setJobs((prev) => [{ ...pendingJob, plan: "free" }, ...prev]);
     }
 
+    setShowPlanModal(false);
     setShowForm(false);
+    setPendingJob(null);
   };
 
   const filteredJobs = useMemo(() => {
@@ -2100,6 +2157,140 @@ export default function App() {
           background: transparent;
         }
 
+
+        .plan-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+          margin-top: 10px;
+        }
+        .plan-card {
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          border-radius: 20px;
+          padding: 18px;
+          text-align: left;
+          cursor: pointer;
+          display: grid;
+          gap: 6px;
+          box-shadow: 0 10px 22px rgba(60,74,95,0.05);
+          color: ${PALETTE.slate};
+        }
+        .plan-card.active {
+          border-color: rgba(255,75,43,0.38);
+          background: linear-gradient(180deg, #fff8f5 0%, #fff 100%);
+          box-shadow: 0 16px 34px rgba(255,75,43,0.13);
+        }
+        .plan-card strong {
+          font-size: 18px;
+          font-weight: 950;
+          letter-spacing: -0.03em;
+        }
+        .plan-card small {
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 800;
+        }
+        .plan-kicker {
+          color: #ff4b2b;
+          font-size: 12px;
+          font-weight: 950;
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
+        }
+        .detail-shell-clean {
+          grid-template-columns: 390px 1fr;
+          min-height: 700px;
+        }
+        .detail-side-clean {
+          border-right: 1px solid rgba(255,75,43,0.10);
+          padding: 34px 32px;
+          background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
+        }
+        .detail-main-clean {
+          padding: 120px 44px 40px;
+          background: #fff;
+          border-left: none;
+          border-top: none;
+        }
+        .compact-salary-card {
+          margin-top: 26px;
+          border-radius: 22px;
+          border: 1px solid rgba(255,75,43,0.14);
+          background: linear-gradient(180deg, #fff8f5 0%, #fff 100%);
+          padding: 22px;
+        }
+        .compact-salary-card .detail-salary {
+          font-size: 34px;
+          line-height: 1.12;
+        }
+        .detail-contact-box-left {
+          margin-top: 18px;
+          padding: 22px;
+          border-radius: 22px;
+          background: rgba(88,173,173,0.10);
+          border: 1px solid rgba(88,173,173,0.16);
+        }
+        .detail-contact-box-left .detail-contact-title {
+          margin-bottom: 16px;
+          color: #0f766e;
+        }
+        .contact-item {
+          display: grid;
+          grid-template-columns: 42px 1fr;
+          gap: 12px;
+          align-items: center;
+          padding: 14px 0;
+          border-bottom: 1px solid rgba(60,74,95,0.08);
+        }
+        .contact-item:last-of-type { border-bottom: none; }
+        .contact-icon {
+          width: 42px;
+          height: 42px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: #fff;
+          color: ${PALETTE.slate};
+          box-shadow: 0 8px 18px rgba(60,74,95,0.06);
+        }
+        .contact-item span:not(.contact-icon) {
+          display: block;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 900;
+          margin-bottom: 4px;
+        }
+        .contact-item strong {
+          display: block;
+          color: ${PALETTE.slate};
+          font-size: 15px;
+          font-weight: 950;
+          line-height: 1.25;
+        }
+        .clean-note {
+          margin: 18px 0 0;
+          padding: 0;
+          background: transparent;
+          border: none;
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          line-height: 1.55;
+        }
+        .detail-meta-clean {
+          margin-top: 28px;
+          padding-bottom: 26px;
+          border-bottom: 1px solid rgba(60,74,95,0.10);
+        }
+        .detail-meta-clean span strong {
+          margin-left: 4px;
+          color: ${PALETTE.slate};
+        }
+        .detail-description-clean {
+          margin-top: 28px;
+          padding: 24px 26px;
+        }
         @media (max-width: 1100px) {
           .filter-grid { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
@@ -2148,8 +2339,11 @@ export default function App() {
           .detail-shell { grid-template-columns: 1fr; min-height: auto; }
           .detail-left, .detail-right { padding: 22px 18px; }
           .detail-right { border-left: none; border-top: 1px solid rgba(255,75,43,0.10); }
+          .detail-side-clean { border-right: none; border-bottom: 1px solid rgba(255,75,43,0.10); }
+          .detail-main-clean { padding: 22px 18px; }
           .detail-title { font-size: 32px; }
           .detail-left-meta { gap: 14px; }
+          .plan-grid { grid-template-columns: 1fr; }
 
         }
       `}</style>
@@ -2261,14 +2455,16 @@ export default function App() {
                 </div>
 
                 <div className="post-field">
-                  <label>Telefon / WhatsApp</label>
+                  <label>Telefon / WhatsApp<span className="required-star">*</span></label>
                   <input
+                    className={errors.contactPhone ? "field-error" : ""}
                     name="contactPhone"
                     type="text"
                     placeholder="Örn. 0555 555 55 55"
                     value={formData.contactPhone}
                     onChange={handleFormChange}
                   />
+                  {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>}
                 </div>
 
                 <div className="post-field full">
@@ -2298,31 +2494,10 @@ export default function App() {
                 </div>
               </div>
 
-              <label className="check-row">
-                <input
-                  type="checkbox"
-                  checked={featuredChecked}
-                  onChange={(e) => setFeaturedChecked(e.target.checked)}
-                />
-                İlanı öne çıkar
-              </label>
-
-              {featuredChecked && (
-                <div className="feature-box">
-                  <div className="feature-box-title">Öne çıkarma bağlantısı</div>
-                  <p className="feature-box-text">
-                    İlanını ana vitrinde göstermek için aşağıdaki bağlantıdan ödeme adımına geçebilirsin.
-                  </p>
-                  <a className="feature-link" href={SHOPIER_FEATURED_LINK} target="_blank" rel="noreferrer">
-                    Shopier ödeme sayfasına git
-                  </a>
-                </div>
-              )}
-
               {showPreview && (
                 <div className="preview-card">
                   <div className="preview-top">
-                    <div className="preview-badge">{featuredChecked ? "Vitrin adayı" : "Standart ilan"}</div>
+                    <div className="preview-badge">"İlan ön izlemesi"</div>
                     <div className="preview-meta">{formData.workType || "Günlük"}</div>
                   </div>
 
@@ -2340,7 +2515,7 @@ export default function App() {
                 <button className="btn btn-primary" type="button" onClick={() => setShowPreview((prev) => !prev)}>
                   {showPreview ? "Önizlemeyi Gizle" : "İlanı Önizle"}
                 </button>
-                <button className="btn btn-secondary" type="button" onClick={handlePublish}>
+                <button className="btn btn-secondary" type="button" onClick={handlePublishClick}>
                   İlanı Yayınla
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={() => setShowForm(false)}>
@@ -2352,16 +2527,59 @@ export default function App() {
         </div>
       )}
 
+
+      {showPlanModal && (
+        <div className="post-modal-backdrop" onClick={() => setShowPlanModal(false)}>
+          <div className="post-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="post-panel-inner">
+              <h3 className="post-title">İlanını nasıl yayınlamak istersin?</h3>
+              <p className="post-desc">
+                Standart ilanı ücretsiz yayınlayabilir ya da vitrinde öne çıkarabilirsin.
+              </p>
+
+              <div className="plan-grid">
+                <button
+                  type="button"
+                  className={`plan-card ${selectedPlan === "free" ? "active" : ""}`}
+                  onClick={() => setSelectedPlan("free")}
+                >
+                  <span className="plan-kicker">Standart</span>
+                  <strong>Ücretsiz İlan</strong>
+                  <small>Standart listede yayınlanır.</small>
+                </button>
+
+                <button
+                  type="button"
+                  className={`plan-card ${selectedPlan === "featured" ? "active" : ""}`}
+                  onClick={() => setSelectedPlan("featured")}
+                >
+                  <span className="plan-kicker">Vitrin</span>
+                  <strong>Ücretli İlan</strong>
+                  <small>Vitrin alanında daha görünür olur.</small>
+                </button>
+              </div>
+
+              <div className="modal-actions" style={{ marginTop: 18 }}>
+                <button className="btn btn-primary" type="button" onClick={handlePlanContinue}>
+                  {selectedPlan === "featured" ? "Ödeme Adımına Geç" : "Ücretsiz Yayınla"}
+                </button>
+                <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
+                  Geri
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {selectedJob && (
         <div className="detail-modal-backdrop" onClick={() => setSelectedJob(null)}>
           <div className="detail-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="detail-close" type="button" onClick={() => setSelectedJob(null)}>
-              ×
-            </button>
+            <button className="detail-close" type="button" onClick={() => setSelectedJob(null)}>×</button>
 
             <div className="detail-panel-inner">
-              <div className="detail-shell">
-                <div className="detail-left">
+              <div className="detail-shell detail-shell-clean">
+                <aside className="detail-left detail-side-clean">
                   <div className="detail-badge-row">
                     {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
                       <span className="detail-featured-badge">★ Öne Çıkan</span>
@@ -2372,74 +2590,7 @@ export default function App() {
                     <span className="detail-type-badge detail-time-badge">{getDaysAgoLabel(selectedJob.createdAt)}</span>
                   </div>
 
-                  <p className="detail-company">{selectedJob.company}</p>
-                  <h3 className="detail-title">{selectedJob.title}</h3>
-                  <p className="detail-summary">
-                    {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
-                  </p>
-
-                  <div className="detail-left-meta">
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 21s6-5.3 6-11a6 6 0 1 0-12 0c0 5.7 6 11 6 11Z" stroke="currentColor" strokeWidth="2"/>
-                        <circle cx="12" cy="10" r="2.4" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                      {selectedJob.location}
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M4 7h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                      </svg>
-                      {selectedJob.type}
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                        <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                      {selectedJob.category || "Vitrin ilan"}
-                    </span>
-                  </div>
-
-                  <div className="detail-address-grid">
-                    <div className="detail-address-card">
-                      <span className="detail-address-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 21s6-5.3 6-11a6 6 0 1 0-12 0c0 5.7 6 11 6 11Z" stroke="currentColor" strokeWidth="2"/>
-                          <circle cx="12" cy="10" r="2.4" stroke="currentColor" strokeWidth="2"/>
-                        </svg>
-                      </span>
-                      <div>
-                        <span>Şehir / Konum</span>
-                        <strong>{selectedJob.location}</strong>
-                      </div>
-                    </div>
-
-                    <div className="detail-address-card">
-                      <span className="detail-address-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                          <path d="M4 11.5 12 5l8 6.5V20H4v-8.5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                          <path d="M9 20v-6h6v6" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                        </svg>
-                      </span>
-                      <div>
-                        <span>İş adresi / buluşma noktası</span>
-                        <strong>{selectedJob.workAddress || selectedJob.location}</strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="detail-description-box">
-                    <h4 className="detail-description-title">İş açıklaması</h4>
-                    <div className="detail-description">
-                      {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
-                    </div>
-                  </div>
-                </div>
-
-                <aside className="detail-right">
-                  <div className="detail-salary-side">
+                  <div className="detail-salary-side compact-salary-card">
                     <div className="detail-salary-side-top">
                       <div>
                         <div className="detail-salary-label">Ücret bilgisi</div>
@@ -2454,57 +2605,63 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="detail-side-list">
-                    <div className="detail-side-row">
-                      <span className="detail-side-icon" aria-hidden="true">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-                          <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2"/>
-                          <path d="M4 7h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                        </svg>
-                      </span>
-                      <div><span>Çalışma tipi</span><strong>{selectedJob.type}</strong></div>
-                    </div>
-
-                    <div className="detail-side-row">
-                      <span className="detail-side-icon" aria-hidden="true">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-                          <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                          <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      </span>
-                      <div><span>Kategori</span><strong>{selectedJob.category || "Vitrin ilan"}</strong></div>
-                    </div>
-
-                    <div className="detail-side-row">
-                      <span className="detail-side-icon" aria-hidden="true">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-                          <path d="M7 3v3M17 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      </span>
-                      <div><span>Yayın</span><strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong></div>
-                    </div>
-                  </div>
-
-                  <div className="detail-contact-box">
+                  <div className="detail-contact-box detail-contact-box-left">
                     <h4 className="detail-contact-title">İletişim bilgileri</h4>
-                    <div className="detail-contact-line">
-                      <span>Yetkili kişi</span>
-                      <strong>{selectedJob.contactName || "İşveren"}</strong>
+                    <div className="contact-item">
+                      <span className="contact-icon">👤</span>
+                      <div><span>Yetkili kişi</span><strong>{selectedJob.contactName || "İşveren"}</strong></div>
                     </div>
-                    <div className="detail-contact-line">
-                      <span>Telefon / WhatsApp</span>
-                      <strong>{selectedJob.contactPhone || "Telefon bilgisi paylaşılmamış"}</strong>
+                    <div className="contact-item">
+                      <span className="contact-icon">☎</span>
+                      <div><span>Telefon / WhatsApp</span><strong>{selectedJob.contactPhone}</strong></div>
                     </div>
-                    <div className="detail-contact-line">
-                      <span>Adres</span>
-                      <strong>{selectedJob.workAddress || selectedJob.location}</strong>
+                    <div className="contact-item">
+                      <span className="contact-icon">⌖</span>
+                      <div><span>Adres</span><strong>{selectedJob.workAddress || selectedJob.location}</strong></div>
                     </div>
-                  </div>
-
-                  <div className="detail-apply-note">
-                    Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
+                    <p className="detail-apply-note clean-note">
+                      Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
+                    </p>
                   </div>
                 </aside>
+
+                <section className="detail-right detail-main-clean">
+                  <p className="detail-company">{selectedJob.company}</p>
+                  <h3 className="detail-title">{selectedJob.title}</h3>
+                  <p className="detail-summary">
+                    {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
+                  </p>
+
+                  <div className="detail-left-meta detail-meta-clean">
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M4 7h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                      </svg>
+                      Çalışma tipi: <strong>{selectedJob.type}</strong>
+                    </span>
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                        <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                      Kategori: <strong>{selectedJob.category || "Vitrin ilan"}</strong>
+                    </span>
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3v3M17 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                      Yayın: <strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong>
+                    </span>
+                  </div>
+
+                  <div className="detail-description-box detail-description-clean">
+                    <h4 className="detail-description-title">İş açıklaması</h4>
+                    <div className="detail-description">
+                      {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
+                    </div>
+                  </div>
+                </section>
               </div>
             </div>
           </div>
