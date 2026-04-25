@@ -1345,11 +1345,6 @@ export default function App() {
           box-shadow: 0 12px 20px rgba(228,93,80,0.24);
           flex-shrink: 0;
         }
-        .hero-trust-icon svg {
-          display: block;
-          width: 16px;
-          height: 16px;
-        }
         .hero-trust-pill strong {
           display: block;
           color: #ff4f26;
@@ -1785,12 +1780,7 @@ export default function App() {
 
               <div className="hero-trust-row">
                 <div className="hero-trust-pill">
-                  <span className="hero-trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <path d="M12 3.25 18.5 5.8v5.05c0 4.05-2.6 7.75-6.5 9.05-3.9-1.3-6.5-5-6.5-9.05V5.8L12 3.25Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                      <path d="m8.8 12.1 2.05 2.05 4.55-4.8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
+                  <span className="hero-trust-icon">✓</span>
                   <span>
                     <strong>Onaylı ilanlar</strong>
                     <small>Güvenle başvur</small>
