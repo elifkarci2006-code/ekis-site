@@ -1320,39 +1320,39 @@ export default function App() {
           flex-wrap: nowrap;
         }
         .hero-trust-pill {
-          height: 68px;
-          min-width: 206px;
+          height: 72px;
+          min-width: 230px;
           display: inline-flex;
           align-items: center;
           gap: 14px;
-          padding: 12px 18px;
+          padding: 13px 18px;
           border-radius: 20px;
-          background: linear-gradient(180deg, #fff7f4 0%, #ffefeb 100%);
+          background: linear-gradient(180deg, #fff8f6 0%, #fff0ec 100%);
           border: 1px solid rgba(255,91,55,0.14);
           box-shadow: 0 16px 34px rgba(255,91,55,0.10);
           color: ${PALETTE.slate};
         }
         .hero-trust-icon {
-          width: 46px;
-          height: 46px;
+          width: 48px;
+          height: 48px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
           color: #ff4f26;
           flex-shrink: 0;
+          filter: drop-shadow(0 10px 16px rgba(255,82,49,0.16));
         }
         .hero-trust-icon svg {
           display: block;
-          width: 46px;
-          height: 46px;
+          width: 48px;
+          height: 48px;
           overflow: visible;
-          filter: drop-shadow(0 10px 16px rgba(255,82,49,0.16));
         }
         .hero-trust-pill strong {
           display: block;
           color: #ff4f26;
-          font-size: 15px;
-          line-height: 1.05;
+          font-size: 16px;
+          line-height: 1.08;
           font-weight: 950;
           letter-spacing: -0.035em;
           white-space: nowrap;
@@ -1361,7 +1361,7 @@ export default function App() {
           display: block;
           margin-top: 6px;
           color: ${PALETTE.slate};
-          font-size: 13px;
+          font-size: 13.5px;
           line-height: 1.05;
           font-weight: 800;
           letter-spacing: -0.025em;
@@ -1785,21 +1785,37 @@ export default function App() {
 
               <div className="hero-trust-row">
                 <div className="hero-trust-pill">
-                  <span className="hero-trust-icon">✓</span>
+                  <span className="hero-trust-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none">
+                      <path d="M24 5.5 37 10.6v10.1c0 8.3-5.4 15.9-13 18.8-7.6-2.9-13-10.5-13-18.8V10.6L24 5.5Z" fill="#ff4f26"/>
+                      <path d="M18.2 23.8 22.2 27.8 30.8 18.7" stroke="white" strokeWidth="3.3" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
                   <span>
                     <strong>Onaylı ilanlar</strong>
                     <small>Güvenle başvur</small>
                   </span>
                 </div>
                 <div className="hero-trust-pill">
-                  <span className="hero-trust-icon">%</span>
+                  <span className="hero-trust-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none">
+                      <path d="M24 5.5c2.1 0 3.7 2.2 5.5 2.8 1.9.6 4.4-.4 6 .8 1.6 1.2 1.7 3.9 2.9 5.5 1.2 1.6 3.8 2.4 4.4 4.3.6 1.8-.9 4.1-.9 6.1s1.5 4.3.9 6.1c-.6 1.9-3.2 2.7-4.4 4.3-1.2 1.6-1.3 4.3-2.9 5.5-1.6 1.2-4.1.2-6 .8-1.8.6-3.4 2.8-5.5 2.8s-3.7-2.2-5.5-2.8c-1.9-.6-4.4.4-6-.8-1.6-1.2-1.7-3.9-2.9-5.5-1.2-1.6-3.8-2.4-4.4-4.3-.6-1.8.9-4.1.9-6.1s-1.5-4.3-.9-6.1c.6-1.9 3.2-2.7 4.4-4.3 1.2-1.6 1.3-4.3 2.9-5.5 1.6-1.2 4.1-.2 6-.8 1.8-.6 3.4-2.8 5.5-2.8Z" fill="#ff4f26"/>
+                      <path d="M18.5 30.2 29.5 17.8" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+                      <circle cx="18.5" cy="18.8" r="2.8" stroke="white" strokeWidth="2.6"/>
+                      <circle cx="29.6" cy="29.3" r="2.8" stroke="white" strokeWidth="2.6"/>
+                    </svg>
+                  </span>
                   <span>
                     <strong>Türkiye geneli fırsatlar</strong>
                     <small>Tüm şehirlerde ilanlar</small>
                   </span>
                 </div>
                 <div className="hero-trust-pill">
-                  <span className="hero-trust-icon">⚡</span>
+                  <span className="hero-trust-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none">
+                      <path d="M27.4 4.8 12.5 27.2h10.2l-2.2 16 15-22.5H25.2l2.2-15.9Z" fill="#ff4f26"/>
+                    </svg>
+                  </span>
                   <span>
                     <strong>Hızlı başvuru süreci</strong>
                     <small>İlanlara kolayca başvur</small>
