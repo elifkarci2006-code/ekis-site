@@ -1261,33 +1261,193 @@ export default function App() {
           font-size: 14px;
           font-weight: 900;
         }
-        .detail-title {
-          margin: 0 0 10px;
-          font-size: 28px;
-          font-weight: 900;
-          letter-spacing: -0.03em;
+        .detail-modal {
+          width: min(760px, calc(100vw - 28px));
+        }
+        .detail-panel-inner {
+          padding: 0;
+        }
+        .detail-hero {
+          position: relative;
+          padding: 24px 26px 22px;
+          background:
+            radial-gradient(circle at top right, rgba(255,75,43,0.14), transparent 34%),
+            linear-gradient(180deg, #fff 0%, #fff7f4 100%);
+          border-bottom: 1px solid rgba(255,75,43,0.12);
+        }
+        .detail-close {
+          position: absolute;
+          top: 18px;
+          right: 18px;
+          width: 38px;
+          height: 38px;
+          border-radius: 999px;
+          border: 1px solid rgba(60,74,95,0.10);
+          background: #fff;
           color: ${PALETTE.slate};
+          font-size: 22px;
+          font-weight: 900;
+          line-height: 1;
+          cursor: pointer;
+          box-shadow: 0 10px 24px rgba(60,74,95,0.08);
+        }
+        .detail-badge-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-bottom: 14px;
+          padding-right: 48px;
+        }
+        .detail-featured-badge,
+        .detail-type-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          height: 32px;
+          padding: 0 12px;
+          border-radius: 999px;
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: -0.01em;
+        }
+        .detail-featured-badge {
+          color: #fff;
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          box-shadow: 0 10px 20px rgba(255,75,43,0.18);
+        }
+        .detail-type-badge {
+          color: #ff4b2b;
+          background: #fff0eb;
+          border: 1px solid rgba(255,75,43,0.16);
+        }
+        .detail-company {
+          margin: 0 0 8px;
+          color: ${PALETTE.teal};
+          font-size: 16px;
+          font-weight: 900;
+          letter-spacing: -0.02em;
+        }
+        .detail-title {
+          margin: 0;
+          max-width: 560px;
+          font-size: clamp(26px, 3vw, 38px);
+          line-height: 1.08;
+          font-weight: 950;
+          letter-spacing: -0.045em;
+          color: ${PALETTE.slate};
+        }
+        .detail-body {
+          padding: 22px 26px 26px;
+        }
+        .detail-salary-card {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          margin-bottom: 18px;
+          padding: 18px 20px;
+          border-radius: 22px;
+          background: linear-gradient(180deg, #fff6f2 0%, #fff 100%);
+          border: 1px solid rgba(255,75,43,0.14);
+          box-shadow: 0 14px 28px rgba(255,75,43,0.08);
+        }
+        .detail-salary-label {
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 900;
+          margin-bottom: 4px;
+        }
+        .detail-salary {
+          color: #ff4b2b;
+          font-size: 26px;
+          font-weight: 950;
+          letter-spacing: -0.035em;
+        }
+        .detail-salary-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 18px;
+          background: #ff4b2b;
+          color: #fff;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 14px 28px rgba(255,75,43,0.20);
+          flex-shrink: 0;
         }
         .detail-meta {
           display: grid;
-          gap: 10px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
           margin-bottom: 18px;
         }
         .detail-line {
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+          min-height: 58px;
+          padding: 13px 14px;
+          border-radius: 18px;
+          background: #fbfcfd;
+          border: 1px solid rgba(60,74,95,0.08);
           color: ${PALETTE.softText};
-          font-size: 15px;
-          font-weight: 700;
+          font-size: 14px;
+          font-weight: 800;
         }
-        .detail-salary {
-          color: ${PALETTE.coral};
-          font-size: 22px;
-          font-weight: 900;
+        .detail-line-icon {
+          width: 30px;
+          height: 30px;
+          border-radius: 12px;
+          background: #fff0eb;
+          color: #ff4b2b;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .detail-line strong {
+          display: block;
+          margin-bottom: 2px;
+          color: ${PALETTE.slate};
+          font-size: 13px;
+          font-weight: 950;
+        }
+        .detail-description-box {
+          padding: 18px 20px;
+          border-radius: 22px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
+          box-shadow: 0 12px 26px rgba(60,74,95,0.04);
+        }
+        .detail-description-title {
+          margin: 0 0 10px;
+          color: ${PALETTE.slate};
+          font-size: 17px;
+          font-weight: 950;
+          letter-spacing: -0.02em;
         }
         .detail-description {
           color: ${PALETTE.text};
           font-size: 15px;
-          line-height: 1.7;
+          line-height: 1.75;
           white-space: pre-wrap;
+        }
+        .detail-actions {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 12px;
+          margin-top: 18px;
+        }
+        .detail-apply-note {
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 800;
+          line-height: 1.45;
+          padding: 12px 14px;
+          border-radius: 16px;
+          background: rgba(88,173,173,0.10);
+          border: 1px solid rgba(88,173,173,0.12);
         }
         .site-footer {
           margin-top: 34px;
@@ -1665,6 +1825,10 @@ export default function App() {
           .quick-type-tab { min-width: auto; padding: 0 14px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
+          .detail-meta { grid-template-columns: 1fr; }
+          .detail-actions { grid-template-columns: 1fr; }
+          .detail-hero { padding: 22px 18px 20px; }
+          .detail-body { padding: 18px; }
         }
       `}</style>
 
@@ -1835,22 +1999,95 @@ export default function App() {
         <div className="detail-modal-backdrop" onClick={() => setSelectedJob(null)}>
           <div className="detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="detail-panel-inner">
-              <h3 className="detail-title">{selectedJob.title}</h3>
-              <div className="detail-meta">
-                <div className="detail-line"><strong>Firma:</strong> {selectedJob.company}</div>
-                <div className="detail-line"><strong>Konum:</strong> {selectedJob.location}</div>
-                <div className="detail-line"><strong>Çalışma tipi:</strong> {selectedJob.type}</div>
-                <div className="detail-line"><strong>Kategori:</strong> {selectedJob.category || "Vitrin ilan"}</div>
-                <div className="detail-line"><strong>Yayın:</strong> {getDaysAgoLabel(selectedJob.createdAt)}</div>
-                <div className="detail-salary">{selectedJob.salary}</div>
-              </div>
-              <div className="detail-description">
-                {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
-              </div>
-              <div className="modal-actions">
-                <button className="btn btn-secondary" type="button" onClick={() => setSelectedJob(null)}>
-                  Kapat
+              <div className="detail-hero">
+                <button className="detail-close" type="button" onClick={() => setSelectedJob(null)}>
+                  ×
                 </button>
+
+                <div className="detail-badge-row">
+                  {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
+                    <span className="detail-featured-badge">★ Öne Çıkan</span>
+                  ) : (
+                    <span className="detail-featured-badge">Yeni İlan</span>
+                  )}
+                  <span className="detail-type-badge">{selectedJob.type}</span>
+                  <span className="detail-type-badge">{getDaysAgoLabel(selectedJob.createdAt)}</span>
+                </div>
+
+                <p className="detail-company">{selectedJob.company}</p>
+                <h3 className="detail-title">{selectedJob.title}</h3>
+              </div>
+
+              <div className="detail-body">
+                <div className="detail-salary-card">
+                  <div>
+                    <div className="detail-salary-label">Ücret bilgisi</div>
+                    <div className="detail-salary">{selectedJob.salary}</div>
+                  </div>
+                  <div className="detail-salary-icon" aria-hidden="true">
+                    <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+                      <path d="M4 7.5h16v10H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                      <path d="M7 10.5h.01M17 14.5h.01M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <div className="detail-meta">
+                  <div className="detail-line">
+                    <span className="detail-line-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 21s6-5.3 6-11a6 6 0 1 0-12 0c0 5.7 6 11 6 11Z" stroke="currentColor" strokeWidth="2"/>
+                        <circle cx="12" cy="10" r="2.4" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                    </span>
+                    <span><strong>Konum</strong>{selectedJob.location}</span>
+                  </div>
+
+                  <div className="detail-line">
+                    <span className="detail-line-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M4 7h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                      </svg>
+                    </span>
+                    <span><strong>Çalışma tipi</strong>{selectedJob.type}</span>
+                  </div>
+
+                  <div className="detail-line">
+                    <span className="detail-line-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                        <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </span>
+                    <span><strong>Kategori</strong>{selectedJob.category || "Vitrin ilan"}</span>
+                  </div>
+
+                  <div className="detail-line">
+                    <span className="detail-line-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 3v3M17 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    </span>
+                    <span><strong>Yayın durumu</strong>{getDaysAgoLabel(selectedJob.createdAt)}</span>
+                  </div>
+                </div>
+
+                <div className="detail-description-box">
+                  <h4 className="detail-description-title">İş açıklaması</h4>
+                  <div className="detail-description">
+                    {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
+                  </div>
+                </div>
+
+                <div className="detail-actions">
+                  <div className="detail-apply-note">
+                    Başvuru/iletişim bilgileri yayına alma aşamasında kuzenin tarafından gerçek sisteme bağlanabilir.
+                  </div>
+                  <button className="btn btn-primary" type="button">
+                    Başvuru Bilgilerini Gör
+                  </button>
+                </div>
               </div>
             </div>
           </div>
