@@ -1298,14 +1298,14 @@ export default function App() {
 
         /* --- Hero trust area + premium featured card revizyonu --- */
         .hero-card {
-          padding: 22px 22px;
+          padding: 24px 26px;
           box-shadow: 0 18px 38px rgba(60,74,95,0.08);
         }
         .hero-content {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 0.9fr 1.1fr;
           align-items: center;
-          gap: 28px;
+          gap: 30px;
         }
         .hero-title {
           font-size: clamp(28px, 3vw, 46px);
@@ -1316,56 +1316,55 @@ export default function App() {
           display: flex;
           justify-content: flex-end;
           align-items: center;
-          gap: 10px;
+          gap: 16px;
           flex-wrap: nowrap;
         }
         .hero-trust-pill {
-          height: 48px;
-          min-width: 164px;
+          height: 68px;
+          min-width: 206px;
           display: inline-flex;
           align-items: center;
-          gap: 9px;
-          padding: 8px 11px;
-          border-radius: 15px;
-          background: linear-gradient(180deg, #fff7f3 0%, #ffefe8 100%);
-          border: 1px solid rgba(228,93,80,0.16);
-          box-shadow: 0 10px 22px rgba(228,93,80,0.08);
+          gap: 14px;
+          padding: 12px 18px;
+          border-radius: 20px;
+          background: linear-gradient(180deg, #fff7f4 0%, #ffefeb 100%);
+          border: 1px solid rgba(255,91,55,0.14);
+          box-shadow: 0 16px 34px rgba(255,91,55,0.10);
           color: ${PALETTE.slate};
         }
         .hero-trust-icon {
-          width: 30px;
-          height: 30px;
-          border-radius: 11px;
+          width: 46px;
+          height: 46px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(180deg, #ff6647 0%, #ff4f26 100%);
-          color: #fff;
-          box-shadow: 0 9px 16px rgba(228,93,80,0.20);
+          color: #ff4f26;
           flex-shrink: 0;
         }
         .hero-trust-icon svg {
           display: block;
-          width: 18px;
-          height: 18px;
+          width: 46px;
+          height: 46px;
+          overflow: visible;
+          filter: drop-shadow(0 10px 16px rgba(255,82,49,0.16));
         }
         .hero-trust-pill strong {
           display: block;
           color: #ff4f26;
-          font-size: 12px;
+          font-size: 15px;
           line-height: 1.05;
           font-weight: 950;
-          letter-spacing: -0.03em;
+          letter-spacing: -0.035em;
           white-space: nowrap;
         }
         .hero-trust-pill small {
           display: block;
-          margin-top: 3px;
+          margin-top: 6px;
           color: ${PALETTE.slate};
-          font-size: 10.5px;
+          font-size: 13px;
           line-height: 1.05;
           font-weight: 800;
-          letter-spacing: -0.02em;
+          letter-spacing: -0.025em;
           white-space: nowrap;
         }
         .hero-stats-inline,
@@ -1524,7 +1523,7 @@ export default function App() {
           .hero-card { padding: 14px 16px; border-radius: 20px; }
           .hero-title { font-size: 24px; }
           .hero-content { grid-template-columns: 1fr; gap: 14px; }
-          .hero-trust-row { justify-content: flex-start; }
+          .hero-trust-row { justify-content: flex-start; flex-wrap: wrap; }
           .hero-trust-pill { width: 100%; min-width: 0; }
           .featured-head-actions { gap: 12px; font-size: 12px; }
           .featured-card { min-height: 220px; }
@@ -1786,37 +1785,21 @@ export default function App() {
 
               <div className="hero-trust-row">
                 <div className="hero-trust-pill">
-                  <span className="hero-trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M12 3.4 18.4 5.9v4.95c0 4.05-2.55 7.5-6.4 8.85-3.85-1.35-6.4-4.8-6.4-8.85V5.9L12 3.4Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-                      <path d="m8.8 12 2.05 2.05 4.35-4.55" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
+                  <span className="hero-trust-icon">✓</span>
                   <span>
                     <strong>Onaylı ilanlar</strong>
                     <small>Güvenle başvur</small>
                   </span>
                 </div>
                 <div className="hero-trust-pill">
-                  <span className="hero-trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="7.2" stroke="currentColor" strokeWidth="2" />
-                      <path d="M9.3 14.8 14.7 9.2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                      <circle cx="9.4" cy="9.5" r="1.15" fill="currentColor" />
-                      <circle cx="14.6" cy="14.5" r="1.15" fill="currentColor" />
-                    </svg>
-                  </span>
+                  <span className="hero-trust-icon">%</span>
                   <span>
                     <strong>Türkiye geneli fırsatlar</strong>
                     <small>Tüm şehirlerde ilanlar</small>
                   </span>
                 </div>
                 <div className="hero-trust-pill">
-                  <span className="hero-trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M13.4 2.9 5.9 13.1h5.3l-.8 8 7.7-10.9h-5.4l.7-7.3Z" fill="currentColor" />
-                    </svg>
-                  </span>
+                  <span className="hero-trust-icon">⚡</span>
                   <span>
                     <strong>Hızlı başvuru süreci</strong>
                     <small>İlanlara kolayca başvur</small>
