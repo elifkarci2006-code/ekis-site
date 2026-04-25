@@ -2365,7 +2365,7 @@ export default function App() {
 
           <div className="top-actions">
             <button className="btn btn-primary" onClick={() => setShowForm(true)}>
-              Ücretsiz İlan Ver
+              İlan Ver
             </button>
             <a className="btn btn-secondary" href="#ilanlar">
               Hemen İş Bul
@@ -2378,7 +2378,7 @@ export default function App() {
         <div className="post-modal-backdrop" onClick={() => setShowForm(false)}>
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-panel-inner">
-              <h3 className="post-title">Ücretsiz ilan ver</h3>
+              <h3 className="post-title">İlan ver</h3>
               <p className="post-desc">Formu doldur, istersen ilanını vitrine çıkar ve ön izlemesini gör.</p>
 
               <div className="post-form-grid">
@@ -2937,7 +2937,7 @@ export default function App() {
               <div>
                 <h3 className="footer-subheading">İşveren</h3>
                 <div className="footer-links">
-                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>Ücretsiz ilan ver</a>
+                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>İlan ver</a>
                   <a className="footer-link" href="#">Vitrine çıkar</a>
                   <a className="footer-link" href="#">Fiyatlandırma</a>
                   <a className="footer-link" href="#">Destek al</a>
