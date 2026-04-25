@@ -1303,9 +1303,9 @@ export default function App() {
         }
         .hero-content {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1.06fr 0.94fr;
           align-items: center;
-          gap: 28px;
+          gap: 26px;
         }
         .hero-title {
           font-size: clamp(28px, 3vw, 46px);
@@ -1315,51 +1315,54 @@ export default function App() {
         .hero-trust-row {
           display: flex;
           justify-content: flex-end;
-          gap: 16px;
+          align-items: center;
+          gap: 14px;
           flex-wrap: wrap;
         }
         .hero-trust-pill {
-          min-height: 76px;
-          min-width: 214px;
+          min-height: 60px;
+          min-width: 190px;
           display: inline-flex;
           align-items: center;
-          gap: 14px;
-          padding: 14px 18px;
-          border-radius: 20px;
-          background: linear-gradient(180deg, #fff7f3 0%, #ffece5 100%);
-          border: 1px solid rgba(228,93,80,0.16);
-          box-shadow: 0 16px 30px rgba(228,93,80,0.09);
+          gap: 12px;
+          padding: 10px 16px;
+          border-radius: 18px;
+          background: linear-gradient(180deg, #fff8f5 0%, #fff0eb 100%);
+          border: 1px solid rgba(255,99,72,0.18);
+          box-shadow:
+            0 14px 26px rgba(228,93,80,0.07),
+            inset 0 1px 0 rgba(255,255,255,0.88);
           color: ${PALETTE.slate};
         }
         .hero-trust-icon {
-          width: 44px;
-          height: 44px;
-          border-radius: 16px;
+          width: 38px;
+          height: 38px;
+          border-radius: 15px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
+          background: linear-gradient(180deg, #ff6446 0%, #ff4d28 100%);
           color: #fff;
-          font-size: 20px;
+          font-size: 18px;
           font-weight: 900;
-          box-shadow: 0 12px 20px rgba(228,93,80,0.24);
+          box-shadow: 0 10px 18px rgba(228,93,80,0.20);
           flex-shrink: 0;
         }
         .hero-trust-pill strong {
           display: block;
           color: #ff4f26;
-          font-size: 15px;
+          font-size: 14px;
           line-height: 1.15;
           font-weight: 900;
           white-space: nowrap;
         }
         .hero-trust-pill small {
           display: block;
-          margin-top: 5px;
+          margin-top: 3px;
           color: ${PALETTE.slate};
-          font-size: 13px;
-          line-height: 1.1;
-          font-weight: 700;
+          font-size: 12px;
+          line-height: 1.2;
+          font-weight: 800;
           white-space: nowrap;
         }
         .hero-stats-inline,
