@@ -289,6 +289,7 @@ export default function App() {
   const [submittedCategory, setSubmittedCategory] = useState("Tümü");
   const [submittedJobType, setSubmittedJobType] = useState("Tümü");
   const [submittedCity, setSubmittedCity] = useState("Tümü");
+  const [sortOption, setSortOption] = useState("newest");
   const [showForm, setShowForm] = useState(false);
   const [featuredChecked, setFeaturedChecked] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -422,6 +423,25 @@ export default function App() {
       return matchesSearch && matchesCategory && matchesType && matchesCity;
     });
   }, [jobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
+
+  const sortedJobs = useMemo(() => {
+    const list = [...filteredJobs];
+    if (sortOption === "salaryHigh") {
+      return list.sort((a, b) => {
+        const aSalary = Number(String(a.salary).replace(/[^0-9]/g, "")) || 0;
+        const bSalary = Number(String(b.salary).replace(/[^0-9]/g, "")) || 0;
+        return bSalary - aSalary;
+      });
+    }
+    if (sortOption === "salaryLow") {
+      return list.sort((a, b) => {
+        const aSalary = Number(String(a.salary).replace(/[^0-9]/g, "")) || 0;
+        const bSalary = Number(String(b.salary).replace(/[^0-9]/g, "")) || 0;
+        return aSalary - bSalary;
+      });
+    }
+    return list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }, [filteredJobs, sortOption]);
 
   const filteredFeaturedJobs = useMemo(() => {
     return featuredJobs.filter((job) => {
@@ -799,52 +819,138 @@ export default function App() {
           font-size: 17px;
           font-weight: 900;
         }
+        .all-jobs-panel {
+          background: rgba(255,255,255,0.92);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 28px;
+          padding: 22px;
+          box-shadow: 0 18px 42px rgba(60,74,95,0.07);
+          margin-top: 4px;
+        }
+        .all-jobs-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 18px;
+          margin-bottom: 18px;
+        }
+        .all-jobs-title-block {
+          display: grid;
+          gap: 6px;
+        }
+        .all-jobs-title {
+          margin: 0;
+          font-size: 28px;
+          line-height: 1;
+          font-weight: 950;
+          letter-spacing: -0.04em;
+          color: ${PALETTE.slate};
+        }
+        .all-jobs-sub {
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 800;
+        }
+        .sort-control {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: ${PALETTE.slate};
+          font-size: 13px;
+          font-weight: 900;
+          white-space: nowrap;
+        }
+        .sort-control select {
+          height: 44px;
+          min-width: 168px;
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          color: ${PALETTE.slate};
+          border-radius: 14px;
+          padding: 0 14px;
+          font-size: 13px;
+          font-weight: 850;
+          outline: none;
+          box-shadow: 0 8px 18px rgba(60,74,95,0.04);
+        }
+        .quick-type-tabs {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+        .quick-type-tab {
+          border: none;
+          min-width: 84px;
+          height: 40px;
+          border-radius: 999px;
+          padding: 0 18px;
+          background: linear-gradient(180deg, #f5f7f9 0%, #edf1f5 100%);
+          color: ${PALETTE.slate};
+          font-size: 13px;
+          font-weight: 900;
+          cursor: pointer;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 8px 14px rgba(60,74,95,0.04);
+          transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+        .quick-type-tab:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 10px 20px rgba(60,74,95,0.08);
+        }
+        .quick-type-tab.active {
+          background: ${PALETTE.teal};
+          color: #fff;
+          box-shadow: 0 12px 24px rgba(88,173,173,0.24);
+        }
         .soft-job-card {
           position: relative;
           background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
           border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 28px;
-          padding: 22px 22px 20px;
-          box-shadow:
-            0 16px 34px rgba(60,74,95,0.06),
-            inset 0 1px 0 rgba(255,255,255,0.95);
+          border-radius: 24px;
+          padding: 20px;
+          box-shadow: 0 14px 30px rgba(60,74,95,0.055), inset 0 1px 0 rgba(255,255,255,0.95);
           overflow: hidden;
           cursor: pointer;
           transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+          min-height: 230px;
+          display: flex;
+          flex-direction: column;
         }
         .soft-job-card:hover {
           transform: translateY(-4px);
-          box-shadow:
-            0 22px 40px rgba(60,74,95,0.10),
-            inset 0 1px 0 rgba(255,255,255,0.95);
+          box-shadow: 0 22px 42px rgba(60,74,95,0.10), inset 0 1px 0 rgba(255,255,255,0.95);
           border-color: rgba(228,93,80,0.16);
         }
-        .soft-job-card::after {
+        .soft-job-card::before {
           content: "";
           position: absolute;
-          left: 22px;
-          right: 22px;
-          bottom: 60px;
-          height: 1px;
-          background: rgba(60,74,95,0.08);
+          inset: 0;
+          background: radial-gradient(circle at top right, rgba(118,191,190,0.12), transparent 34%);
+          opacity: 0;
+          transition: opacity 0.18s ease;
+          pointer-events: none;
         }
+        .soft-job-card:hover::before { opacity: 1; }
         .soft-top {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           gap: 12px;
-          margin-bottom: 10px;
+          margin-bottom: 14px;
+          position: relative;
+          z-index: 1;
         }
         .soft-company {
-          color: #6D7A8F;
+          color: ${PALETTE.teal};
           font-size: 15px;
-          font-weight: 800;
+          font-weight: 950;
           line-height: 1.2;
+          letter-spacing: -0.02em;
         }
         .soft-days {
           color: ${PALETTE.softText};
           font-size: 12px;
-          font-weight: 700;
+          font-weight: 800;
           letter-spacing: -0.01em;
           white-space: nowrap;
           display: inline-flex;
@@ -852,75 +958,97 @@ export default function App() {
           gap: 6px;
         }
         .soft-days::before {
-          content: "•";
-          font-size: 16px;
-          line-height: 1;
+          content: "";
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(88,173,173,0.42);
         }
         .soft-title {
-          margin: 0 0 10px;
-          font-size: 19px;
-          line-height: 1.22;
-          font-weight: 900;
-          letter-spacing: -0.03em;
+          position: relative;
+          z-index: 1;
+          margin: 0 0 12px;
+          font-size: 20px;
+          line-height: 1.18;
+          font-weight: 950;
+          letter-spacing: -0.035em;
           color: ${PALETTE.slate};
         }
-        .soft-salary {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          color: ${PALETTE.teal};
-          font-size: 17px;
-          font-weight: 900;
-          line-height: 1.2;
-          letter-spacing: -0.02em;
-          margin-bottom: 16px;
-        }
-        .soft-salary svg,
-        .soft-detail svg {
-          width: 15px;
-          height: 15px;
-          flex-shrink: 0;
-        }
         .soft-details {
+          position: relative;
+          z-index: 1;
           display: grid;
-          gap: 8px;
-          margin-top: 18px;
-          margin-bottom: 10px;
+          gap: 9px;
+          margin-top: 4px;
+          margin-bottom: 16px;
         }
         .soft-detail {
           display: flex;
           align-items: center;
           gap: 8px;
           color: ${PALETTE.softText};
-          font-size: 15px;
-          line-height: 1.4;
-          font-weight: 500;
+          font-size: 14px;
+          line-height: 1.35;
+          font-weight: 750;
           letter-spacing: -0.01em;
         }
-        .soft-badge-wrap {
+        .soft-detail svg {
+          width: 15px;
+          height: 15px;
+          flex-shrink: 0;
+          color: ${PALETTE.slate};
+        }
+        .soft-divider {
+          height: 1px;
+          background: rgba(228,93,80,0.14);
+          margin: auto 0 14px;
+          position: relative;
+          z-index: 1;
+        }
+        .soft-footer {
+          position: relative;
+          z-index: 1;
           display: flex;
-          justify-content: flex-end;
-          margin-top: 10px;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+        }
+        .soft-salary {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: #ff4b2b;
+          font-size: 17px;
+          font-weight: 950;
+          line-height: 1.2;
+          letter-spacing: -0.02em;
+        }
+        .soft-salary svg {
+          width: 20px;
+          height: 20px;
+          flex-shrink: 0;
+          color: #ff4b2b;
         }
         .soft-badge {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          min-width: 86px;
-          padding: 8px 14px;
+          min-width: 76px;
+          height: 34px;
+          padding: 0 13px;
           border-radius: 999px;
-          background: ${PALETTE.warm};
-          color: ${PALETTE.coral};
-          border: 1px solid rgba(228,93,80,0.22);
+          background: #fff0eb;
+          color: #ff4b2b;
+          border: 1px solid rgba(255,75,43,0.18);
           font-size: 12px;
-          font-weight: 800;
+          font-weight: 900;
           letter-spacing: -0.01em;
-          box-shadow: 0 4px 10px rgba(228,93,80,0.08);
+          box-shadow: 0 6px 14px rgba(255,75,43,0.07);
         }
         .jobs-grid {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 18px;
+          gap: 16px;
         }
         .empty-box {
           background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
@@ -1529,6 +1657,12 @@ export default function App() {
           .featured-card { min-height: 220px; }
           .featured-icon-circle { width: 64px; height: 64px; right: 18px; bottom: 22px; }
           .featured-icon-circle svg { width: 38px; height: 38px; }
+          .all-jobs-panel { padding: 16px; border-radius: 22px; }
+          .all-jobs-top { align-items: flex-start; flex-direction: column; }
+          .sort-control { width: 100%; justify-content: space-between; }
+          .sort-control select { flex: 1; min-width: 0; }
+          .quick-type-tabs { gap: 8px; }
+          .quick-type-tab { min-width: auto; padding: 0 14px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
         }
@@ -1878,56 +2012,87 @@ export default function App() {
         </section>
 
         <section className="section">
-          <div className="section-head">
-            <h2 className="section-title">Tüm ilanlar</h2>
-            <div className="section-sub">{filteredJobs.length} ilan bulundu</div>
-          </div>
+          <div className="all-jobs-panel">
+            <div className="all-jobs-top">
+              <div className="all-jobs-title-block">
+                <h2 className="all-jobs-title">Tüm ilanlar</h2>
+                <div className="all-jobs-sub">{filteredJobs.length} ilan bulundu</div>
+              </div>
 
-          {filteredJobs.length === 0 ? (
-            <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
-          ) : (
-            <div className="jobs-grid">
-              {filteredJobs.map((job) => (
-                <article key={job.id} className="soft-job-card" onClick={() => setSelectedJob(job)}>
-                  <div className="soft-top">
-                    <div className="soft-company">{job.company}</div>
-                    <div className="soft-days">{getDaysAgoLabel(job.createdAt)}</div>
-                  </div>
+              <label className="sort-control">
+                <span>Sırala:</span>
+                <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+                  <option value="newest">En yeni ilanlar</option>
+                  <option value="salaryHigh">Ücret yüksekten düşüğe</option>
+                  <option value="salaryLow">Ücret düşükten yükseğe</option>
+                </select>
+              </label>
+            </div>
 
-                  <h3 className="soft-title">{job.title}</h3>
-
-                  <div className="soft-salary">
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.18"></circle>
-                      <path d="M13.5 7.5c-1.9 0-3.2.95-3.2 2.3 0 1.24.95 1.8 2.67 2.15 1.49.3 1.93.6 1.93 1.22 0 .71-.73 1.18-1.84 1.18-1.13 0-2.09-.44-2.95-1.12l-1.06 1.34c.97.84 2.16 1.35 3.55 1.48V18h1.57v-1.95c1.92-.24 3.16-1.3 3.16-2.82 0-1.47-.86-2.16-2.94-2.64-1.43-.33-1.67-.58-1.67-1.08 0-.46.45-.96 1.51-.96.91 0 1.72.31 2.51.88l.95-1.42c-.89-.71-1.95-1.08-3.08-1.19V6h-1.57v1.55Z" fill="currentColor"></path>
-                    </svg>
-                    <span>{job.salary}</span>
-                  </div>
-
-                  <div className="soft-details">
-                    <div className="soft-detail">
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z" fill="currentColor" opacity="0.22"></path>
-                        <circle cx="12" cy="10" r="2.6" fill="currentColor"></circle>
-                      </svg>
-                      <span>{job.location}</span>
-                    </div>
-                    <div className="soft-detail">
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 3 4 8l8 5 8-5-8-5Z" fill="currentColor" opacity="0.22"></path>
-                        <path d="m4 12 8 5 8-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"></path>
-                      </svg>
-                      <span>{job.category}</span>
-                    </div>
-                  </div>
-
-                  <div className="soft-badge-wrap">
-                    <div className="soft-badge">{job.type}</div>
-                  </div>
-                </article>
+            <div className="quick-type-tabs" aria-label="Hızlı çalışma tipi filtreleri">
+              {types.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  className={`quick-type-tab ${submittedJobType === item ? "active" : ""}`}
+                  onClick={() => {
+                    setJobType(item);
+                    setSubmittedJobType(item);
+                  }}
+                >
+                  {item}
+                </button>
               ))}
             </div>
-          )}
+
+            {filteredJobs.length === 0 ? (
+              <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
+            ) : (
+              <div className="jobs-grid">
+                {sortedJobs.map((job) => (
+                  <article key={job.id} className="soft-job-card" onClick={() => setSelectedJob(job)}>
+                    <div className="soft-top">
+                      <div className="soft-company">{job.company}</div>
+                      <div className="soft-days">{getDaysAgoLabel(job.createdAt)}</div>
+                    </div>
+
+                    <h3 className="soft-title">{job.title}</h3>
+
+                    <div className="soft-details">
+                      <div className="soft-detail">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z" fill="currentColor" opacity="0.20"></path>
+                          <circle cx="12" cy="10" r="2.6" fill="currentColor"></circle>
+                        </svg>
+                        <span>{job.location}</span>
+                      </div>
+                      <div className="soft-detail">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M12 3 4 8l8 5 8-5-8-5Z" fill="currentColor" opacity="0.18"></path>
+                          <path d="m4 12 8 5 8-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"></path>
+                        </svg>
+                        <span>{job.category}</span>
+                      </div>
+                    </div>
+
+                    <div className="soft-divider" />
+
+                    <div className="soft-footer">
+                      <div className="soft-salary">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M4 8.5h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+                          <path d="M4 8.5 17 5v3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M17 13h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                        </svg>
+                        <span>{job.salary}</span>
+                      </div>
+                      <div className="soft-badge">{job.type}</div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
         </section>
 
         <footer className="site-footer">
