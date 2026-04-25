@@ -579,14 +579,24 @@ export default function App() {
         .search-btn {
           width: 100%;
           height: 56px;
-          border: none;
           border-radius: 18px;
-          background: ${PALETTE.slate};
-          color: #fff;
           font-size: 15px;
           font-weight: 900;
           cursor: pointer;
-          box-shadow: 0 12px 24px rgba(60,74,95,0.22);
+          transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+        .search-btn:hover { transform: translateY(-1px); }
+        .search-btn-primary {
+          border: 1px solid rgba(255,255,255,0.35);
+          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
+          color: #fff;
+          box-shadow: 0 14px 28px rgba(255,79,38,0.24);
+        }
+        .search-btn-clear {
+          border: 1px solid rgba(255,255,255,0.62);
+          background: rgba(255,255,255,0.08);
+          color: #fff;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
         }
         .hero {
           padding: 4px 0 6px;
@@ -1288,58 +1298,66 @@ export default function App() {
 
         /* --- Hero trust area + premium featured card revizyonu --- */
         .hero-card {
-          padding: 18px 20px;
+          padding: 22px 22px;
+          box-shadow: 0 18px 38px rgba(60,74,95,0.08);
         }
         .hero-content {
           display: grid;
-          grid-template-columns: 1.1fr 0.9fr;
+          grid-template-columns: 1fr 1fr;
           align-items: center;
-          gap: 24px;
+          gap: 28px;
+        }
+        .hero-title {
+          font-size: clamp(28px, 3vw, 46px);
+          line-height: 1.12;
+          letter-spacing: -0.055em;
         }
         .hero-trust-row {
           display: flex;
           justify-content: flex-end;
-          gap: 12px;
+          gap: 16px;
           flex-wrap: wrap;
         }
         .hero-trust-pill {
-          min-height: 58px;
+          min-height: 76px;
+          min-width: 214px;
           display: inline-flex;
           align-items: center;
-          gap: 12px;
-          padding: 12px 16px;
-          border-radius: 18px;
+          gap: 14px;
+          padding: 14px 18px;
+          border-radius: 20px;
           background: linear-gradient(180deg, #fff7f3 0%, #ffece5 100%);
-          border: 1px solid rgba(228,93,80,0.18);
-          box-shadow: 0 14px 26px rgba(228,93,80,0.10);
+          border: 1px solid rgba(228,93,80,0.16);
+          box-shadow: 0 16px 30px rgba(228,93,80,0.09);
           color: ${PALETTE.slate};
         }
         .hero-trust-icon {
-          width: 34px;
-          height: 34px;
-          border-radius: 12px;
+          width: 44px;
+          height: 44px;
+          border-radius: 16px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: ${PALETTE.coral};
+          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
           color: #fff;
+          font-size: 20px;
           font-weight: 900;
-          box-shadow: 0 10px 18px rgba(228,93,80,0.22);
+          box-shadow: 0 12px 20px rgba(228,93,80,0.24);
           flex-shrink: 0;
         }
         .hero-trust-pill strong {
           display: block;
-          color: ${PALETTE.coral};
-          font-size: 13px;
+          color: #ff4f26;
+          font-size: 15px;
           line-height: 1.15;
           font-weight: 900;
           white-space: nowrap;
         }
         .hero-trust-pill small {
           display: block;
-          margin-top: 3px;
-          color: ${PALETTE.softText};
-          font-size: 12px;
+          margin-top: 5px;
+          color: ${PALETTE.slate};
+          font-size: 13px;
           line-height: 1.1;
           font-weight: 700;
           white-space: nowrap;
@@ -1349,8 +1367,9 @@ export default function App() {
           display: none;
         }
         .featured-section {
-          background: linear-gradient(135deg, ${PALETTE.coral} 0%, #ff5b2f 100%);
-          box-shadow: 0 20px 42px rgba(228,93,80,0.18);
+          background: linear-gradient(135deg, #f35b4d 0%, #ff552b 100%);
+          box-shadow: 0 22px 44px rgba(228,93,80,0.20);
+          padding: 30px 22px 24px;
         }
         .featured-head {
           margin-bottom: 18px;
@@ -1377,17 +1396,17 @@ export default function App() {
           color: #fff;
         }
         .featured-card {
-          min-height: 206px;
-          padding: 22px 24px 24px;
+          min-height: 218px;
+          padding: 24px 26px 26px;
           border-radius: 24px;
-          border: 1px solid rgba(255,255,255,0.72);
+          border: 1px solid rgba(255,255,255,0.76);
           box-shadow: 0 18px 38px rgba(35,48,68,0.10);
         }
         .featured-card::after {
           display: none;
         }
         .featured-card .card-top {
-          margin-bottom: 24px;
+          margin-bottom: 26px;
           min-height: 34px;
         }
         .featured-card .pill {
@@ -1455,21 +1474,21 @@ export default function App() {
         }
         .featured-icon-circle {
           position: absolute;
-          right: 24px;
-          bottom: 24px;
-          width: 76px;
-          height: 76px;
+          right: 26px;
+          bottom: 26px;
+          width: 82px;
+          height: 82px;
           border-radius: 999px;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: rgba(228,93,80,0.10);
+          background: rgba(228,93,80,0.11);
           color: ${PALETTE.slate};
           z-index: 1;
         }
         .featured-icon-circle svg {
-          width: 44px;
-          height: 44px;
+          width: 48px;
+          height: 48px;
           opacity: 0.94;
         }
 
@@ -1500,7 +1519,7 @@ export default function App() {
           .hero-title { font-size: 24px; }
           .hero-content { grid-template-columns: 1fr; gap: 14px; }
           .hero-trust-row { justify-content: flex-start; }
-          .hero-trust-pill { width: 100%; }
+          .hero-trust-pill { width: 100%; min-width: 0; }
           .featured-head-actions { gap: 12px; font-size: 12px; }
           .featured-card { min-height: 220px; }
           .featured-icon-circle { width: 64px; height: 64px; right: 18px; bottom: 22px; }
@@ -1742,11 +1761,11 @@ export default function App() {
               </div>
 
               <div className="search-action">
-                <button className="search-btn" type="button" onClick={handleSearchSubmit}>Ara</button>
+                <button className="search-btn search-btn-primary" type="button" onClick={handleSearchSubmit}>Ara</button>
               </div>
 
               <div className="search-action">
-                <button className="search-btn" type="button" onClick={clearFilters}>Temizle</button>
+                <button className="search-btn search-btn-clear" type="button" onClick={clearFilters}>Temizle</button>
               </div>
             </div>
           </div>
