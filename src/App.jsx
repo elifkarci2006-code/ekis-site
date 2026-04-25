@@ -455,13 +455,31 @@ export default function App() {
 
   const handlePublishClick = () => {
     if (!validateForm()) return;
-    setPendingJob(buildJobFromForm());
-    setSelectedPlan("free");
-    setShowPlanModal(true);
+
+    const newJob = buildJobFromForm();
+
+    if (selectedPlan === "featured") {
+      const featuredJob = {
+        ...newJob,
+        plan: "featured",
+        featuredStatus: "live",
+        paymentStatus: "pending",
+      };
+      setFeaturedJobs((prev) => [featuredJob, ...prev]);
+      window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
+    } else {
+      setJobs((prev) => [{ ...newJob, plan: "free" }, ...prev]);
+    }
+
+    setShowForm(false);
   };
 
   const handlePlanContinue = () => {
-    if (!pendingJob) return;
+    if (!pendingJob) {
+      setShowPlanModal(false);
+      setShowForm(true);
+      return;
+    }
 
     if (selectedPlan === "featured") {
       const featuredJob = {
@@ -614,6 +632,21 @@ export default function App() {
           white-space: nowrap;
         }
         .btn:hover { transform: translateY(-1px); }
+        .btn-lightning {
+          width: 22px;
+          height: 22px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 7px;
+          color: currentColor;
+          flex-shrink: 0;
+        }
+        .btn-lightning svg {
+          width: 18px;
+          height: 18px;
+          display: block;
+        }
         .btn-primary {
           color: #fff;
           background: ${PALETTE.coral};
@@ -2364,8 +2397,20 @@ export default function App() {
           </div>
 
           <div className="top-actions">
-            <button className="btn btn-primary" onClick={() => setShowForm(true)}>
-              İlan Ver
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setSelectedPlan("free");
+                setPendingJob(null);
+                setShowPlanModal(true);
+              }}
+            >
+              <span className="btn-lightning" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M13.2 2.8 5.5 13.1h5.8l-.6 8.1 7.8-11.3h-5.7l.4-7.1Z" fill="currentColor" />
+                </svg>
+              </span>
+              Hemen İlan Ver
             </button>
             <a className="btn btn-secondary" href="#ilanlar">
               Hemen İş Bul
@@ -2378,7 +2423,7 @@ export default function App() {
         <div className="post-modal-backdrop" onClick={() => setShowForm(false)}>
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-panel-inner">
-              <h3 className="post-title">İlan ver</h3>
+              <h3 className="post-title">Ücretsiz ilan ver</h3>
               <p className="post-desc">Formu doldur, istersen ilanını vitrine çıkar ve ön izlemesini gör.</p>
 
               <div className="post-form-grid">
@@ -2561,7 +2606,11 @@ export default function App() {
 
               <div className="modal-actions" style={{ marginTop: 18 }}>
                 <button className="btn btn-primary" type="button" onClick={handlePlanContinue}>
-                  {selectedPlan === "featured" ? "Ödeme Adımına Geç" : "Ücretsiz Yayınla"}
+                  {pendingJob
+                    ? selectedPlan === "featured"
+                      ? "Ödeme Adımına Geç"
+                      : "Ücretsiz Yayınla"
+                    : "Devam Et"}
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
                   Geri
@@ -2937,7 +2986,7 @@ export default function App() {
               <div>
                 <h3 className="footer-subheading">İşveren</h3>
                 <div className="footer-links">
-                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>İlan ver</a>
+                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>Ücretsiz ilan ver</a>
                   <a className="footer-link" href="#">Vitrine çıkar</a>
                   <a className="footer-link" href="#">Fiyatlandırma</a>
                   <a className="footer-link" href="#">Destek al</a>
