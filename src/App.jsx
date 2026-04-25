@@ -309,7 +309,6 @@ export default function App() {
   const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
   const [selectedJob, setSelectedJob] = useState(null);
   const [errors, setErrors] = useState({});
-  const [showContactInfo, setShowContactInfo] = useState(false);
   const [formData, setFormData] = useState({
     company: "",
     title: "",
@@ -1482,8 +1481,8 @@ export default function App() {
         }
 
         .detail-modal {
-          width: min(820px, calc(100vw - 28px));
-          border-radius: 30px;
+          width: min(980px, calc(100vw - 28px));
+          border-radius: 32px;
         }
         .detail-panel-inner {
           padding: 0;
@@ -1491,15 +1490,15 @@ export default function App() {
         }
         .detail-compact-shell {
           display: grid;
-          grid-template-columns: minmax(0, 1.25fr) 310px;
+          grid-template-columns: minmax(0, 1.1fr) 360px;
           gap: 0;
         }
         .detail-main-side {
-          padding: 26px;
+          padding: 30px;
           border-right: 1px solid rgba(60,74,95,0.08);
         }
         .detail-side-card {
-          padding: 24px;
+          padding: 28px;
           background: linear-gradient(180deg, #fff8f5 0%, #ffffff 100%);
         }
         .detail-topline {
@@ -1534,7 +1533,7 @@ export default function App() {
           border-radius: 999px;
           border: 1px solid rgba(60,74,95,0.10);
           background: #fff;
-          color: \${PALETTE.slate};
+          color: ${PALETTE.slate};
           font-size: 22px;
           font-weight: 900;
           line-height: 1;
@@ -1544,14 +1543,14 @@ export default function App() {
         }
         .detail-company-clean {
           margin: 0 0 8px;
-          color: \${PALETTE.teal};
+          color: ${PALETTE.teal};
           font-size: 15px;
           font-weight: 950;
           letter-spacing: -0.02em;
         }
         .detail-title-clean {
           margin: 0 0 14px;
-          color: \${PALETTE.slate};
+          color: ${PALETTE.slate};
           font-size: clamp(25px, 3vw, 36px);
           line-height: 1.08;
           font-weight: 950;
@@ -1559,7 +1558,7 @@ export default function App() {
         }
         .detail-desc-clean {
           margin: 0;
-          color: \${PALETTE.text};
+          color: ${PALETTE.text};
           font-size: 15px;
           line-height: 1.72;
           font-weight: 600;
@@ -1593,103 +1592,106 @@ export default function App() {
         .detail-info-row strong {
           display: block;
           margin-bottom: 3px;
-          color: \${PALETTE.slate};
+          color: ${PALETTE.slate};
           font-size: 12px;
           font-weight: 950;
         }
         .detail-info-row span {
           display: block;
-          color: \${PALETTE.softText};
+          color: ${PALETTE.softText};
           font-size: 13px;
           font-weight: 800;
           line-height: 1.35;
         }
         .detail-side-label {
-          color: \${PALETTE.softText};
+          color: ${PALETTE.softText};
           font-size: 12px;
           font-weight: 950;
-          margin-bottom: 6px;
+          margin-bottom: 7px;
+          letter-spacing: -0.01em;
         }
         .detail-side-salary {
           color: #ff4b2b;
-          font-size: 27px;
+          font-size: 29px;
           line-height: 1.08;
           font-weight: 950;
-          letter-spacing: -0.04em;
-          margin-bottom: 16px;
+          letter-spacing: -0.045em;
+          margin-bottom: 18px;
         }
         .detail-side-divider {
           height: 1px;
           background: rgba(255,75,43,0.14);
-          margin: 14px 0;
+          margin: 18px 0;
         }
         .detail-side-stack {
           display: grid;
           gap: 10px;
-          margin-bottom: 16px;
+          margin-bottom: 0;
         }
         .detail-side-chip {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 12px;
-          padding: 11px 12px;
-          border-radius: 15px;
+          display: grid;
+          gap: 4px;
+          padding: 13px 14px;
+          border-radius: 16px;
           background: #fff;
           border: 1px solid rgba(60,74,95,0.08);
-          color: \${PALETTE.slate};
-          font-size: 13px;
-          font-weight: 900;
+          color: ${PALETTE.slate};
+          box-shadow: 0 10px 20px rgba(60,74,95,0.035);
         }
         .detail-side-chip span:first-child {
-          color: \${PALETTE.softText};
+          color: ${PALETTE.softText};
+          font-size: 12px;
           font-weight: 850;
         }
-        .detail-contact-button {
-          width: 100%;
-          border: none;
-          border-radius: 16px;
-          padding: 14px 16px;
-          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
-          color: #fff;
-          font-size: 15px;
+        .detail-side-chip strong {
+          color: ${PALETTE.slate};
+          font-size: 14px;
           font-weight: 950;
-          cursor: pointer;
-          box-shadow: 0 16px 28px rgba(255,79,38,0.22);
+          line-height: 1.25;
+        }
+        .detail-contact-title {
+          margin: 0 0 12px;
+          color: ${PALETTE.slate};
+          font-size: 16px;
+          font-weight: 950;
+          letter-spacing: -0.025em;
         }
         .detail-contact-box {
-          margin-top: 12px;
-          padding: 13px;
-          border-radius: 16px;
-          background: #fff;
-          border: 1px solid rgba(60,74,95,0.09);
-          box-shadow: 0 12px 24px rgba(60,74,95,0.04);
+          display: grid;
+          gap: 10px;
         }
         .detail-contact-line {
           display: grid;
-          gap: 3px;
-          margin-bottom: 10px;
+          gap: 4px;
+          padding: 13px 14px;
+          border-radius: 16px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.09);
+          box-shadow: 0 10px 20px rgba(60,74,95,0.035);
         }
-        .detail-contact-line:last-child { margin-bottom: 0; }
         .detail-contact-line strong {
-          color: \${PALETTE.slate};
+          color: ${PALETTE.softText};
           font-size: 12px;
-          font-weight: 950;
+          font-weight: 850;
         }
         .detail-contact-line span,
         .detail-contact-line a {
-          color: \${PALETTE.text};
-          font-size: 13px;
-          font-weight: 800;
+          color: ${PALETTE.text};
+          font-size: 14px;
+          font-weight: 900;
           line-height: 1.35;
           text-decoration: none;
         }
         .detail-note-soft {
-          margin-top: 12px;
-          color: \${PALETTE.softText};
+          margin-top: 14px;
+          color: ${PALETTE.softText};
           font-size: 12px;
           font-weight: 750;
-          line-height: 1.45;
+          line-height: 1.5;
+          padding: 12px 13px;
+          border-radius: 15px;
+          background: rgba(88,173,173,0.10);
+          border: 1px solid rgba(88,173,173,0.12);
         }
 
         .site-footer {
@@ -2073,6 +2075,9 @@ export default function App() {
           .detail-hero { padding: 22px 18px 20px; }
           .detail-body { padding: 18px; }
           .detail-compact-shell { grid-template-columns: 1fr; }
+          .detail-main-side { padding: 22px 18px; border-right: none; border-bottom: 1px solid rgba(60,74,95,0.08); }
+          .detail-side-card { padding: 20px 18px 22px; }
+          .detail-compact-shell { grid-template-columns: 1fr; }
           .detail-main-side { border-right: none; border-bottom: 1px solid rgba(60,74,95,0.08); padding: 20px; }
           .detail-side-card { padding: 20px; }
         }
@@ -2354,34 +2359,25 @@ export default function App() {
 
                   <div className="detail-side-divider" />
 
-                  <button
-                    className="detail-contact-button"
-                    type="button"
-                    onClick={() => setShowContactInfo((prev) => !prev)}
-                  >
-                    {showContactInfo ? "İletişimi Gizle" : "İletişim Bilgilerini Gör"}
-                  </button>
-
-                  {showContactInfo && (
-                    <div className="detail-contact-box">
-                      <div className="detail-contact-line">
-                        <strong>Adres</strong>
-                        <span>{selectedJob.address || selectedJob.location}</span>
-                      </div>
-                      <div className="detail-contact-line">
-                        <strong>Yetkili</strong>
-                        <span>{selectedJob.contactName || selectedJob.company}</span>
-                      </div>
-                      <div className="detail-contact-line">
-                        <strong>Telefon / WhatsApp</strong>
-                        {selectedJob.contactPhone ? (
-                          <a href={"tel:" + selectedJob.contactPhone}>{selectedJob.contactPhone}</a>
-                        ) : (
-                          <span>Telefon bilgisi işveren tarafından paylaşılmamış.</span>
-                        )}
-                      </div>
+                  <h4 className="detail-contact-title">İletişim bilgileri</h4>
+                  <div className="detail-contact-box">
+                    <div className="detail-contact-line">
+                      <strong>Adres</strong>
+                      <span>{selectedJob.address || selectedJob.location}</span>
                     </div>
-                  )}
+                    <div className="detail-contact-line">
+                      <strong>Yetkili</strong>
+                      <span>{selectedJob.contactName || selectedJob.company}</span>
+                    </div>
+                    <div className="detail-contact-line">
+                      <strong>Telefon / WhatsApp</strong>
+                      {selectedJob.contactPhone ? (
+                        <a href={"tel:" + selectedJob.contactPhone}>{selectedJob.contactPhone}</a>
+                      ) : (
+                        <span>Telefon bilgisi işveren tarafından paylaşılmamış.</span>
+                      )}
+                    </div>
+                  </div>
 
                   <p className="detail-note-soft">
                     Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
