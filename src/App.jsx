@@ -1578,17 +1578,46 @@ export default function App() {
   }, [filteredJobs, sortOption]);
 
   const filteredFeaturedJobs = useMemo(() => {
-    return featuredJobs.filter((job) => {
-      const text = `${job.title} ${job.company} ${job.location} ${job.category || ""}`.toLowerCase();
-      const matchesSearch = text.includes(submittedSearch.toLowerCase());
-      const matchesCategory = submittedCategory === "Tümü" ? true : (job.category || inferCategory(job.title)) === submittedCategory;
-      const matchesType = submittedJobType === "Tümü" ? true : job.type === submittedJobType;
-      const matchesCity =
-        submittedCity === "Tümü"
+    const normalizedSearch = submittedSearch.toLowerCase();
+
+    const baseFiltered = featuredJobs.filter((job) => {
+      const searchable = `${job.title} ${job.company} ${job.location} ${job.category || ""}`.toLowerCase();
+      const matchesSearch = searchable.includes(normalizedSearch);
+      const matchesCategory =
+        submittedCategory === "Tümü"
           ? true
-          : job.location.toLocaleLowerCase("tr-TR").includes(submittedCity.toLocaleLowerCase("tr-TR"));
-      return matchesSearch && matchesCategory && matchesType && matchesCity;
+          : (job.category || inferCategory(job.title)) === submittedCategory;
+      const matchesType =
+        submittedJobType === "Tümü"
+          ? true
+          : job.type === submittedJobType;
+
+      return matchesSearch && matchesCategory && matchesType;
     });
+
+    if (submittedCity === "Tümü") {
+      return baseFiltered.slice(0, 6);
+    }
+
+    const selectedCity = submittedCity.toLocaleLowerCase("tr-TR");
+
+    const cityMatched = baseFiltered.filter((job) =>
+      job.location.toLocaleLowerCase("tr-TR").includes(selectedCity)
+    );
+
+    const fallbackTurkey = baseFiltered.filter(
+      (job) =>
+        !job.location.toLocaleLowerCase("tr-TR").includes(selectedCity) &&
+        job.location.toLocaleLowerCase("tr-TR").includes("türkiye")
+    );
+
+    const remainingPool = baseFiltered.filter(
+      (job) =>
+        !cityMatched.includes(job) &&
+        !fallbackTurkey.includes(job)
+    );
+
+    return [...cityMatched, ...fallbackTurkey, ...remainingPool].slice(0, 6);
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
   const previewSalary = formatSalaryPreview(formData.workType, formData.salary);
