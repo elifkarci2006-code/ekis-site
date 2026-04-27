@@ -3963,6 +3963,134 @@ export default function App() {
           .plan-grid { grid-template-columns: 1fr; }
 
         }
+
+        .admin-compact-layout {
+          display: grid;
+          grid-template-columns: 280px 1fr;
+          gap: 16px;
+          align-items: start;
+        }
+        .admin-side {
+          background: rgba(255,255,255,0.94);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 26px;
+          padding: 18px;
+          box-shadow: 0 18px 42px rgba(60,74,95,0.08);
+          position: sticky;
+          top: 18px;
+        }
+        .admin-side-title {
+          margin: 0 0 12px;
+          color: ${PALETTE.slate};
+          font-size: 18px;
+          font-weight: 950;
+          letter-spacing: -0.03em;
+        }
+        .admin-side-list {
+          display: grid;
+          gap: 8px;
+        }
+        .admin-side-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          width: 100%;
+          border: 1px solid rgba(60,74,95,0.08);
+          background: #fff;
+          color: ${PALETTE.slate};
+          border-radius: 16px;
+          padding: 12px 13px;
+          font-family: inherit;
+          font-size: 13px;
+          font-weight: 900;
+          cursor: pointer;
+          box-shadow: 0 8px 18px rgba(60,74,95,0.04);
+        }
+        .admin-side-item span {
+          color: ${PALETTE.coral};
+          font-weight: 950;
+        }
+        .admin-main-panel {
+          background: rgba(255,255,255,0.94);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 26px;
+          padding: 18px;
+          box-shadow: 0 18px 42px rgba(60,74,95,0.08);
+        }
+        .admin-main-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 14px;
+        }
+        .admin-main-head h2 {
+          margin: 0;
+          color: ${PALETTE.slate};
+          font-size: 24px;
+          font-weight: 950;
+          letter-spacing: -0.04em;
+        }
+        .admin-table {
+          display: grid;
+          gap: 10px;
+        }
+        .admin-table-row {
+          display: grid;
+          grid-template-columns: 1.4fr 1fr 0.8fr 0.9fr auto;
+          align-items: center;
+          gap: 12px;
+          padding: 14px;
+          border-radius: 18px;
+          background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
+          border: 1px solid rgba(60,74,95,0.08);
+        }
+        .admin-table-row.header {
+          background: transparent;
+          border: none;
+          box-shadow: none;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 950;
+          padding: 4px 14px;
+        }
+        .admin-table-title {
+          min-width: 0;
+        }
+        .admin-table-title strong {
+          display: block;
+          color: ${PALETTE.slate};
+          font-size: 15px;
+          line-height: 1.15;
+          font-weight: 950;
+          letter-spacing: -0.02em;
+        }
+        .admin-table-title span,
+        .admin-table-cell {
+          display: block;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 850;
+          margin-top: 4px;
+        }
+        .admin-table-actions {
+          display: flex;
+          justify-content: flex-end;
+          flex-wrap: wrap;
+          gap: 7px;
+        }
+        @media (max-width: 1000px) {
+          .admin-compact-layout { grid-template-columns: 1fr; }
+          .admin-side { position: static; }
+          .admin-table-row {
+            grid-template-columns: 1fr;
+            align-items: start;
+          }
+          .admin-table-row.header { display: none; }
+          .admin-table-actions { justify-content: flex-start; }
+        }
+
       `}</style>
 
       {isAdminRoute && (
@@ -3979,7 +4107,7 @@ export default function App() {
                   }}
                 />
                 <h1>Admin Paneli</h1>
-                <p>İlanları ve Ekiş Acil alanını buradan yönetebilirsin.</p>
+                <p>Daha sade yönetim ekranı: ilanları tek listeden kontrol et.</p>
               </div>
               <button className="btn btn-secondary" type="button" onClick={goHome}>
                 Siteye Dön
@@ -4005,28 +4133,59 @@ export default function App() {
               </div>
             </div>
 
-            <div className="admin-grid">
-              <section className="admin-panel">
-                <h2>Ekiş Acil İlanları</h2>
-                <div className="admin-list">
-                  {featuredJobs.length === 0 ? (
-                    <div className="admin-empty">Henüz Ekiş Acil ilanı yok.</div>
-                  ) : (
-                    featuredJobs.map((job) => (
-                      <article className="admin-job" key={job.id}>
-                        <div className="admin-job-top">
-                          <div>
-                            <div className="admin-job-company">{job.company}</div>
-                            <h3>{job.title}</h3>
-                            <p>{job.location} • {job.salary}</p>
-                          </div>
-                          <span className="admin-badge">Ekiş Acil</span>
-                        </div>
-                        <p>{job.description}</p>
-                        <div className="admin-actions">
-                          <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
-                            Detay
-                          </button>
+            <div className="admin-compact-layout">
+              <aside className="admin-side">
+                <h2 className="admin-side-title">Hızlı İşlemler</h2>
+                <div className="admin-side-list">
+                  <button className="admin-side-item" type="button">
+                    Toplam ilan <span>{jobs.length + featuredJobs.length}</span>
+                  </button>
+                  <button className="admin-side-item" type="button">
+                    Ekiş Acil <span>{featuredJobs.length}</span>
+                  </button>
+                  <button className="admin-side-item" type="button">
+                    Standart ilan <span>{jobs.length}</span>
+                  </button>
+                  <button className="admin-side-item" type="button" onClick={() => setShowForm(true)}>
+                    Yeni ilan ekle <span>+</span>
+                  </button>
+                </div>
+              </aside>
+
+              <section className="admin-main-panel">
+                <div className="admin-main-head">
+                  <h2>Tüm İlanlar</h2>
+                  <span className="admin-badge">{jobs.length + featuredJobs.length} kayıt</span>
+                </div>
+
+                <div className="admin-table">
+                  <div className="admin-table-row header">
+                    <div>İlan</div>
+                    <div>Konum</div>
+                    <div>Tip</div>
+                    <div>Durum</div>
+                    <div>İşlem</div>
+                  </div>
+
+                  {[...featuredJobs.map((job) => ({ ...job, adminStatus: "Ekiş Acil" })), ...jobs.map((job) => ({ ...job, adminStatus: "Standart" }))].map((job) => (
+                    <article className="admin-table-row" key={`${job.adminStatus}-${job.id}`}>
+                      <div className="admin-table-title">
+                        <strong>{job.title}</strong>
+                        <span>{job.company}</span>
+                      </div>
+
+                      <div className="admin-table-cell">{job.location}</div>
+                      <div className="admin-table-cell">{job.type}</div>
+                      <div>
+                        <span className="admin-badge">{job.adminStatus}</span>
+                      </div>
+
+                      <div className="admin-table-actions">
+                        <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
+                          Detay
+                        </button>
+
+                        {job.adminStatus === "Ekiş Acil" ? (
                           <button
                             className="admin-mini-btn light"
                             type="button"
@@ -4037,41 +4196,7 @@ export default function App() {
                           >
                             Standarta Al
                           </button>
-                          <button
-                            className="admin-mini-btn danger"
-                            type="button"
-                            onClick={() => setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id))}
-                          >
-                            Sil
-                          </button>
-                        </div>
-                      </article>
-                    ))
-                  )}
-                </div>
-              </section>
-
-              <section className="admin-panel">
-                <h2>Standart İlanlar</h2>
-                <div className="admin-list">
-                  {jobs.length === 0 ? (
-                    <div className="admin-empty">Henüz standart ilan yok.</div>
-                  ) : (
-                    jobs.map((job) => (
-                      <article className="admin-job" key={job.id}>
-                        <div className="admin-job-top">
-                          <div>
-                            <div className="admin-job-company">{job.company}</div>
-                            <h3>{job.title}</h3>
-                            <p>{job.location} • {job.salary}</p>
-                          </div>
-                          <span className="admin-badge">{job.type}</span>
-                        </div>
-                        <p>{job.description}</p>
-                        <div className="admin-actions">
-                          <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
-                            Detay
-                          </button>
+                        ) : (
                           <button
                             className="admin-mini-btn"
                             type="button"
@@ -4082,17 +4207,24 @@ export default function App() {
                           >
                             Ekiş Acil Yap
                           </button>
-                          <button
-                            className="admin-mini-btn danger"
-                            type="button"
-                            onClick={() => setJobs((prev) => prev.filter((item) => item.id !== job.id))}
-                          >
-                            Sil
-                          </button>
-                        </div>
-                      </article>
-                    ))
-                  )}
+                        )}
+
+                        <button
+                          className="admin-mini-btn danger"
+                          type="button"
+                          onClick={() => {
+                            if (job.adminStatus === "Ekiş Acil") {
+                              setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
+                            } else {
+                              setJobs((prev) => prev.filter((item) => item.id !== job.id));
+                            }
+                          }}
+                        >
+                          Sil
+                        </button>
+                      </div>
+                    </article>
+                  ))}
                 </div>
               </section>
             </div>
