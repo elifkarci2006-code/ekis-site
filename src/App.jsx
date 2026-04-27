@@ -559,8 +559,7 @@ export default function App() {
           position: relative;
           top: 0;
           z-index: 50;
-          border-radius: 999px;
-          background: rgba(255,255,255,0.92);
+          background: transparent;
           transition: opacity 0.18s ease;
         }
         .topbar-inner {
@@ -587,7 +586,7 @@ export default function App() {
         }
         .brand-logo {
           height: 108px;
-          width: 10px;
+          width: auto;
           display: block;
           object-fit: contain;
           transition: height 0.22s ease, opacity 0.18s ease;
@@ -888,7 +887,7 @@ export default function App() {
         .mini-salary {
           margin-top: 14px;
           color: ${PALETTE.teal};
-          
+          font-size: 17px;
           font-weight: 900;
         }
         .all-jobs-panel {
@@ -1546,7 +1545,7 @@ export default function App() {
         }
         .footer-logo {
           width: 126px;
-          height: 10px;
+          height: auto;
           display: block;
           object-fit: contain;
           filter: brightness(0) invert(1);
@@ -1752,13 +1751,11 @@ export default function App() {
           text-decoration: none;
         }
         .section-title-vitrin::before {
-          content: "";
+          content: "★";
           width: auto;
           height: auto;
           background: transparent;
-          box-shadow:
-            0 0 0 4px rgba(255,255,255,0.18),
-            0 0 18px rgba(255,255,255,0.22);
+          box-shadow: none;
           font-size: 17px;
           color: #fff;
         }
