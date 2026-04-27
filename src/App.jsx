@@ -1387,6 +1387,7 @@ export default function App() {
   const [sortOption, setSortOption] = useState("newest");
   const [showForm, setShowForm] = useState(false);
   const [showPlanModal, setShowPlanModal] = useState(false);
+  const [showFeaturedList, setShowFeaturedList] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("free");
   const [pendingJob, setPendingJob] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
@@ -1596,7 +1597,7 @@ export default function App() {
     });
 
     if (submittedCity === "Tümü") {
-      return baseFiltered.slice(0, 6);
+      return baseFiltered;
     }
 
     const selectedCity = submittedCity.toLocaleLowerCase("tr-TR");
@@ -1617,9 +1618,10 @@ export default function App() {
         !fallbackTurkey.includes(job)
     );
 
-    return [...cityMatched, ...fallbackTurkey, ...remainingPool].slice(0, 6);
+    return [...cityMatched, ...fallbackTurkey, ...remainingPool];
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
+  const visibleFeaturedJobs = filteredFeaturedJobs.slice(0, 6);
   const previewSalary = formatSalaryPreview(formData.workType, formData.salary);
   const totalCount = filteredFeaturedJobs.length + filteredJobs.length;
 
@@ -3010,6 +3012,52 @@ export default function App() {
           color: ${PALETTE.slate};
           font-weight: 800;
         }
+        .featured-list-modal-grid {
+          display: grid;
+          gap: 12px;
+        }
+        .featured-list-modal-card {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 16px 18px;
+          border-radius: 18px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
+          box-shadow: 0 10px 22px rgba(60,74,95,0.05);
+          cursor: pointer;
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .featured-list-modal-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 16px 28px rgba(60,74,95,0.09);
+        }
+        .featured-list-modal-card h4 {
+          margin: 4px 0 4px;
+          color: ${PALETTE.slate};
+          font-size: 18px;
+          line-height: 1.15;
+          font-weight: 950;
+          letter-spacing: -0.03em;
+        }
+        .featured-list-modal-card p {
+          margin: 0;
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 800;
+        }
+        .featured-list-modal-card strong {
+          color: #ff4b2b;
+          font-size: 15px;
+          font-weight: 950;
+          white-space: nowrap;
+        }
+        .featured-list-modal-company {
+          color: ${PALETTE.teal};
+          font-size: 13px;
+          font-weight: 950;
+        }
 
 
         /* --- Hero trust area + premium featured card revizyonu --- */
@@ -4133,12 +4181,12 @@ export default function App() {
             <h2 className="section-title section-title-vitrin">Ekiş Acil</h2>
             <div className="featured-head-actions">
               <span>{filteredFeaturedJobs.length} ilan</span>
-              <a href="#ilanlar" onClick={(e) => e.preventDefault()}>Tümünü Gör →</a>
+              <a href="#one-cikanlar" onClick={(e) => { e.preventDefault(); setShowFeaturedList(true); }}>Tümünü Gör →</a>
             </div>
           </div>
 
           <div className="featured-grid">
-            {filteredFeaturedJobs.map((job) => (
+            {visibleFeaturedJobs.map((job) => (
               <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
                 <div className="card-top">
                   <div className="pill"><span>★</span> Öne Çıkan</div>
@@ -4292,6 +4340,42 @@ export default function App() {
 
                   return <p key={index}>{block.text}</p>;
                 })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showFeaturedList && (
+          <div className="post-modal-backdrop" onClick={() => setShowFeaturedList(false)}>
+            <div className="info-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="info-modal-head">
+                <h3 className="info-modal-title">Tüm Ekiş Acil İlanları</h3>
+                <button className="info-modal-close" type="button" onClick={() => setShowFeaturedList(false)}>×</button>
+              </div>
+              <div className="info-modal-body">
+                {filteredFeaturedJobs.length === 0 ? (
+                  <div className="empty-box">Seçili filtrelere uygun Ekiş Acil ilanı bulunamadı.</div>
+                ) : (
+                  <div className="featured-list-modal-grid">
+                    {filteredFeaturedJobs.map((job) => (
+                      <article
+                        key={job.id}
+                        className="featured-list-modal-card"
+                        onClick={() => {
+                          setShowFeaturedList(false);
+                          setSelectedJob(job);
+                        }}
+                      >
+                        <div>
+                          <div className="featured-list-modal-company">{job.company}</div>
+                          <h4>{job.title}</h4>
+                          <p>{job.location}</p>
+                        </div>
+                        <strong>{job.salary}</strong>
+                      </article>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
