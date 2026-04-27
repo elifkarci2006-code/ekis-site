@@ -1399,6 +1399,7 @@ export default function App() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [errors, setErrors] = useState({});
   const [infoModal, setInfoModal] = useState(null);
+  const [isAdminRoute, setIsAdminRoute] = useState(false);
   const [formData, setFormData] = useState({
     company: "",
     title: "",
@@ -1424,6 +1425,24 @@ export default function App() {
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const syncAdminRoute = () => {
+      setIsAdminRoute(window.location.hash === "#admin");
+    };
+
+    syncAdminRoute();
+    window.addEventListener("hashchange", syncAdminRoute);
+    return () => window.removeEventListener("hashchange", syncAdminRoute);
+  }, []);
+
+  const goHome = () => {
+    setIsAdminRoute(false);
+    if (window.location.hash) {
+      window.history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     if (!showForm) {
@@ -3025,6 +3044,183 @@ export default function App() {
           color: ${PALETTE.slate};
           font-weight: 800;
         }
+        .admin-page {
+          position: fixed;
+          inset: 0;
+          z-index: 120;
+          background:
+            radial-gradient(circle at top left, rgba(228,93,80,0.10), transparent 28%),
+            radial-gradient(circle at top right, rgba(88,173,173,0.13), transparent 24%),
+            ${PALETTE.bg};
+          overflow-y: auto;
+          padding: 24px;
+        }
+        .admin-shell {
+          max-width: 1280px;
+          margin: 0 auto;
+        }
+        .admin-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          margin-bottom: 18px;
+        }
+        .admin-title-block h1 {
+          margin: 0;
+          color: ${PALETTE.slate};
+          font-size: clamp(28px, 3vw, 44px);
+          line-height: 1;
+          font-weight: 950;
+          letter-spacing: -0.055em;
+        }
+        .admin-title-block p {
+          margin: 8px 0 0;
+          color: ${PALETTE.softText};
+          font-size: 14px;
+          font-weight: 800;
+        }
+        .admin-logo {
+          height: 74px;
+          object-fit: contain;
+        }
+        .admin-stats {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 14px;
+          margin-bottom: 18px;
+        }
+        .admin-stat {
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 22px;
+          padding: 18px;
+          box-shadow: 0 14px 30px rgba(60,74,95,0.06);
+        }
+        .admin-stat span {
+          display: block;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 900;
+          margin-bottom: 8px;
+        }
+        .admin-stat strong {
+          color: ${PALETTE.slate};
+          font-size: 28px;
+          line-height: 1;
+          font-weight: 950;
+          letter-spacing: -0.04em;
+        }
+        .admin-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          align-items: start;
+        }
+        .admin-panel {
+          background: rgba(255,255,255,0.94);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 26px;
+          padding: 18px;
+          box-shadow: 0 18px 42px rgba(60,74,95,0.08);
+        }
+        .admin-panel h2 {
+          margin: 0 0 14px;
+          color: ${PALETTE.slate};
+          font-size: 22px;
+          font-weight: 950;
+          letter-spacing: -0.035em;
+        }
+        .admin-list {
+          display: grid;
+          gap: 12px;
+        }
+        .admin-job {
+          background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 18px;
+          padding: 14px;
+        }
+        .admin-job-top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 8px;
+        }
+        .admin-job-company {
+          color: ${PALETTE.teal};
+          font-size: 13px;
+          font-weight: 950;
+        }
+        .admin-job h3 {
+          margin: 3px 0 4px;
+          color: ${PALETTE.slate};
+          font-size: 17px;
+          line-height: 1.15;
+          font-weight: 950;
+          letter-spacing: -0.03em;
+        }
+        .admin-job p {
+          margin: 0;
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 750;
+          line-height: 1.45;
+        }
+        .admin-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 999px;
+          padding: 7px 10px;
+          background: #fff0eb;
+          color: #ff4b2b;
+          font-size: 11px;
+          font-weight: 950;
+          white-space: nowrap;
+          border: 1px solid rgba(255,75,43,0.16);
+        }
+        .admin-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 12px;
+        }
+        .admin-mini-btn {
+          border: none;
+          border-radius: 12px;
+          padding: 9px 11px;
+          font-size: 12px;
+          font-weight: 900;
+          cursor: pointer;
+          background: ${PALETTE.slate};
+          color: #fff;
+        }
+        .admin-mini-btn.light {
+          background: #fff;
+          color: ${PALETTE.slate};
+          border: 1px solid rgba(60,74,95,0.12);
+        }
+        .admin-mini-btn.danger {
+          background: #dc2626;
+          color: #fff;
+        }
+        .admin-empty {
+          background: #fff;
+          border: 1px dashed rgba(60,74,95,0.18);
+          color: ${PALETTE.softText};
+          border-radius: 18px;
+          padding: 22px;
+          text-align: center;
+          font-weight: 850;
+        }
+        @media (max-width: 900px) {
+          .admin-page { padding: 14px; }
+          .admin-top { align-items: flex-start; flex-direction: column; }
+          .admin-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .admin-grid { grid-template-columns: 1fr; }
+        }
         .featured-list-modal-grid {
           display: grid;
           gap: 12px;
@@ -3769,7 +3965,14 @@ export default function App() {
       <header className={`topbar ${headerSmall ? "small" : ""}`} style={{ opacity: headerOpacity }}>
         <div className="container topbar-inner">
           <div className="brand-wrap">
-            <a className="brand-logo-link" href="#">
+            <a
+              className="brand-logo-link"
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                goHome();
+              }}
+            >
               <img
                 className="brand-logo"
                 src={logoSrc}
