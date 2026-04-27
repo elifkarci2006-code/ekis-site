@@ -1428,7 +1428,10 @@ export default function App() {
 
   useEffect(() => {
     const syncAdminRoute = () => {
-      setIsAdminRoute(window.location.hash === "#admin");
+      const hash = window.location.hash.toLowerCase();
+      const path = window.location.pathname.toLowerCase();
+      const searchParams = new URLSearchParams(window.location.search);
+      setIsAdminRoute(hash === "#admin" || path.endsWith("/admin") || searchParams.get("admin") === "1");
     };
 
     syncAdminRoute();
@@ -3961,6 +3964,141 @@ export default function App() {
 
         }
       `}</style>
+
+      {isAdminRoute && (
+        <div className="admin-page">
+          <div className="admin-shell">
+            <div className="admin-top">
+              <div className="admin-title-block">
+                <img
+                  className="admin-logo"
+                  src={logoSrc}
+                  alt="Ekiş logo"
+                  onError={() => {
+                    if (logoSrc !== "/logo-ekis.png") setLogoSrc("/logo-ekis.png");
+                  }}
+                />
+                <h1>Admin Paneli</h1>
+                <p>İlanları ve Ekiş Acil alanını buradan yönetebilirsin.</p>
+              </div>
+              <button className="btn btn-secondary" type="button" onClick={goHome}>
+                Siteye Dön
+              </button>
+            </div>
+
+            <div className="admin-stats">
+              <div className="admin-stat">
+                <span>Toplam ilan</span>
+                <strong>{jobs.length + featuredJobs.length}</strong>
+              </div>
+              <div className="admin-stat">
+                <span>Standart ilan</span>
+                <strong>{jobs.length}</strong>
+              </div>
+              <div className="admin-stat">
+                <span>Ekiş Acil</span>
+                <strong>{featuredJobs.length}</strong>
+              </div>
+              <div className="admin-stat">
+                <span>Bekleyen işlem</span>
+                <strong>0</strong>
+              </div>
+            </div>
+
+            <div className="admin-grid">
+              <section className="admin-panel">
+                <h2>Ekiş Acil İlanları</h2>
+                <div className="admin-list">
+                  {featuredJobs.length === 0 ? (
+                    <div className="admin-empty">Henüz Ekiş Acil ilanı yok.</div>
+                  ) : (
+                    featuredJobs.map((job) => (
+                      <article className="admin-job" key={job.id}>
+                        <div className="admin-job-top">
+                          <div>
+                            <div className="admin-job-company">{job.company}</div>
+                            <h3>{job.title}</h3>
+                            <p>{job.location} • {job.salary}</p>
+                          </div>
+                          <span className="admin-badge">Ekiş Acil</span>
+                        </div>
+                        <p>{job.description}</p>
+                        <div className="admin-actions">
+                          <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
+                            Detay
+                          </button>
+                          <button
+                            className="admin-mini-btn light"
+                            type="button"
+                            onClick={() => {
+                              setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
+                              setJobs((prev) => [{ ...job, plan: "free" }, ...prev]);
+                            }}
+                          >
+                            Standarta Al
+                          </button>
+                          <button
+                            className="admin-mini-btn danger"
+                            type="button"
+                            onClick={() => setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id))}
+                          >
+                            Sil
+                          </button>
+                        </div>
+                      </article>
+                    ))
+                  )}
+                </div>
+              </section>
+
+              <section className="admin-panel">
+                <h2>Standart İlanlar</h2>
+                <div className="admin-list">
+                  {jobs.length === 0 ? (
+                    <div className="admin-empty">Henüz standart ilan yok.</div>
+                  ) : (
+                    jobs.map((job) => (
+                      <article className="admin-job" key={job.id}>
+                        <div className="admin-job-top">
+                          <div>
+                            <div className="admin-job-company">{job.company}</div>
+                            <h3>{job.title}</h3>
+                            <p>{job.location} • {job.salary}</p>
+                          </div>
+                          <span className="admin-badge">{job.type}</span>
+                        </div>
+                        <p>{job.description}</p>
+                        <div className="admin-actions">
+                          <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
+                            Detay
+                          </button>
+                          <button
+                            className="admin-mini-btn"
+                            type="button"
+                            onClick={() => {
+                              setJobs((prev) => prev.filter((item) => item.id !== job.id));
+                              setFeaturedJobs((prev) => [{ ...job, plan: "featured" }, ...prev]);
+                            }}
+                          >
+                            Ekiş Acil Yap
+                          </button>
+                          <button
+                            className="admin-mini-btn danger"
+                            type="button"
+                            onClick={() => setJobs((prev) => prev.filter((item) => item.id !== job.id))}
+                          >
+                            Sil
+                          </button>
+                        </div>
+                      </article>
+                    ))
+                  )}
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
 
       <header className={`topbar ${headerSmall ? "small" : ""}`} style={{ opacity: headerOpacity }}>
         <div className="container topbar-inner">
