@@ -341,6 +341,89 @@ function CategoryIcon({ job }) {
         },
       ],
     },
+    cityJobs: {
+      title: "Şehre Göre İşler",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te ilanları şehir filtresiyle kolayca daraltabilir, yaşadığınız yere yakın günlük, saatlik ve part time iş fırsatlarını keşfedebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Arama alanında şehir seçimi yaparak ilanları filtreleyebilirsiniz.",
+            "İstanbul, Ankara, İzmir, Eskişehir, Bursa ve diğer tüm şehirlerdeki ilanları tek ekranda görebilirsiniz.",
+            "Uzaktan / Türkiye seçeneğiyle dijital ve freelance işleri de inceleyebilirsiniz.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şehre göre arama yapmak için üstteki filtre alanındaki “Şehir seç” bölümünü kullanabilirsiniz.",
+        },
+      ],
+    },
+    faq: {
+      title: "Sık Sorulanlar",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş hakkında en sık sorulan soruları burada özetledik.",
+        },
+        {
+          type: "list",
+          items: [
+            "İlanlara başvurmak için üyelik zorunlu değildir; ilan detayındaki iletişim bilgileri üzerinden işverenle görüşebilirsiniz.",
+            "İşe alım süreci ve görüşmeler işveren ile aday arasında yürütülür.",
+            "Ekiş Acil, daha görünür olmak isteyen işverenlerin ilanlarını öne çıkaran özel alandır.",
+            "Sahte, yanıltıcı veya hukuka aykırı ilanlar yayından kaldırılabilir.",
+            "İlan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+          ],
+        },
+      ],
+    },
+    pricing: {
+      title: "Fiyatlandırma",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te standart ilan yayınlama ücretsizdir. Daha görünür olmak isteyen işverenler Ekiş Acil alanını tercih edebilir.",
+        },
+        {
+          type: "list",
+          items: [
+            "Standart ilan: Ücretsiz olarak yayınlanır ve tüm ilanlar listesinde görünür.",
+            "Ekiş Acil ilanı: İlanınızı ana sayfadaki özel alanda daha görünür hale getirir.",
+            "Ücretli ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Fiyatlar ve paket detayları sistem aktif ödeme altyapısına geçtiğinde güncellenebilir.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şu an demo/MVP aşamasında olduğumuz için fiyatlandırma ve ödeme süreci final entegrasyon öncesi netleştirilecektir.",
+        },
+      ],
+    },
+    support: {
+      title: "Destek Al",
+      blocks: [
+        {
+          type: "p",
+          text: "İlan verme, ilan düzenleme, Ekiş Acil kullanımı veya teknik sorunlar için destek ekibimizle iletişime geçebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek e-postası: destek@ekis.com",
+            "Kurumsal iletişim: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Daha hızlı destek için mesajınızda firma adınızı, ilan başlığınızı ve yaşadığınız sorunu kısaca belirtmeniz önerilir.",
+        },
+      ],
+    },
   };
 
   return (
@@ -443,6 +526,89 @@ function CategoryIcon({ job }) {
         {
           type: "note",
           text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+    cityJobs: {
+      title: "Şehre Göre İşler",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te ilanları şehir filtresiyle kolayca daraltabilir, yaşadığınız yere yakın günlük, saatlik ve part time iş fırsatlarını keşfedebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Arama alanında şehir seçimi yaparak ilanları filtreleyebilirsiniz.",
+            "İstanbul, Ankara, İzmir, Eskişehir, Bursa ve diğer tüm şehirlerdeki ilanları tek ekranda görebilirsiniz.",
+            "Uzaktan / Türkiye seçeneğiyle dijital ve freelance işleri de inceleyebilirsiniz.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şehre göre arama yapmak için üstteki filtre alanındaki “Şehir seç” bölümünü kullanabilirsiniz.",
+        },
+      ],
+    },
+    faq: {
+      title: "Sık Sorulanlar",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş hakkında en sık sorulan soruları burada özetledik.",
+        },
+        {
+          type: "list",
+          items: [
+            "İlanlara başvurmak için üyelik zorunlu değildir; ilan detayındaki iletişim bilgileri üzerinden işverenle görüşebilirsiniz.",
+            "İşe alım süreci ve görüşmeler işveren ile aday arasında yürütülür.",
+            "Ekiş Acil, daha görünür olmak isteyen işverenlerin ilanlarını öne çıkaran özel alandır.",
+            "Sahte, yanıltıcı veya hukuka aykırı ilanlar yayından kaldırılabilir.",
+            "İlan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+          ],
+        },
+      ],
+    },
+    pricing: {
+      title: "Fiyatlandırma",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te standart ilan yayınlama ücretsizdir. Daha görünür olmak isteyen işverenler Ekiş Acil alanını tercih edebilir.",
+        },
+        {
+          type: "list",
+          items: [
+            "Standart ilan: Ücretsiz olarak yayınlanır ve tüm ilanlar listesinde görünür.",
+            "Ekiş Acil ilanı: İlanınızı ana sayfadaki özel alanda daha görünür hale getirir.",
+            "Ücretli ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Fiyatlar ve paket detayları sistem aktif ödeme altyapısına geçtiğinde güncellenebilir.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şu an demo/MVP aşamasında olduğumuz için fiyatlandırma ve ödeme süreci final entegrasyon öncesi netleştirilecektir.",
+        },
+      ],
+    },
+    support: {
+      title: "Destek Al",
+      blocks: [
+        {
+          type: "p",
+          text: "İlan verme, ilan düzenleme, Ekiş Acil kullanımı veya teknik sorunlar için destek ekibimizle iletişime geçebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek e-postası: destek@ekis.com",
+            "Kurumsal iletişim: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Daha hızlı destek için mesajınızda firma adınızı, ilan başlığınızı ve yaşadığınız sorunu kısaca belirtmeniz önerilir.",
         },
       ],
     },
@@ -553,6 +719,89 @@ function CategoryIcon({ job }) {
         },
       ],
     },
+    cityJobs: {
+      title: "Şehre Göre İşler",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te ilanları şehir filtresiyle kolayca daraltabilir, yaşadığınız yere yakın günlük, saatlik ve part time iş fırsatlarını keşfedebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Arama alanında şehir seçimi yaparak ilanları filtreleyebilirsiniz.",
+            "İstanbul, Ankara, İzmir, Eskişehir, Bursa ve diğer tüm şehirlerdeki ilanları tek ekranda görebilirsiniz.",
+            "Uzaktan / Türkiye seçeneğiyle dijital ve freelance işleri de inceleyebilirsiniz.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şehre göre arama yapmak için üstteki filtre alanındaki “Şehir seç” bölümünü kullanabilirsiniz.",
+        },
+      ],
+    },
+    faq: {
+      title: "Sık Sorulanlar",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş hakkında en sık sorulan soruları burada özetledik.",
+        },
+        {
+          type: "list",
+          items: [
+            "İlanlara başvurmak için üyelik zorunlu değildir; ilan detayındaki iletişim bilgileri üzerinden işverenle görüşebilirsiniz.",
+            "İşe alım süreci ve görüşmeler işveren ile aday arasında yürütülür.",
+            "Ekiş Acil, daha görünür olmak isteyen işverenlerin ilanlarını öne çıkaran özel alandır.",
+            "Sahte, yanıltıcı veya hukuka aykırı ilanlar yayından kaldırılabilir.",
+            "İlan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+          ],
+        },
+      ],
+    },
+    pricing: {
+      title: "Fiyatlandırma",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te standart ilan yayınlama ücretsizdir. Daha görünür olmak isteyen işverenler Ekiş Acil alanını tercih edebilir.",
+        },
+        {
+          type: "list",
+          items: [
+            "Standart ilan: Ücretsiz olarak yayınlanır ve tüm ilanlar listesinde görünür.",
+            "Ekiş Acil ilanı: İlanınızı ana sayfadaki özel alanda daha görünür hale getirir.",
+            "Ücretli ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Fiyatlar ve paket detayları sistem aktif ödeme altyapısına geçtiğinde güncellenebilir.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şu an demo/MVP aşamasında olduğumuz için fiyatlandırma ve ödeme süreci final entegrasyon öncesi netleştirilecektir.",
+        },
+      ],
+    },
+    support: {
+      title: "Destek Al",
+      blocks: [
+        {
+          type: "p",
+          text: "İlan verme, ilan düzenleme, Ekiş Acil kullanımı veya teknik sorunlar için destek ekibimizle iletişime geçebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek e-postası: destek@ekis.com",
+            "Kurumsal iletişim: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Daha hızlı destek için mesajınızda firma adınızı, ilan başlığınızı ve yaşadığınız sorunu kısaca belirtmeniz önerilir.",
+        },
+      ],
+    },
   };
 
   return (
@@ -655,6 +904,89 @@ function CategoryIcon({ job }) {
         {
           type: "note",
           text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+    cityJobs: {
+      title: "Şehre Göre İşler",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te ilanları şehir filtresiyle kolayca daraltabilir, yaşadığınız yere yakın günlük, saatlik ve part time iş fırsatlarını keşfedebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Arama alanında şehir seçimi yaparak ilanları filtreleyebilirsiniz.",
+            "İstanbul, Ankara, İzmir, Eskişehir, Bursa ve diğer tüm şehirlerdeki ilanları tek ekranda görebilirsiniz.",
+            "Uzaktan / Türkiye seçeneğiyle dijital ve freelance işleri de inceleyebilirsiniz.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şehre göre arama yapmak için üstteki filtre alanındaki “Şehir seç” bölümünü kullanabilirsiniz.",
+        },
+      ],
+    },
+    faq: {
+      title: "Sık Sorulanlar",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş hakkında en sık sorulan soruları burada özetledik.",
+        },
+        {
+          type: "list",
+          items: [
+            "İlanlara başvurmak için üyelik zorunlu değildir; ilan detayındaki iletişim bilgileri üzerinden işverenle görüşebilirsiniz.",
+            "İşe alım süreci ve görüşmeler işveren ile aday arasında yürütülür.",
+            "Ekiş Acil, daha görünür olmak isteyen işverenlerin ilanlarını öne çıkaran özel alandır.",
+            "Sahte, yanıltıcı veya hukuka aykırı ilanlar yayından kaldırılabilir.",
+            "İlan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+          ],
+        },
+      ],
+    },
+    pricing: {
+      title: "Fiyatlandırma",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te standart ilan yayınlama ücretsizdir. Daha görünür olmak isteyen işverenler Ekiş Acil alanını tercih edebilir.",
+        },
+        {
+          type: "list",
+          items: [
+            "Standart ilan: Ücretsiz olarak yayınlanır ve tüm ilanlar listesinde görünür.",
+            "Ekiş Acil ilanı: İlanınızı ana sayfadaki özel alanda daha görünür hale getirir.",
+            "Ücretli ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Fiyatlar ve paket detayları sistem aktif ödeme altyapısına geçtiğinde güncellenebilir.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şu an demo/MVP aşamasında olduğumuz için fiyatlandırma ve ödeme süreci final entegrasyon öncesi netleştirilecektir.",
+        },
+      ],
+    },
+    support: {
+      title: "Destek Al",
+      blocks: [
+        {
+          type: "p",
+          text: "İlan verme, ilan düzenleme, Ekiş Acil kullanımı veya teknik sorunlar için destek ekibimizle iletişime geçebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek e-postası: destek@ekis.com",
+            "Kurumsal iletişim: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Daha hızlı destek için mesajınızda firma adınızı, ilan başlığınızı ve yaşadığınız sorunu kısaca belirtmeniz önerilir.",
         },
       ],
     },
@@ -762,6 +1094,89 @@ function CategoryIcon({ job }) {
         },
       ],
     },
+    cityJobs: {
+      title: "Şehre Göre İşler",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te ilanları şehir filtresiyle kolayca daraltabilir, yaşadığınız yere yakın günlük, saatlik ve part time iş fırsatlarını keşfedebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Arama alanında şehir seçimi yaparak ilanları filtreleyebilirsiniz.",
+            "İstanbul, Ankara, İzmir, Eskişehir, Bursa ve diğer tüm şehirlerdeki ilanları tek ekranda görebilirsiniz.",
+            "Uzaktan / Türkiye seçeneğiyle dijital ve freelance işleri de inceleyebilirsiniz.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şehre göre arama yapmak için üstteki filtre alanındaki “Şehir seç” bölümünü kullanabilirsiniz.",
+        },
+      ],
+    },
+    faq: {
+      title: "Sık Sorulanlar",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş hakkında en sık sorulan soruları burada özetledik.",
+        },
+        {
+          type: "list",
+          items: [
+            "İlanlara başvurmak için üyelik zorunlu değildir; ilan detayındaki iletişim bilgileri üzerinden işverenle görüşebilirsiniz.",
+            "İşe alım süreci ve görüşmeler işveren ile aday arasında yürütülür.",
+            "Ekiş Acil, daha görünür olmak isteyen işverenlerin ilanlarını öne çıkaran özel alandır.",
+            "Sahte, yanıltıcı veya hukuka aykırı ilanlar yayından kaldırılabilir.",
+            "İlan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+          ],
+        },
+      ],
+    },
+    pricing: {
+      title: "Fiyatlandırma",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te standart ilan yayınlama ücretsizdir. Daha görünür olmak isteyen işverenler Ekiş Acil alanını tercih edebilir.",
+        },
+        {
+          type: "list",
+          items: [
+            "Standart ilan: Ücretsiz olarak yayınlanır ve tüm ilanlar listesinde görünür.",
+            "Ekiş Acil ilanı: İlanınızı ana sayfadaki özel alanda daha görünür hale getirir.",
+            "Ücretli ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Fiyatlar ve paket detayları sistem aktif ödeme altyapısına geçtiğinde güncellenebilir.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şu an demo/MVP aşamasında olduğumuz için fiyatlandırma ve ödeme süreci final entegrasyon öncesi netleştirilecektir.",
+        },
+      ],
+    },
+    support: {
+      title: "Destek Al",
+      blocks: [
+        {
+          type: "p",
+          text: "İlan verme, ilan düzenleme, Ekiş Acil kullanımı veya teknik sorunlar için destek ekibimizle iletişime geçebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek e-postası: destek@ekis.com",
+            "Kurumsal iletişim: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Daha hızlı destek için mesajınızda firma adınızı, ilan başlığınızı ve yaşadığınız sorunu kısaca belirtmeniz önerilir.",
+        },
+      ],
+    },
   };
 
   return (
@@ -862,6 +1277,89 @@ function CategoryIcon({ job }) {
         {
           type: "note",
           text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+    cityJobs: {
+      title: "Şehre Göre İşler",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te ilanları şehir filtresiyle kolayca daraltabilir, yaşadığınız yere yakın günlük, saatlik ve part time iş fırsatlarını keşfedebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Arama alanında şehir seçimi yaparak ilanları filtreleyebilirsiniz.",
+            "İstanbul, Ankara, İzmir, Eskişehir, Bursa ve diğer tüm şehirlerdeki ilanları tek ekranda görebilirsiniz.",
+            "Uzaktan / Türkiye seçeneğiyle dijital ve freelance işleri de inceleyebilirsiniz.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şehre göre arama yapmak için üstteki filtre alanındaki “Şehir seç” bölümünü kullanabilirsiniz.",
+        },
+      ],
+    },
+    faq: {
+      title: "Sık Sorulanlar",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş hakkında en sık sorulan soruları burada özetledik.",
+        },
+        {
+          type: "list",
+          items: [
+            "İlanlara başvurmak için üyelik zorunlu değildir; ilan detayındaki iletişim bilgileri üzerinden işverenle görüşebilirsiniz.",
+            "İşe alım süreci ve görüşmeler işveren ile aday arasında yürütülür.",
+            "Ekiş Acil, daha görünür olmak isteyen işverenlerin ilanlarını öne çıkaran özel alandır.",
+            "Sahte, yanıltıcı veya hukuka aykırı ilanlar yayından kaldırılabilir.",
+            "İlan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+          ],
+        },
+      ],
+    },
+    pricing: {
+      title: "Fiyatlandırma",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te standart ilan yayınlama ücretsizdir. Daha görünür olmak isteyen işverenler Ekiş Acil alanını tercih edebilir.",
+        },
+        {
+          type: "list",
+          items: [
+            "Standart ilan: Ücretsiz olarak yayınlanır ve tüm ilanlar listesinde görünür.",
+            "Ekiş Acil ilanı: İlanınızı ana sayfadaki özel alanda daha görünür hale getirir.",
+            "Ücretli ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Fiyatlar ve paket detayları sistem aktif ödeme altyapısına geçtiğinde güncellenebilir.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şu an demo/MVP aşamasında olduğumuz için fiyatlandırma ve ödeme süreci final entegrasyon öncesi netleştirilecektir.",
+        },
+      ],
+    },
+    support: {
+      title: "Destek Al",
+      blocks: [
+        {
+          type: "p",
+          text: "İlan verme, ilan düzenleme, Ekiş Acil kullanımı veya teknik sorunlar için destek ekibimizle iletişime geçebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek e-postası: destek@ekis.com",
+            "Kurumsal iletişim: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Daha hızlı destek için mesajınızda firma adınızı, ilan başlığınızı ve yaşadığınız sorunu kısaca belirtmeniz önerilir.",
         },
       ],
     },
@@ -1185,6 +1683,89 @@ export default function App() {
         {
           type: "note",
           text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+    cityJobs: {
+      title: "Şehre Göre İşler",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te ilanları şehir filtresiyle kolayca daraltabilir, yaşadığınız yere yakın günlük, saatlik ve part time iş fırsatlarını keşfedebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Arama alanında şehir seçimi yaparak ilanları filtreleyebilirsiniz.",
+            "İstanbul, Ankara, İzmir, Eskişehir, Bursa ve diğer tüm şehirlerdeki ilanları tek ekranda görebilirsiniz.",
+            "Uzaktan / Türkiye seçeneğiyle dijital ve freelance işleri de inceleyebilirsiniz.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şehre göre arama yapmak için üstteki filtre alanındaki “Şehir seç” bölümünü kullanabilirsiniz.",
+        },
+      ],
+    },
+    faq: {
+      title: "Sık Sorulanlar",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş hakkında en sık sorulan soruları burada özetledik.",
+        },
+        {
+          type: "list",
+          items: [
+            "İlanlara başvurmak için üyelik zorunlu değildir; ilan detayındaki iletişim bilgileri üzerinden işverenle görüşebilirsiniz.",
+            "İşe alım süreci ve görüşmeler işveren ile aday arasında yürütülür.",
+            "Ekiş Acil, daha görünür olmak isteyen işverenlerin ilanlarını öne çıkaran özel alandır.",
+            "Sahte, yanıltıcı veya hukuka aykırı ilanlar yayından kaldırılabilir.",
+            "İlan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+          ],
+        },
+      ],
+    },
+    pricing: {
+      title: "Fiyatlandırma",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş’te standart ilan yayınlama ücretsizdir. Daha görünür olmak isteyen işverenler Ekiş Acil alanını tercih edebilir.",
+        },
+        {
+          type: "list",
+          items: [
+            "Standart ilan: Ücretsiz olarak yayınlanır ve tüm ilanlar listesinde görünür.",
+            "Ekiş Acil ilanı: İlanınızı ana sayfadaki özel alanda daha görünür hale getirir.",
+            "Ücretli ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Fiyatlar ve paket detayları sistem aktif ödeme altyapısına geçtiğinde güncellenebilir.",
+          ],
+        },
+        {
+          type: "note",
+          text: "Şu an demo/MVP aşamasında olduğumuz için fiyatlandırma ve ödeme süreci final entegrasyon öncesi netleştirilecektir.",
+        },
+      ],
+    },
+    support: {
+      title: "Destek Al",
+      blocks: [
+        {
+          type: "p",
+          text: "İlan verme, ilan düzenleme, Ekiş Acil kullanımı veya teknik sorunlar için destek ekibimizle iletişime geçebilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek e-postası: destek@ekis.com",
+            "Kurumsal iletişim: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Daha hızlı destek için mesajınızda firma adınızı, ilan başlığınızı ve yaşadığınız sorunu kısaca belirtmeniz önerilir.",
         },
       ],
     },
@@ -2232,6 +2813,14 @@ export default function App() {
           text-decoration: none;
           font-size: 15px;
           font-weight: 700;
+        }
+        .footer-link-button {
+          border: none;
+          background: transparent;
+          padding: 0;
+          text-align: left;
+          cursor: pointer;
+          font-family: inherit;
         }
         .footer-socials {
           display: flex;
@@ -3702,8 +4291,8 @@ export default function App() {
                 <div className="footer-links">
                   <a className="footer-link" href="#ilanlar">İlanları keşfet</a>
                   <a className="footer-link" href="#one-cikanlar">Ekiş Acil</a>
-                  <a className="footer-link" href="#">Şehre göre işler</a>
-                  <a className="footer-link" href="#">Sık sorulanlar</a>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("cityJobs")}>Şehre göre işler</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("faq")}>Sık sorulanlar</button>
                 </div>
               </div>
 
@@ -3711,9 +4300,9 @@ export default function App() {
                 <h3 className="footer-subheading">İşveren</h3>
                 <div className="footer-links">
                   <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>İlan ver</a>
-                  <a className="footer-link" href="#">Vitrine çıkar</a>
-                  <a className="footer-link" href="#">Fiyatlandırma</a>
-                  <a className="footer-link" href="#">Destek al</a>
+                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); setSelectedPlan("featured"); }}>Ekiş Acil’e çıkar</a>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("pricing")}>Fiyatlandırma</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("support")}>Destek al</button>
                 </div>
               </div>
 
