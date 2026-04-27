@@ -455,31 +455,13 @@ export default function App() {
 
   const handlePublishClick = () => {
     if (!validateForm()) return;
-
-    const newJob = buildJobFromForm();
-
-    if (selectedPlan === "featured") {
-      const featuredJob = {
-        ...newJob,
-        plan: "featured",
-        featuredStatus: "live",
-        paymentStatus: "pending",
-      };
-      setFeaturedJobs((prev) => [featuredJob, ...prev]);
-      window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
-    } else {
-      setJobs((prev) => [{ ...newJob, plan: "free" }, ...prev]);
-    }
-
-    setShowForm(false);
+    setPendingJob(buildJobFromForm());
+    setSelectedPlan("free");
+    setShowPlanModal(true);
   };
 
   const handlePlanContinue = () => {
-    if (!pendingJob) {
-      setShowPlanModal(false);
-      setShowForm(true);
-      return;
-    }
+    if (!pendingJob) return;
 
     if (selectedPlan === "featured") {
       const featuredJob = {
@@ -632,21 +614,6 @@ export default function App() {
           white-space: nowrap;
         }
         .btn:hover { transform: translateY(-1px); }
-        .btn-lightning {
-          width: 22px;
-          height: 22px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          margin-right: 7px;
-          color: currentColor;
-          flex-shrink: 0;
-        }
-        .btn-lightning svg {
-          width: 18px;
-          height: 18px;
-          display: block;
-        }
         .btn-primary {
           color: #fff;
           background: ${PALETTE.coral};
@@ -2397,20 +2364,8 @@ export default function App() {
           </div>
 
           <div className="top-actions">
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setSelectedPlan("free");
-                setPendingJob(null);
-                setShowPlanModal(true);
-              }}
-            >
-              <span className="btn-lightning" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path d="M13.2 2.8 5.5 13.1h5.8l-.6 8.1 7.8-11.3h-5.7l.4-7.1Z" fill="currentColor" />
-                </svg>
-              </span>
-              Hemen İlan Ver
+            <button className="btn btn-primary" onClick={() => setShowForm(true)}>
+              Ücretsiz İlan Ver
             </button>
             <a className="btn btn-secondary" href="#ilanlar">
               Hemen İş Bul
@@ -2598,19 +2553,15 @@ export default function App() {
                   className={`plan-card ${selectedPlan === "featured" ? "active" : ""}`}
                   onClick={() => setSelectedPlan("featured")}
                 >
-                  <span className="plan-kicker">Vitrin</span>
-                  <strong>Ücretli İlan</strong>
+                  <span className="plan-kicker">Ekiş Acil</span>
+                  <strong>Ekiş Acil İlanı</strong>
                   <small>Vitrin alanında daha görünür olur.</small>
                 </button>
               </div>
 
               <div className="modal-actions" style={{ marginTop: 18 }}>
                 <button className="btn btn-primary" type="button" onClick={handlePlanContinue}>
-                  {pendingJob
-                    ? selectedPlan === "featured"
-                      ? "Ödeme Adımına Geç"
-                      : "Ücretsiz Yayınla"
-                    : "Devam Et"}
+                  {selectedPlan === "featured" ? "Ödeme Adımına Geç" : "Ücretsiz Yayınla"}
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
                   Geri
