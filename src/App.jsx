@@ -1448,13 +1448,26 @@ export default function App() {
 
   const validateForm = () => {
     const nextErrors = {};
+
     if (!formData.company.trim()) nextErrors.company = "Firma adı zorunludur.";
     if (!formData.title.trim()) nextErrors.title = "İlan başlığı zorunludur.";
     if (!formData.city.trim()) nextErrors.city = "Şehir / konum zorunludur.";
     if (!formData.workAddress.trim()) nextErrors.workAddress = "İş adresi / buluşma noktası zorunludur.";
-    if (!formData.contactPhone.trim()) nextErrors.contactPhone = "Telefon / WhatsApp zorunludur.";
+
+    const phoneDigits = formData.contactPhone.replace(/\D/g, "");
+    const invalidRepeatingPhone = /^(\d)\1+$/.test(phoneDigits);
+
+    if (!formData.contactPhone.trim()) {
+      nextErrors.contactPhone = "Telefon numarası zorunludur.";
+    } else if (phoneDigits.length < 10 || phoneDigits.length > 11) {
+      nextErrors.contactPhone = "Geçerli bir telefon numarası giriniz.";
+    } else if (invalidRepeatingPhone || phoneDigits === "1234567890" || phoneDigits === "12345678901") {
+      nextErrors.contactPhone = "Lütfen gerçek bir telefon numarası giriniz.";
+    }
+
     if (!formData.salary.trim()) nextErrors.salary = "Ücret bilgisi zorunludur.";
     if (!formData.description.trim()) nextErrors.description = "İş açıklaması zorunludur.";
+
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
