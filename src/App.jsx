@@ -249,7 +249,101 @@ function CategoryIcon({ job }) {
   const key = getJobVisualKey(job);
 
   if (key === "delivery") {
-    return (
+    const footerInfoContent = {
+    about: {
+      title: "Hakkımızda",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan modern bir ilan platformudur.",
+        },
+        {
+          type: "p",
+          text: "Amacımız, klasik kariyer sitelerinden farklı olarak hızlı işe alım süreçlerini kolaylaştırmak ve kısa süreli, vardiyalı, ek iş ve dönemsel personel ihtiyaçlarını tek bir güvenilir platformda toplamaktır.",
+        },
+        {
+          type: "p",
+          text: "Ekiş üzerinde yayınlanan ilanlar; mağaza, kafe, organizasyon, kurye, depo, etkinlik, satış destek, dönemsel personel ve benzeri birçok sektörü kapsar.",
+        },
+        {
+          type: "note",
+          text: "Ekiş yalnızca ilan ve iletişim altyapısını sağlar. İşe alım süreci, görüşmeler ve çalışma koşulları işveren ile aday arasında yürütülür.",
+        },
+      ],
+    },
+    terms: {
+      title: "Kullanım Şartları",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş platformunu kullanan tüm kullanıcılar aşağıdaki şartları kabul etmiş sayılır:",
+        },
+        {
+          type: "list",
+          items: [
+            "Yayınlanan ilan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+            "Yanıltıcı, sahte, eksik veya hukuka aykırı ilanlar yayınlanamaz.",
+            "Kullanıcılar yalnızca yasal ve etik kurallara uygun ilan yayınlayabilir.",
+            "Ekiş, gerekli gördüğü durumlarda ilanı yayından kaldırma hakkını saklı tutar.",
+            "Platform üzerinden gerçekleşen işe alım süreçlerinden doğabilecek anlaşmazlıklardan Ekiş doğrudan sorumlu değildir.",
+            "Ücretli Ekiş Acil ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Kullanıcılar iletişim bilgilerini doğru ve ulaşılabilir şekilde paylaşmakla yükümlüdür.",
+            "Sistem kötüye kullanımı, sahte ilan veya dolandırıcılık şüphesi durumunda erişim sınırlandırılabilir.",
+          ],
+        },
+      ],
+    },
+    privacy: {
+      title: "Gizlilik Politikası",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş, kullanıcı bilgilerinin gizliliğini önemser. Toplanan bilgiler yalnızca ilan yayınlama, kullanıcı iletişimi, ödeme işlemleri ve yasal yükümlülükler amacıyla kullanılır.",
+        },
+        {
+          type: "list",
+          items: [
+            "Ad soyad veya firma adı",
+            "Telefon numarası",
+            "E-posta adresi",
+            "İşveren iletişim bilgileri",
+            "Ücretli ilanlarda gerekli fatura bilgileri",
+          ],
+        },
+        {
+          type: "p",
+          text: "Kullanıcı verileri izinsiz şekilde üçüncü kişilerle paylaşılmaz. Yalnızca yasal zorunluluklar kapsamında resmi kurumlarla paylaşılabilir.",
+        },
+        {
+          type: "note",
+          text: "Ödeme işlemleri güvenli ödeme altyapıları üzerinden gerçekleştirilir. Kart bilgileri doğrudan ödeme sağlayıcısı tarafından işlenir; Ekiş bu bilgilere erişmez.",
+        },
+      ],
+    },
+    contact: {
+      title: "İletişim",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş ile iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek: destek@ekis.com",
+            "İş birliği / Kurumsal: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+  };
+
+  return (
       <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <path d="M18 39h24l5-12h7l4 12h-6" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
         <path d="M13 39h5l4-18h23" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
@@ -260,7 +354,101 @@ function CategoryIcon({ job }) {
   }
 
   if (key === "people") {
-    return (
+    const footerInfoContent = {
+    about: {
+      title: "Hakkımızda",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan modern bir ilan platformudur.",
+        },
+        {
+          type: "p",
+          text: "Amacımız, klasik kariyer sitelerinden farklı olarak hızlı işe alım süreçlerini kolaylaştırmak ve kısa süreli, vardiyalı, ek iş ve dönemsel personel ihtiyaçlarını tek bir güvenilir platformda toplamaktır.",
+        },
+        {
+          type: "p",
+          text: "Ekiş üzerinde yayınlanan ilanlar; mağaza, kafe, organizasyon, kurye, depo, etkinlik, satış destek, dönemsel personel ve benzeri birçok sektörü kapsar.",
+        },
+        {
+          type: "note",
+          text: "Ekiş yalnızca ilan ve iletişim altyapısını sağlar. İşe alım süreci, görüşmeler ve çalışma koşulları işveren ile aday arasında yürütülür.",
+        },
+      ],
+    },
+    terms: {
+      title: "Kullanım Şartları",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş platformunu kullanan tüm kullanıcılar aşağıdaki şartları kabul etmiş sayılır:",
+        },
+        {
+          type: "list",
+          items: [
+            "Yayınlanan ilan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+            "Yanıltıcı, sahte, eksik veya hukuka aykırı ilanlar yayınlanamaz.",
+            "Kullanıcılar yalnızca yasal ve etik kurallara uygun ilan yayınlayabilir.",
+            "Ekiş, gerekli gördüğü durumlarda ilanı yayından kaldırma hakkını saklı tutar.",
+            "Platform üzerinden gerçekleşen işe alım süreçlerinden doğabilecek anlaşmazlıklardan Ekiş doğrudan sorumlu değildir.",
+            "Ücretli Ekiş Acil ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Kullanıcılar iletişim bilgilerini doğru ve ulaşılabilir şekilde paylaşmakla yükümlüdür.",
+            "Sistem kötüye kullanımı, sahte ilan veya dolandırıcılık şüphesi durumunda erişim sınırlandırılabilir.",
+          ],
+        },
+      ],
+    },
+    privacy: {
+      title: "Gizlilik Politikası",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş, kullanıcı bilgilerinin gizliliğini önemser. Toplanan bilgiler yalnızca ilan yayınlama, kullanıcı iletişimi, ödeme işlemleri ve yasal yükümlülükler amacıyla kullanılır.",
+        },
+        {
+          type: "list",
+          items: [
+            "Ad soyad veya firma adı",
+            "Telefon numarası",
+            "E-posta adresi",
+            "İşveren iletişim bilgileri",
+            "Ücretli ilanlarda gerekli fatura bilgileri",
+          ],
+        },
+        {
+          type: "p",
+          text: "Kullanıcı verileri izinsiz şekilde üçüncü kişilerle paylaşılmaz. Yalnızca yasal zorunluluklar kapsamında resmi kurumlarla paylaşılabilir.",
+        },
+        {
+          type: "note",
+          text: "Ödeme işlemleri güvenli ödeme altyapıları üzerinden gerçekleştirilir. Kart bilgileri doğrudan ödeme sağlayıcısı tarafından işlenir; Ekiş bu bilgilere erişmez.",
+        },
+      ],
+    },
+    contact: {
+      title: "İletişim",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş ile iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek: destek@ekis.com",
+            "İş birliği / Kurumsal: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+  };
+
+  return (
       <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <circle cx="32" cy="22" r="8" stroke="currentColor" strokeWidth="4" />
         <circle cx="18" cy="28" r="6" stroke="currentColor" strokeWidth="4" />
@@ -273,7 +461,101 @@ function CategoryIcon({ job }) {
   }
 
   if (key === "service") {
-    return (
+    const footerInfoContent = {
+    about: {
+      title: "Hakkımızda",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan modern bir ilan platformudur.",
+        },
+        {
+          type: "p",
+          text: "Amacımız, klasik kariyer sitelerinden farklı olarak hızlı işe alım süreçlerini kolaylaştırmak ve kısa süreli, vardiyalı, ek iş ve dönemsel personel ihtiyaçlarını tek bir güvenilir platformda toplamaktır.",
+        },
+        {
+          type: "p",
+          text: "Ekiş üzerinde yayınlanan ilanlar; mağaza, kafe, organizasyon, kurye, depo, etkinlik, satış destek, dönemsel personel ve benzeri birçok sektörü kapsar.",
+        },
+        {
+          type: "note",
+          text: "Ekiş yalnızca ilan ve iletişim altyapısını sağlar. İşe alım süreci, görüşmeler ve çalışma koşulları işveren ile aday arasında yürütülür.",
+        },
+      ],
+    },
+    terms: {
+      title: "Kullanım Şartları",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş platformunu kullanan tüm kullanıcılar aşağıdaki şartları kabul etmiş sayılır:",
+        },
+        {
+          type: "list",
+          items: [
+            "Yayınlanan ilan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+            "Yanıltıcı, sahte, eksik veya hukuka aykırı ilanlar yayınlanamaz.",
+            "Kullanıcılar yalnızca yasal ve etik kurallara uygun ilan yayınlayabilir.",
+            "Ekiş, gerekli gördüğü durumlarda ilanı yayından kaldırma hakkını saklı tutar.",
+            "Platform üzerinden gerçekleşen işe alım süreçlerinden doğabilecek anlaşmazlıklardan Ekiş doğrudan sorumlu değildir.",
+            "Ücretli Ekiş Acil ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Kullanıcılar iletişim bilgilerini doğru ve ulaşılabilir şekilde paylaşmakla yükümlüdür.",
+            "Sistem kötüye kullanımı, sahte ilan veya dolandırıcılık şüphesi durumunda erişim sınırlandırılabilir.",
+          ],
+        },
+      ],
+    },
+    privacy: {
+      title: "Gizlilik Politikası",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş, kullanıcı bilgilerinin gizliliğini önemser. Toplanan bilgiler yalnızca ilan yayınlama, kullanıcı iletişimi, ödeme işlemleri ve yasal yükümlülükler amacıyla kullanılır.",
+        },
+        {
+          type: "list",
+          items: [
+            "Ad soyad veya firma adı",
+            "Telefon numarası",
+            "E-posta adresi",
+            "İşveren iletişim bilgileri",
+            "Ücretli ilanlarda gerekli fatura bilgileri",
+          ],
+        },
+        {
+          type: "p",
+          text: "Kullanıcı verileri izinsiz şekilde üçüncü kişilerle paylaşılmaz. Yalnızca yasal zorunluluklar kapsamında resmi kurumlarla paylaşılabilir.",
+        },
+        {
+          type: "note",
+          text: "Ödeme işlemleri güvenli ödeme altyapıları üzerinden gerçekleştirilir. Kart bilgileri doğrudan ödeme sağlayıcısı tarafından işlenir; Ekiş bu bilgilere erişmez.",
+        },
+      ],
+    },
+    contact: {
+      title: "İletişim",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş ile iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek: destek@ekis.com",
+            "İş birliği / Kurumsal: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+  };
+
+  return (
       <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <path d="M14 39c1-12 8-21 18-21s17 9 18 21" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
         <path d="M10 43h44" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
@@ -284,7 +566,101 @@ function CategoryIcon({ job }) {
   }
 
   if (key === "box") {
-    return (
+    const footerInfoContent = {
+    about: {
+      title: "Hakkımızda",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan modern bir ilan platformudur.",
+        },
+        {
+          type: "p",
+          text: "Amacımız, klasik kariyer sitelerinden farklı olarak hızlı işe alım süreçlerini kolaylaştırmak ve kısa süreli, vardiyalı, ek iş ve dönemsel personel ihtiyaçlarını tek bir güvenilir platformda toplamaktır.",
+        },
+        {
+          type: "p",
+          text: "Ekiş üzerinde yayınlanan ilanlar; mağaza, kafe, organizasyon, kurye, depo, etkinlik, satış destek, dönemsel personel ve benzeri birçok sektörü kapsar.",
+        },
+        {
+          type: "note",
+          text: "Ekiş yalnızca ilan ve iletişim altyapısını sağlar. İşe alım süreci, görüşmeler ve çalışma koşulları işveren ile aday arasında yürütülür.",
+        },
+      ],
+    },
+    terms: {
+      title: "Kullanım Şartları",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş platformunu kullanan tüm kullanıcılar aşağıdaki şartları kabul etmiş sayılır:",
+        },
+        {
+          type: "list",
+          items: [
+            "Yayınlanan ilan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+            "Yanıltıcı, sahte, eksik veya hukuka aykırı ilanlar yayınlanamaz.",
+            "Kullanıcılar yalnızca yasal ve etik kurallara uygun ilan yayınlayabilir.",
+            "Ekiş, gerekli gördüğü durumlarda ilanı yayından kaldırma hakkını saklı tutar.",
+            "Platform üzerinden gerçekleşen işe alım süreçlerinden doğabilecek anlaşmazlıklardan Ekiş doğrudan sorumlu değildir.",
+            "Ücretli Ekiş Acil ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Kullanıcılar iletişim bilgilerini doğru ve ulaşılabilir şekilde paylaşmakla yükümlüdür.",
+            "Sistem kötüye kullanımı, sahte ilan veya dolandırıcılık şüphesi durumunda erişim sınırlandırılabilir.",
+          ],
+        },
+      ],
+    },
+    privacy: {
+      title: "Gizlilik Politikası",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş, kullanıcı bilgilerinin gizliliğini önemser. Toplanan bilgiler yalnızca ilan yayınlama, kullanıcı iletişimi, ödeme işlemleri ve yasal yükümlülükler amacıyla kullanılır.",
+        },
+        {
+          type: "list",
+          items: [
+            "Ad soyad veya firma adı",
+            "Telefon numarası",
+            "E-posta adresi",
+            "İşveren iletişim bilgileri",
+            "Ücretli ilanlarda gerekli fatura bilgileri",
+          ],
+        },
+        {
+          type: "p",
+          text: "Kullanıcı verileri izinsiz şekilde üçüncü kişilerle paylaşılmaz. Yalnızca yasal zorunluluklar kapsamında resmi kurumlarla paylaşılabilir.",
+        },
+        {
+          type: "note",
+          text: "Ödeme işlemleri güvenli ödeme altyapıları üzerinden gerçekleştirilir. Kart bilgileri doğrudan ödeme sağlayıcısı tarafından işlenir; Ekiş bu bilgilere erişmez.",
+        },
+      ],
+    },
+    contact: {
+      title: "İletişim",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş ile iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek: destek@ekis.com",
+            "İş birliği / Kurumsal: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+  };
+
+  return (
       <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <path d="M14 22l18-9 18 9v21l-18 9-18-9V22Z" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
         <path d="M14 22l18 9 18-9" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
@@ -294,7 +670,101 @@ function CategoryIcon({ job }) {
   }
 
   if (key === "store") {
-    return (
+    const footerInfoContent = {
+    about: {
+      title: "Hakkımızda",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan modern bir ilan platformudur.",
+        },
+        {
+          type: "p",
+          text: "Amacımız, klasik kariyer sitelerinden farklı olarak hızlı işe alım süreçlerini kolaylaştırmak ve kısa süreli, vardiyalı, ek iş ve dönemsel personel ihtiyaçlarını tek bir güvenilir platformda toplamaktır.",
+        },
+        {
+          type: "p",
+          text: "Ekiş üzerinde yayınlanan ilanlar; mağaza, kafe, organizasyon, kurye, depo, etkinlik, satış destek, dönemsel personel ve benzeri birçok sektörü kapsar.",
+        },
+        {
+          type: "note",
+          text: "Ekiş yalnızca ilan ve iletişim altyapısını sağlar. İşe alım süreci, görüşmeler ve çalışma koşulları işveren ile aday arasında yürütülür.",
+        },
+      ],
+    },
+    terms: {
+      title: "Kullanım Şartları",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş platformunu kullanan tüm kullanıcılar aşağıdaki şartları kabul etmiş sayılır:",
+        },
+        {
+          type: "list",
+          items: [
+            "Yayınlanan ilan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+            "Yanıltıcı, sahte, eksik veya hukuka aykırı ilanlar yayınlanamaz.",
+            "Kullanıcılar yalnızca yasal ve etik kurallara uygun ilan yayınlayabilir.",
+            "Ekiş, gerekli gördüğü durumlarda ilanı yayından kaldırma hakkını saklı tutar.",
+            "Platform üzerinden gerçekleşen işe alım süreçlerinden doğabilecek anlaşmazlıklardan Ekiş doğrudan sorumlu değildir.",
+            "Ücretli Ekiş Acil ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Kullanıcılar iletişim bilgilerini doğru ve ulaşılabilir şekilde paylaşmakla yükümlüdür.",
+            "Sistem kötüye kullanımı, sahte ilan veya dolandırıcılık şüphesi durumunda erişim sınırlandırılabilir.",
+          ],
+        },
+      ],
+    },
+    privacy: {
+      title: "Gizlilik Politikası",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş, kullanıcı bilgilerinin gizliliğini önemser. Toplanan bilgiler yalnızca ilan yayınlama, kullanıcı iletişimi, ödeme işlemleri ve yasal yükümlülükler amacıyla kullanılır.",
+        },
+        {
+          type: "list",
+          items: [
+            "Ad soyad veya firma adı",
+            "Telefon numarası",
+            "E-posta adresi",
+            "İşveren iletişim bilgileri",
+            "Ücretli ilanlarda gerekli fatura bilgileri",
+          ],
+        },
+        {
+          type: "p",
+          text: "Kullanıcı verileri izinsiz şekilde üçüncü kişilerle paylaşılmaz. Yalnızca yasal zorunluluklar kapsamında resmi kurumlarla paylaşılabilir.",
+        },
+        {
+          type: "note",
+          text: "Ödeme işlemleri güvenli ödeme altyapıları üzerinden gerçekleştirilir. Kart bilgileri doğrudan ödeme sağlayıcısı tarafından işlenir; Ekiş bu bilgilere erişmez.",
+        },
+      ],
+    },
+    contact: {
+      title: "İletişim",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş ile iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek: destek@ekis.com",
+            "İş birliği / Kurumsal: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+  };
+
+  return (
       <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <path d="M14 26h36l-4-11H18l-4 11Z" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
         <path d="M18 30v20h28V30" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
@@ -302,6 +772,100 @@ function CategoryIcon({ job }) {
       </svg>
     );
   }
+
+  const footerInfoContent = {
+    about: {
+      title: "Hakkımızda",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan modern bir ilan platformudur.",
+        },
+        {
+          type: "p",
+          text: "Amacımız, klasik kariyer sitelerinden farklı olarak hızlı işe alım süreçlerini kolaylaştırmak ve kısa süreli, vardiyalı, ek iş ve dönemsel personel ihtiyaçlarını tek bir güvenilir platformda toplamaktır.",
+        },
+        {
+          type: "p",
+          text: "Ekiş üzerinde yayınlanan ilanlar; mağaza, kafe, organizasyon, kurye, depo, etkinlik, satış destek, dönemsel personel ve benzeri birçok sektörü kapsar.",
+        },
+        {
+          type: "note",
+          text: "Ekiş yalnızca ilan ve iletişim altyapısını sağlar. İşe alım süreci, görüşmeler ve çalışma koşulları işveren ile aday arasında yürütülür.",
+        },
+      ],
+    },
+    terms: {
+      title: "Kullanım Şartları",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş platformunu kullanan tüm kullanıcılar aşağıdaki şartları kabul etmiş sayılır:",
+        },
+        {
+          type: "list",
+          items: [
+            "Yayınlanan ilan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+            "Yanıltıcı, sahte, eksik veya hukuka aykırı ilanlar yayınlanamaz.",
+            "Kullanıcılar yalnızca yasal ve etik kurallara uygun ilan yayınlayabilir.",
+            "Ekiş, gerekli gördüğü durumlarda ilanı yayından kaldırma hakkını saklı tutar.",
+            "Platform üzerinden gerçekleşen işe alım süreçlerinden doğabilecek anlaşmazlıklardan Ekiş doğrudan sorumlu değildir.",
+            "Ücretli Ekiş Acil ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Kullanıcılar iletişim bilgilerini doğru ve ulaşılabilir şekilde paylaşmakla yükümlüdür.",
+            "Sistem kötüye kullanımı, sahte ilan veya dolandırıcılık şüphesi durumunda erişim sınırlandırılabilir.",
+          ],
+        },
+      ],
+    },
+    privacy: {
+      title: "Gizlilik Politikası",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş, kullanıcı bilgilerinin gizliliğini önemser. Toplanan bilgiler yalnızca ilan yayınlama, kullanıcı iletişimi, ödeme işlemleri ve yasal yükümlülükler amacıyla kullanılır.",
+        },
+        {
+          type: "list",
+          items: [
+            "Ad soyad veya firma adı",
+            "Telefon numarası",
+            "E-posta adresi",
+            "İşveren iletişim bilgileri",
+            "Ücretli ilanlarda gerekli fatura bilgileri",
+          ],
+        },
+        {
+          type: "p",
+          text: "Kullanıcı verileri izinsiz şekilde üçüncü kişilerle paylaşılmaz. Yalnızca yasal zorunluluklar kapsamında resmi kurumlarla paylaşılabilir.",
+        },
+        {
+          type: "note",
+          text: "Ödeme işlemleri güvenli ödeme altyapıları üzerinden gerçekleştirilir. Kart bilgileri doğrudan ödeme sağlayıcısı tarafından işlenir; Ekiş bu bilgilere erişmez.",
+        },
+      ],
+    },
+    contact: {
+      title: "İletişim",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş ile iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek: destek@ekis.com",
+            "İş birliği / Kurumsal: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+  };
 
   return (
     <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
@@ -335,6 +899,7 @@ export default function App() {
   const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
   const [selectedJob, setSelectedJob] = useState(null);
   const [errors, setErrors] = useState({});
+  const [infoModal, setInfoModal] = useState(null);
   const [formData, setFormData] = useState({
     company: "",
     title: "",
@@ -530,6 +1095,100 @@ export default function App() {
 
   const previewSalary = formatSalaryPreview(formData.workType, formData.salary);
   const totalCount = filteredFeaturedJobs.length + filteredJobs.length;
+
+  const footerInfoContent = {
+    about: {
+      title: "Hakkımızda",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan modern bir ilan platformudur.",
+        },
+        {
+          type: "p",
+          text: "Amacımız, klasik kariyer sitelerinden farklı olarak hızlı işe alım süreçlerini kolaylaştırmak ve kısa süreli, vardiyalı, ek iş ve dönemsel personel ihtiyaçlarını tek bir güvenilir platformda toplamaktır.",
+        },
+        {
+          type: "p",
+          text: "Ekiş üzerinde yayınlanan ilanlar; mağaza, kafe, organizasyon, kurye, depo, etkinlik, satış destek, dönemsel personel ve benzeri birçok sektörü kapsar.",
+        },
+        {
+          type: "note",
+          text: "Ekiş yalnızca ilan ve iletişim altyapısını sağlar. İşe alım süreci, görüşmeler ve çalışma koşulları işveren ile aday arasında yürütülür.",
+        },
+      ],
+    },
+    terms: {
+      title: "Kullanım Şartları",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş platformunu kullanan tüm kullanıcılar aşağıdaki şartları kabul etmiş sayılır:",
+        },
+        {
+          type: "list",
+          items: [
+            "Yayınlanan ilan bilgilerinin doğruluğu ilan sahibi işverene aittir.",
+            "Yanıltıcı, sahte, eksik veya hukuka aykırı ilanlar yayınlanamaz.",
+            "Kullanıcılar yalnızca yasal ve etik kurallara uygun ilan yayınlayabilir.",
+            "Ekiş, gerekli gördüğü durumlarda ilanı yayından kaldırma hakkını saklı tutar.",
+            "Platform üzerinden gerçekleşen işe alım süreçlerinden doğabilecek anlaşmazlıklardan Ekiş doğrudan sorumlu değildir.",
+            "Ücretli Ekiş Acil ilanlarda ödeme tamamlandıktan sonra yayın süreci başlatılır.",
+            "Kullanıcılar iletişim bilgilerini doğru ve ulaşılabilir şekilde paylaşmakla yükümlüdür.",
+            "Sistem kötüye kullanımı, sahte ilan veya dolandırıcılık şüphesi durumunda erişim sınırlandırılabilir.",
+          ],
+        },
+      ],
+    },
+    privacy: {
+      title: "Gizlilik Politikası",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş, kullanıcı bilgilerinin gizliliğini önemser. Toplanan bilgiler yalnızca ilan yayınlama, kullanıcı iletişimi, ödeme işlemleri ve yasal yükümlülükler amacıyla kullanılır.",
+        },
+        {
+          type: "list",
+          items: [
+            "Ad soyad veya firma adı",
+            "Telefon numarası",
+            "E-posta adresi",
+            "İşveren iletişim bilgileri",
+            "Ücretli ilanlarda gerekli fatura bilgileri",
+          ],
+        },
+        {
+          type: "p",
+          text: "Kullanıcı verileri izinsiz şekilde üçüncü kişilerle paylaşılmaz. Yalnızca yasal zorunluluklar kapsamında resmi kurumlarla paylaşılabilir.",
+        },
+        {
+          type: "note",
+          text: "Ödeme işlemleri güvenli ödeme altyapıları üzerinden gerçekleştirilir. Kart bilgileri doğrudan ödeme sağlayıcısı tarafından işlenir; Ekiş bu bilgilere erişmez.",
+        },
+      ],
+    },
+    contact: {
+      title: "İletişim",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş ile iletişime geçmek için aşağıdaki kanalları kullanabilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Destek: destek@ekis.com",
+            "İş birliği / Kurumsal: iletisim@ekis.com",
+            "Destek saatleri: Hafta içi 09:00 – 18:00",
+          ],
+        },
+        {
+          type: "note",
+          text: "Resmi talepler ve iş ortaklığı başvuruları için e-posta üzerinden iletişim kurulması önerilir.",
+        },
+      ],
+    },
+  };
 
   return (
     <div className="app-shell">
@@ -1652,6 +2311,86 @@ export default function App() {
           text-decoration: none;
           font-size: 13px;
           font-weight: 700;
+        }
+
+        .footer-bottom-link {
+          border: none;
+          background: transparent;
+          padding: 0;
+          cursor: pointer;
+          font-family: inherit;
+        }
+        .info-modal {
+          width: min(760px, calc(100vw - 28px));
+          max-height: min(86vh, 820px);
+          background: linear-gradient(180deg, #fff 0%, #fcfcfd 100%);
+          border-radius: 28px;
+          border: 1px solid rgba(60,74,95,0.10);
+          box-shadow: 0 34px 80px rgba(35,48,68,0.26);
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+        .info-modal-head {
+          position: relative;
+          padding: 24px 28px 18px;
+          background:
+            radial-gradient(circle at top right, rgba(228,93,80,0.13), transparent 32%),
+            linear-gradient(180deg, #fff 0%, #fff7f4 100%);
+          border-bottom: 1px solid rgba(228,93,80,0.12);
+        }
+        .info-modal-title {
+          margin: 0;
+          color: ${PALETTE.slate};
+          font-size: clamp(24px, 3vw, 34px);
+          line-height: 1.1;
+          font-weight: 950;
+          letter-spacing: -0.045em;
+          padding-right: 52px;
+        }
+        .info-modal-close {
+          position: absolute;
+          top: 18px;
+          right: 18px;
+          width: 40px;
+          height: 40px;
+          border-radius: 999px;
+          border: 1px solid rgba(60,74,95,0.10);
+          background: #fff;
+          color: ${PALETTE.slate};
+          font-size: 24px;
+          font-weight: 900;
+          line-height: 1;
+          cursor: pointer;
+          box-shadow: 0 10px 24px rgba(60,74,95,0.08);
+        }
+        .info-modal-body {
+          padding: 24px 28px 28px;
+          overflow-y: auto;
+          color: ${PALETTE.text};
+          font-size: 15px;
+          line-height: 1.75;
+        }
+        .info-modal-body p {
+          margin: 0 0 14px;
+          color: ${PALETTE.text};
+        }
+        .info-modal-body ul {
+          margin: 8px 0 18px;
+          padding-left: 20px;
+          color: ${PALETTE.text};
+        }
+        .info-modal-body li {
+          margin-bottom: 8px;
+        }
+        .info-modal-note {
+          margin-top: 18px;
+          padding: 14px 16px;
+          border-radius: 18px;
+          background: rgba(88,173,173,0.10);
+          border: 1px solid rgba(88,173,173,0.14);
+          color: ${PALETTE.slate};
+          font-weight: 800;
         }
 
 
@@ -2906,6 +3645,40 @@ export default function App() {
           </div>
         </section>
 
+        {infoModal && (
+          <div className="post-modal-backdrop" onClick={() => setInfoModal(null)}>
+            <div className="info-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="info-modal-head">
+                <h3 className="info-modal-title">{footerInfoContent[infoModal].title}</h3>
+                <button className="info-modal-close" type="button" onClick={() => setInfoModal(null)}>×</button>
+              </div>
+              <div className="info-modal-body">
+                {footerInfoContent[infoModal].blocks.map((block, index) => {
+                  if (block.type === "list") {
+                    return (
+                      <ul key={index}>
+                        {block.items.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    );
+                  }
+
+                  if (block.type === "note") {
+                    return (
+                      <div className="info-modal-note" key={index}>
+                        {block.text}
+                      </div>
+                    );
+                  }
+
+                  return <p key={index}>{block.text}</p>;
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
         <footer className="site-footer">
           <div className="site-footer-topline" />
           <div className="site-footer-inner">
@@ -2973,10 +3746,10 @@ export default function App() {
 
             <div className="footer-bottom">
               <div className="footer-bottom-links">
-                <a className="footer-bottom-link" href="#">Hakkımızda</a>
-                <a className="footer-bottom-link" href="#">Kullanım şartları</a>
-                <a className="footer-bottom-link" href="#">Gizlilik</a>
-                <a className="footer-bottom-link" href="#">İletişim</a>
+                <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("about")}>Hakkımızda</button>
+                <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("terms")}>Kullanım şartları</button>
+                <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("privacy")}>Gizlilik</button>
+                <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("contact")}>İletişim</button>
               </div>
               <div className="footer-copy">Ekiş © 2026</div>
             </div>
