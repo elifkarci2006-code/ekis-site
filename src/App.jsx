@@ -214,6 +214,34 @@ function getDaysAgoLabel(createdAt) {
   return `${diffDays} gündür yayında`;
 }
 
+function getJobDurationDays(job) {
+  return job.plan === "featured" || job.featuredStatus === "live" ? 15 : 30;
+}
+
+function getJobExpireDate(job) {
+  const created = new Date(job.createdAt);
+  const duration = Number(job.durationDays || getJobDurationDays(job));
+  return new Date(created.getTime() + duration * 24 * 60 * 60 * 1000);
+}
+
+function getDaysLeftLabel(job) {
+  const diffMs = getJobExpireDate(job) - new Date();
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays <= 0) return "Süresi doldu";
+  if (diffDays === 1) return "1 gün kaldı";
+  return `${diffDays} gün kaldı`;
+}
+
+function isJobActive(job) {
+  return getJobExpireDate(job) > new Date() && job.status !== "passive";
+}
+
+function generateCaptchaQuestion() {
+  const a = Math.floor(Math.random() * 7) + 3;
+  const b = Math.floor(Math.random() * 6) + 2;
+  return { question: `${a} + ${b}`, answer: String(a + b) };
+}
+
 function inferCategory(title) {
   const lower = title.toLocaleLowerCase("tr-TR");
   if (lower.includes("garson") || lower.includes("barista") || lower.includes("kafe")) return "Kafe & Restoran";
@@ -1388,6 +1416,8 @@ export default function App() {
   const [showForm, setShowForm] = useState(false);
   const [showPlanModal, setShowPlanModal] = useState(false);
   const [showFeaturedList, setShowFeaturedList] = useState(false);
+  const [adminFilter, setAdminFilter] = useState("all");
+  const [adminSearch, setAdminSearch] = useState("");
   const [selectedPlan, setSelectedPlan] = useState("free");
   const [pendingJob, setPendingJob] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
@@ -1400,6 +1430,7 @@ export default function App() {
   const [errors, setErrors] = useState({});
   const [infoModal, setInfoModal] = useState(null);
   const [isAdminRoute, setIsAdminRoute] = useState(false);
+  const [captcha, setCaptcha] = useState(() => generateCaptchaQuestion());
   const [formData, setFormData] = useState({
     company: "",
     title: "",
@@ -1410,6 +1441,7 @@ export default function App() {
     workAddress: "",
     contactName: "",
     contactPhone: "",
+    captchaAnswer: "",
   });
 
   useEffect(() => {
@@ -1464,7 +1496,9 @@ export default function App() {
         workAddress: "",
         contactName: "",
         contactPhone: "",
+        captchaAnswer: "",
       });
+      setCaptcha(generateCaptchaQuestion());
     }
   }, [showForm]);
 
@@ -1478,6 +1512,10 @@ export default function App() {
 
     const phoneDigits = formData.contactPhone.replace(/\D/g, "");
     const invalidRepeatingPhone = /^(\d)\1+$/.test(phoneDigits);
+    const allJobsForSpamCheck = [...jobs, ...featuredJobs];
+    const duplicatePhoneCount = allJobsForSpamCheck.filter(
+      (job) => String(job.contactPhone || "").replace(/\D/g, "") === phoneDigits
+    ).length;
 
     if (!formData.contactPhone.trim()) {
       nextErrors.contactPhone = "Telefon numarası zorunludur.";
@@ -1485,10 +1523,18 @@ export default function App() {
       nextErrors.contactPhone = "Geçerli bir telefon numarası giriniz.";
     } else if (invalidRepeatingPhone || phoneDigits === "1234567890" || phoneDigits === "12345678901") {
       nextErrors.contactPhone = "Lütfen gerçek bir telefon numarası giriniz.";
+    } else if (duplicatePhoneCount >= 3) {
+      nextErrors.contactPhone = "Bu numara ile çok fazla ilan girilmiş. Lütfen farklı bir numara kullanın.";
     }
 
     if (!formData.salary.trim()) nextErrors.salary = "Ücret bilgisi zorunludur.";
     if (!formData.description.trim()) nextErrors.description = "İş açıklaması zorunludur.";
+
+    if (!formData.captchaAnswer.trim()) {
+      nextErrors.captchaAnswer = "Güvenlik sorusunu cevaplayınız.";
+    } else if (formData.captchaAnswer.trim() !== captcha.answer) {
+      nextErrors.captchaAnswer = "Güvenlik sorusu hatalı cevaplandı.";
+    }
 
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -1508,6 +1554,13 @@ export default function App() {
       const cleaned = value.replace(/[^0-9+\s()-]/g, "");
       setFormData((prev) => ({ ...prev, contactPhone: cleaned }));
       setErrors((prev) => ({ ...prev, contactPhone: "" }));
+      return;
+    }
+
+    if (name === "captchaAnswer") {
+      const onlyNumbers = value.replace(/[^0-9]/g, "");
+      setFormData((prev) => ({ ...prev, captchaAnswer: onlyNumbers }));
+      setErrors((prev) => ({ ...prev, captchaAnswer: "" }));
       return;
     }
 
@@ -1549,6 +1602,8 @@ export default function App() {
     workAddress: formData.workAddress.trim(),
     contactName: formData.contactName.trim(),
     contactPhone: formData.contactPhone.trim(),
+    status: "active",
+    durationDays: selectedPlan === "featured" ? 15 : 30,
     createdAt: new Date().toISOString(),
   });
 
@@ -1568,11 +1623,13 @@ export default function App() {
         plan: "featured",
         featuredStatus: "live",
         paymentStatus: "pending",
+        durationDays: 15,
+        status: "active",
       };
       setFeaturedJobs((prev) => [featuredJob, ...prev]);
       window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     } else {
-      setJobs((prev) => [{ ...pendingJob, plan: "free" }, ...prev]);
+      setJobs((prev) => [{ ...pendingJob, plan: "free", durationDays: 30, status: "active" }, ...prev]);
     }
 
     setShowPlanModal(false);
@@ -1582,6 +1639,7 @@ export default function App() {
 
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
+      if (!isJobActive(job)) return false;
       const text = `${job.title} ${job.company} ${job.location} ${job.category}`.toLowerCase();
       const matchesSearch = text.includes(submittedSearch.toLowerCase());
       const matchesCategory = submittedCategory === "Tümü" ? true : job.category === submittedCategory;
@@ -1617,6 +1675,7 @@ export default function App() {
     const normalizedSearch = submittedSearch.toLowerCase();
 
     const baseFiltered = featuredJobs.filter((job) => {
+      if (!isJobActive(job)) return false;
       const searchable = `${job.title} ${job.company} ${job.location} ${job.category || ""}`.toLowerCase();
       const matchesSearch = searchable.includes(normalizedSearch);
       const matchesCategory =
@@ -1657,6 +1716,26 @@ export default function App() {
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
   const visibleFeaturedJobs = filteredFeaturedJobs.slice(0, 6);
+  const adminJobs = useMemo(() => {
+    const all = [
+      ...featuredJobs.map((job) => ({ ...job, adminStatus: "Ekiş Acil" })),
+      ...jobs.map((job) => ({ ...job, adminStatus: "Standart" })),
+    ];
+
+    return all.filter((job) => {
+      const searchText = `${job.title} ${job.company} ${job.location} ${job.contactPhone || ""}`.toLocaleLowerCase("tr-TR");
+      const matchesSearch = searchText.includes(adminSearch.toLocaleLowerCase("tr-TR"));
+      const active = isJobActive(job);
+
+      if (adminFilter === "active") return matchesSearch && active;
+      if (adminFilter === "expired") return matchesSearch && !active;
+      if (adminFilter === "featured") return matchesSearch && job.adminStatus === "Ekiş Acil";
+      if (adminFilter === "standard") return matchesSearch && job.adminStatus === "Standart";
+
+      return matchesSearch;
+    });
+  }, [jobs, featuredJobs, adminFilter, adminSearch]);
+
   const previewSalary = formatSalaryPreview(formData.workType, formData.salary);
   const totalCount = filteredFeaturedJobs.length + filteredJobs.length;
 
@@ -4080,6 +4159,56 @@ export default function App() {
           flex-wrap: wrap;
           gap: 7px;
         }
+        .admin-tools {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 10px;
+          margin-bottom: 14px;
+        }
+        .admin-tools input,
+        .admin-tools select {
+          height: 44px;
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          color: ${PALETTE.slate};
+          border-radius: 14px;
+          padding: 0 14px;
+          font-size: 13px;
+          font-weight: 850;
+          outline: none;
+        }
+        .admin-expired {
+          opacity: 0.68;
+          background: #f7f8fa;
+        }
+        .admin-status-line {
+          margin-top: 5px;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 900;
+        }
+        .captcha-box {
+          display: grid;
+          grid-template-columns: 1fr 1fr auto;
+          gap: 10px;
+          align-items: end;
+          grid-column: 1 / -1;
+          padding: 14px;
+          border-radius: 18px;
+          background: rgba(88,173,173,0.08);
+          border: 1px solid rgba(88,173,173,0.14);
+        }
+        .captcha-question {
+          height: 46px;
+          display: flex;
+          align-items: center;
+          padding: 0 14px;
+          border-radius: 14px;
+          background: #fff;
+          color: ${PALETTE.slate};
+          font-weight: 950;
+          border: 1px solid rgba(60,74,95,0.10);
+        }
         @media (max-width: 1000px) {
           .admin-compact-layout { grid-template-columns: 1fr; }
           .admin-side { position: static; }
@@ -4155,7 +4284,23 @@ export default function App() {
               <section className="admin-main-panel">
                 <div className="admin-main-head">
                   <h2>Tüm İlanlar</h2>
-                  <span className="admin-badge">{jobs.length + featuredJobs.length} kayıt</span>
+                  <span className="admin-badge">{adminJobs.length} kayıt</span>
+                </div>
+
+                <div className="admin-tools">
+                  <input
+                    type="text"
+                    placeholder="İlan, firma, şehir veya telefon ara..."
+                    value={adminSearch}
+                    onChange={(e) => setAdminSearch(e.target.value)}
+                  />
+                  <select value={adminFilter} onChange={(e) => setAdminFilter(e.target.value)}>
+                    <option value="all">Tümü</option>
+                    <option value="active">Aktif</option>
+                    <option value="expired">Süresi dolan</option>
+                    <option value="featured">Ekiş Acil</option>
+                    <option value="standard">Standart</option>
+                  </select>
                 </div>
 
                 <div className="admin-table">
@@ -4167,22 +4312,39 @@ export default function App() {
                     <div>İşlem</div>
                   </div>
 
-                  {[...featuredJobs.map((job) => ({ ...job, adminStatus: "Ekiş Acil" })), ...jobs.map((job) => ({ ...job, adminStatus: "Standart" }))].map((job) => (
-                    <article className="admin-table-row" key={`${job.adminStatus}-${job.id}`}>
+                  {adminJobs.length === 0 ? (
+                    <div className="admin-empty">Bu filtrelere uygun ilan yok.</div>
+                  ) : adminJobs.map((job) => (
+                    <article className={`admin-table-row ${!isJobActive(job) ? "admin-expired" : ""}`} key={`${job.adminStatus}-${job.id}`}>
                       <div className="admin-table-title">
                         <strong>{job.title}</strong>
                         <span>{job.company}</span>
+                        <div className="admin-status-line">{getDaysLeftLabel(job)}</div>
                       </div>
 
                       <div className="admin-table-cell">{job.location}</div>
                       <div className="admin-table-cell">{job.type}</div>
                       <div>
-                        <span className="admin-badge">{job.adminStatus}</span>
+                        <span className="admin-badge">{isJobActive(job) ? job.adminStatus : "Süresi doldu"}</span>
                       </div>
 
                       <div className="admin-table-actions">
                         <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
                           Detay
+                        </button>
+                        <button
+                          className="admin-mini-btn light"
+                          type="button"
+                          onClick={() => {
+                            const toggle = (item) => item.id === job.id ? { ...item, status: item.status === "passive" ? "active" : "passive" } : item;
+                            if (job.adminStatus === "Ekiş Acil") {
+                              setFeaturedJobs((prev) => prev.map(toggle));
+                            } else {
+                              setJobs((prev) => prev.map(toggle));
+                            }
+                          }}
+                        >
+                          {job.status === "passive" ? "Aktif Et" : "Pasif Yap"}
                         </button>
 
                         {job.adminStatus === "Ekiş Acil" ? (
@@ -4356,6 +4518,36 @@ export default function App() {
                     onChange={handleFormChange}
                   />
                   {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>}
+                </div>
+
+                <div className="captcha-box">
+                  <div className="post-field">
+                    <label>Güvenlik sorusu<span className="required-star">*</span></label>
+                    <div className="captcha-question">{captcha.question} = ?</div>
+                  </div>
+                  <div className="post-field">
+                    <label>Cevabınız<span className="required-star">*</span></label>
+                    <input
+                      className={errors.captchaAnswer ? "field-error" : ""}
+                      name="captchaAnswer"
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="Cevap"
+                      value={formData.captchaAnswer}
+                      onChange={handleFormChange}
+                    />
+                    {errors.captchaAnswer && <div className="error-text">{errors.captchaAnswer}</div>}
+                  </div>
+                  <button
+                    className="btn btn-secondary"
+                    type="button"
+                    onClick={() => {
+                      setCaptcha(generateCaptchaQuestion());
+                      setFormData((prev) => ({ ...prev, captchaAnswer: "" }));
+                    }}
+                  >
+                    Yenile
+                  </button>
                 </div>
 
                 <div className="post-field full">
