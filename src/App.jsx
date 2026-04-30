@@ -1426,6 +1426,7 @@ export default function App() {
   const [headerOpacity, setHeaderOpacity] = useState(1);
   const [jobs, setJobs] = useState(jobsSeed);
   const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
+  const [pendingJobs, setPendingJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [errors, setErrors] = useState({});
   const [infoModal, setInfoModal] = useState(null);
@@ -1512,7 +1513,7 @@ export default function App() {
 
     const phoneDigits = formData.contactPhone.replace(/\D/g, "");
     const invalidRepeatingPhone = /^(\d)\1+$/.test(phoneDigits);
-    const allJobsForSpamCheck = [...jobs, ...featuredJobs];
+    const allJobsForSpamCheck = [...jobs, ...featuredJobs, ...pendingJobs];
     const duplicatePhoneCount = allJobsForSpamCheck.filter(
       (job) => String(job.contactPhone || "").replace(/\D/g, "") === phoneDigits
     ).length;
@@ -1617,19 +1618,19 @@ export default function App() {
   const handlePlanContinue = () => {
     if (!pendingJob) return;
 
+    const reviewJob = {
+      ...pendingJob,
+      plan: selectedPlan === "featured" ? "featured" : "free",
+      durationDays: selectedPlan === "featured" ? 15 : 30,
+      status: "pending",
+      paymentStatus: selectedPlan === "featured" ? "pending" : "not_required",
+      submittedAt: new Date().toISOString(),
+    };
+
+    setPendingJobs((prev) => [reviewJob, ...prev]);
+
     if (selectedPlan === "featured") {
-      const featuredJob = {
-        ...pendingJob,
-        plan: "featured",
-        featuredStatus: "live",
-        paymentStatus: "pending",
-        durationDays: 15,
-        status: "active",
-      };
-      setFeaturedJobs((prev) => [featuredJob, ...prev]);
       window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
-    } else {
-      setJobs((prev) => [{ ...pendingJob, plan: "free", durationDays: 30, status: "active" }, ...prev]);
     }
 
     setShowPlanModal(false);
@@ -1716,8 +1717,31 @@ export default function App() {
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
   const visibleFeaturedJobs = filteredFeaturedJobs.slice(0, 6);
+  const approvePendingJob = (job) => {
+    const approvedJob = {
+      ...job,
+      status: "active",
+      approvedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      featuredStatus: job.plan === "featured" ? "live" : undefined,
+    };
+
+    setPendingJobs((prev) => prev.filter((item) => item.id !== job.id));
+
+    if (job.plan === "featured") {
+      setFeaturedJobs((prev) => [approvedJob, ...prev]);
+    } else {
+      setJobs((prev) => [approvedJob, ...prev]);
+    }
+  };
+
+  const rejectPendingJob = (jobId) => {
+    setPendingJobs((prev) => prev.filter((item) => item.id !== jobId));
+  };
+
   const adminJobs = useMemo(() => {
     const all = [
+      ...pendingJobs.map((job) => ({ ...job, adminStatus: "Onay Bekliyor" })),
       ...featuredJobs.map((job) => ({ ...job, adminStatus: "Ekiş Acil" })),
       ...jobs.map((job) => ({ ...job, adminStatus: "Standart" })),
     ];
@@ -1729,12 +1753,13 @@ export default function App() {
 
       if (adminFilter === "active") return matchesSearch && active;
       if (adminFilter === "expired") return matchesSearch && !active;
+      if (adminFilter === "pending") return matchesSearch && job.adminStatus === "Onay Bekliyor";
       if (adminFilter === "featured") return matchesSearch && job.adminStatus === "Ekiş Acil";
       if (adminFilter === "standard") return matchesSearch && job.adminStatus === "Standart";
 
       return matchesSearch;
     });
-  }, [jobs, featuredJobs, adminFilter, adminSearch]);
+  }, [jobs, featuredJobs, pendingJobs, adminFilter, adminSearch]);
 
   const previewSalary = formatSalaryPreview(formData.workType, formData.salary);
   const totalCount = filteredFeaturedJobs.length + filteredJobs.length;
@@ -4246,7 +4271,7 @@ export default function App() {
             <div className="admin-stats">
               <div className="admin-stat">
                 <span>Toplam ilan</span>
-                <strong>{jobs.length + featuredJobs.length}</strong>
+                <strong>{jobs.length + featuredJobs.length + pendingJobs.length}</strong>
               </div>
               <div className="admin-stat">
                 <span>Standart ilan</span>
@@ -4258,7 +4283,7 @@ export default function App() {
               </div>
               <div className="admin-stat">
                 <span>Bekleyen işlem</span>
-                <strong>0</strong>
+                <strong>{pendingJobs.length}</strong>
               </div>
             </div>
 
@@ -4267,7 +4292,10 @@ export default function App() {
                 <h2 className="admin-side-title">Hızlı İşlemler</h2>
                 <div className="admin-side-list">
                   <button className="admin-side-item" type="button">
-                    Toplam ilan <span>{jobs.length + featuredJobs.length}</span>
+                    Toplam ilan <span>{jobs.length + featuredJobs.length + pendingJobs.length}</span>
+                  </button>
+                  <button className="admin-side-item" type="button" onClick={() => setAdminFilter("pending")}>
+                    Onay bekleyen <span>{pendingJobs.length}</span>
                   </button>
                   <button className="admin-side-item" type="button">
                     Ekiş Acil <span>{featuredJobs.length}</span>
@@ -4296,6 +4324,7 @@ export default function App() {
                   />
                   <select value={adminFilter} onChange={(e) => setAdminFilter(e.target.value)}>
                     <option value="all">Tümü</option>
+                    <option value="pending">Onay bekleyen</option>
                     <option value="active">Aktif</option>
                     <option value="expired">Süresi dolan</option>
                     <option value="featured">Ekiş Acil</option>
@@ -4319,71 +4348,85 @@ export default function App() {
                       <div className="admin-table-title">
                         <strong>{job.title}</strong>
                         <span>{job.company}</span>
-                        <div className="admin-status-line">{getDaysLeftLabel(job)}</div>
+                        <div className="admin-status-line">{job.adminStatus === "Onay Bekliyor" ? "Admin onayı bekliyor" : getDaysLeftLabel(job)}</div>
                       </div>
 
                       <div className="admin-table-cell">{job.location}</div>
                       <div className="admin-table-cell">{job.type}</div>
                       <div>
-                        <span className="admin-badge">{isJobActive(job) ? job.adminStatus : "Süresi doldu"}</span>
+                        <span className="admin-badge">{job.adminStatus === "Onay Bekliyor" ? "Onay bekliyor" : isJobActive(job) ? job.adminStatus : "Süresi doldu"}</span>
                       </div>
 
                       <div className="admin-table-actions">
                         <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
                           Detay
                         </button>
-                        <button
-                          className="admin-mini-btn light"
-                          type="button"
-                          onClick={() => {
-                            const toggle = (item) => item.id === job.id ? { ...item, status: item.status === "passive" ? "active" : "passive" } : item;
-                            if (job.adminStatus === "Ekiş Acil") {
-                              setFeaturedJobs((prev) => prev.map(toggle));
-                            } else {
-                              setJobs((prev) => prev.map(toggle));
-                            }
-                          }}
-                        >
-                          {job.status === "passive" ? "Aktif Et" : "Pasif Yap"}
-                        </button>
 
-                        {job.adminStatus === "Ekiş Acil" ? (
-                          <button
-                            className="admin-mini-btn light"
-                            type="button"
-                            onClick={() => {
-                              setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
-                              setJobs((prev) => [{ ...job, plan: "free" }, ...prev]);
-                            }}
-                          >
-                            Standarta Al
-                          </button>
+                        {job.adminStatus === "Onay Bekliyor" ? (
+                          <>
+                            <button className="admin-mini-btn" type="button" onClick={() => approvePendingJob(job)}>
+                              Onayla
+                            </button>
+                            <button className="admin-mini-btn danger" type="button" onClick={() => rejectPendingJob(job.id)}>
+                              Reddet
+                            </button>
+                          </>
                         ) : (
-                          <button
-                            className="admin-mini-btn"
-                            type="button"
-                            onClick={() => {
-                              setJobs((prev) => prev.filter((item) => item.id !== job.id));
-                              setFeaturedJobs((prev) => [{ ...job, plan: "featured" }, ...prev]);
-                            }}
-                          >
-                            Ekiş Acil Yap
-                          </button>
-                        )}
+                          <>
+                            <button
+                              className="admin-mini-btn light"
+                              type="button"
+                              onClick={() => {
+                                const toggle = (item) => item.id === job.id ? { ...item, status: item.status === "passive" ? "active" : "passive" } : item;
+                                if (job.adminStatus === "Ekiş Acil") {
+                                  setFeaturedJobs((prev) => prev.map(toggle));
+                                } else {
+                                  setJobs((prev) => prev.map(toggle));
+                                }
+                              }}
+                            >
+                              {job.status === "passive" ? "Aktif Et" : "Pasif Yap"}
+                            </button>
 
-                        <button
-                          className="admin-mini-btn danger"
-                          type="button"
-                          onClick={() => {
-                            if (job.adminStatus === "Ekiş Acil") {
-                              setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
-                            } else {
-                              setJobs((prev) => prev.filter((item) => item.id !== job.id));
-                            }
-                          }}
-                        >
-                          Sil
-                        </button>
+                            {job.adminStatus === "Ekiş Acil" ? (
+                              <button
+                                className="admin-mini-btn light"
+                                type="button"
+                                onClick={() => {
+                                  setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
+                                  setJobs((prev) => [{ ...job, plan: "free", durationDays: 30 }, ...prev]);
+                                }}
+                              >
+                                Standarta Al
+                              </button>
+                            ) : (
+                              <button
+                                className="admin-mini-btn"
+                                type="button"
+                                onClick={() => {
+                                  setJobs((prev) => prev.filter((item) => item.id !== job.id));
+                                  setFeaturedJobs((prev) => [{ ...job, plan: "featured", durationDays: 15, featuredStatus: "live" }, ...prev]);
+                                }}
+                              >
+                                Ekiş Acil Yap
+                              </button>
+                            )}
+
+                            <button
+                              className="admin-mini-btn danger"
+                              type="button"
+                              onClick={() => {
+                                if (job.adminStatus === "Ekiş Acil") {
+                                  setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
+                                } else {
+                                  setJobs((prev) => prev.filter((item) => item.id !== job.id));
+                                }
+                              }}
+                            >
+                              Sil
+                            </button>
+                          </>
+                        )}
                       </div>
                     </article>
                   ))}
@@ -4617,7 +4660,7 @@ export default function App() {
             <div className="post-panel-inner">
               <h3 className="post-title">İlanını nasıl yayınlamak istersin?</h3>
               <p className="post-desc">
-                Standart ilanı ücretsiz yayınlayabilir ya da vitrinde öne çıkarabilirsin.
+                İlanın admin onayına düşer. Onay sonrası standart listede veya Ekiş Acil alanında yayınlanır.
               </p>
 
               <div className="plan-grid">
@@ -4644,7 +4687,7 @@ export default function App() {
 
               <div className="modal-actions" style={{ marginTop: 18 }}>
                 <button className="btn btn-primary" type="button" onClick={handlePlanContinue}>
-                  {selectedPlan === "featured" ? "Ödeme Adımına Geç" : "Ücretsiz Yayınla"}
+                  {selectedPlan === "featured" ? "Ödeme Adımına Geç" : "Onaya Gönder"}
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
                   Geri
