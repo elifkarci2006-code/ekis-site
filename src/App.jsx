@@ -5143,9 +5143,32 @@ export default function App() {
               <div>
                 <h3 className="footer-subheading">Bizi takip et</h3>
                 <div className="footer-socials">
-                  <a className="footer-social" href="#" aria-label="Instagram">ig</a>
-                  <a className="footer-social" href="#" aria-label="X">x</a>
-                  <a className="footer-social" href="#" aria-label="TikTok">tt</a>
+                  <a
+                    className="footer-social"
+                    href="https://www.instagram.com/ekis.official/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    title="Instagram"
+                  >
+                    <svg viewBox="0 0 24 24" width="19" height="19" fill="none" aria-hidden="true">
+                      <rect x="4" y="4" width="16" height="16" rx="5" stroke="currentColor" strokeWidth="2" />
+                      <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="2" />
+                      <circle cx="17" cy="7" r="1.2" fill="currentColor" />
+                    </svg>
+                  </a>
+                  <a
+                    className="footer-social"
+                    href="https://www.facebook.com/ekisplatform"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    title="Facebook"
+                  >
+                    <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true">
+                      <path d="M14 8.2h2V5h-2.4C10.8 5 9 6.8 9 9.6V12H7v3.2h2V21h3.4v-5.8H15l.5-3.2h-3.1V9.9c0-1 .4-1.7 1.6-1.7Z" />
+                    </svg>
+                  </a>
                 </div>
 
                 <div className="footer-boxes">
