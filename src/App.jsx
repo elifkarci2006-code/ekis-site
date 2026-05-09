@@ -1501,7 +1501,7 @@ useEffect(() => {
       status: job.status || "pending",
       plan: job.plan_type === "featured" ? "featured" : "free",
       featuredStatus:
-        job.status === "active" && job.plan_type === "featured" ? "live" : null,
+        job.plan_type === "featured" ? "live" : null,
     }));
 
     const pendingFromDb = formatted.filter(
@@ -1509,11 +1509,11 @@ useEffect(() => {
     );
 
     const normalJobs = formatted.filter(
-      (j) => j.status === "active" && j.featuredStatus !== "live"
+      (j) => j.status !== "pending" && j.featuredStatus !== "live"
     );
 
     const featuredJobsFromDb = formatted.filter(
-      (j) => j.status === "active" && j.featuredStatus === "live"
+      (j) => j.status !== "pending" && j.featuredStatus === "live"
     );
 
     setPendingJobs(pendingFromDb);
@@ -1916,6 +1916,85 @@ useEffect(() => {
     }
 
     setPendingJobs((prev) => prev.filter((item) => item.id !== jobId));
+  };
+
+  const updateDbJob = async (job, changes, errorMessage) => {
+    if (!job.dbId) return true;
+
+    const { error } = await supabase
+      .from("job_posts")
+      .update(changes)
+      .eq("id", job.dbId);
+
+    if (error) {
+      console.error(errorMessage, error);
+      alert(errorMessage);
+      return false;
+    }
+
+    return true;
+  };
+
+  const toggleJobActive = async (job) => {
+    const nextStatus = job.status === "passive" ? "active" : "passive";
+    const ok = await updateDbJob(job, { status: nextStatus }, "İlan durumu güncellenemedi 😥");
+    if (!ok) return;
+
+    const toggle = (item) =>
+      item.id === job.id ? { ...item, status: nextStatus } : item;
+
+    if (job.adminStatus === "Ekiş Acil") {
+      setFeaturedJobs((prev) => prev.map(toggle));
+    } else {
+      setJobs((prev) => prev.map(toggle));
+    }
+  };
+
+  const makeJobFeatured = async (job) => {
+    const ok = await updateDbJob(job, { plan_type: "featured", status: "active" }, "İlan Ekiş Acil yapılamadı 😥");
+    if (!ok) return;
+
+    setJobs((prev) => prev.filter((item) => item.id !== job.id));
+    setFeaturedJobs((prev) => [
+      {
+        ...job,
+        plan: "featured",
+        status: "active",
+        durationDays: 15,
+        featuredStatus: "live",
+      },
+      ...prev,
+    ]);
+  };
+
+  const makeJobStandard = async (job) => {
+    const ok = await updateDbJob(job, { plan_type: "normal", status: "active" }, "İlan standarda alınamadı 😥");
+    if (!ok) return;
+
+    setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
+    setJobs((prev) => [
+      {
+        ...job,
+        plan: "free",
+        status: "active",
+        durationDays: 30,
+        featuredStatus: null,
+      },
+      ...prev,
+    ]);
+  };
+
+  const deleteJob = async (job) => {
+    const ok = await updateDbJob(job, { status: "rejected" }, "İlan silinemedi 😥");
+    if (!ok) return;
+
+    if (job.adminStatus === "Ekiş Acil") {
+      setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
+    } else if (job.adminStatus === "Onay Bekliyor") {
+      setPendingJobs((prev) => prev.filter((item) => item.id !== job.id));
+    } else {
+      setJobs((prev) => prev.filter((item) => item.id !== job.id));
+    }
   };
 
   const adminJobs = useMemo(() => {
@@ -4633,14 +4712,7 @@ useEffect(() => {
                             <button
                               className="admin-mini-btn light"
                               type="button"
-                              onClick={() => {
-                                const toggle = (item) => item.id === job.id ? { ...item, status: item.status === "passive" ? "active" : "passive" } : item;
-                                if (job.adminStatus === "Ekiş Acil") {
-                                  setFeaturedJobs((prev) => prev.map(toggle));
-                                } else {
-                                  setJobs((prev) => prev.map(toggle));
-                                }
-                              }}
+                              onClick={() => toggleJobActive(job)}
                             >
                               {job.status === "passive" ? "Aktif Et" : "Pasif Yap"}
                             </button>
@@ -4649,10 +4721,7 @@ useEffect(() => {
                               <button
                                 className="admin-mini-btn light"
                                 type="button"
-                                onClick={() => {
-                                  setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
-                                  setJobs((prev) => [{ ...job, plan: "free", durationDays: 30 }, ...prev]);
-                                }}
+                                onClick={() => makeJobStandard(job)}
                               >
                                 Standarta Al
                               </button>
@@ -4660,10 +4729,7 @@ useEffect(() => {
                               <button
                                 className="admin-mini-btn"
                                 type="button"
-                                onClick={() => {
-                                  setJobs((prev) => prev.filter((item) => item.id !== job.id));
-                                  setFeaturedJobs((prev) => [{ ...job, plan: "featured", durationDays: 15, featuredStatus: "live" }, ...prev]);
-                                }}
+                                onClick={() => makeJobFeatured(job)}
                               >
                                 Ekiş Acil Yap
                               </button>
@@ -4672,13 +4738,7 @@ useEffect(() => {
                             <button
                               className="admin-mini-btn danger"
                               type="button"
-                              onClick={() => {
-                                if (job.adminStatus === "Ekiş Acil") {
-                                  setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
-                                } else {
-                                  setJobs((prev) => prev.filter((item) => item.id !== job.id));
-                                }
-                              }}
+                              onClick={() => deleteJob(job)}
                             >
                               Sil
                             </button>
