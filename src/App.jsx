@@ -1516,6 +1516,7 @@ export default function App() {
   const [formData, setFormData] = useState({
     company: "",
     title: "",
+    category: "",
     city: "",
     district: "",
     neighborhood: "",
@@ -1567,7 +1568,8 @@ useEffect(() => {
       description: job.description,
       contactPhone: job.phone,
       createdAt: job.created_at,
-      category: "Genel",
+      category: job.category || "Genel",
+      viewsCount: Number(job.views_count || 0),
       status: job.status || "pending",
       plan: job.plan_type === "featured" ? "featured" : "free",
       featuredStatus:
@@ -1656,6 +1658,7 @@ useEffect(() => {
       setFormData({
         company: "",
         title: "",
+        category: "",
         city: "",
         district: "",
         neighborhood: "",
@@ -1678,6 +1681,7 @@ useEffect(() => {
 
     if (!formData.company.trim()) nextErrors.company = "Firma adı zorunludur.";
     if (!formData.title.trim()) nextErrors.title = "İlan başlığı zorunludur.";
+    if (!formData.category.trim()) nextErrors.category = "Kategori seçimi zorunludur.";
     if (!formData.city.trim()) nextErrors.city = "Şehir seçimi zorunludur.";
     if (!formData.district.trim()) nextErrors.district = "İlçe zorunludur.";
     if (!formData.neighborhood.trim()) nextErrors.neighborhood = "Mahalle zorunludur.";
@@ -1775,7 +1779,7 @@ useEffect(() => {
     location: normalizeLocation(formData.city, formData.district),
     salary: formatSalaryPreview(formData.workType, formData.salary),
     type: formData.workType,
-    category: inferCategory(formData.title),
+    category: formData.category,
     description: formData.description.trim(),
     workAddress: buildPublicAddress({
       neighborhood: formData.neighborhood,
@@ -1801,6 +1805,7 @@ useEffect(() => {
     const payload = {
       company_name: pendingJob.company,
       job_title: pendingJob.title,
+      category: pendingJob.category,
       city: toTitleCase(formData.city),
       district: toTitleCase(formData.district),
       neighborhood: toTitleCase(formData.neighborhood),
@@ -1810,6 +1815,7 @@ useEffect(() => {
       description: pendingJob.description,
       phone: pendingJob.contactPhone,
       plan_type: selectedPlan === "featured" ? "featured" : "normal",
+      views_count: 0,
       status: "pending",
       expires_at: new Date(
         Date.now() +
@@ -1861,6 +1867,7 @@ useEffect(() => {
     setFormData({
       company: "",
       title: "",
+      category: "",
       city: "",
       district: "",
       neighborhood: "",
@@ -1876,6 +1883,33 @@ useEffect(() => {
     });
 
     setCaptcha(generateCaptchaQuestion());
+  };
+
+  const openJobDetail = async (job) => {
+    const nextViews = Number(job.viewsCount || 0) + 1;
+    const updatedJob = { ...job, viewsCount: nextViews };
+
+    setSelectedJob(updatedJob);
+
+    const updateLocalViews = (item) =>
+      item.id === job.id ? { ...item, viewsCount: nextViews } : item;
+
+    if (job.featuredStatus === "live" || job.plan === "featured") {
+      setFeaturedJobs((prev) => prev.map(updateLocalViews));
+    } else {
+      setJobs((prev) => prev.map(updateLocalViews));
+    }
+
+    if (job.dbId) {
+      const { error } = await supabase
+        .from("job_posts")
+        .update({ views_count: nextViews })
+        .eq("id", job.dbId);
+
+      if (error) {
+        console.error("Görüntülenme sayısı güncellenemedi:", error);
+      }
+    }
   };
 
   const filteredJobs = useMemo(() => {
@@ -4885,7 +4919,7 @@ useEffect(() => {
                       </div>
 
                       <div className="admin-table-actions">
-                        <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
+                        <button className="admin-mini-btn light" type="button" onClick={() => openJobDetail(job)}>
                           Detay
                         </button>
 
@@ -5011,6 +5045,22 @@ useEffect(() => {
                     onChange={handleFormChange}
                   />
                   {errors.title && <div className="error-text">{errors.title}</div>}
+                </div>
+
+                <div className="post-field full">
+                  <label>Kategori<span className="required-star">*</span></label>
+                  <select
+                    className={errors.category ? "field-error" : ""}
+                    name="category"
+                    value={formData.category}
+                    onChange={handleFormChange}
+                  >
+                    <option value="">Kategori seç</option>
+                    {categories.filter((item) => item !== "Tümü").map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </select>
+                  {errors.category && <div className="error-text">{errors.category}</div>}
                 </div>
 
                 <div className="location-section">
@@ -5187,6 +5237,7 @@ useEffect(() => {
 
                   <h4 className="preview-title">{toTitleCase(formData.title) || "İlan başlığı burada görünecek"}</h4>
                   <div className="preview-company">{toTitleCase(formData.company) || "Firma adı burada görünecek"}</div>
+                  <div className="preview-location">{formData.category || "Kategori burada görünecek"}</div>
                   <div className="preview-location">{normalizeLocation(formData.city, formData.district) || "Şehir / İlçe burada görünecek"}</div>
                   <div className="preview-location">
                     {buildPublicAddress({ neighborhood: formData.neighborhood, street: formData.street }) || "Mahalle / sokak bilgisi burada görünecek"}
@@ -5304,6 +5355,13 @@ useEffect(() => {
                       </svg>
                       Yayın: <strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong>
                     </span>
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                      </svg>
+                      Görüntülenme: <strong>{Number(selectedJob.viewsCount || 0)}</strong>
+                    </span>
                   </div>
 
                   <div className="detail-description-box detail-description-clean">
@@ -5390,6 +5448,10 @@ useEffect(() => {
                     <div>
                       <span>İlan tipi</span>
                       <strong>{selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? "Ekiş Acil" : "Standart"}</strong>
+                    </div>
+                    <div>
+                      <span>Görüntülenme</span>
+                      <strong>{Number(selectedJob.viewsCount || 0)}</strong>
                     </div>
                   </div>
                 </section>
@@ -5513,7 +5575,7 @@ useEffect(() => {
 
           <div className="featured-grid">
             {visibleFeaturedJobs.map((job) => (
-              <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
+              <article key={job.id} className="featured-card" onClick={() => openJobDetail(job)}>
                 <div className="card-top">
                   <div className="pill"><span>★</span> Öne Çıkan</div>
                   <div className="card-top-right">
@@ -5592,7 +5654,7 @@ useEffect(() => {
             ) : (
               <div className="jobs-grid">
                 {sortedJobs.map((job) => (
-                  <article key={job.id} className="soft-job-card" onClick={() => setSelectedJob(job)}>
+                  <article key={job.id} className="soft-job-card" onClick={() => openJobDetail(job)}>
                     <div className="soft-top">
                       <div className="soft-company">{job.company}</div>
                       <div className="soft-days">{getDaysAgoLabel(job.createdAt)}</div>
