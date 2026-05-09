@@ -4362,6 +4362,232 @@ useEffect(() => {
           font-weight: 950;
         }
 
+        .detail-modal-modern {
+          width: min(980px, calc(100vw - 24px));
+          border-radius: 34px;
+          background:
+            radial-gradient(circle at top right, rgba(255,75,43,0.12), transparent 30%),
+            linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.98));
+          backdrop-filter: blur(18px);
+          overflow: hidden;
+        }
+        .detail-close-modern {
+          top: 18px;
+          right: 18px;
+          background: rgba(255,255,255,0.88);
+        }
+        .detail-modern-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.15fr) 340px;
+          min-height: 620px;
+        }
+        .detail-modern-main {
+          padding: 42px 42px 34px;
+          background: rgba(255,255,255,0.74);
+        }
+        .detail-modern-side {
+          padding: 42px 28px 34px;
+          background: rgba(245,247,248,0.78);
+          border-left: 1px solid rgba(60,74,95,0.08);
+        }
+        .detail-modern-badges {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-bottom: 24px;
+          padding-right: 48px;
+        }
+        .modern-badge {
+          min-height: 34px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 14px;
+          border-radius: 999px;
+          color: #fff;
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          font-size: 13px;
+          font-weight: 950;
+          box-shadow: 0 12px 22px rgba(255,75,43,0.16);
+        }
+        .modern-badge.soft {
+          color: ${PALETTE.slate};
+          background: rgba(255,255,255,0.78);
+          border: 1px solid rgba(60,74,95,0.09);
+          box-shadow: none;
+        }
+        .modern-badge.hot {
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+        }
+        .detail-modern-company {
+          margin: 0 0 10px;
+          color: ${PALETTE.teal};
+          font-size: 16px;
+          font-weight: 950;
+          letter-spacing: -0.02em;
+        }
+        .detail-modern-title {
+          margin: 0;
+          max-width: 590px;
+          color: ${PALETTE.slate};
+          font-size: clamp(38px, 5vw, 58px);
+          line-height: 0.98;
+          font-weight: 950;
+          letter-spacing: -0.07em;
+        }
+        .detail-modern-summary {
+          max-width: 600px;
+          margin: 20px 0 26px;
+          color: ${PALETTE.text};
+          font-size: 17px;
+          font-weight: 750;
+          line-height: 1.65;
+        }
+        .detail-modern-meta {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+          margin-bottom: 18px;
+        }
+        .detail-modern-meta div,
+        .detail-modern-desc-card,
+        .detail-modern-salary-card,
+        .detail-modern-contact-card {
+          background: rgba(255,255,255,0.82);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 24px;
+          box-shadow: 0 18px 38px rgba(60,74,95,0.055);
+        }
+        .detail-modern-meta div {
+          padding: 15px 16px;
+        }
+        .detail-modern-meta span,
+        .modern-contact-row span,
+        .detail-modern-salary-card span {
+          display: block;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 900;
+          margin-bottom: 6px;
+        }
+        .detail-modern-meta strong,
+        .modern-contact-row strong {
+          color: ${PALETTE.slate};
+          font-size: 15px;
+          font-weight: 950;
+        }
+        .detail-modern-desc-card {
+          padding: 22px;
+          margin-top: 8px;
+        }
+        .detail-modern-desc-card h4 {
+          margin: 0 0 12px;
+          color: ${PALETTE.slate};
+          font-size: 18px;
+          font-weight: 950;
+        }
+        .detail-modern-desc-card p {
+          margin: 0;
+          color: ${PALETTE.text};
+          font-size: 15px;
+          line-height: 1.75;
+          white-space: pre-wrap;
+        }
+        .detail-modern-salary-card {
+          padding: 22px;
+          margin-bottom: 14px;
+          background: linear-gradient(180deg, #fff 0%, #fff7f4 100%);
+          border-color: rgba(255,75,43,0.12);
+        }
+        .detail-modern-salary-card strong {
+          display: block;
+          color: #ff4424;
+          font-size: 30px;
+          line-height: 1.1;
+          font-weight: 950;
+          letter-spacing: -0.05em;
+        }
+        .detail-modern-contact-card {
+          padding: 20px;
+        }
+        .detail-modern-contact-card h4 {
+          margin: 0 0 14px;
+          color: #0f7778;
+          font-size: 18px;
+          font-weight: 950;
+        }
+        .modern-contact-row {
+          padding: 13px 0;
+          border-top: 1px solid rgba(60,74,95,0.08);
+        }
+        .modern-contact-row:first-of-type {
+          border-top: none;
+          padding-top: 0;
+        }
+        .modern-whatsapp-btn {
+          width: 100%;
+          min-height: 54px;
+          margin-top: 14px;
+          border-radius: 18px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 950;
+          box-shadow: 0 18px 28px rgba(255,75,43,0.22);
+        }
+        .modern-mini-actions {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 9px;
+          margin-top: 10px;
+        }
+        .modern-mini-actions a,
+        .modern-mini-actions button {
+          min-height: 44px;
+          border-radius: 16px;
+          border: 1px solid rgba(60,74,95,0.10);
+          background: #fff;
+          color: ${PALETTE.slate};
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 950;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-family: inherit;
+        }
+        .modern-safe-note {
+          margin: 14px 0 0;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 800;
+          line-height: 1.55;
+        }
+        @media (max-width: 880px) {
+          .detail-modern-grid {
+            grid-template-columns: 1fr;
+          }
+          .detail-modern-main,
+          .detail-modern-side {
+            padding: 28px 20px;
+          }
+          .detail-modern-side {
+            border-left: none;
+            border-top: 1px solid rgba(60,74,95,0.08);
+          }
+          .detail-modern-meta {
+            grid-template-columns: 1fr;
+          }
+          .detail-modern-title {
+            font-size: 38px;
+          }
+        }
+
         .plan-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5312,150 +5538,107 @@ useEffect(() => {
 
       {selectedJob && (
         <div className="detail-modal-backdrop" onClick={() => setSelectedJob(null)}>
-          <div className="detail-modal detail-modal-wide" onClick={(e) => e.stopPropagation()}>
-            <button className="detail-close" type="button" onClick={() => setSelectedJob(null)}>×</button>
+          <div className="detail-modal detail-modal-modern" onClick={(e) => e.stopPropagation()}>
+            <button className="detail-close detail-close-modern" type="button" onClick={() => setSelectedJob(null)}>×</button>
 
-            <div className="detail-panel-inner">
-              <div className="detail-shell detail-shell-clean detail-shell-pro">
-                <aside className="detail-left detail-side-clean">
-                  <div className="detail-badge-row">
-                    {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
-                      <span className="detail-featured-badge">★ Öne Çıkan</span>
-                    ) : (
-                      <span className="detail-featured-badge">Yeni İlan</span>
-                    )}
-                    <span className="detail-type-badge">{selectedJob.type}</span>
-                    <span className="detail-type-badge detail-time-badge">{getDaysAgoLabel(selectedJob.createdAt)}</span>
+            <div className="detail-modern-grid">
+              <section className="detail-modern-main">
+                <div className="detail-modern-badges">
+                  {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
+                    <span className="modern-badge hot">★ Ekiş Acil</span>
+                  ) : (
+                    <span className="modern-badge">Yeni İlan</span>
+                  )}
+                  <span className="modern-badge soft">{selectedJob.type}</span>
+                  <span className="modern-badge soft">👁 {Number(selectedJob.viewsCount || 0)} görüntülenme</span>
+                </div>
+
+                <p className="detail-modern-company">{selectedJob.company}</p>
+                <h3 className="detail-modern-title">{selectedJob.title}</h3>
+                <p className="detail-modern-summary">
+                  {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
+                </p>
+
+                <div className="detail-modern-meta">
+                  <div>
+                    <span>Konum</span>
+                    <strong>{selectedJob.location}</strong>
+                  </div>
+                  <div>
+                    <span>Kategori</span>
+                    <strong>{selectedJob.category || "Genel"}</strong>
+                  </div>
+                  <div>
+                    <span>Yayın</span>
+                    <strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong>
+                  </div>
+                  <div>
+                    <span>Süre</span>
+                    <strong>{getDaysLeftLabel(selectedJob)}</strong>
+                  </div>
+                </div>
+
+                <div className="detail-modern-desc-card">
+                  <h4>İş açıklaması</h4>
+                  <p>{selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}</p>
+                </div>
+              </section>
+
+              <aside className="detail-modern-side">
+                <div className="detail-modern-salary-card">
+                  <span>Ücret bilgisi</span>
+                  <strong>{selectedJob.salary}</strong>
+                </div>
+
+                <div className="detail-modern-contact-card">
+                  <h4>Başvuru</h4>
+
+                  <div className="modern-contact-row">
+                    <span>Yetkili</span>
+                    <strong>{selectedJob.contactName || "İşveren"}</strong>
+                  </div>
+                  <div className="modern-contact-row">
+                    <span>Telefon / WhatsApp</span>
+                    <strong>{selectedJob.contactPhone || "Belirtilmedi"}</strong>
+                  </div>
+                  <div className="modern-contact-row">
+                    <span>Adres</span>
+                    <strong>{selectedJob.workAddress || selectedJob.location}</strong>
                   </div>
 
-                  <p className="detail-company">{selectedJob.company}</p>
-                  <h3 className="detail-title">{selectedJob.title}</h3>
-                  <p className="detail-summary">
-                    {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
+                  <a className="modern-whatsapp-btn" href={getWhatsappHref(selectedJob.contactPhone, selectedJob)} target="_blank" rel="noopener noreferrer">
+                    WhatsApp'tan Yaz
+                  </a>
+
+                  <div className="modern-mini-actions">
+                    <a href={getPhoneHref(selectedJob.contactPhone)}>Ara</a>
+                    <a href={getMapHref(selectedJob)} target="_blank" rel="noopener noreferrer">Harita</a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const shareData = {
+                          title: selectedJob.title,
+                          text: getShareText(selectedJob),
+                          url: window.location.href,
+                        };
+
+                        if (navigator.share) {
+                          navigator.share(shareData).catch(() => {});
+                        } else {
+                          navigator.clipboard?.writeText(`${shareData.text} - ${shareData.url}`);
+                          alert("İlan bağlantısı kopyalandı 🚀");
+                        }
+                      }}
+                    >
+                      Paylaş
+                    </button>
+                  </div>
+
+                  <p className="modern-safe-note">
+                    Kapı numarası ilanda gösterilmez. Kesin konum ve görüşme süreci işveren tarafından yürütülür.
                   </p>
-
-                  <div className="detail-left-meta detail-meta-clean">
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2"/>
-                        <path d="M4 7h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                      </svg>
-                      Çalışma tipi: <strong>{selectedJob.type}</strong>
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                        <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                      Kategori: <strong>{selectedJob.category || "Genel"}</strong>
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M7 3v3M17 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                      Yayın: <strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong>
-                    </span>
-                    <span>
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
-                      Görüntülenme: <strong>{Number(selectedJob.viewsCount || 0)}</strong>
-                    </span>
-                  </div>
-
-                  <div className="detail-description-box detail-description-clean">
-                    <h4 className="detail-description-title">İş açıklaması</h4>
-                    <div className="detail-description">
-                      {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
-                    </div>
-                  </div>
-                </aside>
-
-                <section className="detail-right detail-main-clean">
-                  <div className="detail-salary-side compact-salary-card">
-                    <div className="detail-salary-side-top">
-                      <div>
-                        <div className="detail-salary-label">Ücret bilgisi</div>
-                        <div className="detail-salary">{selectedJob.salary}</div>
-                      </div>
-                      <div className="detail-salary-icon" aria-hidden="true">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                          <path d="M4 7.5h16v10H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                          <path d="M7 10.5h.01M17 14.5h.01M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="detail-contact-box detail-contact-box-left">
-                    <h4 className="detail-contact-title">Başvuru ve iletişim</h4>
-                    <div className="contact-item">
-                      <span className="contact-icon">👤</span>
-                      <div><span>Yetkili kişi</span><strong>{selectedJob.contactName || "İşveren"}</strong></div>
-                    </div>
-                    <div className="contact-item">
-                      <span className="contact-icon">☎</span>
-                      <div><span>Telefon / WhatsApp</span><strong>{selectedJob.contactPhone || "Belirtilmedi"}</strong></div>
-                    </div>
-                    <div className="contact-item">
-                      <span className="contact-icon">⌖</span>
-                      <div><span>Adres</span><strong>{selectedJob.workAddress || selectedJob.location}</strong></div>
-                    </div>
-
-                    <div className="detail-cta-grid">
-                      <a className="detail-cta primary" href={getWhatsappHref(selectedJob.contactPhone, selectedJob)} target="_blank" rel="noopener noreferrer">
-                        WhatsApp'tan Yaz
-                      </a>
-                      <a className="detail-cta" href={getPhoneHref(selectedJob.contactPhone)}>
-                        Ara
-                      </a>
-                      <a className="detail-cta" href={getMapHref(selectedJob)} target="_blank" rel="noopener noreferrer">
-                        Haritada Aç
-                      </a>
-                      <button
-                        className="detail-cta"
-                        type="button"
-                        onClick={() => {
-                          const shareData = {
-                            title: selectedJob.title,
-                            text: getShareText(selectedJob),
-                            url: window.location.href,
-                          };
-
-                          if (navigator.share) {
-                            navigator.share(shareData).catch(() => {});
-                          } else {
-                            navigator.clipboard?.writeText(`${shareData.text} - ${shareData.url}`);
-                            alert("İlan bağlantısı kopyalandı 🚀");
-                          }
-                        }}
-                      >
-                        Paylaş
-                      </button>
-                    </div>
-
-                    <p className="detail-apply-note clean-note">
-                      Kapı numarası ilanda gösterilmez. Kesin konum ve görüşme süreci işveren tarafından yürütülür.
-                    </p>
-                  </div>
-
-                  <div className="detail-mini-info">
-                    <div>
-                      <span>İlan süresi</span>
-                      <strong>{getDaysLeftLabel(selectedJob)}</strong>
-                    </div>
-                    <div>
-                      <span>İlan tipi</span>
-                      <strong>{selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? "Ekiş Acil" : "Standart"}</strong>
-                    </div>
-                    <div>
-                      <span>Görüntülenme</span>
-                      <strong>{Number(selectedJob.viewsCount || 0)}</strong>
-                    </div>
-                  </div>
-                </section>
-              </div>
+                </div>
+              </aside>
             </div>
           </div>
         </div>
