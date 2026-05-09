@@ -1444,7 +1444,53 @@ export default function App() {
     contactPhone: "",
     captchaAnswer: "",
   });
+useEffect(() => {
+  const fetchJobs = async () => {
+    const { data, error } = await supabase
+      .from("job_posts")
+      .select("*")
+      .eq("status", "active");
 
+    if (error) {
+      console.error("Supabase hata:", error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.log("Henüz gerçek ilan yok, demo ilanlar gösteriliyor.");
+      return;
+    }
+
+    const formatted = data.map((job) => ({
+      id: job.id,
+      title: job.job_title,
+      company: job.company_name,
+      location: `${job.city} / ${job.district}`,
+      salary: job.salary,
+      type: job.plan_type === "featured" ? "Öne Çıkan" : "Standart",
+      description: job.description,
+      contactPhone: job.phone,
+      createdAt: job.created_at,
+      category: "Genel",
+      featuredStatus:
+        job.plan_type === "featured" ? "live" : null,
+    }));
+
+    setJobs(
+      formatted.filter(
+        (j) => j.featuredStatus !== "live"
+      )
+    );
+
+    setFeaturedJobs(
+      formatted.filter(
+        (j) => j.featuredStatus === "live"
+      )
+    );
+  };
+
+  fetchJobs();
+}, []);
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
