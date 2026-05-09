@@ -1638,28 +1638,79 @@ useEffect(() => {
   };
 
   const buildJobFromForm = () => ({
-    id: Date.now(),
-    title: formData.title.trim(),
-    company: formData.company.trim(),
-    location: formData.city.trim(),
-    salary: formatSalaryPreview(formData.workType, formData.salary),
-    type: formData.workType,
-    category: inferCategory(formData.title),
-    description: formData.description.trim(),
-    workAddress: formData.workAddress.trim(),
-    contactName: formData.contactName.trim(),
-    contactPhone: formData.contactPhone.trim(),
+  id: Date.now(),
+  title: formData.title.trim(),
+  company: formData.company.trim(),
+  location: formData.city.trim(),
+  salary: formatSalaryPreview(formData.workType, formData.salary),
+  type: formData.workType,
+  category: inferCategory(formData.title),
+  description: formData.description.trim(),
+  workAddress: formData.workAddress.trim(),
+  contactName: formData.contactName.trim(),
+  contactPhone: formData.contactPhone.trim(),
+  status: "active",
+  durationDays: selectedPlan === "featured" ? 15 : 30,
+  createdAt: new Date().toISOString(),
+});
+
+  const handlePublishClick = async () => {
+  if (!validateForm()) return;
+
+  const newJob = buildJobFromForm();
+
+  const payload = {
+    company_name: newJob.company,
+    job_title: newJob.title,
+    city: formData.city,
+    district: formData.city,
+    salary: newJob.salary,
+    description: newJob.description,
+    phone: newJob.contactPhone,
+    plan_type:
+      selectedPlan === "featured"
+        ? "featured"
+        : "normal",
     status: "active",
-    durationDays: selectedPlan === "featured" ? 15 : 30,
-    createdAt: new Date().toISOString(),
+    expires_at: new Date(
+      Date.now() +
+        (selectedPlan === "featured" ? 15 : 30) *
+          24 *
+          60 *
+          60 *
+          1000
+    ).toISOString(),
+  };
+
+  const { error } = await supabase
+    .from("job_posts")
+    .insert([payload]);
+
+  if (error) {
+    console.error(error);
+    alert("İlan kaydedilemedi 😥");
+    return;
+  }
+
+  alert("İlan başarıyla yayınlandı 🚀");
+
+  setShowForm(false);
+
+  setFormData({
+    company: "",
+    title: "",
+    city: "",
+    workType: "Günlük",
+    salary: "",
+    description: "",
+    workAddress: "",
+    contactName: "",
+    contactPhone: "",
+    captchaAnswer: "",
   });
 
-  const handlePublishClick = () => {
-    if (!validateForm()) return;
-    setPendingJob(buildJobFromForm());
-    setSelectedPlan("free");
-    setShowPlanModal(true);
-  };
+  setCaptcha(generateCaptchaQuestion());
+};
 
   const handlePlanContinue = () => {
     if (!pendingJob) return;
