@@ -280,6 +280,27 @@ function normalizeLocation(city, district) {
   return normalizedCity || normalizedDistrict;
 }
 
+function buildPublicAddress(parts = {}) {
+  const neighborhood = toTitleCase(parts.neighborhood);
+  const street = toTitleCase(parts.street);
+
+  return [neighborhood && `${neighborhood} Mah.`, street]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function buildPrivateMapAddress(parts = {}) {
+  return [
+    toTitleCase(parts.city),
+    toTitleCase(parts.district),
+    toTitleCase(parts.neighborhood) && `${toTitleCase(parts.neighborhood)} Mah.`,
+    toTitleCase(parts.street),
+    parts.doorNo ? `No:${String(parts.doorNo).trim()}` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
 function cleanPhone(value) {
   return String(value || "").replace(/\D/g, "");
 }
@@ -301,7 +322,15 @@ function getWhatsappHref(value, job) {
 }
 
 function getMapHref(job) {
-  const query = encodeURIComponent(`${job?.workAddress || job?.location || ""}`);
+  const query = encodeURIComponent(
+    buildPrivateMapAddress({
+      city: job?.city,
+      district: job?.district,
+      neighborhood: job?.neighborhood,
+      street: job?.street,
+      doorNo: job?.doorNo,
+    }) || job?.workAddress || job?.location || ""
+  );
   return query ? `https://www.google.com/maps/search/?api=1&query=${query}` : "#";
 }
 
@@ -1489,6 +1518,9 @@ export default function App() {
     title: "",
     city: "",
     district: "",
+    neighborhood: "",
+    street: "",
+    doorNo: "",
     workType: "Günlük",
     salary: "",
     description: "",
@@ -1520,7 +1552,16 @@ useEffect(() => {
       dbId: job.id,
       title: toTitleCase(job.job_title),
       company: toTitleCase(job.company_name),
+      city: job.city,
+      district: job.district,
+      neighborhood: job.neighborhood || "",
+      street: job.street || "",
+      doorNo: job.door_no || "",
       location: normalizeLocation(job.city, job.district),
+      workAddress: buildPublicAddress({
+        neighborhood: job.neighborhood,
+        street: job.street,
+      }) || normalizeLocation(job.city, job.district),
       salary: job.salary,
       type: job.plan_type === "featured" ? "Öne Çıkan" : "Standart",
       description: job.description,
@@ -1616,6 +1657,10 @@ useEffect(() => {
         company: "",
         title: "",
         city: "",
+        district: "",
+        neighborhood: "",
+        street: "",
+        doorNo: "",
         workType: "Günlük",
         salary: "",
         description: "",
@@ -1634,8 +1679,10 @@ useEffect(() => {
     if (!formData.company.trim()) nextErrors.company = "Firma adı zorunludur.";
     if (!formData.title.trim()) nextErrors.title = "İlan başlığı zorunludur.";
     if (!formData.city.trim()) nextErrors.city = "Şehir seçimi zorunludur.";
-    if (!formData.district.trim()) nextErrors.district = "İlçe / konum zorunludur.";
-    if (!formData.workAddress.trim()) nextErrors.workAddress = "İş adresi / buluşma noktası zorunludur.";
+    if (!formData.district.trim()) nextErrors.district = "İlçe zorunludur.";
+    if (!formData.neighborhood.trim()) nextErrors.neighborhood = "Mahalle zorunludur.";
+    if (!formData.street.trim()) nextErrors.street = "Sokak / cadde zorunludur.";
+    if (!formData.doorNo.trim()) nextErrors.doorNo = "Kapı no zorunludur.";
 
     const phoneDigits = formData.contactPhone.replace(/\D/g, "");
     const invalidRepeatingPhone = /^(\d)\1+$/.test(phoneDigits);
@@ -1721,12 +1768,20 @@ useEffect(() => {
     id: Date.now(),
     title: toTitleCase(formData.title),
     company: toTitleCase(formData.company),
+    city: toTitleCase(formData.city),
+    district: toTitleCase(formData.district),
+    neighborhood: toTitleCase(formData.neighborhood),
+    street: toTitleCase(formData.street),
+    doorNo: String(formData.doorNo || "").trim(),
     location: normalizeLocation(formData.city, formData.district),
     salary: formatSalaryPreview(formData.workType, formData.salary),
     type: formData.workType,
     category: inferCategory(formData.title),
     description: formData.description.trim(),
-    workAddress: toTitleCase(formData.workAddress),
+    workAddress: buildPublicAddress({
+      neighborhood: formData.neighborhood,
+      street: formData.street,
+    }),
     contactName: toTitleCase(formData.contactName),
     contactPhone: formData.contactPhone.trim(),
     status: "active",
@@ -1749,6 +1804,9 @@ useEffect(() => {
       job_title: pendingJob.title,
       city: toTitleCase(formData.city),
       district: toTitleCase(formData.district),
+      neighborhood: toTitleCase(formData.neighborhood),
+      street: toTitleCase(formData.street),
+      door_no: String(formData.doorNo || "").trim(),
       salary: pendingJob.salary,
       description: pendingJob.description,
       phone: pendingJob.contactPhone,
@@ -1806,6 +1864,9 @@ useEffect(() => {
       title: "",
       city: "",
       district: "",
+      neighborhood: "",
+      street: "",
+      doorNo: "",
       workType: "Günlük",
       salary: "",
       description: "",
@@ -4929,16 +4990,55 @@ useEffect(() => {
                 </div>
 
                 <div className="post-field">
-                  <label>İlçe / Konum<span className="required-star">*</span></label>
+                  <label>İlçe<span className="required-star">*</span></label>
                   <input
                     className={errors.district ? "field-error" : ""}
                     name="district"
                     type="text"
-                    placeholder="Örn. Kadıköy, Odunpazarı, Gebze"
+                    placeholder="Örn. Odunpazarı"
                     value={formData.district}
                     onChange={handleFormChange}
                   />
                   {errors.district && <div className="error-text">{errors.district}</div>}
+                </div>
+
+                <div className="post-field">
+                  <label>Mahalle<span className="required-star">*</span></label>
+                  <input
+                    className={errors.neighborhood ? "field-error" : ""}
+                    name="neighborhood"
+                    type="text"
+                    placeholder="Örn. Vişnelik"
+                    value={formData.neighborhood}
+                    onChange={handleFormChange}
+                  />
+                  {errors.neighborhood && <div className="error-text">{errors.neighborhood}</div>}
+                </div>
+
+                <div className="post-field">
+                  <label>Sokak / Cadde<span className="required-star">*</span></label>
+                  <input
+                    className={errors.street ? "field-error" : ""}
+                    name="street"
+                    type="text"
+                    placeholder="Örn. İsmet İnönü Cad."
+                    value={formData.street}
+                    onChange={handleFormChange}
+                  />
+                  {errors.street && <div className="error-text">{errors.street}</div>}
+                </div>
+
+                <div className="post-field">
+                  <label>Kapı No<span className="required-star">*</span></label>
+                  <input
+                    className={errors.doorNo ? "field-error" : ""}
+                    name="doorNo"
+                    type="text"
+                    placeholder="Örn. 12"
+                    value={formData.doorNo}
+                    onChange={handleFormChange}
+                  />
+                  {errors.doorNo && <div className="error-text">{errors.doorNo}</div>}
                 </div>
 
                 <div className="post-field">
@@ -4948,19 +5048,6 @@ useEffect(() => {
                       <option key={item} value={item}>{item}</option>
                     ))}
                   </select>
-                </div>
-
-                <div className="post-field full">
-                  <label>İş adresi / buluşma noktası<span className="required-star">*</span></label>
-                  <input
-                    className={errors.workAddress ? "field-error" : ""}
-                    name="workAddress"
-                    type="text"
-                    placeholder="Örn. Kadıköy / Moda, AVM önü, depo giriş kapısı"
-                    value={formData.workAddress}
-                    onChange={handleFormChange}
-                  />
-                  {errors.workAddress && <div className="error-text">{errors.workAddress}</div>}
                 </div>
 
                 <div className="post-field">
@@ -5053,7 +5140,10 @@ useEffect(() => {
 
                   <h4 className="preview-title">{toTitleCase(formData.title) || "İlan başlığı burada görünecek"}</h4>
                   <div className="preview-company">{toTitleCase(formData.company) || "Firma adı burada görünecek"}</div>
-                  <div className="preview-location">{normalizeLocation(formData.city, formData.district) || "Şehir / Konum burada görünecek"}</div>
+                  <div className="preview-location">{normalizeLocation(formData.city, formData.district) || "Şehir / İlçe burada görünecek"}</div>
+                  <div className="preview-location">
+                    {buildPublicAddress({ neighborhood: formData.neighborhood, street: formData.street }) || "Mahalle / sokak bilgisi burada görünecek"}
+                  </div>
                   <div className="preview-salary">{previewSalary || "Ücret bilgisi burada görünecek"}</div>
                   <p className="preview-desc">
                     {formData.description || "İş açıklaması burada görünecek. Kullanıcılar ilanı açtığında bu alanı okuyacak."}
@@ -5241,7 +5331,7 @@ useEffect(() => {
                     </div>
 
                     <p className="detail-apply-note clean-note">
-                      Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
+                      Kapı numarası ilanda gösterilmez. Kesin konum ve görüşme süreci işveren tarafından yürütülür.
                     </p>
                   </div>
 
