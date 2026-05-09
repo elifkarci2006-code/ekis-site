@@ -1705,19 +1705,24 @@ useEffect(() => {
     createdAt: new Date().toISOString(),
   });
 
-  const handlePublishClick = async () => {
+  const handlePublishClick = () => {
     if (!validateForm()) return;
+    setPendingJob(buildJobFromForm());
+    setSelectedPlan("free");
+    setShowPlanModal(true);
+  };
 
-    const newJob = buildJobFromForm();
+  const handlePlanContinue = async () => {
+    if (!pendingJob) return;
 
     const payload = {
-      company_name: newJob.company,
-      job_title: newJob.title,
+      company_name: pendingJob.company,
+      job_title: pendingJob.title,
       city: toTitleCase(formData.city),
       district: toTitleCase(formData.district),
-      salary: newJob.salary,
-      description: newJob.description,
-      phone: newJob.contactPhone,
+      salary: pendingJob.salary,
+      description: pendingJob.description,
+      phone: pendingJob.contactPhone,
       plan_type: selectedPlan === "featured" ? "featured" : "normal",
       status: "pending",
       expires_at: new Date(
@@ -1742,27 +1747,30 @@ useEffect(() => {
       return;
     }
 
-    const pendingRecord = {
-      ...newJob,
-      id: data?.id || newJob.id,
+    const reviewJob = {
+      ...pendingJob,
+      id: data?.id || pendingJob.id,
       dbId: data?.id,
-      status: "pending",
       plan: selectedPlan === "featured" ? "featured" : "free",
+      durationDays: selectedPlan === "featured" ? 15 : 30,
+      status: "pending",
       paymentStatus: selectedPlan === "featured" ? "pending" : "not_required",
       submittedAt: new Date().toISOString(),
     };
 
-    setPendingJobs((prev) => [pendingRecord, ...prev]);
+    setPendingJobs((prev) => [reviewJob, ...prev]);
 
     if (selectedPlan === "featured") {
       window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     }
 
     alert("İlan admin onayına gönderildi 🚀");
+
+    setShowPlanModal(false);
     setShowForm(false);
     setShowPreview(false);
-    setSelectedPlan("free");
     setPendingJob(null);
+    setSelectedPlan("free");
 
     setFormData({
       company: "",
@@ -1779,29 +1787,6 @@ useEffect(() => {
     });
 
     setCaptcha(generateCaptchaQuestion());
-  };
-
-  const handlePlanContinue = () => {
-    if (!pendingJob) return;
-
-    const reviewJob = {
-      ...pendingJob,
-      plan: selectedPlan === "featured" ? "featured" : "free",
-      durationDays: selectedPlan === "featured" ? 15 : 30,
-      status: "pending",
-      paymentStatus: selectedPlan === "featured" ? "pending" : "not_required",
-      submittedAt: new Date().toISOString(),
-    };
-
-    setPendingJobs((prev) => [reviewJob, ...prev]);
-
-    if (selectedPlan === "featured") {
-      window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
-    }
-
-    setShowPlanModal(false);
-    setShowForm(false);
-    setPendingJob(null);
   };
 
   const filteredJobs = useMemo(() => {
