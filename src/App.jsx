@@ -280,6 +280,35 @@ function normalizeLocation(city, district) {
   return normalizedCity || normalizedDistrict;
 }
 
+function cleanPhone(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+function getPhoneHref(value) {
+  const phone = cleanPhone(value);
+  return phone ? `tel:${phone}` : "#";
+}
+
+function getWhatsappHref(value, job) {
+  let phone = cleanPhone(value);
+  if (!phone) return "#";
+  if (phone.startsWith("0")) phone = `90${phone.slice(1)}`;
+  if (!phone.startsWith("90")) phone = `90${phone}`;
+  const message = encodeURIComponent(
+    `Merhaba, Ekiş'teki "${job?.title || "ilan"}" ilanınız için yazıyorum.`
+  );
+  return `https://wa.me/${phone}?text=${message}`;
+}
+
+function getMapHref(job) {
+  const query = encodeURIComponent(`${job?.workAddress || job?.location || ""}`);
+  return query ? `https://www.google.com/maps/search/?api=1&query=${query}` : "#";
+}
+
+function getShareText(job) {
+  return `${job?.title || "Ekiş ilanı"} - ${job?.company || ""} | ${job?.location || ""}`;
+}
+
 
 function getJobVisualKey(job) {
   const text = `${job.title || ""} ${job.category || ""}`.toLocaleLowerCase("tr-TR");
@@ -4137,6 +4166,67 @@ useEffect(() => {
         }
 
 
+        .detail-modal-wide {
+          width: min(1040px, calc(100vw - 28px));
+        }
+        .detail-shell-pro {
+          grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        }
+        .detail-cta-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          margin-top: 16px;
+          margin-bottom: 14px;
+        }
+        .detail-cta {
+          min-height: 46px;
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          color: ${PALETTE.slate};
+          border-radius: 16px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 950;
+          cursor: pointer;
+          font-family: inherit;
+          box-shadow: 0 10px 18px rgba(60,74,95,0.05);
+        }
+        .detail-cta.primary {
+          grid-column: 1 / -1;
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          color: #fff;
+          border-color: transparent;
+          box-shadow: 0 14px 26px rgba(255,75,43,0.20);
+        }
+        .detail-mini-info {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          margin-top: 14px;
+        }
+        .detail-mini-info div {
+          padding: 14px;
+          border-radius: 18px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
+        }
+        .detail-mini-info span {
+          display: block;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 900;
+          margin-bottom: 5px;
+        }
+        .detail-mini-info strong {
+          color: ${PALETTE.slate};
+          font-size: 15px;
+          font-weight: 950;
+        }
+
         .plan-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5034,11 +5124,11 @@ useEffect(() => {
 
       {selectedJob && (
         <div className="detail-modal-backdrop" onClick={() => setSelectedJob(null)}>
-          <div className="detail-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="detail-modal detail-modal-wide" onClick={(e) => e.stopPropagation()}>
             <button className="detail-close" type="button" onClick={() => setSelectedJob(null)}>×</button>
 
             <div className="detail-panel-inner">
-              <div className="detail-shell detail-shell-clean">
+              <div className="detail-shell detail-shell-clean detail-shell-pro">
                 <aside className="detail-left detail-side-clean">
                   <div className="detail-badge-row">
                     {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
@@ -5050,42 +5140,6 @@ useEffect(() => {
                     <span className="detail-type-badge detail-time-badge">{getDaysAgoLabel(selectedJob.createdAt)}</span>
                   </div>
 
-                  <div className="detail-salary-side compact-salary-card">
-                    <div className="detail-salary-side-top">
-                      <div>
-                        <div className="detail-salary-label">Ücret bilgisi</div>
-                        <div className="detail-salary">{selectedJob.salary}</div>
-                      </div>
-                      <div className="detail-salary-icon" aria-hidden="true">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                          <path d="M4 7.5h16v10H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                          <path d="M7 10.5h.01M17 14.5h.01M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="detail-contact-box detail-contact-box-left">
-                    <h4 className="detail-contact-title">İletişim bilgileri</h4>
-                    <div className="contact-item">
-                      <span className="contact-icon">👤</span>
-                      <div><span>Yetkili kişi</span><strong>{selectedJob.contactName || "İşveren"}</strong></div>
-                    </div>
-                    <div className="contact-item">
-                      <span className="contact-icon">☎</span>
-                      <div><span>Telefon / WhatsApp</span><strong>{selectedJob.contactPhone}</strong></div>
-                    </div>
-                    <div className="contact-item">
-                      <span className="contact-icon">⌖</span>
-                      <div><span>Adres</span><strong>{selectedJob.workAddress || selectedJob.location}</strong></div>
-                    </div>
-                    <p className="detail-apply-note clean-note">
-                      Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
-                    </p>
-                  </div>
-                </aside>
-
-                <section className="detail-right detail-main-clean">
                   <p className="detail-company">{selectedJob.company}</p>
                   <h3 className="detail-title">{selectedJob.title}</h3>
                   <p className="detail-summary">
@@ -5105,7 +5159,7 @@ useEffect(() => {
                         <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                         <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                       </svg>
-                      Kategori: <strong>{selectedJob.category || "Vitrin ilan"}</strong>
+                      Kategori: <strong>{selectedJob.category || "Genel"}</strong>
                     </span>
                     <span>
                       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -5119,6 +5173,86 @@ useEffect(() => {
                     <h4 className="detail-description-title">İş açıklaması</h4>
                     <div className="detail-description">
                       {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
+                    </div>
+                  </div>
+                </aside>
+
+                <section className="detail-right detail-main-clean">
+                  <div className="detail-salary-side compact-salary-card">
+                    <div className="detail-salary-side-top">
+                      <div>
+                        <div className="detail-salary-label">Ücret bilgisi</div>
+                        <div className="detail-salary">{selectedJob.salary}</div>
+                      </div>
+                      <div className="detail-salary-icon" aria-hidden="true">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                          <path d="M4 7.5h16v10H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                          <path d="M7 10.5h.01M17 14.5h.01M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="detail-contact-box detail-contact-box-left">
+                    <h4 className="detail-contact-title">Başvuru ve iletişim</h4>
+                    <div className="contact-item">
+                      <span className="contact-icon">👤</span>
+                      <div><span>Yetkili kişi</span><strong>{selectedJob.contactName || "İşveren"}</strong></div>
+                    </div>
+                    <div className="contact-item">
+                      <span className="contact-icon">☎</span>
+                      <div><span>Telefon / WhatsApp</span><strong>{selectedJob.contactPhone || "Belirtilmedi"}</strong></div>
+                    </div>
+                    <div className="contact-item">
+                      <span className="contact-icon">⌖</span>
+                      <div><span>Adres</span><strong>{selectedJob.workAddress || selectedJob.location}</strong></div>
+                    </div>
+
+                    <div className="detail-cta-grid">
+                      <a className="detail-cta primary" href={getWhatsappHref(selectedJob.contactPhone, selectedJob)} target="_blank" rel="noopener noreferrer">
+                        WhatsApp'tan Yaz
+                      </a>
+                      <a className="detail-cta" href={getPhoneHref(selectedJob.contactPhone)}>
+                        Ara
+                      </a>
+                      <a className="detail-cta" href={getMapHref(selectedJob)} target="_blank" rel="noopener noreferrer">
+                        Haritada Aç
+                      </a>
+                      <button
+                        className="detail-cta"
+                        type="button"
+                        onClick={() => {
+                          const shareData = {
+                            title: selectedJob.title,
+                            text: getShareText(selectedJob),
+                            url: window.location.href,
+                          };
+
+                          if (navigator.share) {
+                            navigator.share(shareData).catch(() => {});
+                          } else {
+                            navigator.clipboard?.writeText(`${shareData.text} - ${shareData.url}`);
+                            alert("İlan bağlantısı kopyalandı 🚀");
+                          }
+                        }}
+                      >
+                        Paylaş
+                      </button>
+                    </div>
+
+                    <p className="detail-apply-note clean-note">
+                      Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
+                    </p>
+                  </div>
+
+                  <div className="detail-mini-info">
+                    <div>
+                      <span>İlan süresi</span>
+                      <strong>{getDaysLeftLabel(selectedJob)}</strong>
+                    </div>
+                    <div>
+                      <span>İlan tipi</span>
+                      <strong>{selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? "Ekiş Acil" : "Standart"}</strong>
                     </div>
                   </div>
                 </section>
