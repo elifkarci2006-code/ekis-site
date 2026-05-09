@@ -1682,7 +1682,6 @@ useEffect(() => {
     if (!formData.district.trim()) nextErrors.district = "İlçe zorunludur.";
     if (!formData.neighborhood.trim()) nextErrors.neighborhood = "Mahalle zorunludur.";
     if (!formData.street.trim()) nextErrors.street = "Sokak / cadde zorunludur.";
-    if (!formData.doorNo.trim()) nextErrors.doorNo = "Kapı no zorunludur.";
 
     const phoneDigits = formData.contactPhone.replace(/\D/g, "");
     const invalidRepeatingPhone = /^(\d)\1+$/.test(phoneDigits);
@@ -2917,6 +2916,47 @@ useEffect(() => {
           padding: 24px;
           overflow-y: auto;
         }
+        .location-section {
+          grid-column: 1 / -1;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 12px;
+          padding: 16px;
+          border-radius: 22px;
+          background: rgba(88,173,173,0.07);
+          border: 1px solid rgba(88,173,173,0.14);
+          margin-bottom: 2px;
+        }
+
+        .location-section-title {
+          grid-column: 1 / -1;
+          color: ${PALETTE.slate};
+          font-size: 15px;
+          font-weight: 950;
+          letter-spacing: -0.02em;
+          margin-bottom: 2px;
+        }
+
+        .post-field label small {
+          color: ${PALETTE.softText};
+          font-size: 11px;
+          font-weight: 800;
+        }
+
+        .post-field input:-webkit-autofill,
+        .post-field input:-webkit-autofill:hover,
+        .post-field input:-webkit-autofill:focus {
+          -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+          -webkit-text-fill-color: ${PALETTE.text};
+          transition: background-color 5000s ease-in-out 0s;
+        }
+
+        @media (max-width: 720px) {
+          .location-section {
+            grid-template-columns: 1fr;
+          }
+        }
+
         .post-form-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4973,6 +5013,11 @@ useEffect(() => {
                   {errors.title && <div className="error-text">{errors.title}</div>}
                 </div>
 
+                <div className="location-section">
+                  <div className="location-section-title">
+                    📍 Konum Bilgileri
+                  </div>
+
                 <div className="post-field">
                   <label>Şehir<span className="required-star">*</span></label>
                   <select
@@ -5029,16 +5074,18 @@ useEffect(() => {
                 </div>
 
                 <div className="post-field">
-                  <label>Kapı No<span className="required-star">*</span></label>
+                  <label>Kapı No <small>(opsiyonel - ilanda gösterilmez)</small></label>
                   <input
                     className={errors.doorNo ? "field-error" : ""}
                     name="doorNo"
                     type="text"
-                    placeholder="Örn. 12"
+                    placeholder="Örn. 12A"
                     value={formData.doorNo}
                     onChange={handleFormChange}
                   />
                   {errors.doorNo && <div className="error-text">{errors.doorNo}</div>}
+                </div>
+
                 </div>
 
                 <div className="post-field">
