@@ -263,6 +263,24 @@ function formatSalaryPreview(workType, salary) {
   return `Günlük ${formatted} TL`;
 }
 
+function toTitleCase(value) {
+  return String(value || "")
+    .trim()
+    .toLocaleLowerCase("tr-TR")
+    .replace(/(^|[\s/.,()-])([a-zçğıöşü])/g, (match, separator, char) =>
+      `${separator}${char.toLocaleUpperCase("tr-TR")}`
+    )
+    .replace(/\s+/g, " ");
+}
+
+function normalizeLocation(city, district) {
+  const normalizedCity = toTitleCase(city);
+  const normalizedDistrict = toTitleCase(district);
+  if (normalizedCity && normalizedDistrict) return `${normalizedCity} / ${normalizedDistrict}`;
+  return normalizedCity || normalizedDistrict;
+}
+
+
 function getJobVisualKey(job) {
   const text = `${job.title || ""} ${job.category || ""}`.toLocaleLowerCase("tr-TR");
   if (text.includes("kurye") || text.includes("dağıtım")) return "delivery";
@@ -1431,11 +1449,17 @@ export default function App() {
   const [errors, setErrors] = useState({});
   const [infoModal, setInfoModal] = useState(null);
   const [isAdminRoute, setIsAdminRoute] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminLoginError, setAdminLoginError] = useState("");
+  const [adminAuthenticated, setAdminAuthenticated] = useState(
+    () => window.localStorage.getItem("ekisAdminAuth") === "true"
+  );
   const [captcha, setCaptcha] = useState(() => generateCaptchaQuestion());
   const [formData, setFormData] = useState({
     company: "",
     title: "",
     city: "",
+    district: "",
     workType: "Günlük",
     salary: "",
     description: "",
@@ -1463,9 +1487,9 @@ useEffect(() => {
 
     const formatted = data.map((job) => ({
       id: job.id,
-      title: job.job_title,
-      company: job.company_name,
-      location: `${job.city} / ${job.district}`,
+      title: toTitleCase(job.job_title),
+      company: toTitleCase(job.company_name),
+      location: normalizeLocation(job.city, job.district),
       salary: job.salary,
       type: job.plan_type === "featured" ? "Öne Çıkan" : "Standart",
       description: job.description,
@@ -1525,6 +1549,24 @@ useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleAdminLogin = () => {
+    if (adminPassword === "ekis2026") {
+      window.localStorage.setItem("ekisAdminAuth", "true");
+      setAdminAuthenticated(true);
+      setAdminLoginError("");
+      setAdminPassword("");
+      return;
+    }
+
+    setAdminLoginError("Şifre hatalı kankam 😄");
+  };
+
+  const handleAdminLogout = () => {
+    window.localStorage.removeItem("ekisAdminAuth");
+    setAdminAuthenticated(false);
+    setAdminPassword("");
+  };
+
   useEffect(() => {
     if (!showForm) {
       setShowPreview(false);
@@ -1553,7 +1595,8 @@ useEffect(() => {
 
     if (!formData.company.trim()) nextErrors.company = "Firma adı zorunludur.";
     if (!formData.title.trim()) nextErrors.title = "İlan başlığı zorunludur.";
-    if (!formData.city.trim()) nextErrors.city = "Şehir / konum zorunludur.";
+    if (!formData.city.trim()) nextErrors.city = "Şehir seçimi zorunludur.";
+    if (!formData.district.trim()) nextErrors.district = "İlçe / konum zorunludur.";
     if (!formData.workAddress.trim()) nextErrors.workAddress = "İş adresi / buluşma noktası zorunludur.";
 
     const phoneDigits = formData.contactPhone.replace(/\D/g, "");
@@ -1638,26 +1681,83 @@ useEffect(() => {
 
   const buildJobFromForm = () => ({
     id: Date.now(),
-    title: formData.title.trim(),
-    company: formData.company.trim(),
-    location: formData.city.trim(),
+    title: toTitleCase(formData.title),
+    company: toTitleCase(formData.company),
+    location: normalizeLocation(formData.city, formData.district),
     salary: formatSalaryPreview(formData.workType, formData.salary),
     type: formData.workType,
     category: inferCategory(formData.title),
     description: formData.description.trim(),
-    workAddress: formData.workAddress.trim(),
-    contactName: formData.contactName.trim(),
+    workAddress: toTitleCase(formData.workAddress),
+    contactName: toTitleCase(formData.contactName),
     contactPhone: formData.contactPhone.trim(),
     status: "active",
     durationDays: selectedPlan === "featured" ? 15 : 30,
     createdAt: new Date().toISOString(),
   });
 
-  const handlePublishClick = () => {
+  const handlePublishClick = async () => {
     if (!validateForm()) return;
-    setPendingJob(buildJobFromForm());
+
+    const newJob = buildJobFromForm();
+
+    const payload = {
+      company_name: newJob.company,
+      job_title: newJob.title,
+      city: toTitleCase(formData.city),
+      district: toTitleCase(formData.district),
+      salary: newJob.salary,
+      description: newJob.description,
+      phone: newJob.contactPhone,
+      plan_type: selectedPlan === "featured" ? "featured" : "normal",
+      status: "active",
+      expires_at: new Date(
+        Date.now() +
+          (selectedPlan === "featured" ? 15 : 30) *
+            24 *
+            60 *
+            60 *
+            1000
+      ).toISOString(),
+    };
+
+    const { error } = await supabase
+      .from("job_posts")
+      .insert([payload]);
+
+    if (error) {
+      console.error("İlan kaydedilemedi:", error);
+      alert("İlan kaydedilemedi 😥");
+      return;
+    }
+
+    if (selectedPlan === "featured") {
+      setFeaturedJobs((prev) => [{ ...newJob, plan: "featured", featuredStatus: "live" }, ...prev]);
+    } else {
+      setJobs((prev) => [newJob, ...prev]);
+    }
+
+    alert("İlan başarıyla yayınlandı 🚀");
+    setShowForm(false);
+    setShowPreview(false);
     setSelectedPlan("free");
-    setShowPlanModal(true);
+    setPendingJob(null);
+
+    setFormData({
+      company: "",
+      title: "",
+      city: "",
+      district: "",
+      workType: "Günlük",
+      salary: "",
+      description: "",
+      workAddress: "",
+      contactName: "",
+      contactPhone: "",
+      captchaAnswer: "",
+    });
+
+    setCaptcha(generateCaptchaQuestion());
   };
 
   const handlePlanContinue = () => {
@@ -4279,6 +4379,52 @@ useEffect(() => {
           font-weight: 950;
           border: 1px solid rgba(60,74,95,0.10);
         }
+        .admin-login-card {
+          max-width: 460px;
+          margin: 80px auto 0;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 28px;
+          padding: 28px;
+          box-shadow: 0 24px 60px rgba(60,74,95,0.12);
+        }
+        .admin-login-card h1 {
+          margin: 0 0 8px;
+          color: ${PALETTE.slate};
+          font-size: 34px;
+          font-weight: 950;
+          letter-spacing: -0.05em;
+        }
+        .admin-login-card p {
+          margin: 0 0 18px;
+          color: ${PALETTE.softText};
+          font-size: 14px;
+          font-weight: 800;
+          line-height: 1.45;
+        }
+        .admin-login-card input {
+          width: 100%;
+          height: 50px;
+          border: 1px solid rgba(60,74,95,0.12);
+          border-radius: 16px;
+          padding: 0 15px;
+          color: ${PALETTE.slate};
+          font-size: 15px;
+          font-weight: 850;
+          outline: none;
+          margin-bottom: 12px;
+        }
+        .admin-login-error {
+          color: ${PALETTE.coral};
+          font-size: 13px;
+          font-weight: 900;
+          margin: 0 0 12px;
+        }
+        .admin-login-actions {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
         @media (max-width: 1000px) {
           .admin-compact-layout { grid-template-columns: 1fr; }
           .admin-side { position: static; }
@@ -4294,6 +4440,33 @@ useEffect(() => {
 
       {isAdminRoute && (
         <div className="admin-page">
+          {!adminAuthenticated ? (
+            <div className="admin-login-card">
+              <h1>Admin Girişi</h1>
+              <p>Admin paneline devam etmek için şifre gir.</p>
+              <input
+                type="password"
+                placeholder="Admin şifresi"
+                value={adminPassword}
+                onChange={(e) => {
+                  setAdminPassword(e.target.value);
+                  setAdminLoginError("");
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleAdminLogin();
+                }}
+              />
+              {adminLoginError && <div className="admin-login-error">{adminLoginError}</div>}
+              <div className="admin-login-actions">
+                <button className="btn btn-primary" type="button" onClick={handleAdminLogin}>
+                  Giriş Yap
+                </button>
+                <button className="btn btn-secondary" type="button" onClick={goHome}>
+                  Siteye Dön
+                </button>
+              </div>
+            </div>
+          ) : (
           <div className="admin-shell">
             <div className="admin-top">
               <div className="admin-title-block">
@@ -4308,9 +4481,14 @@ useEffect(() => {
                 <h1>Admin Paneli</h1>
                 <p>Daha sade yönetim ekranı: ilanları tek listeden kontrol et.</p>
               </div>
-              <button className="btn btn-secondary" type="button" onClick={goHome}>
-                Siteye Dön
-              </button>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                <button className="btn btn-secondary" type="button" onClick={handleAdminLogout}>
+                  Çıkış Yap
+                </button>
+                <button className="btn btn-secondary" type="button" onClick={goHome}>
+                  Siteye Dön
+                </button>
+              </div>
             </div>
 
             <div className="admin-stats">
@@ -4479,6 +4657,7 @@ useEffect(() => {
               </section>
             </div>
           </div>
+          )}
         </div>
       )}
 
@@ -4550,16 +4729,32 @@ useEffect(() => {
                 </div>
 
                 <div className="post-field">
-                  <label>Şehir / Konum<span className="required-star">*</span></label>
-                  <input
+                  <label>Şehir<span className="required-star">*</span></label>
+                  <select
                     className={errors.city ? "field-error" : ""}
                     name="city"
-                    type="text"
-                    placeholder="Örn. İstanbul / Kadıköy"
                     value={formData.city}
                     onChange={handleFormChange}
-                  />
+                  >
+                    <option value="">Şehir seç</option>
+                    {cities.filter((item) => item !== "Tümü").map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </select>
                   {errors.city && <div className="error-text">{errors.city}</div>}
+                </div>
+
+                <div className="post-field">
+                  <label>İlçe / Konum<span className="required-star">*</span></label>
+                  <input
+                    className={errors.district ? "field-error" : ""}
+                    name="district"
+                    type="text"
+                    placeholder="Örn. Kadıköy, Odunpazarı, Gebze"
+                    value={formData.district}
+                    onChange={handleFormChange}
+                  />
+                  {errors.district && <div className="error-text">{errors.district}</div>}
                 </div>
 
                 <div className="post-field">
@@ -4672,9 +4867,9 @@ useEffect(() => {
                     <div className="preview-meta">{formData.workType || "Günlük"}</div>
                   </div>
 
-                  <h4 className="preview-title">{formData.title || "İlan başlığı burada görünecek"}</h4>
-                  <div className="preview-company">{formData.company || "Firma adı burada görünecek"}</div>
-                  <div className="preview-location">{formData.city || "Şehir / Konum burada görünecek"}</div>
+                  <h4 className="preview-title">{toTitleCase(formData.title) || "İlan başlığı burada görünecek"}</h4>
+                  <div className="preview-company">{toTitleCase(formData.company) || "Firma adı burada görünecek"}</div>
+                  <div className="preview-location">{normalizeLocation(formData.city, formData.district) || "Şehir / Konum burada görünecek"}</div>
                   <div className="preview-salary">{previewSalary || "Ücret bilgisi burada görünecek"}</div>
                   <p className="preview-desc">
                     {formData.description || "İş açıklaması burada görünecek. Kullanıcılar ilanı açtığında bu alanı okuyacak."}
