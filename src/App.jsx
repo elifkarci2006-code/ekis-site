@@ -4588,6 +4588,184 @@ useEffect(() => {
           }
         }
 
+        .detail-modal-modern {
+          background:
+            radial-gradient(circle at 8% 10%, rgba(255,75,43,0.10), transparent 26%),
+            radial-gradient(circle at 92% 12%, rgba(88,173,173,0.14), transparent 28%),
+            linear-gradient(135deg, #ffffff 0%, #fffaf7 48%, #f3fbfb 100%) !important;
+          box-shadow: 0 40px 100px rgba(35,48,68,0.30) !important;
+        }
+
+        .detail-modern-main {
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.72)),
+            radial-gradient(circle at top left, rgba(255,75,43,0.08), transparent 34%) !important;
+        }
+
+        .detail-modern-side {
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.72), rgba(245,247,248,0.86)),
+            radial-gradient(circle at top right, rgba(118,191,190,0.18), transparent 38%) !important;
+        }
+
+        .detail-modern-company {
+          color: #ff4b2b !important;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .detail-modern-company::after {
+          content: "✓";
+          width: 20px;
+          height: 20px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255,75,43,0.12);
+          color: #ff4b2b;
+          font-size: 12px;
+          font-weight: 950;
+        }
+
+        .detail-modern-title {
+          color: #26354d !important;
+          text-shadow: 0 12px 28px rgba(60,74,95,0.08);
+        }
+
+        .detail-modern-summary {
+          font-size: 18px !important;
+          font-weight: 800 !important;
+          color: #334155 !important;
+          max-width: 660px !important;
+        }
+
+        .detail-modern-meta {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          margin-bottom: 24px !important;
+        }
+
+        .detail-modern-meta div {
+          min-height: 82px;
+          border-radius: 24px !important;
+          background:
+            linear-gradient(180deg, #fff 0%, #fffdfc 100%) !important;
+          border-color: rgba(255,75,43,0.10) !important;
+        }
+
+        .detail-modern-meta div:first-child {
+          border-color: rgba(88,173,173,0.18) !important;
+          background:
+            radial-gradient(circle at left, rgba(88,173,173,0.13), transparent 45%),
+            #fff !important;
+        }
+
+        .detail-modern-meta div:nth-child(2) {
+          border-color: rgba(255,75,43,0.16) !important;
+          background:
+            radial-gradient(circle at left, rgba(255,75,43,0.11), transparent 45%),
+            #fff !important;
+        }
+
+        .detail-modern-desc-card {
+          padding: 28px !important;
+          min-height: 235px;
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,248,245,0.82)) !important;
+          border-color: rgba(255,75,43,0.16) !important;
+          box-shadow: 0 20px 45px rgba(255,75,43,0.075) !important;
+        }
+
+        .detail-modern-desc-card h4 {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 21px !important;
+        }
+
+        .detail-modern-desc-card h4::before {
+          content: "▌";
+          color: #ff4b2b;
+          font-size: 24px;
+          line-height: 1;
+        }
+
+        .detail-modern-desc-card p {
+          font-size: 16px !important;
+          line-height: 1.85 !important;
+          color: #334155 !important;
+        }
+
+        .detail-modern-salary-card {
+          background:
+            radial-gradient(circle at 90% 20%, rgba(255,255,255,0.28), transparent 22%),
+            linear-gradient(135deg, #ff4424 0%, #ff7a1a 100%) !important;
+          color: #fff !important;
+          border: none !important;
+          box-shadow: 0 22px 46px rgba(255,75,43,0.28) !important;
+        }
+
+        .detail-modern-salary-card span,
+        .detail-modern-salary-card strong {
+          color: #fff !important;
+        }
+
+        .detail-modern-contact-card {
+          background: rgba(255,255,255,0.88) !important;
+          border-color: rgba(60,74,95,0.08) !important;
+          box-shadow: 0 24px 55px rgba(60,74,95,0.12) !important;
+        }
+
+        .detail-modern-contact-card h4 {
+          color: #0f7778 !important;
+          position: relative;
+          padding-bottom: 10px;
+        }
+
+        .detail-modern-contact-card h4::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 34px;
+          height: 3px;
+          border-radius: 999px;
+          background: #ff4b2b;
+        }
+
+        .modern-whatsapp-btn {
+          background: linear-gradient(135deg, #11c76f 0%, #20d982 100%) !important;
+          box-shadow: 0 18px 35px rgba(17,199,111,0.26) !important;
+        }
+
+        .modern-mini-actions a,
+        .modern-mini-actions button {
+          min-height: 54px !important;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .modern-mini-actions a:nth-child(1)::before {
+          content: "📞";
+          font-size: 18px;
+        }
+        .modern-mini-actions a:nth-child(2)::before {
+          content: "🗺️";
+          font-size: 18px;
+        }
+        .modern-mini-actions button::before {
+          content: "🔗";
+          font-size: 18px;
+        }
+
+        .modern-safe-note {
+          background: rgba(88,173,173,0.10);
+          border: 1px solid rgba(88,173,173,0.14);
+          border-radius: 18px;
+          padding: 13px 14px;
+        }
+
         .plan-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5568,14 +5746,7 @@ useEffect(() => {
                     <span>Kategori</span>
                     <strong>{selectedJob.category || "Genel"}</strong>
                   </div>
-                  <div>
-                    <span>Yayın</span>
-                    <strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong>
-                  </div>
-                  <div>
-                    <span>Süre</span>
-                    <strong>{getDaysLeftLabel(selectedJob)}</strong>
-                  </div>
+
                 </div>
 
                 <div className="detail-modern-desc-card">
