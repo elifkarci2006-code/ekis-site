@@ -1473,7 +1473,8 @@ useEffect(() => {
     const { data, error } = await supabase
       .from("job_posts")
       .select("*")
-      .eq("status", "active");
+      .neq("status", "rejected")
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Supabase hata:", error);
@@ -1487,6 +1488,7 @@ useEffect(() => {
 
     const formatted = data.map((job) => ({
       id: job.id,
+      dbId: job.id,
       title: toTitleCase(job.job_title),
       company: toTitleCase(job.company_name),
       location: normalizeLocation(job.city, job.district),
@@ -1496,18 +1498,25 @@ useEffect(() => {
       contactPhone: job.phone,
       createdAt: job.created_at,
       category: "Genel",
+      status: job.status || "pending",
+      plan: job.plan_type === "featured" ? "featured" : "free",
       featuredStatus:
-        job.plan_type === "featured" ? "live" : null,
+        job.status === "active" && job.plan_type === "featured" ? "live" : null,
     }));
 
+    const pendingFromDb = formatted.filter(
+      (j) => j.status === "pending"
+    );
+
     const normalJobs = formatted.filter(
-      (j) => j.featuredStatus !== "live"
+      (j) => j.status === "active" && j.featuredStatus !== "live"
     );
 
     const featuredJobsFromDb = formatted.filter(
-      (j) => j.featuredStatus === "live"
+      (j) => j.status === "active" && j.featuredStatus === "live"
     );
 
+    setPendingJobs(pendingFromDb);
     setJobs([...normalJobs, ...jobsSeed]);
     setFeaturedJobs([...featuredJobsFromDb, ...featuredSeed]);
   };
@@ -1710,7 +1719,7 @@ useEffect(() => {
       description: newJob.description,
       phone: newJob.contactPhone,
       plan_type: selectedPlan === "featured" ? "featured" : "normal",
-      status: "active",
+      status: "pending",
       expires_at: new Date(
         Date.now() +
           (selectedPlan === "featured" ? 15 : 30) *
@@ -1721,9 +1730,11 @@ useEffect(() => {
       ).toISOString(),
     };
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("job_posts")
-      .insert([payload]);
+      .insert([payload])
+      .select()
+      .single();
 
     if (error) {
       console.error("İlan kaydedilemedi:", error);
@@ -1731,13 +1742,23 @@ useEffect(() => {
       return;
     }
 
+    const pendingRecord = {
+      ...newJob,
+      id: data?.id || newJob.id,
+      dbId: data?.id,
+      status: "pending",
+      plan: selectedPlan === "featured" ? "featured" : "free",
+      paymentStatus: selectedPlan === "featured" ? "pending" : "not_required",
+      submittedAt: new Date().toISOString(),
+    };
+
+    setPendingJobs((prev) => [pendingRecord, ...prev]);
+
     if (selectedPlan === "featured") {
-      setFeaturedJobs((prev) => [{ ...newJob, plan: "featured", featuredStatus: "live" }, ...prev]);
-    } else {
-      setJobs((prev) => [newJob, ...prev]);
+      window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     }
 
-    alert("İlan başarıyla yayınlandı 🚀");
+    alert("İlan admin onayına gönderildi 🚀");
     setShowForm(false);
     setShowPreview(false);
     setSelectedPlan("free");
@@ -1862,7 +1883,7 @@ useEffect(() => {
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
   const visibleFeaturedJobs = filteredFeaturedJobs.slice(0, 6);
-  const approvePendingJob = (job) => {
+  const approvePendingJob = async (job) => {
     const approvedJob = {
       ...job,
       status: "active",
@@ -1870,6 +1891,19 @@ useEffect(() => {
       createdAt: new Date().toISOString(),
       featuredStatus: job.plan === "featured" ? "live" : undefined,
     };
+
+    if (job.dbId) {
+      const { error } = await supabase
+        .from("job_posts")
+        .update({ status: "active" })
+        .eq("id", job.dbId);
+
+      if (error) {
+        console.error("İlan onaylanamadı:", error);
+        alert("İlan onaylanamadı 😥");
+        return;
+      }
+    }
 
     setPendingJobs((prev) => prev.filter((item) => item.id !== job.id));
 
@@ -1880,7 +1914,22 @@ useEffect(() => {
     }
   };
 
-  const rejectPendingJob = (jobId) => {
+  const rejectPendingJob = async (jobId) => {
+    const job = pendingJobs.find((item) => item.id === jobId);
+
+    if (job?.dbId) {
+      const { error } = await supabase
+        .from("job_posts")
+        .update({ status: "rejected" })
+        .eq("id", job.dbId);
+
+      if (error) {
+        console.error("İlan reddedilemedi:", error);
+        alert("İlan reddedilemedi 😥");
+        return;
+      }
+    }
+
     setPendingJobs((prev) => prev.filter((item) => item.id !== jobId));
   };
 
