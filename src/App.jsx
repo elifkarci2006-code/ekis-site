@@ -4762,7 +4762,54 @@ useEffect(() => {
           .admin-table-actions { justify-content: flex-start; }
         }
 
-      `}</style>
+      `}
+        /* MOBILE POPUP ORDER FIX - Başlık ve iş açıklaması önce gelsin */
+        @media (max-width: 760px) {
+          .detail-shell.detail-shell-clean {
+            display: flex;
+            flex-direction: column;
+          }
+
+          .detail-main-clean {
+            order: 1;
+          }
+
+          .detail-side-clean {
+            order: 2;
+          }
+
+          .detail-panel-inner {
+            max-height: 86vh;
+            overflow-y: auto;
+          }
+
+          .detail-company {
+            margin-top: 0;
+          }
+
+          .detail-title {
+            font-size: 30px;
+            line-height: 1.08;
+          }
+
+          .detail-summary {
+            margin-bottom: 16px;
+          }
+
+          .detail-left-meta {
+            margin-bottom: 16px;
+          }
+
+          .detail-description-clean {
+            margin-top: 14px;
+          }
+
+          .detail-contact-box-left {
+            margin-top: 16px;
+          }
+        }
+
+</style>
 
       {isAdminRoute && (
         <div className="admin-page">
