@@ -1590,7 +1590,7 @@ useEffect(() => {
 
     setPendingJobs(pendingFromDb);
     setJobs([...normalJobs, ...jobsSeed]);
-    setFeaturedJobs([...featuredJobsFromDb, ...featuredSeed]);
+    setFeaturedJobs(featuredJobsFromDb);
   };
 
   fetchJobs();
