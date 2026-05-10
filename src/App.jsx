@@ -4762,7 +4762,6 @@ useEffect(() => {
           .admin-table-actions { justify-content: flex-start; }
         }
 
-      `}
         /* MOBILE POPUP ORDER FIX - Başlık ve iş açıklaması önce gelsin */
         @media (max-width: 760px) {
           .detail-shell.detail-shell-clean {
@@ -4809,7 +4808,7 @@ useEffect(() => {
           }
         }
 
-</style>
+      `}</style>
 
       {isAdminRoute && (
         <div className="admin-page">
