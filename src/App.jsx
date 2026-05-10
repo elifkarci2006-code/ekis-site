@@ -2337,7 +2337,7 @@ useEffect(() => {
         .app-shell {
           min-height: 100vh;
           background:
-            radial-gradient(circle at top left, rgba(228,93,80,0.10), transparent 26%),
+            radial-gradient(circle at top left, rgba(246,90,69,0.10), transparent 26%),
             radial-gradient(circle at top right, rgba(118,191,190,0.10), transparent 24%),
             linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
         }
@@ -2408,7 +2408,7 @@ useEffect(() => {
         .btn-primary {
           color: #fff;
           background: ${PALETTE.coral};
-          box-shadow: 0 12px 24px rgba(228,93,80,0.28);
+          box-shadow: 0 12px 24px rgba(246,90,69,0.28);
         }
         .btn-secondary {
           color: ${PALETTE.slate};
@@ -2470,9 +2470,9 @@ useEffect(() => {
         .search-btn:hover { transform: translateY(-1px); }
         .search-btn-primary {
           border: 1px solid rgba(255,255,255,0.35);
-          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
+          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
           color: #fff;
-          box-shadow: 0 14px 28px rgba(255,79,38,0.24);
+          box-shadow: 0 14px 28px rgba(246,90,69,0.24);
         }
         .search-btn-clear {
           border: 1px solid rgba(255,255,255,0.62);
@@ -2591,7 +2591,7 @@ useEffect(() => {
           width: 130px;
           height: 130px;
           border-radius: 50%;
-          background: rgba(228,93,80,0.12);
+          background: rgba(246,90,69,0.12);
         }
 
         .card-top {
@@ -2633,7 +2633,7 @@ useEffect(() => {
           font-size: 12px;
           font-weight: 800;
           letter-spacing: -0.01em;
-          border: 1px solid rgba(228,93,80,0.16);
+          border: 1px solid rgba(246,90,69,0.16);
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
         .job-days {
@@ -2781,7 +2781,7 @@ useEffect(() => {
         .soft-job-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 22px 42px rgba(60,74,95,0.10), inset 0 1px 0 rgba(255,255,255,0.95);
-          border-color: rgba(228,93,80,0.16);
+          border-color: rgba(246,90,69,0.16);
         }
         .soft-job-card::before {
           content: "";
@@ -2862,7 +2862,7 @@ useEffect(() => {
         }
         .soft-divider {
           height: 1px;
-          background: rgba(228,93,80,0.14);
+          background: rgba(246,90,69,0.14);
           margin: auto 0 14px;
           position: relative;
           z-index: 1;
@@ -2879,7 +2879,7 @@ useEffect(() => {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          color: #ff4b2b;
+          color: #f65a45;
           font-size: 17px;
           font-weight: 950;
           line-height: 1.2;
@@ -2889,7 +2889,7 @@ useEffect(() => {
           width: 20px;
           height: 20px;
           flex-shrink: 0;
-          color: #ff4b2b;
+          color: #f65a45;
         }
         .soft-badge {
           display: inline-flex;
@@ -2900,12 +2900,12 @@ useEffect(() => {
           padding: 0 13px;
           border-radius: 999px;
           background: #fff0eb;
-          color: #ff4b2b;
-          border: 1px solid rgba(255,75,43,0.18);
+          color: #f65a45;
+          border: 1px solid rgba(246,90,69,0.18);
           font-size: 12px;
           font-weight: 900;
           letter-spacing: -0.01em;
-          box-shadow: 0 6px 14px rgba(255,75,43,0.07);
+          box-shadow: 0 6px 14px rgba(246,90,69,0.07);
         }
         .jobs-grid {
           display: grid;
@@ -3065,7 +3065,7 @@ useEffect(() => {
         }
         .feature-box {
           background: ${PALETTE.warm};
-          border: 1px solid rgba(228,93,80,0.14);
+          border: 1px solid rgba(246,90,69,0.14);
           border-radius: 18px;
           padding: 14px;
         }
@@ -3108,7 +3108,7 @@ useEffect(() => {
           color: ${PALETTE.coral};
           font-size: 12px;
           font-weight: 900;
-          border: 1px solid rgba(228,93,80,0.16);
+          border: 1px solid rgba(246,90,69,0.16);
         }
         .preview-meta {
           color: ${PALETTE.softText};
@@ -3174,9 +3174,9 @@ useEffect(() => {
           position: relative;
           padding: 24px 26px 22px;
           background:
-            radial-gradient(circle at top right, rgba(255,75,43,0.14), transparent 34%),
+            radial-gradient(circle at top right, rgba(246,90,69,0.14), transparent 34%),
             linear-gradient(180deg, #fff 0%, #fff7f4 100%);
-          border-bottom: 1px solid rgba(255,75,43,0.12);
+          border-bottom: 1px solid rgba(246,90,69,0.12);
         }
         .detail-close {
           position: absolute;
@@ -3216,13 +3216,13 @@ useEffect(() => {
         }
         .detail-featured-badge {
           color: #fff;
-          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
-          box-shadow: 0 10px 20px rgba(255,75,43,0.18);
+          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
+          box-shadow: 0 10px 20px rgba(246,90,69,0.18);
         }
         .detail-type-badge {
-          color: #ff4b2b;
+          color: #f65a45;
           background: #fff0eb;
-          border: 1px solid rgba(255,75,43,0.16);
+          border: 1px solid rgba(246,90,69,0.16);
         }
         .detail-company {
           margin: 0 0 8px;
@@ -3252,8 +3252,8 @@ useEffect(() => {
           padding: 18px 20px;
           border-radius: 22px;
           background: linear-gradient(180deg, #fff6f2 0%, #fff 100%);
-          border: 1px solid rgba(255,75,43,0.14);
-          box-shadow: 0 14px 28px rgba(255,75,43,0.08);
+          border: 1px solid rgba(246,90,69,0.14);
+          box-shadow: 0 14px 28px rgba(246,90,69,0.08);
         }
         .detail-salary-label {
           color: ${PALETTE.softText};
@@ -3262,7 +3262,7 @@ useEffect(() => {
           margin-bottom: 4px;
         }
         .detail-salary {
-          color: #ff4b2b;
+          color: #f65a45;
           font-size: 26px;
           font-weight: 950;
           letter-spacing: -0.035em;
@@ -3271,12 +3271,12 @@ useEffect(() => {
           width: 48px;
           height: 48px;
           border-radius: 18px;
-          background: #ff4b2b;
+          background: #f65a45;
           color: #fff;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 14px 28px rgba(255,75,43,0.20);
+          box-shadow: 0 14px 28px rgba(246,90,69,0.20);
           flex-shrink: 0;
         }
         .detail-meta {
@@ -3303,7 +3303,7 @@ useEffect(() => {
           height: 30px;
           border-radius: 12px;
           background: #fff0eb;
-          color: #ff4b2b;
+          color: #f65a45;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -3516,9 +3516,9 @@ useEffect(() => {
           position: relative;
           padding: 24px 28px 18px;
           background:
-            radial-gradient(circle at top right, rgba(228,93,80,0.13), transparent 32%),
+            radial-gradient(circle at top right, rgba(246,90,69,0.13), transparent 32%),
             linear-gradient(180deg, #fff 0%, #fff7f4 100%);
-          border-bottom: 1px solid rgba(228,93,80,0.12);
+          border-bottom: 1px solid rgba(246,90,69,0.12);
         }
         .info-modal-title {
           margin: 0;
@@ -3578,7 +3578,7 @@ useEffect(() => {
           inset: 0;
           z-index: 120;
           background:
-            radial-gradient(circle at top left, rgba(228,93,80,0.10), transparent 28%),
+            radial-gradient(circle at top left, rgba(246,90,69,0.10), transparent 28%),
             radial-gradient(circle at top right, rgba(88,173,173,0.13), transparent 24%),
             ${PALETTE.bg};
           overflow-y: auto;
@@ -3704,11 +3704,11 @@ useEffect(() => {
           border-radius: 999px;
           padding: 7px 10px;
           background: #fff0eb;
-          color: #ff4b2b;
+          color: #f65a45;
           font-size: 11px;
           font-weight: 950;
           white-space: nowrap;
-          border: 1px solid rgba(255,75,43,0.16);
+          border: 1px solid rgba(246,90,69,0.16);
         }
         .admin-actions {
           display: flex;
@@ -3786,7 +3786,7 @@ useEffect(() => {
           font-weight: 800;
         }
         .featured-list-modal-card strong {
-          color: #ff4b2b;
+          color: #f65a45;
           font-size: 15px;
           font-weight: 950;
           white-space: nowrap;
@@ -3840,7 +3840,7 @@ useEffect(() => {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          color: #ff4f26;
+          color: #f65a45;
           flex-shrink: 0;
           filter: drop-shadow(0 10px 16px rgba(255,82,49,0.16));
         }
@@ -3852,7 +3852,7 @@ useEffect(() => {
         }
         .hero-trust-pill strong {
           display: block;
-          color: #ff4f26;
+          color: #f65a45;
           font-size: 16px;
           line-height: 1.08;
           font-weight: 950;
@@ -3875,7 +3875,7 @@ useEffect(() => {
         }
         .featured-section {
           background: linear-gradient(135deg, #f35b4d 0%, #ff552b 100%);
-          box-shadow: 0 22px 44px rgba(228,93,80,0.20);
+          box-shadow: 0 22px 44px rgba(246,90,69,0.20);
           padding: 30px 22px 24px;
         }
         .featured-head {
@@ -3920,13 +3920,13 @@ useEffect(() => {
           gap: 6px;
           padding: 9px 13px;
           background: ${PALETTE.coral};
-          box-shadow: 0 10px 18px rgba(228,93,80,0.22);
+          box-shadow: 0 10px 18px rgba(246,90,69,0.22);
         }
         .featured-card .type-tag {
           padding: 8px 12px;
           background: ${PALETTE.warm};
           color: ${PALETTE.coral};
-          border-color: rgba(228,93,80,0.20);
+          border-color: rgba(246,90,69,0.20);
         }
         .featured-company {
           color: ${PALETTE.teal};
@@ -3954,7 +3954,7 @@ useEffect(() => {
         .featured-divider {
           width: min(76%, 360px);
           height: 1px;
-          background: rgba(228,93,80,0.18);
+          background: rgba(246,90,69,0.18);
           margin: 20px 0 16px;
         }
         .featured-salary-row {
@@ -3967,7 +3967,7 @@ useEffect(() => {
         .salary-wallet {
           width: 24px;
           height: 24px;
-          color: #ff4f26;
+          color: #f65a45;
           flex-shrink: 0;
         }
         .salary-wallet svg {
@@ -3976,7 +3976,7 @@ useEffect(() => {
         }
         .featured-salary {
           margin: 0;
-          color: #ff4f26;
+          color: #f65a45;
           font-size: 20px;
         }
         .featured-icon-circle {
@@ -3989,7 +3989,7 @@ useEffect(() => {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: rgba(228,93,80,0.11);
+          background: rgba(246,90,69,0.11);
           color: ${PALETTE.slate};
           z-index: 1;
         }
@@ -4024,9 +4024,9 @@ useEffect(() => {
         .detail-right {
           padding: 34px 36px 28px;
           background:
-            radial-gradient(circle at top right, rgba(255,75,43,0.12), transparent 34%),
+            radial-gradient(circle at top right, rgba(246,90,69,0.12), transparent 34%),
             linear-gradient(180deg, #fff8f5 0%, #fff 100%);
-          border-left: 1px solid rgba(255,75,43,0.10);
+          border-left: 1px solid rgba(246,90,69,0.10);
         }
         .detail-close {
           position: absolute;
@@ -4067,13 +4067,13 @@ useEffect(() => {
         }
         .detail-featured-badge {
           color: #fff;
-          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
-          box-shadow: 0 10px 20px rgba(255,75,43,0.18);
+          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
+          box-shadow: 0 10px 20px rgba(246,90,69,0.18);
         }
         .detail-type-badge {
-          color: #ff4b2b;
+          color: #f65a45;
           background: #fff0eb;
-          border: 1px solid rgba(255,75,43,0.16);
+          border: 1px solid rgba(246,90,69,0.16);
         }
         .detail-time-badge {
           color: #0f7778;
@@ -4147,7 +4147,7 @@ useEffect(() => {
           height: 42px;
           border-radius: 16px;
           background: #fff0eb;
-          color: #ff4b2b;
+          color: #f65a45;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -4205,7 +4205,7 @@ useEffect(() => {
           margin-bottom: 10px;
         }
         .detail-salary {
-          color: #ff4b2b;
+          color: #f65a45;
           font-size: clamp(30px, 3vw, 42px);
           line-height: 1.12;
           font-weight: 950;
@@ -4216,7 +4216,7 @@ useEffect(() => {
           height: 72px;
           border-radius: 999px;
           background: #fff0eb;
-          color: #ff4b2b;
+          color: #f65a45;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -4332,10 +4332,10 @@ useEffect(() => {
         }
         .detail-cta.primary {
           grid-column: 1 / -1;
-          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
           color: #fff;
           border-color: transparent;
-          box-shadow: 0 14px 26px rgba(255,75,43,0.20);
+          box-shadow: 0 14px 26px rgba(246,90,69,0.20);
         }
         .detail-mini-info {
           display: grid;
@@ -4366,7 +4366,7 @@ useEffect(() => {
           width: min(980px, calc(100vw - 24px));
           border-radius: 34px;
           background:
-            radial-gradient(circle at top right, rgba(255,75,43,0.12), transparent 30%),
+            radial-gradient(circle at top right, rgba(246,90,69,0.12), transparent 30%),
             linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.98));
           backdrop-filter: blur(18px);
           overflow: hidden;
@@ -4405,10 +4405,10 @@ useEffect(() => {
           padding: 0 14px;
           border-radius: 999px;
           color: #fff;
-          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
           font-size: 13px;
           font-weight: 950;
-          box-shadow: 0 12px 22px rgba(255,75,43,0.16);
+          box-shadow: 0 12px 22px rgba(246,90,69,0.16);
         }
         .modern-badge.soft {
           color: ${PALETTE.slate};
@@ -4417,7 +4417,7 @@ useEffect(() => {
           box-shadow: none;
         }
         .modern-badge.hot {
-          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
         }
         .detail-modern-company {
           margin: 0 0 10px;
@@ -4497,11 +4497,11 @@ useEffect(() => {
           padding: 22px;
           margin-bottom: 14px;
           background: linear-gradient(180deg, #fff 0%, #fff7f4 100%);
-          border-color: rgba(255,75,43,0.12);
+          border-color: rgba(246,90,69,0.12);
         }
         .detail-modern-salary-card strong {
           display: block;
-          color: #ff4424;
+          color: #f65a45;
           font-size: 30px;
           line-height: 1.1;
           font-weight: 950;
@@ -4533,11 +4533,11 @@ useEffect(() => {
           align-items: center;
           justify-content: center;
           color: #fff;
-          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
           text-decoration: none;
           font-size: 15px;
           font-weight: 950;
-          box-shadow: 0 18px 28px rgba(255,75,43,0.22);
+          box-shadow: 0 18px 28px rgba(246,90,69,0.22);
         }
         .modern-mini-actions {
           display: grid;
@@ -4591,7 +4591,7 @@ useEffect(() => {
         .detail-modal-modern {
           background:
             radial-gradient(circle at 8% 10%, rgba(88,173,173,0.10), transparent 28%),
-            radial-gradient(circle at 92% 12%, rgba(255,75,43,0.07), transparent 30%),
+            radial-gradient(circle at 92% 12%, rgba(246,90,69,0.07), transparent 30%),
             linear-gradient(135deg, rgba(255,255,255,0.90), rgba(245,247,248,0.88)) !important;
           backdrop-filter: blur(22px);
           border: 1px solid rgba(255,255,255,0.72) !important;
@@ -4607,7 +4607,7 @@ useEffect(() => {
         .detail-modern-side {
           background:
             linear-gradient(180deg, rgba(255,255,255,0.62), rgba(245,247,248,0.72)),
-            radial-gradient(circle at top right, rgba(255,75,43,0.055), transparent 40%) !important;
+            radial-gradient(circle at top right, rgba(246,90,69,0.055), transparent 40%) !important;
           border-left: 1px solid rgba(255,255,255,0.72) !important;
         }
 
@@ -4626,8 +4626,8 @@ useEffect(() => {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: rgba(255,75,43,0.10);
-          color: #ff4b2b;
+          background: rgba(246,90,69,0.10);
+          color: #f65a45;
           font-size: 11px;
           font-weight: 950;
         }
@@ -4666,7 +4666,7 @@ useEffect(() => {
 
         .detail-modern-meta div:nth-child(2) {
           background:
-            radial-gradient(circle at left, rgba(255,75,43,0.09), transparent 45%),
+            radial-gradient(circle at left, rgba(246,90,69,0.09), transparent 45%),
             rgba(255,255,255,0.78) !important;
         }
 
@@ -4701,11 +4701,11 @@ useEffect(() => {
 
         .detail-modern-salary-card {
           background:
-            radial-gradient(circle at 92% 16%, rgba(255,75,43,0.13), transparent 28%),
+            radial-gradient(circle at 92% 16%, rgba(246,90,69,0.13), transparent 28%),
             linear-gradient(135deg, rgba(255,255,255,0.84), rgba(255,244,239,0.72)) !important;
           color: ${PALETTE.slate} !important;
           border: 1px solid rgba(255,255,255,0.82) !important;
-          box-shadow: 0 22px 46px rgba(255,75,43,0.11) !important;
+          box-shadow: 0 22px 46px rgba(246,90,69,0.11) !important;
         }
 
         .detail-modern-salary-card span {
@@ -4713,7 +4713,7 @@ useEffect(() => {
         }
 
         .detail-modern-salary-card strong {
-          color: #ff4b2b !important;
+          color: #f65a45 !important;
         }
 
         .detail-modern-contact-card {
@@ -4737,7 +4737,7 @@ useEffect(() => {
           width: 34px;
           height: 3px;
           border-radius: 999px;
-          background: rgba(255,75,43,0.85);
+          background: rgba(246,90,69,0.85);
         }
 
         .modern-whatsapp-btn {
@@ -4774,70 +4774,79 @@ useEffect(() => {
         }
 
 
-        /* === EKIS GLASS V2 - net görünür popup değişimi === */
 
-        body .featured-section,
-        body .btn-primary {
-          background: #E45D50 !important;
+        /* === EKIS SOFT V3: gerçek çalışan popup düzeni === */
+
+        .featured-section,
+        .btn-primary,
+        .search-btn-primary {
+          background: #f65a45 !important;
         }
 
-        body .btn-primary {
+        .btn-primary,
+        .search-btn-primary {
           color: #fff !important;
-          box-shadow: 0 12px 24px rgba(228,93,80,0.24) !important;
+          box-shadow: 0 12px 24px rgba(246,90,69,0.24) !important;
         }
 
-        body .detail-modal-backdrop {
+        .detail-modal-backdrop {
           background: rgba(35,48,68,0.42) !important;
-          backdrop-filter: blur(18px) saturate(1.05) !important;
+          backdrop-filter: blur(16px) saturate(1.05) !important;
         }
 
-        body .detail-modal-glass-v2 {
-          width: min(1010px, calc(100vw - 24px)) !important;
-          border-radius: 36px !important;
+        .detail-modal-soft-v3 {
+          width: min(1020px, calc(100vw - 24px)) !important;
+          border-radius: 34px !important;
           background:
-            linear-gradient(135deg, rgba(255,255,255,0.52), rgba(245,247,248,0.34)),
-            radial-gradient(circle at 0% 0%, rgba(88,173,173,0.20), transparent 34%),
-            radial-gradient(circle at 100% 0%, rgba(228,93,80,0.13), transparent 34%) !important;
+            linear-gradient(135deg, rgba(255,255,255,0.74), rgba(245,247,248,0.66)),
+            radial-gradient(circle at 0% 0%, rgba(88,173,173,0.18), transparent 34%),
+            radial-gradient(circle at 100% 0%, rgba(246,90,69,0.12), transparent 34%) !important;
           border: 1px solid rgba(255,255,255,0.88) !important;
           box-shadow:
-            0 46px 120px rgba(35,48,68,0.36),
+            0 44px 105px rgba(35,48,68,0.30),
             inset 0 1px 0 rgba(255,255,255,0.78) !important;
-          backdrop-filter: blur(32px) saturate(1.14) !important;
+          backdrop-filter: blur(30px) saturate(1.10) !important;
           overflow: hidden !important;
         }
 
-        body .detail-modern-grid-v2 {
+        .detail-modern-grid-v3 {
           background: transparent !important;
         }
 
-        body .detail-modern-main-v2 {
-          padding: 48px 48px 38px !important;
+        .detail-modern-main-v3 {
+          padding: 46px 48px 38px !important;
           background:
-            linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28)),
-            radial-gradient(circle at 4% 18%, rgba(88,173,173,0.13), transparent 38%) !important;
-          backdrop-filter: blur(22px) !important;
+            linear-gradient(180deg, rgba(255,255,255,0.52), rgba(255,255,255,0.34)),
+            radial-gradient(circle at 4% 18%, rgba(88,173,173,0.12), transparent 38%) !important;
+          backdrop-filter: blur(20px) !important;
         }
 
-        body .detail-modern-side-v2 {
-          padding: 48px 30px 38px !important;
+        .detail-modern-side-v3 {
+          padding: 46px 30px 38px !important;
           background:
-            linear-gradient(180deg, rgba(255,255,255,0.38), rgba(245,247,248,0.50)),
-            radial-gradient(circle at 90% 0%, rgba(228,93,80,0.11), transparent 44%) !important;
+            linear-gradient(180deg, rgba(255,255,255,0.44), rgba(245,247,248,0.58)),
+            radial-gradient(circle at 92% 0%, rgba(246,90,69,0.10), transparent 44%) !important;
           border-left: 1px solid rgba(255,255,255,0.86) !important;
-          backdrop-filter: blur(22px) !important;
+          backdrop-filter: blur(20px) !important;
         }
 
-        body .detail-modern-company {
+        .detail-modern-company {
           color: #58ADAD !important;
           font-weight: 950 !important;
         }
 
-        body .detail-modern-title {
+        .detail-modern-company::after {
+          background: rgba(246,90,69,0.12) !important;
+          color: #f65a45 !important;
+        }
+
+        .detail-modern-title {
           color: #24324a !important;
+          letter-spacing: -0.075em !important;
           text-shadow: 0 16px 36px rgba(60,74,95,0.10) !important;
         }
 
-        body .detail-modern-summary {
+        .detail-modern-summary {
           max-width: 700px !important;
           color: #3C4A5F !important;
           font-size: 18px !important;
@@ -4845,13 +4854,18 @@ useEffect(() => {
           line-height: 1.65 !important;
         }
 
-        body .modern-badge {
-          background: #E45D50 !important;
-          box-shadow: 0 12px 24px rgba(228,93,80,0.16) !important;
+        .modern-badge,
+        .modern-badge.hot,
+        .detail-featured-badge,
+        .badge-hot {
+          background: #f65a45 !important;
+          color: #fff !important;
+          border-color: transparent !important;
+          box-shadow: 0 12px 24px rgba(246,90,69,0.16) !important;
         }
 
-        body .modern-badge.soft {
-          background: rgba(255,255,255,0.48) !important;
+        .modern-badge.soft {
+          background: rgba(255,255,255,0.56) !important;
           color: #3C4A5F !important;
           border: 1px solid rgba(255,255,255,0.86) !important;
           box-shadow:
@@ -4860,16 +4874,16 @@ useEffect(() => {
           backdrop-filter: blur(14px) !important;
         }
 
-        body .detail-modern-meta {
+        .detail-modern-meta {
           grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
           gap: 16px !important;
           margin-bottom: 28px !important;
         }
 
-        body .detail-modern-meta div {
+        .detail-modern-meta div {
           min-height: 92px !important;
           border-radius: 26px !important;
-          background: rgba(255,255,255,0.44) !important;
+          background: rgba(255,255,255,0.50) !important;
           border: 1px solid rgba(255,255,255,0.86) !important;
           box-shadow:
             0 20px 46px rgba(60,74,95,0.07),
@@ -4877,25 +4891,25 @@ useEffect(() => {
           backdrop-filter: blur(18px) !important;
         }
 
-        body .detail-modern-meta div:first-child {
+        .detail-modern-meta div:first-child {
           background:
             radial-gradient(circle at left, rgba(88,173,173,0.18), transparent 48%),
-            rgba(255,255,255,0.44) !important;
+            rgba(255,255,255,0.50) !important;
         }
 
-        body .detail-modern-meta div:nth-child(2) {
+        .detail-modern-meta div:nth-child(2) {
           background:
-            radial-gradient(circle at left, rgba(228,93,80,0.12), transparent 48%),
-            rgba(255,255,255,0.44) !important;
+            radial-gradient(circle at left, rgba(246,90,69,0.12), transparent 48%),
+            rgba(255,255,255,0.50) !important;
         }
 
-        body .detail-modern-desc-card {
+        .detail-modern-desc-card {
           min-height: 315px !important;
           padding: 34px !important;
           border-radius: 32px !important;
           background:
-            linear-gradient(180deg, rgba(255,255,255,0.48), rgba(255,255,255,0.30)),
-            radial-gradient(circle at 0% 0%, rgba(228,93,80,0.07), transparent 36%) !important;
+            linear-gradient(180deg, rgba(255,255,255,0.52), rgba(255,255,255,0.34)),
+            radial-gradient(circle at 0% 0%, rgba(246,90,69,0.07), transparent 36%) !important;
           border: 1px solid rgba(255,255,255,0.88) !important;
           box-shadow:
             0 30px 70px rgba(60,74,95,0.10),
@@ -4903,40 +4917,40 @@ useEffect(() => {
           backdrop-filter: blur(22px) !important;
         }
 
-        body .detail-modern-desc-card h4 {
+        .detail-modern-desc-card h4 {
           font-size: 23px !important;
           color: #3C4A5F !important;
         }
 
-        body .detail-modern-desc-card h4::before {
-          color: #E45D50 !important;
+        .detail-modern-desc-card h4::before {
+          color: #f65a45 !important;
         }
 
-        body .detail-modern-desc-card p {
+        .detail-modern-desc-card p {
           font-size: 16.5px !important;
           line-height: 1.95 !important;
           color: #334155 !important;
         }
 
-        body .detail-modern-salary-card {
+        .detail-modern-salary-card {
           border-radius: 28px !important;
           background:
-            linear-gradient(135deg, rgba(255,255,255,0.56), rgba(255,242,236,0.40)),
-            radial-gradient(circle at 95% 8%, rgba(228,93,80,0.16), transparent 30%) !important;
+            linear-gradient(135deg, rgba(255,255,255,0.62), rgba(255,242,236,0.44)),
+            radial-gradient(circle at 95% 8%, rgba(246,90,69,0.16), transparent 30%) !important;
           border: 1px solid rgba(255,255,255,0.88) !important;
           box-shadow:
-            0 24px 56px rgba(228,93,80,0.13),
+            0 24px 56px rgba(246,90,69,0.13),
             inset 0 1px 0 rgba(255,255,255,0.74) !important;
           backdrop-filter: blur(18px) !important;
         }
 
-        body .detail-modern-salary-card strong {
-          color: #E45D50 !important;
+        .detail-modern-salary-card strong {
+          color: #f65a45 !important;
         }
 
-        body .detail-modern-contact-card {
+        .detail-modern-contact-card {
           border-radius: 30px !important;
-          background: rgba(255,255,255,0.46) !important;
+          background: rgba(255,255,255,0.52) !important;
           border: 1px solid rgba(255,255,255,0.88) !important;
           box-shadow:
             0 30px 72px rgba(60,74,95,0.14),
@@ -4944,23 +4958,27 @@ useEffect(() => {
           backdrop-filter: blur(22px) !important;
         }
 
-        body .detail-modern-contact-card h4 {
+        .detail-modern-contact-card h4 {
           color: #0f7778 !important;
           font-size: 20px !important;
         }
 
-        body .detail-modern-contact-card h4::after {
-          background: #E45D50 !important;
+        .detail-modern-contact-card h4::after {
+          background: #f65a45 !important;
         }
 
-        body .modern-whatsapp-btn {
+        .modern-contact-row {
+          border-top-color: rgba(60,74,95,0.075) !important;
+        }
+
+        .modern-whatsapp-btn {
           background: linear-gradient(135deg, #22c98a 0%, #28d993 100%) !important;
           box-shadow: 0 18px 36px rgba(34,201,138,0.18) !important;
         }
 
-        body .modern-mini-actions a,
-        body .modern-mini-actions button {
-          background: rgba(255,255,255,0.54) !important;
+        .modern-mini-actions a,
+        .modern-mini-actions button {
+          background: rgba(255,255,255,0.58) !important;
           border: 1px solid rgba(255,255,255,0.88) !important;
           box-shadow:
             0 14px 30px rgba(60,74,95,0.07),
@@ -4968,14 +4986,14 @@ useEffect(() => {
           backdrop-filter: blur(14px) !important;
         }
 
-        body .modern-safe-note {
+        .modern-safe-note {
           background: rgba(88,173,173,0.12) !important;
           border: 1px solid rgba(88,173,173,0.18) !important;
           border-radius: 18px !important;
         }
 
         @media (max-width: 880px) {
-          body .detail-modern-side-v2 {
+          .detail-modern-side-v3 {
             border-left: none !important;
             border-top: 1px solid rgba(255,255,255,0.86) !important;
           }
@@ -5520,11 +5538,11 @@ useEffect(() => {
 
       {selectedJob && (
         <div className="detail-modal-backdrop" onClick={() => setSelectedJob(null)}>
-          <div className="detail-modal detail-modal-modern detail-modal-glass-v2" onClick={(e) => e.stopPropagation()}>
+          <div className="detail-modal detail-modal-modern detail-modal-soft-v3" onClick={(e) => e.stopPropagation()}>
             <button className="detail-close detail-close-modern" type="button" onClick={() => setSelectedJob(null)}>×</button>
 
-            <div className="detail-modern-grid detail-modern-grid-v2">
-              <section className="detail-modern-main detail-modern-main-v2">
+            <div className="detail-modern-grid detail-modern-grid-v3">
+              <section className="detail-modern-main detail-modern-main-v3">
                 <div className="detail-modern-badges">
                   {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
                     <span className="modern-badge hot">★ Ekiş Acil</span>
@@ -5559,7 +5577,7 @@ useEffect(() => {
                 </div>
               </section>
 
-              <aside className="detail-modern-side detail-modern-side-v2">
+              <aside className="detail-modern-side detail-modern-side-v3">
                 <div className="detail-modern-salary-card">
                   <span>Ücret bilgisi</span>
                   <strong>{selectedJob.salary}</strong>
@@ -5683,7 +5701,7 @@ useEffect(() => {
                 <div className="hero-trust-pill">
                   <span className="hero-trust-icon" aria-hidden="true">
                     <svg viewBox="0 0 48 48" fill="none">
-                      <path d="M24 5.5 37 10.6v10.1c0 8.3-5.4 15.9-13 18.8-7.6-2.9-13-10.5-13-18.8V10.6L24 5.5Z" fill="#ff4f26"/>
+                      <path d="M24 5.5 37 10.6v10.1c0 8.3-5.4 15.9-13 18.8-7.6-2.9-13-10.5-13-18.8V10.6L24 5.5Z" fill="#f65a45"/>
                       <path d="M18.2 23.8 22.2 27.8 30.8 18.7" stroke="white" strokeWidth="3.3" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </span>
@@ -5695,7 +5713,7 @@ useEffect(() => {
                 <div className="hero-trust-pill">
                   <span className="hero-trust-icon" aria-hidden="true">
                     <svg viewBox="0 0 48 48" fill="none">
-                      <path d="M24 5.5c2.1 0 3.7 2.2 5.5 2.8 1.9.6 4.4-.4 6 .8 1.6 1.2 1.7 3.9 2.9 5.5 1.2 1.6 3.8 2.4 4.4 4.3.6 1.8-.9 4.1-.9 6.1s1.5 4.3.9 6.1c-.6 1.9-3.2 2.7-4.4 4.3-1.2 1.6-1.3 4.3-2.9 5.5-1.6 1.2-4.1.2-6 .8-1.8.6-3.4 2.8-5.5 2.8s-3.7-2.2-5.5-2.8c-1.9-.6-4.4.4-6-.8-1.6-1.2-1.7-3.9-2.9-5.5-1.2-1.6-3.8-2.4-4.4-4.3-.6-1.8.9-4.1.9-6.1s-1.5-4.3-.9-6.1c.6-1.9 3.2-2.7 4.4-4.3 1.2-1.6 1.3-4.3 2.9-5.5 1.6-1.2 4.1-.2 6-.8 1.8-.6 3.4-2.8 5.5-2.8Z" fill="#ff4f26"/>
+                      <path d="M24 5.5c2.1 0 3.7 2.2 5.5 2.8 1.9.6 4.4-.4 6 .8 1.6 1.2 1.7 3.9 2.9 5.5 1.2 1.6 3.8 2.4 4.4 4.3.6 1.8-.9 4.1-.9 6.1s1.5 4.3.9 6.1c-.6 1.9-3.2 2.7-4.4 4.3-1.2 1.6-1.3 4.3-2.9 5.5-1.6 1.2-4.1.2-6 .8-1.8.6-3.4 2.8-5.5 2.8s-3.7-2.2-5.5-2.8c-1.9-.6-4.4.4-6-.8-1.6-1.2-1.7-3.9-2.9-5.5-1.2-1.6-3.8-2.4-4.4-4.3-.6-1.8.9-4.1.9-6.1s-1.5-4.3-.9-6.1c.6-1.9 3.2-2.7 4.4-4.3 1.2-1.6 1.3-4.3 2.9-5.5 1.6-1.2 4.1-.2 6-.8 1.8-.6 3.4-2.8 5.5-2.8Z" fill="#f65a45"/>
                       <path d="M18.5 30.2 29.5 17.8" stroke="white" strokeWidth="3" strokeLinecap="round"/>
                       <circle cx="18.5" cy="18.8" r="2.8" stroke="white" strokeWidth="2.6"/>
                       <circle cx="29.6" cy="29.3" r="2.8" stroke="white" strokeWidth="2.6"/>
@@ -5709,7 +5727,7 @@ useEffect(() => {
                 <div className="hero-trust-pill">
                   <span className="hero-trust-icon" aria-hidden="true">
                     <svg viewBox="0 0 48 48" fill="none">
-                      <path d="M27.4 4.8 12.5 27.2h10.2l-2.2 16 15-22.5H25.2l2.2-15.9Z" fill="#ff4f26"/>
+                      <path d="M27.4 4.8 12.5 27.2h10.2l-2.2 16 15-22.5H25.2l2.2-15.9Z" fill="#f65a45"/>
                     </svg>
                   </span>
                   <span>
