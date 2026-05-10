@@ -146,8 +146,6 @@ export function getStyles(PALETTE) {
 
     /* CSS devam ediyor... */
 
-
-```
 .top-search {
   padding: 2px 0 10px;
 }
