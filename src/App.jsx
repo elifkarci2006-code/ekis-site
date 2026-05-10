@@ -4002,7 +4002,7 @@ useEffect(() => {
 
         /* --- Popup düzeltme: direkt iletişimli ferah iki kolon --- */
         .detail-modal {
-          width: min(1040px, calc(100vw - 36px));
+          width: min(1380px, calc(100vw - 48px));
           max-height: min(88vh, 900px);
           border-radius: 28px;
           overflow: hidden;
@@ -4014,15 +4014,15 @@ useEffect(() => {
         }
         .detail-shell {
           display: grid;
-          grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.75fr);
+          grid-template-columns: minmax(0, 1.5fr) minmax(380px, 0.82fr);
           min-height: 610px;
         }
         .detail-left {
-          padding: 34px 38px 28px;
+  padding: 46px 52px 40px;
           background: linear-gradient(180deg, #fff 0%, #fcfdfe 100%);
         }
         .detail-right {
-          padding: 34px 36px 28px;
+  padding: 46px 36px 40px;
           background:
             radial-gradient(circle at top right, rgba(246,90,69,0.12), transparent 34%),
             linear-gradient(180deg, #fff8f5 0%, #fff 100%);
