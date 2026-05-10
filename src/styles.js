@@ -468,3 +468,262 @@ export function getStyles(PALETTE) {
       text-align: center;
       box-shadow: 0 14px 24px rgba(60,74,95,0.04);
     }
+    .post-modal-backdrop,
+    .detail-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(35,48,68,0.38);
+      backdrop-filter: blur(14px);
+      z-index: 90;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .post-modal,
+    .detail-modal {
+      width: min(980px, calc(100vw - 24px));
+      max-height: min(88vh, 900px);
+      border-radius: 34px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.82);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,0.78),
+          rgba(245,247,248,0.62)
+        ),
+        radial-gradient(
+          circle at 0% 0%,
+          rgba(88,173,173,0.12),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(246,90,69,0.10),
+          transparent 30%
+        );
+      box-shadow:
+        0 42px 100px rgba(35,48,68,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.78);
+      backdrop-filter: blur(28px);
+    }
+
+    .detail-panel-inner,
+    .post-panel-inner {
+      overflow-y: auto;
+      padding: 0;
+    }
+
+    .detail-modern-grid {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        348px;
+      min-height: 660px;
+    }
+
+    .detail-modern-main {
+      padding: 42px 40px 32px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,0.50),
+          rgba(255,255,255,0.34)
+        ),
+        radial-gradient(
+          circle at 4% 20%,
+          rgba(88,173,173,0.10),
+          transparent 38%
+        );
+      backdrop-filter: blur(18px);
+    }
+
+    .detail-modern-side {
+      padding: 42px 26px 32px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,0.40),
+          rgba(245,247,248,0.55)
+        ),
+        radial-gradient(
+          circle at 92% 0%,
+          rgba(246,90,69,0.09),
+          transparent 44%
+        );
+      border-left: 1px solid rgba(255,255,255,0.72);
+      backdrop-filter: blur(18px);
+    }
+
+    .detail-modern-title {
+      max-width: 620px;
+      color: #102142;
+      font-size: clamp(44px, 5vw, 64px);
+      line-height: 0.98;
+      letter-spacing: -0.075em;
+      text-shadow:
+        0 14px 34px rgba(60,74,95,0.08);
+      margin-bottom: 20px;
+      font-weight: 950;
+    }
+
+    .detail-modern-summary {
+      max-width: 620px;
+      color: ${PALETTE.softText};
+      font-size: 18px;
+      line-height: 1.65;
+      margin-bottom: 28px;
+      font-weight: 700;
+    }
+
+    .detail-modern-meta {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+      max-width: 620px;
+    }
+
+    .detail-modern-meta div {
+      min-height: 92px;
+      padding: 20px 22px;
+      border-radius: 26px;
+      background: rgba(255,255,255,0.54);
+      border: 1px solid rgba(255,255,255,0.84);
+      box-shadow:
+        0 20px 44px rgba(60,74,95,0.07),
+        inset 0 1px 0 rgba(255,255,255,0.74);
+      backdrop-filter: blur(16px);
+    }
+
+    .detail-modern-desc-card {
+      max-width: 620px;
+      min-height: 250px;
+      padding: 30px;
+      border-radius: 30px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,0.58),
+          rgba(255,255,255,0.42)
+        ),
+        radial-gradient(
+          circle at 0% 0%,
+          rgba(246,90,69,0.055),
+          transparent 36%
+        );
+      border: 1px solid rgba(255,255,255,0.88);
+      box-shadow:
+        0 28px 66px rgba(60,74,95,0.09),
+        inset 0 1px 0 rgba(255,255,255,0.76);
+      backdrop-filter: blur(18px);
+    }
+
+    .detail-modern-desc-card h4 {
+      color: #233044;
+      font-size: 22px;
+      font-weight: 950;
+      margin-bottom: 16px;
+    }
+
+    .detail-modern-desc-card p {
+      color: #334155;
+      font-size: 16px;
+      line-height: 1.85;
+    }
+
+    .detail-modern-salary-card {
+      margin-bottom: 18px;
+      padding: 26px 24px;
+      border-radius: 28px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(246,90,69,0.94),
+          rgba(246,90,69,0.78)
+        );
+      box-shadow:
+        0 24px 52px rgba(246,90,69,0.22);
+    }
+
+    .detail-modern-salary-card span {
+      color: rgba(255,255,255,0.92);
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .detail-modern-salary-card strong {
+      color: #fff;
+      font-size: 34px;
+      font-weight: 950;
+      letter-spacing: -0.05em;
+    }
+
+    .detail-modern-contact-card {
+      padding: 24px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(255,255,255,0.88);
+      box-shadow:
+        0 28px 68px rgba(60,74,95,0.13),
+        inset 0 1px 0 rgba(255,255,255,0.74);
+      backdrop-filter: blur(18px);
+    }
+
+    .modern-whatsapp-btn {
+      min-height: 58px;
+      border-radius: 17px;
+      background: ${PALETTE.coral};
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 950;
+      box-shadow:
+        0 18px 34px rgba(246,90,69,0.22);
+    }
+
+    @media (max-width: 900px) {
+      .detail-modern-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-modern-side {
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.72);
+      }
+
+      .detail-modern-main,
+      .detail-modern-side {
+        padding: 28px 20px;
+      }
+
+      .detail-modern-title {
+        font-size: 40px;
+      }
+
+      .featured-grid,
+      .jobs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: clamp(34px, 13vw, 48px);
+      }
+
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  `;
+}
