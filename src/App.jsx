@@ -5185,7 +5185,162 @@ useEffect(() => {
           .admin-table-actions { justify-content: flex-start; }
         }
 
-      `}</style>
+      `}
+        /* === EKIS FINAL OVERRIDES: soft blur popup + ortak acil renk === */
+
+        .featured-section,
+        .btn-primary {
+          background: ${PALETTE.coral} !important;
+        }
+
+        .btn-primary {
+          color: #fff !important;
+          box-shadow: 0 12px 24px rgba(228,93,80,0.28) !important;
+        }
+
+        .detail-modal-modern {
+          background:
+            radial-gradient(circle at 10% 12%, rgba(88,173,173,0.11), transparent 30%),
+            radial-gradient(circle at 92% 10%, rgba(228,93,80,0.065), transparent 30%),
+            linear-gradient(135deg, rgba(255,255,255,0.91), rgba(245,247,248,0.88)) !important;
+          backdrop-filter: blur(24px) !important;
+          border: 1px solid rgba(255,255,255,0.76) !important;
+          box-shadow: 0 42px 100px rgba(35,48,68,0.22) !important;
+        }
+
+        .detail-modern-main {
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.58)),
+            radial-gradient(circle at left top, rgba(88,173,173,0.075), transparent 36%) !important;
+        }
+
+        .detail-modern-side {
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.64), rgba(245,247,248,0.74)),
+            radial-gradient(circle at top right, rgba(228,93,80,0.05), transparent 40%) !important;
+          border-left: 1px solid rgba(255,255,255,0.76) !important;
+        }
+
+        .modern-badge.hot,
+        .modern-badge {
+          background: rgba(228,93,80,0.92) !important;
+          box-shadow: 0 12px 22px rgba(228,93,80,0.14) !important;
+        }
+
+        .modern-badge.soft {
+          color: ${PALETTE.slate} !important;
+          background: rgba(255,255,255,0.70) !important;
+          border: 1px solid rgba(60,74,95,0.08) !important;
+          box-shadow: none !important;
+        }
+
+        .detail-modern-company {
+          color: ${PALETTE.teal} !important;
+        }
+
+        .detail-modern-title {
+          color: #26354d !important;
+          text-shadow: 0 12px 26px rgba(60,74,95,0.055) !important;
+        }
+
+        .detail-modern-summary {
+          color: #3C4A5F !important;
+          font-size: 18px !important;
+          font-weight: 780 !important;
+          max-width: 660px !important;
+        }
+
+        .detail-modern-meta {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          margin-bottom: 24px !important;
+        }
+
+        .detail-modern-meta div {
+          min-height: 82px !important;
+          border-radius: 24px !important;
+          background: rgba(255,255,255,0.68) !important;
+          border: 1px solid rgba(255,255,255,0.82) !important;
+          box-shadow: 0 18px 38px rgba(60,74,95,0.052) !important;
+        }
+
+        .detail-modern-meta div:first-child {
+          background:
+            radial-gradient(circle at left, rgba(88,173,173,0.12), transparent 45%),
+            rgba(255,255,255,0.70) !important;
+        }
+
+        .detail-modern-meta div:nth-child(2) {
+          background:
+            radial-gradient(circle at left, rgba(228,93,80,0.075), transparent 45%),
+            rgba(255,255,255,0.70) !important;
+        }
+
+        .detail-modern-desc-card {
+          padding: 30px !important;
+          min-height: 255px !important;
+          background: rgba(255,255,255,0.62) !important;
+          border: 1px solid rgba(255,255,255,0.84) !important;
+          box-shadow: 0 20px 48px rgba(60,74,95,0.07) !important;
+        }
+
+        .detail-modern-desc-card h4::before {
+          color: ${PALETTE.coral} !important;
+        }
+
+        .detail-modern-desc-card p {
+          color: #334155 !important;
+          font-size: 16px !important;
+          line-height: 1.85 !important;
+        }
+
+        .detail-modern-salary-card {
+          background:
+            radial-gradient(circle at 92% 16%, rgba(228,93,80,0.12), transparent 28%),
+            linear-gradient(135deg, rgba(255,255,255,0.84), rgba(255,244,239,0.70)) !important;
+          border: 1px solid rgba(255,255,255,0.82) !important;
+          box-shadow: 0 22px 46px rgba(228,93,80,0.10) !important;
+        }
+
+        .detail-modern-salary-card span {
+          color: ${PALETTE.softText} !important;
+        }
+
+        .detail-modern-salary-card strong {
+          color: ${PALETTE.coral} !important;
+        }
+
+        .detail-modern-contact-card {
+          background: rgba(255,255,255,0.72) !important;
+          border: 1px solid rgba(255,255,255,0.84) !important;
+          box-shadow: 0 24px 55px rgba(60,74,95,0.10) !important;
+          backdrop-filter: blur(14px) !important;
+        }
+
+        .detail-modern-contact-card h4 {
+          color: #0f7778 !important;
+        }
+
+        .detail-modern-contact-card h4::after {
+          background: rgba(228,93,80,0.82) !important;
+        }
+
+        .modern-whatsapp-btn {
+          background: linear-gradient(135deg, #20c987 0%, #25d990 100%) !important;
+          box-shadow: 0 18px 34px rgba(32,201,135,0.16) !important;
+        }
+
+        .modern-mini-actions a,
+        .modern-mini-actions button {
+          background: rgba(255,255,255,0.76) !important;
+          box-shadow: 0 10px 22px rgba(60,74,95,0.05) !important;
+        }
+
+        .modern-safe-note {
+          background: rgba(88,173,173,0.10) !important;
+          border: 1px solid rgba(88,173,173,0.14) !important;
+        }
+
+</style>
 
       {isAdminRoute && (
         <div className="admin-page">
