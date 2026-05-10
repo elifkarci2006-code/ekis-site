@@ -3,7 +3,7 @@ import { supabase } from "./supabaseClient";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 const PALETTE = {
-  coral: "#f65a45",
+  coral: "#E45D50",
   sage: "#9BC78F",
   aqua: "#76BFBE",
   teal: "#58ADAD",
@@ -278,64 +278,6 @@ function normalizeLocation(city, district) {
   const normalizedDistrict = toTitleCase(district);
   if (normalizedCity && normalizedDistrict) return `${normalizedCity} / ${normalizedDistrict}`;
   return normalizedCity || normalizedDistrict;
-}
-
-function buildPublicAddress(parts = {}) {
-  const neighborhood = toTitleCase(parts.neighborhood);
-  const street = toTitleCase(parts.street);
-
-  return [neighborhood && `${neighborhood} Mah.`, street]
-    .filter(Boolean)
-    .join(" ");
-}
-
-function buildPrivateMapAddress(parts = {}) {
-  return [
-    toTitleCase(parts.city),
-    toTitleCase(parts.district),
-    toTitleCase(parts.neighborhood) && `${toTitleCase(parts.neighborhood)} Mah.`,
-    toTitleCase(parts.street),
-    parts.doorNo ? `No:${String(parts.doorNo).trim()}` : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-}
-
-function cleanPhone(value) {
-  return String(value || "").replace(/\D/g, "");
-}
-
-function getPhoneHref(value) {
-  const phone = cleanPhone(value);
-  return phone ? `tel:${phone}` : "#";
-}
-
-function getWhatsappHref(value, job) {
-  let phone = cleanPhone(value);
-  if (!phone) return "#";
-  if (phone.startsWith("0")) phone = `90${phone.slice(1)}`;
-  if (!phone.startsWith("90")) phone = `90${phone}`;
-  const message = encodeURIComponent(
-    `Merhaba, Ekiş'teki "${job?.title || "ilan"}" ilanınız için yazıyorum.`
-  );
-  return `https://wa.me/${phone}?text=${message}`;
-}
-
-function getMapHref(job) {
-  const query = encodeURIComponent(
-    buildPrivateMapAddress({
-      city: job?.city,
-      district: job?.district,
-      neighborhood: job?.neighborhood,
-      street: job?.street,
-      doorNo: job?.doorNo,
-    }) || job?.workAddress || job?.location || ""
-  );
-  return query ? `https://www.google.com/maps/search/?api=1&query=${query}` : "#";
-}
-
-function getShareText(job) {
-  return `${job?.title || "Ekiş ilanı"} - ${job?.company || ""} | ${job?.location || ""}`;
 }
 
 
@@ -1516,12 +1458,8 @@ export default function App() {
   const [formData, setFormData] = useState({
     company: "",
     title: "",
-    category: "",
     city: "",
     district: "",
-    neighborhood: "",
-    street: "",
-    doorNo: "",
     workType: "Günlük",
     salary: "",
     description: "",
@@ -1553,23 +1491,13 @@ useEffect(() => {
       dbId: job.id,
       title: toTitleCase(job.job_title),
       company: toTitleCase(job.company_name),
-      city: job.city,
-      district: job.district,
-      neighborhood: job.neighborhood || "",
-      street: job.street || "",
-      doorNo: job.door_no || "",
       location: normalizeLocation(job.city, job.district),
-      workAddress: buildPublicAddress({
-        neighborhood: job.neighborhood,
-        street: job.street,
-      }) || normalizeLocation(job.city, job.district),
       salary: job.salary,
       type: job.plan_type === "featured" ? "Öne Çıkan" : "Standart",
       description: job.description,
       contactPhone: job.phone,
       createdAt: job.created_at,
-      category: job.category || "Genel",
-      viewsCount: Number(job.views_count || 0),
+      category: "Genel",
       status: job.status || "pending",
       plan: job.plan_type === "featured" ? "featured" : "free",
       featuredStatus:
@@ -1590,7 +1518,7 @@ useEffect(() => {
 
     setPendingJobs(pendingFromDb);
     setJobs([...normalJobs, ...jobsSeed]);
-    setFeaturedJobs(featuredJobsFromDb);
+    setFeaturedJobs([...featuredJobsFromDb, ...featuredSeed]);
   };
 
   fetchJobs();
@@ -1658,12 +1586,7 @@ useEffect(() => {
       setFormData({
         company: "",
         title: "",
-        category: "",
         city: "",
-        district: "",
-        neighborhood: "",
-        street: "",
-        doorNo: "",
         workType: "Günlük",
         salary: "",
         description: "",
@@ -1681,11 +1604,9 @@ useEffect(() => {
 
     if (!formData.company.trim()) nextErrors.company = "Firma adı zorunludur.";
     if (!formData.title.trim()) nextErrors.title = "İlan başlığı zorunludur.";
-    if (!formData.category.trim()) nextErrors.category = "Kategori seçimi zorunludur.";
     if (!formData.city.trim()) nextErrors.city = "Şehir seçimi zorunludur.";
-    if (!formData.district.trim()) nextErrors.district = "İlçe zorunludur.";
-    if (!formData.neighborhood.trim()) nextErrors.neighborhood = "Mahalle zorunludur.";
-    if (!formData.street.trim()) nextErrors.street = "Sokak / cadde zorunludur.";
+    if (!formData.district.trim()) nextErrors.district = "İlçe / konum zorunludur.";
+    if (!formData.workAddress.trim()) nextErrors.workAddress = "İş adresi / buluşma noktası zorunludur.";
 
     const phoneDigits = formData.contactPhone.replace(/\D/g, "");
     const invalidRepeatingPhone = /^(\d)\1+$/.test(phoneDigits);
@@ -1771,20 +1692,12 @@ useEffect(() => {
     id: Date.now(),
     title: toTitleCase(formData.title),
     company: toTitleCase(formData.company),
-    city: toTitleCase(formData.city),
-    district: toTitleCase(formData.district),
-    neighborhood: toTitleCase(formData.neighborhood),
-    street: toTitleCase(formData.street),
-    doorNo: String(formData.doorNo || "").trim(),
     location: normalizeLocation(formData.city, formData.district),
     salary: formatSalaryPreview(formData.workType, formData.salary),
     type: formData.workType,
-    category: formData.category,
+    category: inferCategory(formData.title),
     description: formData.description.trim(),
-    workAddress: buildPublicAddress({
-      neighborhood: formData.neighborhood,
-      street: formData.street,
-    }),
+    workAddress: toTitleCase(formData.workAddress),
     contactName: toTitleCase(formData.contactName),
     contactPhone: formData.contactPhone.trim(),
     status: "active",
@@ -1805,17 +1718,12 @@ useEffect(() => {
     const payload = {
       company_name: pendingJob.company,
       job_title: pendingJob.title,
-      category: pendingJob.category,
       city: toTitleCase(formData.city),
       district: toTitleCase(formData.district),
-      neighborhood: toTitleCase(formData.neighborhood),
-      street: toTitleCase(formData.street),
-      door_no: String(formData.doorNo || "").trim(),
       salary: pendingJob.salary,
       description: pendingJob.description,
       phone: pendingJob.contactPhone,
       plan_type: selectedPlan === "featured" ? "featured" : "normal",
-      views_count: 0,
       status: "pending",
       expires_at: new Date(
         Date.now() +
@@ -1867,12 +1775,8 @@ useEffect(() => {
     setFormData({
       company: "",
       title: "",
-      category: "",
       city: "",
       district: "",
-      neighborhood: "",
-      street: "",
-      doorNo: "",
       workType: "Günlük",
       salary: "",
       description: "",
@@ -1883,33 +1787,6 @@ useEffect(() => {
     });
 
     setCaptcha(generateCaptchaQuestion());
-  };
-
-  const openJobDetail = async (job) => {
-    const nextViews = Number(job.viewsCount || 0) + 1;
-    const updatedJob = { ...job, viewsCount: nextViews };
-
-    setSelectedJob(updatedJob);
-
-    const updateLocalViews = (item) =>
-      item.id === job.id ? { ...item, viewsCount: nextViews } : item;
-
-    if (job.featuredStatus === "live" || job.plan === "featured") {
-      setFeaturedJobs((prev) => prev.map(updateLocalViews));
-    } else {
-      setJobs((prev) => prev.map(updateLocalViews));
-    }
-
-    if (job.dbId) {
-      const { error } = await supabase
-        .from("job_posts")
-        .update({ views_count: nextViews })
-        .eq("id", job.dbId);
-
-      if (error) {
-        console.error("Görüntülenme sayısı güncellenemedi:", error);
-      }
-    }
   };
 
   const filteredJobs = useMemo(() => {
@@ -2337,7 +2214,7 @@ useEffect(() => {
         .app-shell {
           min-height: 100vh;
           background:
-            radial-gradient(circle at top left, rgba(246,90,69,0.10), transparent 26%),
+            radial-gradient(circle at top left, rgba(228,93,80,0.10), transparent 26%),
             radial-gradient(circle at top right, rgba(118,191,190,0.10), transparent 24%),
             linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
         }
@@ -2408,7 +2285,7 @@ useEffect(() => {
         .btn-primary {
           color: #fff;
           background: ${PALETTE.coral};
-          box-shadow: 0 12px 24px rgba(246,90,69,0.28);
+          box-shadow: 0 12px 24px rgba(228,93,80,0.28);
         }
         .btn-secondary {
           color: ${PALETTE.slate};
@@ -2470,9 +2347,9 @@ useEffect(() => {
         .search-btn:hover { transform: translateY(-1px); }
         .search-btn-primary {
           border: 1px solid rgba(255,255,255,0.35);
-          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
+          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
           color: #fff;
-          box-shadow: 0 14px 28px rgba(246,90,69,0.24);
+          box-shadow: 0 14px 28px rgba(255,79,38,0.24);
         }
         .search-btn-clear {
           border: 1px solid rgba(255,255,255,0.62);
@@ -2591,7 +2468,7 @@ useEffect(() => {
           width: 130px;
           height: 130px;
           border-radius: 50%;
-          background: rgba(246,90,69,0.12);
+          background: rgba(228,93,80,0.12);
         }
 
         .card-top {
@@ -2633,7 +2510,7 @@ useEffect(() => {
           font-size: 12px;
           font-weight: 800;
           letter-spacing: -0.01em;
-          border: 1px solid rgba(246,90,69,0.16);
+          border: 1px solid rgba(228,93,80,0.16);
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
         .job-days {
@@ -2781,7 +2658,7 @@ useEffect(() => {
         .soft-job-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 22px 42px rgba(60,74,95,0.10), inset 0 1px 0 rgba(255,255,255,0.95);
-          border-color: rgba(246,90,69,0.16);
+          border-color: rgba(228,93,80,0.16);
         }
         .soft-job-card::before {
           content: "";
@@ -2862,7 +2739,7 @@ useEffect(() => {
         }
         .soft-divider {
           height: 1px;
-          background: rgba(246,90,69,0.14);
+          background: rgba(228,93,80,0.14);
           margin: auto 0 14px;
           position: relative;
           z-index: 1;
@@ -2879,7 +2756,7 @@ useEffect(() => {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          color: #f65a45;
+          color: #ff4b2b;
           font-size: 17px;
           font-weight: 950;
           line-height: 1.2;
@@ -2889,7 +2766,7 @@ useEffect(() => {
           width: 20px;
           height: 20px;
           flex-shrink: 0;
-          color: #f65a45;
+          color: #ff4b2b;
         }
         .soft-badge {
           display: inline-flex;
@@ -2900,12 +2777,12 @@ useEffect(() => {
           padding: 0 13px;
           border-radius: 999px;
           background: #fff0eb;
-          color: #f65a45;
-          border: 1px solid rgba(246,90,69,0.18);
+          color: #ff4b2b;
+          border: 1px solid rgba(255,75,43,0.18);
           font-size: 12px;
           font-weight: 900;
           letter-spacing: -0.01em;
-          box-shadow: 0 6px 14px rgba(246,90,69,0.07);
+          box-shadow: 0 6px 14px rgba(255,75,43,0.07);
         }
         .jobs-grid {
           display: grid;
@@ -2950,47 +2827,6 @@ useEffect(() => {
           padding: 24px;
           overflow-y: auto;
         }
-        .location-section {
-          grid-column: 1 / -1;
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 12px;
-          padding: 16px;
-          border-radius: 22px;
-          background: rgba(88,173,173,0.07);
-          border: 1px solid rgba(88,173,173,0.14);
-          margin-bottom: 2px;
-        }
-
-        .location-section-title {
-          grid-column: 1 / -1;
-          color: ${PALETTE.slate};
-          font-size: 15px;
-          font-weight: 950;
-          letter-spacing: -0.02em;
-          margin-bottom: 2px;
-        }
-
-        .post-field label small {
-          color: ${PALETTE.softText};
-          font-size: 11px;
-          font-weight: 800;
-        }
-
-        .post-field input:-webkit-autofill,
-        .post-field input:-webkit-autofill:hover,
-        .post-field input:-webkit-autofill:focus {
-          -webkit-box-shadow: 0 0 0px 1000px #fff inset;
-          -webkit-text-fill-color: ${PALETTE.text};
-          transition: background-color 5000s ease-in-out 0s;
-        }
-
-        @media (max-width: 720px) {
-          .location-section {
-            grid-template-columns: 1fr;
-          }
-        }
-
         .post-form-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3065,7 +2901,7 @@ useEffect(() => {
         }
         .feature-box {
           background: ${PALETTE.warm};
-          border: 1px solid rgba(246,90,69,0.14);
+          border: 1px solid rgba(228,93,80,0.14);
           border-radius: 18px;
           padding: 14px;
         }
@@ -3108,7 +2944,7 @@ useEffect(() => {
           color: ${PALETTE.coral};
           font-size: 12px;
           font-weight: 900;
-          border: 1px solid rgba(246,90,69,0.16);
+          border: 1px solid rgba(228,93,80,0.16);
         }
         .preview-meta {
           color: ${PALETTE.softText};
@@ -3174,9 +3010,9 @@ useEffect(() => {
           position: relative;
           padding: 24px 26px 22px;
           background:
-            radial-gradient(circle at top right, rgba(246,90,69,0.14), transparent 34%),
+            radial-gradient(circle at top right, rgba(255,75,43,0.14), transparent 34%),
             linear-gradient(180deg, #fff 0%, #fff7f4 100%);
-          border-bottom: 1px solid rgba(246,90,69,0.12);
+          border-bottom: 1px solid rgba(255,75,43,0.12);
         }
         .detail-close {
           position: absolute;
@@ -3216,13 +3052,13 @@ useEffect(() => {
         }
         .detail-featured-badge {
           color: #fff;
-          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
-          box-shadow: 0 10px 20px rgba(246,90,69,0.18);
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          box-shadow: 0 10px 20px rgba(255,75,43,0.18);
         }
         .detail-type-badge {
-          color: #f65a45;
+          color: #ff4b2b;
           background: #fff0eb;
-          border: 1px solid rgba(246,90,69,0.16);
+          border: 1px solid rgba(255,75,43,0.16);
         }
         .detail-company {
           margin: 0 0 8px;
@@ -3252,8 +3088,8 @@ useEffect(() => {
           padding: 18px 20px;
           border-radius: 22px;
           background: linear-gradient(180deg, #fff6f2 0%, #fff 100%);
-          border: 1px solid rgba(246,90,69,0.14);
-          box-shadow: 0 14px 28px rgba(246,90,69,0.08);
+          border: 1px solid rgba(255,75,43,0.14);
+          box-shadow: 0 14px 28px rgba(255,75,43,0.08);
         }
         .detail-salary-label {
           color: ${PALETTE.softText};
@@ -3262,7 +3098,7 @@ useEffect(() => {
           margin-bottom: 4px;
         }
         .detail-salary {
-          color: #f65a45;
+          color: #ff4b2b;
           font-size: 26px;
           font-weight: 950;
           letter-spacing: -0.035em;
@@ -3271,12 +3107,12 @@ useEffect(() => {
           width: 48px;
           height: 48px;
           border-radius: 18px;
-          background: #f65a45;
+          background: #ff4b2b;
           color: #fff;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 14px 28px rgba(246,90,69,0.20);
+          box-shadow: 0 14px 28px rgba(255,75,43,0.20);
           flex-shrink: 0;
         }
         .detail-meta {
@@ -3303,7 +3139,7 @@ useEffect(() => {
           height: 30px;
           border-radius: 12px;
           background: #fff0eb;
-          color: #f65a45;
+          color: #ff4b2b;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -3516,9 +3352,9 @@ useEffect(() => {
           position: relative;
           padding: 24px 28px 18px;
           background:
-            radial-gradient(circle at top right, rgba(246,90,69,0.13), transparent 32%),
+            radial-gradient(circle at top right, rgba(228,93,80,0.13), transparent 32%),
             linear-gradient(180deg, #fff 0%, #fff7f4 100%);
-          border-bottom: 1px solid rgba(246,90,69,0.12);
+          border-bottom: 1px solid rgba(228,93,80,0.12);
         }
         .info-modal-title {
           margin: 0;
@@ -3578,7 +3414,7 @@ useEffect(() => {
           inset: 0;
           z-index: 120;
           background:
-            radial-gradient(circle at top left, rgba(246,90,69,0.10), transparent 28%),
+            radial-gradient(circle at top left, rgba(228,93,80,0.10), transparent 28%),
             radial-gradient(circle at top right, rgba(88,173,173,0.13), transparent 24%),
             ${PALETTE.bg};
           overflow-y: auto;
@@ -3704,11 +3540,11 @@ useEffect(() => {
           border-radius: 999px;
           padding: 7px 10px;
           background: #fff0eb;
-          color: #f65a45;
+          color: #ff4b2b;
           font-size: 11px;
           font-weight: 950;
           white-space: nowrap;
-          border: 1px solid rgba(246,90,69,0.16);
+          border: 1px solid rgba(255,75,43,0.16);
         }
         .admin-actions {
           display: flex;
@@ -3786,7 +3622,7 @@ useEffect(() => {
           font-weight: 800;
         }
         .featured-list-modal-card strong {
-          color: #f65a45;
+          color: #ff4b2b;
           font-size: 15px;
           font-weight: 950;
           white-space: nowrap;
@@ -3840,7 +3676,7 @@ useEffect(() => {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          color: #f65a45;
+          color: #ff4f26;
           flex-shrink: 0;
           filter: drop-shadow(0 10px 16px rgba(255,82,49,0.16));
         }
@@ -3852,7 +3688,7 @@ useEffect(() => {
         }
         .hero-trust-pill strong {
           display: block;
-          color: #f65a45;
+          color: #ff4f26;
           font-size: 16px;
           line-height: 1.08;
           font-weight: 950;
@@ -3875,7 +3711,7 @@ useEffect(() => {
         }
         .featured-section {
           background: linear-gradient(135deg, #f35b4d 0%, #ff552b 100%);
-          box-shadow: 0 22px 44px rgba(246,90,69,0.20);
+          box-shadow: 0 22px 44px rgba(228,93,80,0.20);
           padding: 30px 22px 24px;
         }
         .featured-head {
@@ -3920,13 +3756,13 @@ useEffect(() => {
           gap: 6px;
           padding: 9px 13px;
           background: ${PALETTE.coral};
-          box-shadow: 0 10px 18px rgba(246,90,69,0.22);
+          box-shadow: 0 10px 18px rgba(228,93,80,0.22);
         }
         .featured-card .type-tag {
           padding: 8px 12px;
           background: ${PALETTE.warm};
           color: ${PALETTE.coral};
-          border-color: rgba(246,90,69,0.20);
+          border-color: rgba(228,93,80,0.20);
         }
         .featured-company {
           color: ${PALETTE.teal};
@@ -3954,7 +3790,7 @@ useEffect(() => {
         .featured-divider {
           width: min(76%, 360px);
           height: 1px;
-          background: rgba(246,90,69,0.18);
+          background: rgba(228,93,80,0.18);
           margin: 20px 0 16px;
         }
         .featured-salary-row {
@@ -3967,7 +3803,7 @@ useEffect(() => {
         .salary-wallet {
           width: 24px;
           height: 24px;
-          color: #f65a45;
+          color: #ff4f26;
           flex-shrink: 0;
         }
         .salary-wallet svg {
@@ -3976,7 +3812,7 @@ useEffect(() => {
         }
         .featured-salary {
           margin: 0;
-          color: #f65a45;
+          color: #ff4f26;
           font-size: 20px;
         }
         .featured-icon-circle {
@@ -3989,7 +3825,7 @@ useEffect(() => {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: rgba(246,90,69,0.11);
+          background: rgba(228,93,80,0.11);
           color: ${PALETTE.slate};
           z-index: 1;
         }
@@ -4002,7 +3838,7 @@ useEffect(() => {
 
         /* --- Popup düzeltme: direkt iletişimli ferah iki kolon --- */
         .detail-modal {
-          width: min(1380px, calc(100vw - 48px));
+          width: min(1040px, calc(100vw - 36px));
           max-height: min(88vh, 900px);
           border-radius: 28px;
           overflow: hidden;
@@ -4014,19 +3850,19 @@ useEffect(() => {
         }
         .detail-shell {
           display: grid;
-          grid-template-columns: minmax(0, 1.5fr) minmax(380px, 0.82fr);
+          grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.75fr);
           min-height: 610px;
         }
         .detail-left {
-  padding: 46px 52px 40px;
+          padding: 34px 38px 28px;
           background: linear-gradient(180deg, #fff 0%, #fcfdfe 100%);
         }
         .detail-right {
-  padding: 46px 36px 40px;
+          padding: 34px 36px 28px;
           background:
-            radial-gradient(circle at top right, rgba(246,90,69,0.12), transparent 34%),
+            radial-gradient(circle at top right, rgba(255,75,43,0.12), transparent 34%),
             linear-gradient(180deg, #fff8f5 0%, #fff 100%);
-          border-left: 1px solid rgba(246,90,69,0.10);
+          border-left: 1px solid rgba(255,75,43,0.10);
         }
         .detail-close {
           position: absolute;
@@ -4067,13 +3903,13 @@ useEffect(() => {
         }
         .detail-featured-badge {
           color: #fff;
-          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
-          box-shadow: 0 10px 20px rgba(246,90,69,0.18);
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          box-shadow: 0 10px 20px rgba(255,75,43,0.18);
         }
         .detail-type-badge {
-          color: #f65a45;
+          color: #ff4b2b;
           background: #fff0eb;
-          border: 1px solid rgba(246,90,69,0.16);
+          border: 1px solid rgba(255,75,43,0.16);
         }
         .detail-time-badge {
           color: #0f7778;
@@ -4147,7 +3983,7 @@ useEffect(() => {
           height: 42px;
           border-radius: 16px;
           background: #fff0eb;
-          color: #f65a45;
+          color: #ff4b2b;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -4205,7 +4041,7 @@ useEffect(() => {
           margin-bottom: 10px;
         }
         .detail-salary {
-          color: #f65a45;
+          color: #ff4b2b;
           font-size: clamp(30px, 3vw, 42px);
           line-height: 1.12;
           font-weight: 950;
@@ -4216,7 +4052,7 @@ useEffect(() => {
           height: 72px;
           border-radius: 999px;
           background: #fff0eb;
-          color: #f65a45;
+          color: #ff4b2b;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -4301,946 +4137,256 @@ useEffect(() => {
         }
 
 
-        .detail-modal-wide {
-          width: min(1040px, calc(100vw - 28px));
-        }
-        .detail-shell-pro {
-          grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-        }
-        .detail-cta-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 10px;
-          margin-top: 16px;
-          margin-bottom: 14px;
-        }
-        .detail-cta {
-          min-height: 46px;
-          border: 1px solid rgba(60,74,95,0.12);
-          background: #fff;
-          color: ${PALETTE.slate};
-          border-radius: 16px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-          font-size: 13px;
-          font-weight: 950;
-          cursor: pointer;
-          font-family: inherit;
-          box-shadow: 0 10px 18px rgba(60,74,95,0.05);
-        }
-        .detail-cta.primary {
-          grid-column: 1 / -1;
-          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
-          color: #fff;
-          border-color: transparent;
-          box-shadow: 0 14px 26px rgba(246,90,69,0.20);
-        }
-        .detail-mini-info {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 10px;
-          margin-top: 14px;
-        }
-        .detail-mini-info div {
-          padding: 14px;
-          border-radius: 18px;
-          background: #fff;
-          border: 1px solid rgba(60,74,95,0.08);
-        }
-        .detail-mini-info span {
-          display: block;
-          color: ${PALETTE.softText};
-          font-size: 12px;
-          font-weight: 900;
-          margin-bottom: 5px;
-        }
-        .detail-mini-info strong {
-          color: ${PALETTE.slate};
-          font-size: 15px;
-          font-weight: 950;
-        }
-
-        .detail-modal-modern {
-          width: min(980px, calc(100vw - 24px));
-          border-radius: 34px;
-          background:
-            radial-gradient(circle at top right, rgba(246,90,69,0.12), transparent 30%),
-            linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.98));
-          backdrop-filter: blur(18px);
-          overflow: hidden;
-        }
-        .detail-close-modern {
-          top: 18px;
-          right: 18px;
-          background: rgba(255,255,255,0.88);
-        }
-        .detail-modern-grid {
-          display: grid;
-          grid-template-columns: minmax(0, 1.15fr) 340px;
-          min-height: 620px;
-        }
-        .detail-modern-main {
-          padding: 42px 42px 34px;
-          background: rgba(255,255,255,0.74);
-        }
-        .detail-modern-side {
-          padding: 42px 28px 34px;
-          background: rgba(245,247,248,0.78);
-          border-left: 1px solid rgba(60,74,95,0.08);
-        }
-        .detail-modern-badges {
-          display: flex;
-          gap: 10px;
-          flex-wrap: wrap;
-          margin-bottom: 24px;
-          padding-right: 48px;
-        }
-        .modern-badge {
-          min-height: 34px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0 14px;
-          border-radius: 999px;
-          color: #fff;
-          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
-          font-size: 13px;
-          font-weight: 950;
-          box-shadow: 0 12px 22px rgba(246,90,69,0.16);
-        }
-        .modern-badge.soft {
-          color: ${PALETTE.slate};
-          background: rgba(255,255,255,0.78);
-          border: 1px solid rgba(60,74,95,0.09);
-          box-shadow: none;
-        }
-        .modern-badge.hot {
-          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
-        }
-        .detail-modern-company {
-          margin: 0 0 10px;
-          color: ${PALETTE.teal};
-          font-size: 16px;
-          font-weight: 950;
-          letter-spacing: -0.02em;
-        }
-        .detail-modern-title {
-          margin: 0;
-          max-width: 590px;
-          color: ${PALETTE.slate};
-          font-size: clamp(38px, 5vw, 58px);
-          line-height: 0.98;
-          font-weight: 950;
-          letter-spacing: -0.07em;
-        }
-        .detail-modern-summary {
-          max-width: 600px;
-          margin: 20px 0 26px;
-          color: ${PALETTE.text};
-          font-size: 17px;
-          font-weight: 750;
-          line-height: 1.65;
-        }
-        .detail-modern-meta {
+        .plan-grid {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 12px;
-          margin-bottom: 18px;
+          margin-top: 10px;
         }
-        .detail-modern-meta div,
-        .detail-modern-desc-card,
-        .detail-modern-salary-card,
-        .detail-modern-contact-card {
-          background: rgba(255,255,255,0.82);
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 24px;
-          box-shadow: 0 18px 38px rgba(60,74,95,0.055);
+        .plan-card {
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          border-radius: 20px;
+          padding: 18px;
+          text-align: left;
+          cursor: pointer;
+          display: grid;
+          gap: 6px;
+          box-shadow: 0 10px 22px rgba(60,74,95,0.05);
+          color: ${PALETTE.slate};
         }
-        .detail-modern-meta div {
-          padding: 15px 16px;
+        .plan-card.active {
+          border-color: rgba(255,75,43,0.38);
+          background: linear-gradient(180deg, #fff8f5 0%, #fff 100%);
+          box-shadow: 0 16px 34px rgba(255,75,43,0.13);
         }
-        .detail-modern-meta span,
-        .modern-contact-row span,
-        .detail-modern-salary-card span {
+        .plan-card strong {
+          font-size: 18px;
+          font-weight: 950;
+          letter-spacing: -0.03em;
+        }
+        .plan-card small {
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 800;
+        }
+        .plan-kicker {
+          color: #ff4b2b;
+          font-size: 12px;
+          font-weight: 950;
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
+        }
+        .detail-shell-clean {
+          grid-template-columns: 390px 1fr;
+          min-height: 700px;
+        }
+        .detail-side-clean {
+          border-right: 1px solid rgba(255,75,43,0.10);
+          padding: 34px 32px;
+          background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
+        }
+        .detail-main-clean {
+          padding: 120px 44px 40px;
+          background: #fff;
+          border-left: none;
+          border-top: none;
+        }
+        .compact-salary-card {
+          margin-top: 26px;
+          border-radius: 22px;
+          border: 1px solid rgba(255,75,43,0.14);
+          background: linear-gradient(180deg, #fff8f5 0%, #fff 100%);
+          padding: 22px;
+        }
+        .compact-salary-card .detail-salary {
+          font-size: 34px;
+          line-height: 1.12;
+        }
+        .detail-contact-box-left {
+          margin-top: 18px;
+          padding: 22px;
+          border-radius: 22px;
+          background: rgba(88,173,173,0.10);
+          border: 1px solid rgba(88,173,173,0.16);
+        }
+        .detail-contact-box-left .detail-contact-title {
+          margin-bottom: 16px;
+          color: #0f766e;
+        }
+        .contact-item {
+          display: grid;
+          grid-template-columns: 42px 1fr;
+          gap: 12px;
+          align-items: center;
+          padding: 14px 0;
+          border-bottom: 1px solid rgba(60,74,95,0.08);
+        }
+        .contact-item:last-of-type { border-bottom: none; }
+        .contact-icon {
+          width: 42px;
+          height: 42px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: #fff;
+          color: ${PALETTE.slate};
+          box-shadow: 0 8px 18px rgba(60,74,95,0.06);
+        }
+        .contact-item span:not(.contact-icon) {
           display: block;
           color: ${PALETTE.softText};
           font-size: 12px;
           font-weight: 900;
-          margin-bottom: 6px;
+          margin-bottom: 4px;
         }
-        .detail-modern-meta strong,
-        .modern-contact-row strong {
+        .contact-item strong {
+          display: block;
           color: ${PALETTE.slate};
           font-size: 15px;
           font-weight: 950;
+          line-height: 1.25;
         }
-        .detail-modern-desc-card {
-          padding: 22px;
-          margin-top: 8px;
+        .clean-note {
+          margin: 18px 0 0;
+          padding: 0;
+          background: transparent;
+          border: none;
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          line-height: 1.55;
         }
-        .detail-modern-desc-card h4 {
+        .detail-meta-clean {
+          margin-top: 28px;
+          padding-bottom: 26px;
+          border-bottom: 1px solid rgba(60,74,95,0.10);
+        }
+        .detail-meta-clean span strong {
+          margin-left: 4px;
+          color: ${PALETTE.slate};
+        }
+        .detail-description-clean {
+          margin-top: 28px;
+          padding: 24px 26px;
+        }
+        @media (max-width: 1100px) {
+          .filter-grid { grid-template-columns: 1fr; }
+          .featured-grid { grid-template-columns: 1fr; }
+          .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 760px) {
+          .container { width: calc(100% - 16px); max-width: none; }
+          .footer-grid { grid-template-columns: 1fr; gap: 22px; }
+          .topbar-inner {
+            min-height: auto;
+            padding: 4px 0 8px;
+            align-items: flex-start;
+            flex-direction: column;
+          }
+          .brand-wrap { width: 100%; }
+          .brand-logo { height: 92px; }
+          .topbar.small .brand-logo { height: 92px; }
+          .top-actions {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          }
+          .btn { width: 100%; padding: 12px 14px; }
+          .hero-card { padding: 14px 16px; border-radius: 20px; }
+          .hero-title { font-size: 24px; }
+          .hero-content { grid-template-columns: 1fr; gap: 14px; }
+          .hero-trust-row { justify-content: flex-start; flex-wrap: wrap; }
+          .hero-trust-pill { width: 100%; min-width: 0; }
+          .featured-head-actions { gap: 12px; font-size: 12px; }
+          .featured-card { min-height: 220px; }
+          .featured-icon-circle { width: 64px; height: 64px; right: 18px; bottom: 22px; }
+          .featured-icon-circle svg { width: 38px; height: 38px; }
+          .all-jobs-panel { padding: 16px; border-radius: 22px; }
+          .all-jobs-top { align-items: flex-start; flex-direction: column; }
+          .sort-control { width: 100%; justify-content: space-between; }
+          .sort-control select { flex: 1; min-width: 0; }
+          .quick-type-tabs { gap: 8px; }
+          .quick-type-tab { min-width: auto; padding: 0 14px; }
+          .jobs-grid { grid-template-columns: 1fr; }
+          .post-form-grid { grid-template-columns: 1fr; }
+          .detail-meta { grid-template-columns: 1fr; }
+          .detail-actions { grid-template-columns: 1fr; }
+          .detail-hero { padding: 22px 18px 20px; }
+          .detail-body { padding: 18px; }
+
+          .detail-shell { grid-template-columns: 1fr; min-height: auto; }
+          .detail-left, .detail-right { padding: 22px 18px; }
+          .detail-right { border-left: none; border-top: 1px solid rgba(255,75,43,0.10); }
+          .detail-side-clean { border-right: none; border-bottom: 1px solid rgba(255,75,43,0.10); }
+          .detail-main-clean { padding: 22px 18px; }
+          .detail-title { font-size: 32px; }
+          .detail-left-meta { gap: 14px; }
+          .plan-grid { grid-template-columns: 1fr; }
+
+        }
+
+        .admin-compact-layout {
+          display: grid;
+          grid-template-columns: 280px 1fr;
+          gap: 16px;
+          align-items: start;
+        }
+        .admin-side {
+          background: rgba(255,255,255,0.94);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 26px;
+          padding: 18px;
+          box-shadow: 0 18px 42px rgba(60,74,95,0.08);
+          position: sticky;
+          top: 18px;
+        }
+        .admin-side-title {
           margin: 0 0 12px;
           color: ${PALETTE.slate};
           font-size: 18px;
           font-weight: 950;
+          letter-spacing: -0.03em;
         }
-        .detail-modern-desc-card p {
-          margin: 0;
-          color: ${PALETTE.text};
-          font-size: 15px;
-          line-height: 1.75;
-          white-space: pre-wrap;
-        }
-        .detail-modern-salary-card {
-          padding: 22px;
-          margin-bottom: 14px;
-          background: linear-gradient(180deg, #fff 0%, #fff7f4 100%);
-          border-color: rgba(246,90,69,0.12);
-        }
-        .detail-modern-salary-card strong {
-          display: block;
-          color: #f65a45;
-          font-size: 30px;
-          line-height: 1.1;
-          font-weight: 950;
-          letter-spacing: -0.05em;
-        }
-        .detail-modern-contact-card {
-          padding: 20px;
-        }
-        .detail-modern-contact-card h4 {
-          margin: 0 0 14px;
-          color: #0f7778;
-          font-size: 18px;
-          font-weight: 950;
-        }
-        .modern-contact-row {
-          padding: 13px 0;
-          border-top: 1px solid rgba(60,74,95,0.08);
-        }
-        .modern-contact-row:first-of-type {
-          border-top: none;
-          padding-top: 0;
-        }
-        .modern-whatsapp-btn {
-          width: 100%;
-          min-height: 54px;
-          margin-top: 14px;
-          border-radius: 18px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
-          text-decoration: none;
-          font-size: 15px;
-          font-weight: 950;
-          box-shadow: 0 18px 28px rgba(246,90,69,0.22);
-        }
-        .modern-mini-actions {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 9px;
-          margin-top: 10px;
-        }
-        .modern-mini-actions a,
-        .modern-mini-actions button {
-          min-height: 44px;
-          border-radius: 16px;
-          border: 1px solid rgba(60,74,95,0.10);
-          background: #fff;
-          color: ${PALETTE.slate};
-          text-decoration: none;
-          font-size: 13px;
-          font-weight: 950;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          font-family: inherit;
-        }
-        .modern-safe-note {
-          margin: 14px 0 0;
-          color: ${PALETTE.softText};
-          font-size: 12px;
-          font-weight: 800;
-          line-height: 1.55;
-        }
-        @media (max-width: 880px) {
-          .detail-modern-grid {
-            grid-template-columns: 1fr;
-          }
-          .detail-modern-main,
-          .detail-modern-side {
-            padding: 28px 20px;
-          }
-          .detail-modern-side {
-            border-left: none;
-            border-top: 1px solid rgba(60,74,95,0.08);
-          }
-          .detail-modern-meta {
-            grid-template-columns: 1fr;
-          }
-          .detail-modern-title {
-            font-size: 38px;
-          }
-        }
-
-        .detail-modal-modern {
-          background:
-            radial-gradient(circle at 8% 10%, rgba(88,173,173,0.10), transparent 28%),
-            radial-gradient(circle at 92% 12%, rgba(246,90,69,0.07), transparent 30%),
-            linear-gradient(135deg, rgba(255,255,255,0.90), rgba(245,247,248,0.88)) !important;
-          backdrop-filter: blur(22px);
-          border: 1px solid rgba(255,255,255,0.72) !important;
-          box-shadow: 0 42px 100px rgba(35,48,68,0.22) !important;
-        }
-
-        .detail-modern-main {
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.58)),
-            radial-gradient(circle at left top, rgba(88,173,173,0.08), transparent 36%) !important;
-        }
-
-        .detail-modern-side {
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.62), rgba(245,247,248,0.72)),
-            radial-gradient(circle at top right, rgba(246,90,69,0.055), transparent 40%) !important;
-          border-left: 1px solid rgba(255,255,255,0.72) !important;
-        }
-
-        .detail-modern-company {
-          color: ${PALETTE.teal} !important;
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .detail-modern-company::after {
-          content: "✓";
-          width: 19px;
-          height: 19px;
-          border-radius: 999px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(246,90,69,0.10);
-          color: #f65a45;
-          font-size: 11px;
-          font-weight: 950;
-        }
-
-        .detail-modern-title {
-          color: #26354d !important;
-          text-shadow: 0 12px 26px rgba(60,74,95,0.06);
-        }
-
-        .detail-modern-summary {
-          font-size: 18px !important;
-          font-weight: 780 !important;
-          color: #3C4A5F !important;
-          max-width: 660px !important;
-        }
-
-        .detail-modern-meta {
-          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          margin-bottom: 24px !important;
-        }
-
-        .detail-modern-meta div {
-          min-height: 82px;
-          border-radius: 24px !important;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.64)) !important;
-          border: 1px solid rgba(255,255,255,0.80) !important;
-          box-shadow: 0 18px 38px rgba(60,74,95,0.055) !important;
-        }
-
-        .detail-modern-meta div:first-child {
-          background:
-            radial-gradient(circle at left, rgba(88,173,173,0.13), transparent 45%),
-            rgba(255,255,255,0.78) !important;
-        }
-
-        .detail-modern-meta div:nth-child(2) {
-          background:
-            radial-gradient(circle at left, rgba(246,90,69,0.09), transparent 45%),
-            rgba(255,255,255,0.78) !important;
-        }
-
-        .detail-modern-desc-card {
-          padding: 30px !important;
-          min-height: 255px;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.56)) !important;
-          border: 1px solid rgba(255,255,255,0.82) !important;
-          box-shadow: 0 20px 48px rgba(60,74,95,0.07) !important;
-        }
-
-        .detail-modern-desc-card h4 {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          font-size: 21px !important;
-        }
-
-        .detail-modern-desc-card h4::before {
-          content: "▌";
-          color: ${PALETTE.coral};
-          font-size: 24px;
-          line-height: 1;
-        }
-
-        .detail-modern-desc-card p {
-          font-size: 16px !important;
-          line-height: 1.85 !important;
-          color: #334155 !important;
-        }
-
-        .detail-modern-salary-card {
-          background:
-            radial-gradient(circle at 92% 16%, rgba(246,90,69,0.13), transparent 28%),
-            linear-gradient(135deg, rgba(255,255,255,0.84), rgba(255,244,239,0.72)) !important;
-          color: ${PALETTE.slate} !important;
-          border: 1px solid rgba(255,255,255,0.82) !important;
-          box-shadow: 0 22px 46px rgba(246,90,69,0.11) !important;
-        }
-
-        .detail-modern-salary-card span {
-          color: ${PALETTE.softText} !important;
-        }
-
-        .detail-modern-salary-card strong {
-          color: #f65a45 !important;
-        }
-
-        .detail-modern-contact-card {
-          background: rgba(255,255,255,0.72) !important;
-          border: 1px solid rgba(255,255,255,0.82) !important;
-          box-shadow: 0 24px 55px rgba(60,74,95,0.10) !important;
-          backdrop-filter: blur(14px);
-        }
-
-        .detail-modern-contact-card h4 {
-          color: #0f7778 !important;
-          position: relative;
-          padding-bottom: 10px;
-        }
-
-        .detail-modern-contact-card h4::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          width: 34px;
-          height: 3px;
-          border-radius: 999px;
-          background: rgba(246,90,69,0.85);
-        }
-
-        .modern-whatsapp-btn {
-          background: linear-gradient(135deg, #18c878 0%, #23d68a 100%) !important;
-          box-shadow: 0 18px 34px rgba(17,199,111,0.18) !important;
-        }
-
-        .modern-mini-actions a,
-        .modern-mini-actions button {
-          min-height: 54px !important;
-          flex-direction: column;
-          gap: 4px;
-          background: rgba(255,255,255,0.78) !important;
-        }
-
-        .modern-mini-actions a:nth-child(1)::before {
-          content: "📞";
-          font-size: 18px;
-        }
-        .modern-mini-actions a:nth-child(2)::before {
-          content: "🗺️";
-          font-size: 18px;
-        }
-        .modern-mini-actions button::before {
-          content: "🔗";
-          font-size: 18px;
-        }
-
-        .modern-safe-note {
-          background: rgba(88,173,173,0.10);
-          border: 1px solid rgba(88,173,173,0.14);
-          border-radius: 18px;
-          padding: 13px 14px;
-        }
-
-
-
-        /* === EKIS GLASS V4: referans görsele yakın popup === */
-
-        .featured-section,
-        .btn-primary,
-        .search-btn-primary {
-          background: #f65a45 !important;
-        }
-
-        .btn-primary,
-        .search-btn-primary {
-          color: #fff !important;
-          box-shadow: 0 12px 24px rgba(246,90,69,0.22) !important;
-        }
-
-        .detail-modal-backdrop {
-          background: rgba(35,48,68,0.34) !important;
-          backdrop-filter: blur(15px) saturate(1.04) !important;
-          padding: 18px !important;
-        }
-
-        .detail-modal-ref-v4 {
-          width: min(980px, calc(100vw - 24px)) !important;
-          max-height: min(88vh, 820px) !important;
-          border-radius: 34px !important;
-          background:
-            linear-gradient(135deg, rgba(255,255,255,0.78), rgba(245,247,248,0.58)),
-            radial-gradient(circle at 2% 8%, rgba(88,173,173,0.12), transparent 32%),
-            radial-gradient(circle at 96% 5%, rgba(246,90,69,0.10), transparent 30%) !important;
-          border: 1px solid rgba(255,255,255,0.82) !important;
-          box-shadow:
-            0 42px 100px rgba(35,48,68,0.30),
-            inset 0 1px 0 rgba(255,255,255,0.78) !important;
-          backdrop-filter: blur(26px) saturate(1.08) !important;
-          overflow: hidden !important;
-        }
-
-        .detail-close-modern {
-          top: 22px !important;
-          right: 22px !important;
-          width: 54px !important;
-          height: 54px !important;
-          background: rgba(255,255,255,0.88) !important;
-          border: 1px solid rgba(255,255,255,0.85) !important;
-          box-shadow: 0 14px 30px rgba(60,74,95,0.12) !important;
-          color: #233044 !important;
-          font-size: 30px !important;
-          z-index: 6 !important;
-        }
-
-        .detail-modern-grid-ref-v4 {
-          grid-template-columns: minmax(0, 1fr) 348px !important;
-          min-height: 660px !important;
-          background: transparent !important;
-        }
-
-        .detail-modern-main-ref-v4 {
-          padding: 42px 40px 32px !important;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.50), rgba(255,255,255,0.34)),
-            radial-gradient(circle at 4% 20%, rgba(88,173,173,0.10), transparent 38%) !important;
-          backdrop-filter: blur(18px) !important;
-        }
-
-        .detail-modern-side-ref-v4 {
-          padding: 42px 26px 32px !important;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.40), rgba(245,247,248,0.55)),
-            radial-gradient(circle at 92% 0%, rgba(246,90,69,0.09), transparent 44%) !important;
-          border-left: 1px solid rgba(255,255,255,0.72) !important;
-          backdrop-filter: blur(18px) !important;
-        }
-
-        .detail-modern-badges {
-          gap: 12px !important;
-          margin-bottom: 26px !important;
-          padding-right: 60px !important;
-        }
-
-        .modern-badge,
-        .modern-badge.hot {
-          min-height: 36px !important;
-          padding: 0 16px !important;
-          border-radius: 999px !important;
-          background: #f65a45 !important;
-          color: #fff !important;
-          border: 1px solid rgba(255,255,255,0.22) !important;
-          box-shadow: 0 12px 24px rgba(246,90,69,0.18) !important;
-          font-size: 13px !important;
-          font-weight: 950 !important;
-        }
-
-        .modern-badge.soft {
-          background: rgba(255,255,255,0.58) !important;
-          color: #233044 !important;
-          border: 1px solid rgba(255,255,255,0.82) !important;
-          box-shadow:
-            0 9px 20px rgba(60,74,95,0.045),
-            inset 0 1px 0 rgba(255,255,255,0.72) !important;
-          backdrop-filter: blur(14px) !important;
-        }
-
-        .detail-modern-company {
-          color: #f65a45 !important;
-          font-size: 18px !important;
-          font-weight: 950 !important;
-          margin-bottom: 12px !important;
-        }
-
-        .detail-modern-company::after {
-          background: rgba(246,90,69,0.12) !important;
-          color: #f65a45 !important;
-        }
-
-        .detail-modern-title {
-          max-width: 620px !important;
-          color: #102142 !important;
-          font-size: clamp(44px, 5.3vw, 64px) !important;
-          line-height: 0.98 !important;
-          letter-spacing: -0.075em !important;
-          text-shadow: 0 14px 34px rgba(60,74,95,0.08) !important;
-          margin-bottom: 20px !important;
-        }
-
-        .detail-modern-summary {
-          max-width: 620px !important;
-          color: #3C4A5F !important;
-          font-size: 18px !important;
-          font-weight: 700 !important;
-          line-height: 1.62 !important;
-          margin-bottom: 28px !important;
-        }
-
-        .detail-modern-meta {
-          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          gap: 16px !important;
-          margin-bottom: 28px !important;
-          max-width: 620px !important;
-        }
-
-        .detail-modern-meta div {
-          min-height: 92px !important;
-          padding: 20px 22px !important;
-          border-radius: 26px !important;
-          background: rgba(255,255,255,0.54) !important;
-          border: 1px solid rgba(255,255,255,0.84) !important;
-          box-shadow:
-            0 20px 44px rgba(60,74,95,0.07),
-            inset 0 1px 0 rgba(255,255,255,0.74) !important;
-          backdrop-filter: blur(16px) !important;
-        }
-
-        .detail-modern-meta div:first-child {
-          background:
-            radial-gradient(circle at left, rgba(88,173,173,0.15), transparent 48%),
-            rgba(255,255,255,0.54) !important;
-        }
-
-        .detail-modern-meta div:nth-child(2) {
-          background:
-            radial-gradient(circle at left, rgba(246,90,69,0.10), transparent 48%),
-            rgba(255,255,255,0.54) !important;
-        }
-
-        .detail-modern-meta span {
-          color: #5D6B7F !important;
-          font-size: 13px !important;
-          font-weight: 850 !important;
-        }
-
-        .detail-modern-meta strong {
-          color: #233044 !important;
-          font-size: 17px !important;
-          font-weight: 950 !important;
-        }
-
-        .detail-modern-desc-card {
-          max-width: 620px !important;
-          min-height: 250px !important;
-          padding: 30px !important;
-          border-radius: 30px !important;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.58), rgba(255,255,255,0.42)),
-            radial-gradient(circle at 0% 0%, rgba(246,90,69,0.055), transparent 36%) !important;
-          border: 1px solid rgba(255,255,255,0.88) !important;
-          box-shadow:
-            0 28px 66px rgba(60,74,95,0.09),
-            inset 0 1px 0 rgba(255,255,255,0.76) !important;
-          backdrop-filter: blur(18px) !important;
-        }
-
-        .detail-modern-desc-card h4 {
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 12px !important;
-          color: #233044 !important;
-          font-size: 22px !important;
-          font-weight: 950 !important;
-          margin-bottom: 16px !important;
-        }
-
-        .detail-modern-desc-card h4::before {
-          content: "i" !important;
-          width: 34px !important;
-          height: 34px !important;
-          border-radius: 9px !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          background: #f65a45 !important;
-          color: #fff !important;
-          font-size: 20px !important;
-          font-weight: 950 !important;
-          line-height: 1 !important;
-        }
-
-        .detail-modern-desc-card h4::after {
-          content: "" !important;
-          position: absolute !important;
-          width: 42px !important;
-          height: 3px !important;
-          border-radius: 999px !important;
-          background: #f65a45 !important;
-          left: 30px !important;
-          top: 74px !important;
-        }
-
-        .detail-modern-desc-card p {
-          color: #334155 !important;
-          font-size: 16px !important;
-          line-height: 1.85 !important;
-          margin-top: 16px !important;
-        }
-
-        .detail-modern-salary-card {
-          margin-top: 8px !important;
-          margin-bottom: 18px !important;
-          padding: 26px 24px !important;
-          border-radius: 28px !important;
-          background:
-            linear-gradient(135deg, rgba(246,90,69,0.94), rgba(246,90,69,0.78)),
-            radial-gradient(circle at 92% 12%, rgba(255,255,255,0.22), transparent 30%) !important;
-          border: 1px solid rgba(255,255,255,0.26) !important;
-          box-shadow:
-            0 24px 52px rgba(246,90,69,0.22),
-            inset 0 1px 0 rgba(255,255,255,0.30) !important;
-        }
-
-        .detail-modern-salary-card span {
-          color: rgba(255,255,255,0.92) !important;
-          font-size: 14px !important;
-          font-weight: 850 !important;
-        }
-
-        .detail-modern-salary-card strong {
-          color: #fff !important;
-          font-size: 34px !important;
-          letter-spacing: -0.055em !important;
-        }
-
-        .detail-modern-contact-card {
-          padding: 24px !important;
-          border-radius: 30px !important;
-          background: rgba(255,255,255,0.62) !important;
-          border: 1px solid rgba(255,255,255,0.88) !important;
-          box-shadow:
-            0 28px 68px rgba(60,74,95,0.13),
-            inset 0 1px 0 rgba(255,255,255,0.74) !important;
-          backdrop-filter: blur(18px) !important;
-        }
-
-        .detail-modern-contact-card h4 {
-          color: #102142 !important;
-          font-size: 21px !important;
-          font-weight: 950 !important;
-          padding-bottom: 13px !important;
-          margin-bottom: 18px !important;
-        }
-
-        .detail-modern-contact-card h4::after {
-          background: #f65a45 !important;
-          width: 42px !important;
-          height: 3px !important;
-        }
-
-        .modern-contact-row {
-          padding: 14px 0 14px 62px !important;
-          min-height: 62px !important;
-          position: relative !important;
-          border-top-color: rgba(60,74,95,0.08) !important;
-        }
-
-        .modern-contact-row::before {
-          content: "" !important;
-          position: absolute !important;
-          left: 0 !important;
-          top: 14px !important;
-          width: 42px !important;
-          height: 42px !important;
-          border-radius: 13px !important;
-          background: rgba(255,255,255,0.66) !important;
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.74) !important;
-        }
-
-        .modern-contact-row span {
-          color: #5D6B7F !important;
-          font-size: 13px !important;
-          font-weight: 850 !important;
-        }
-
-        .modern-contact-row strong {
-          color: #102142 !important;
-          font-size: 17px !important;
-          font-weight: 950 !important;
-        }
-
-        .modern-whatsapp-btn {
-          min-height: 58px !important;
-          border-radius: 17px !important;
-          background: #f65a45 !important;
-          box-shadow: 0 18px 34px rgba(246,90,69,0.22) !important;
-          font-size: 17px !important;
-          font-weight: 950 !important;
-        }
-
-        .modern-mini-actions {
-          gap: 12px !important;
-          margin-top: 14px !important;
-        }
-
-        .modern-mini-actions a,
-        .modern-mini-actions button {
-          min-height: 64px !important;
-          border-radius: 17px !important;
-          background: rgba(255,255,255,0.62) !important;
-          border: 1px solid rgba(255,255,255,0.88) !important;
-          box-shadow:
-            0 14px 30px rgba(60,74,95,0.07),
-            inset 0 1px 0 rgba(255,255,255,0.74) !important;
-          backdrop-filter: blur(12px) !important;
-          color: #102142 !important;
-        }
-
-        .modern-mini-actions a:nth-child(1)::before,
-        .modern-mini-actions a:nth-child(2)::before,
-        .modern-mini-actions button::before {
-          color: #f65a45 !important;
-          font-size: 19px !important;
-        }
-
-        .modern-safe-note {
-          margin-top: 18px !important;
-          padding: 16px 16px 16px 54px !important;
-          border-radius: 20px !important;
-          background:
-            linear-gradient(180deg, rgba(255,242,236,0.78), rgba(255,242,236,0.58)) !important;
-          border: 1px solid rgba(246,90,69,0.10) !important;
-          color: #3C4A5F !important;
-          position: relative !important;
-        }
-
-        .modern-safe-note::before {
-          content: "✓" !important;
-          position: absolute !important;
-          left: 16px !important;
-          top: 16px !important;
-          width: 28px !important;
-          height: 28px !important;
-          border-radius: 9px !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          background: #f65a45 !important;
-          color: #fff !important;
-          font-weight: 950 !important;
-        }
-
-        @media (max-width: 900px) {
-          .detail-modern-grid-ref-v4 {
-            grid-template-columns: 1fr !important;
-          }
-          .detail-modern-side-ref-v4 {
-            border-left: none !important;
-            border-top: 1px solid rgba(255,255,255,0.72) !important;
-          }
-          .detail-modern-main-ref-v4,
-          .detail-modern-side-ref-v4 {
-            padding: 28px 20px !important;
-          }
-          .detail-modern-title {
-            font-size: 40px !important;
-          }
-        }
-
-
-        /* === EKIS CHECKLIST FIX: mobil + admin panel toparlama === */
-
-        .admin-compact-layout {
-          display: grid;
-          grid-template-columns: 260px minmax(0, 1fr);
-          gap: 18px;
-          align-items: start;
-        }
-
-        .admin-side,
-        .admin-main-panel {
-          background: rgba(255,255,255,0.94);
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 26px;
-          box-shadow: 0 18px 42px rgba(60,74,95,0.08);
-        }
-
-        .admin-side {
-          padding: 18px;
-          position: sticky;
-          top: 18px;
-        }
-
-        .admin-side-title {
-          margin: 0 0 14px;
-          color: ${PALETTE.slate};
-          font-size: 20px;
-          font-weight: 950;
-          letter-spacing: -0.035em;
-        }
-
         .admin-side-list {
           display: grid;
-          gap: 10px;
+          gap: 8px;
         }
-
         .admin-side-item {
-          width: 100%;
-          border: 1px solid rgba(60,74,95,0.10);
-          background: #fff;
-          color: ${PALETTE.slate};
-          border-radius: 16px;
-          padding: 13px 14px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 12px;
+          width: 100%;
+          border: 1px solid rgba(60,74,95,0.08);
+          background: #fff;
+          color: ${PALETTE.slate};
+          border-radius: 16px;
+          padding: 12px 13px;
           font-family: inherit;
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 900;
           cursor: pointer;
-          box-shadow: 0 10px 20px rgba(60,74,95,0.04);
+          box-shadow: 0 8px 18px rgba(60,74,95,0.04);
         }
-
         .admin-side-item span {
-          color: #f65a45;
+          color: ${PALETTE.coral};
           font-weight: 950;
         }
-
         .admin-main-panel {
-          padding: 20px;
-          min-width: 0;
+          background: rgba(255,255,255,0.94);
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 26px;
+          padding: 18px;
+          box-shadow: 0 18px 42px rgba(60,74,95,0.08);
         }
-
         .admin-main-head {
           display: flex;
-          align-items: center;
           justify-content: space-between;
-          gap: 14px;
+          align-items: center;
+          gap: 16px;
           margin-bottom: 14px;
         }
-
         .admin-main-head h2 {
           margin: 0;
           color: ${PALETTE.slate};
@@ -5248,1362 +4394,162 @@ useEffect(() => {
           font-weight: 950;
           letter-spacing: -0.04em;
         }
-
-        .admin-tools {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) 160px;
-          gap: 10px;
-          margin-bottom: 14px;
-        }
-
-        .admin-tools input,
-        .admin-tools select {
-          height: 48px;
-          border: 1px solid rgba(60,74,95,0.12);
-          background: #fff;
-          border-radius: 16px;
-          padding: 0 14px;
-          color: ${PALETTE.text};
-          font-family: inherit;
-          font-size: 14px;
-          font-weight: 800;
-          outline: none;
-        }
-
         .admin-table {
           display: grid;
           gap: 10px;
         }
-
         .admin-table-row {
           display: grid;
-          grid-template-columns: minmax(220px, 1.45fr) minmax(130px, 0.8fr) minmax(95px, 0.6fr) minmax(120px, 0.65fr) minmax(260px, 1fr);
-          gap: 12px;
+          grid-template-columns: 1.4fr 1fr 0.8fr 0.9fr auto;
           align-items: center;
-          padding: 15px 16px;
-          border: 1px solid rgba(60,74,95,0.08);
+          gap: 12px;
+          padding: 14px;
           border-radius: 18px;
-          background: #fff;
-          box-shadow: 0 10px 20px rgba(60,74,95,0.04);
+          background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
+          border: 1px solid rgba(60,74,95,0.08);
         }
-
         .admin-table-row.header {
-          box-shadow: none;
           background: transparent;
           border: none;
-          padding: 0 16px 6px;
+          box-shadow: none;
           color: ${PALETTE.softText};
           font-size: 12px;
           font-weight: 950;
+          padding: 4px 14px;
         }
-
+        .admin-table-title {
+          min-width: 0;
+        }
         .admin-table-title strong {
           display: block;
           color: ${PALETTE.slate};
           font-size: 15px;
-          font-weight: 950;
           line-height: 1.15;
-          margin-bottom: 4px;
+          font-weight: 950;
+          letter-spacing: -0.02em;
         }
-
         .admin-table-title span,
-        .admin-status-line,
         .admin-table-cell {
           display: block;
           color: ${PALETTE.softText};
-          font-size: 13px;
-          font-weight: 800;
-          line-height: 1.35;
+          font-size: 12px;
+          font-weight: 850;
+          margin-top: 4px;
         }
-
         .admin-table-actions {
           display: flex;
-          align-items: center;
           justify-content: flex-end;
           flex-wrap: wrap;
-          gap: 8px;
+          gap: 7px;
         }
-
+        .admin-tools {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 10px;
+          margin-bottom: 14px;
+        }
+        .admin-tools input,
+        .admin-tools select {
+          height: 44px;
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          color: ${PALETTE.slate};
+          border-radius: 14px;
+          padding: 0 14px;
+          font-size: 13px;
+          font-weight: 850;
+          outline: none;
+        }
         .admin-expired {
           opacity: 0.68;
+          background: #f7f8fa;
         }
-
-        @media (max-width: 1100px) {
-          .admin-page {
-            padding: 16px;
-          }
-
-          .admin-compact-layout {
-            grid-template-columns: 1fr;
-          }
-
-          .admin-side {
-            position: static;
-          }
-
-          .admin-side-list {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-
+        .admin-status-line {
+          margin-top: 5px;
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 900;
+        }
+        .captcha-box {
+          display: grid;
+          grid-template-columns: 1fr 1fr auto;
+          gap: 10px;
+          align-items: end;
+          grid-column: 1 / -1;
+          padding: 14px;
+          border-radius: 18px;
+          background: rgba(88,173,173,0.08);
+          border: 1px solid rgba(88,173,173,0.14);
+        }
+        .captcha-question {
+          height: 46px;
+          display: flex;
+          align-items: center;
+          padding: 0 14px;
+          border-radius: 14px;
+          background: #fff;
+          color: ${PALETTE.slate};
+          font-weight: 950;
+          border: 1px solid rgba(60,74,95,0.10);
+        }
+        .admin-login-card {
+          max-width: 460px;
+          margin: 80px auto 0;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
+          border-radius: 28px;
+          padding: 28px;
+          box-shadow: 0 24px 60px rgba(60,74,95,0.12);
+        }
+        .admin-login-card h1 {
+          margin: 0 0 8px;
+          color: ${PALETTE.slate};
+          font-size: 34px;
+          font-weight: 950;
+          letter-spacing: -0.05em;
+        }
+        .admin-login-card p {
+          margin: 0 0 18px;
+          color: ${PALETTE.softText};
+          font-size: 14px;
+          font-weight: 800;
+          line-height: 1.45;
+        }
+        .admin-login-card input {
+          width: 100%;
+          height: 50px;
+          border: 1px solid rgba(60,74,95,0.12);
+          border-radius: 16px;
+          padding: 0 15px;
+          color: ${PALETTE.slate};
+          font-size: 15px;
+          font-weight: 850;
+          outline: none;
+          margin-bottom: 12px;
+        }
+        .admin-login-error {
+          color: ${PALETTE.coral};
+          font-size: 13px;
+          font-weight: 900;
+          margin: 0 0 12px;
+        }
+        .admin-login-actions {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+        @media (max-width: 1000px) {
+          .admin-compact-layout { grid-template-columns: 1fr; }
+          .admin-side { position: static; }
           .admin-table-row {
             grid-template-columns: 1fr;
             align-items: start;
           }
-
-          .admin-table-row.header {
-            display: none;
-          }
-
-          .admin-table-actions {
-            justify-content: flex-start;
-          }
-        }
-
-        @media (max-width: 760px) {
-          .container {
-            width: min(100% - 28px, 1180px);
-          }
-
-          .topbar {
-            padding: 8px 0 2px;
-          }
-
-          .topbar-inner {
-            min-height: auto !important;
-            align-items: center;
-            gap: 10px;
-          }
-
-          .brand-logo {
-            height: 54px !important;
-            max-width: 62px;
-            object-fit: contain;
-          }
-
-          .topbar.small .brand-logo {
-            height: 48px !important;
-          }
-
-          .top-actions {
-            gap: 8px;
-            min-width: 0;
-          }
-
-          .top-actions .btn {
-            min-height: 42px;
-            padding: 10px 13px;
-            border-radius: 14px;
-            font-size: 13px;
-            white-space: nowrap;
-          }
-
-          .top-search {
-            padding-top: 8px;
-          }
-
-          .filter-wrap {
-            border-radius: 22px;
-            padding: 14px;
-            overflow: hidden;
-          }
-
-          .filter-grid {
-            grid-template-columns: 1fr 0.72fr 0.72fr 0.82fr auto !important;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 2px;
-            scrollbar-width: none;
-          }
-
-          .filter-grid::-webkit-scrollbar {
-            display: none;
-          }
-
-          .field {
-            min-width: 58px;
-          }
-
-          .field:first-child {
-            min-width: 72px;
-          }
-
-          .field label {
-            font-size: 11px;
-            line-height: 1.05;
-          }
-
-          .field input,
-          .field select {
-            height: 50px;
-            border-radius: 16px;
-            padding: 0 10px;
-            font-size: 13px;
-          }
-
-          .search-action {
-            min-width: 48px;
-          }
-
-          .search-btn {
-            height: 50px;
-            min-width: 48px;
-            padding: 0 10px;
-            border-radius: 16px;
-            font-size: 13px;
-          }
-
-          .search-btn-clear {
-            display: none;
-          }
-
-          .hero-card {
-            padding: 22px 24px;
-            border-radius: 24px;
-            overflow: hidden;
-          }
-
-          .hero-content {
-            grid-template-columns: 1fr !important;
-            gap: 16px;
-          }
-
-          .hero-title {
-            font-size: clamp(34px, 13vw, 48px) !important;
-            line-height: 1.05 !important;
-            max-width: 260px;
-          }
-
-          .hero-trust-row {
-            justify-content: flex-start;
-            overflow-x: auto;
-            flex-wrap: nowrap;
-            padding-bottom: 6px;
-            scrollbar-width: none;
-          }
-
-          .hero-trust-row::-webkit-scrollbar {
-            display: none;
-          }
-
-          .hero-trust-pill {
-            min-width: 220px;
-            height: 66px;
-            flex: 0 0 auto;
-          }
-
-          .featured-section {
-            border-radius: 24px;
-            padding: 24px 18px 20px;
-          }
-
-          .featured-grid,
-          .jobs-grid {
-            grid-template-columns: 1fr !important;
-          }
-
-          .section-head,
-          .featured-head {
-            align-items: flex-start;
-            flex-direction: column;
-          }
-
-          .admin-page {
-            padding: 14px;
-          }
-
-          .admin-top {
-            flex-direction: column;
-            align-items: flex-start;
-          }
-
-          .admin-stats {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-          }
-
-          .admin-stat {
-            padding: 15px;
-            border-radius: 18px;
-          }
-
-          .admin-side-list {
-            grid-template-columns: 1fr;
-          }
-
-          .admin-main-panel {
-            padding: 14px;
-            border-radius: 22px;
-          }
-
-          .admin-tools {
-            grid-template-columns: 1fr;
-          }
-
-          .admin-table-row {
-            padding: 14px;
-          }
-
-
-        /* =========================================================
-           İLAN DETAY POPUP - TEMİZ VE HİZALI SÜRÜM
-           Bu blok en sonda olduğu için eski popup stillerini güvenli şekilde ezer.
-        ========================================================= */
-
-        .detail-modal-backdrop {
-          background: rgba(35, 48, 68, 0.36) !important;
-          backdrop-filter: blur(16px) saturate(1.04) !important;
-          padding: 16px !important;
-        }
-
-        .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
-          width: min(1180px, calc(100vw - 28px)) !important;
-          max-height: min(92vh, 860px) !important;
-          border-radius: 34px !important;
-          overflow: hidden !important;
-          background:
-            radial-gradient(circle at 6% 6%, rgba(88,173,173,0.10), transparent 30%),
-            radial-gradient(circle at 95% 5%, rgba(246,90,69,0.10), transparent 28%),
-            linear-gradient(135deg, rgba(255,255,255,0.94), rgba(246,248,250,0.92)) !important;
-          border: 1px solid rgba(255,255,255,0.92) !important;
-          box-shadow:
-            0 42px 100px rgba(35,48,68,0.26),
-            inset 0 1px 0 rgba(255,255,255,0.90) !important;
-        }
-
-        .detail-close.detail-close-modern {
-          top: 18px !important;
-          right: 18px !important;
-          width: 58px !important;
-          height: 58px !important;
-          border-radius: 999px !important;
-          border: 1px solid rgba(255,255,255,0.92) !important;
-          background: rgba(255,255,255,0.94) !important;
-          color: #102142 !important;
-          box-shadow: 0 16px 34px rgba(60,74,95,0.14) !important;
-          font-size: 34px !important;
-          line-height: 1 !important;
-          z-index: 10 !important;
-        }
-
-        .detail-modern-grid.detail-modern-grid-ref-v4 {
-          display: grid !important;
-          grid-template-columns: minmax(0, 1fr) 420px !important;
-          gap: 0 !important;
-          min-height: 720px !important;
-          max-height: min(92vh, 860px) !important;
-          overflow: auto !important;
-          background: transparent !important;
-        }
-
-        .detail-modern-main.detail-modern-main-ref-v4 {
-          padding: 44px 46px 40px !important;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.66), rgba(255,255,255,0.42)),
-            radial-gradient(circle at 4% 20%, rgba(88,173,173,0.09), transparent 36%) !important;
-          border-right: 1px solid rgba(60,74,95,0.08) !important;
-        }
-
-        .detail-modern-side.detail-modern-side-ref-v4 {
-          padding: 44px 34px 34px !important;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.54), rgba(245,247,248,0.68)),
-            radial-gradient(circle at 92% 0%, rgba(246,90,69,0.08), transparent 42%) !important;
-          border-left: none !important;
-        }
-
-        .detail-modern-badges {
-          display: flex !important;
-          align-items: center !important;
-          gap: 12px !important;
-          flex-wrap: wrap !important;
-          margin: 0 0 30px !important;
-          padding-right: 72px !important;
-        }
-
-        .modern-badge,
-        .modern-badge.hot {
-          min-height: 38px !important;
-          padding: 0 18px !important;
-          border-radius: 999px !important;
-          background: #f65a45 !important;
-          color: #fff !important;
-          border: 1px solid rgba(255,255,255,0.32) !important;
-          box-shadow: 0 13px 24px rgba(246,90,69,0.20) !important;
-          font-size: 13px !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.02em !important;
-        }
-
-        .modern-badge.soft {
-          background: rgba(255,255,255,0.78) !important;
-          color: #102142 !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          box-shadow: 0 10px 22px rgba(60,74,95,0.055) !important;
-        }
-
-        .detail-modern-company {
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 8px !important;
-          margin: 0 0 14px !important;
-          color: #f65a45 !important;
-          font-size: 19px !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.025em !important;
-        }
-
-        .detail-modern-company::after {
-          content: "✓";
-          width: 20px;
-          height: 20px;
-          border-radius: 999px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(246,90,69,0.13);
-          color: #f65a45;
-          font-size: 12px;
-          font-weight: 950;
-        }
-
-        .detail-modern-title {
-          margin: 0 !important;
-          max-width: 720px !important;
-          color: #102142 !important;
-          font-size: clamp(50px, 5.5vw, 76px) !important;
-          line-height: 0.94 !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.078em !important;
-          text-shadow: 0 14px 28px rgba(60,74,95,0.06) !important;
-        }
-
-        .detail-modern-summary {
-          margin: 24px 0 34px !important;
-          max-width: 720px !important;
-          color: #3C4A5F !important;
-          font-size: 20px !important;
-          line-height: 1.55 !important;
-          font-weight: 780 !important;
-        }
-
-        .detail-modern-meta {
-          display: grid !important;
-          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          gap: 16px !important;
-          margin: 0 0 26px !important;
-          max-width: 720px !important;
-        }
-
-        .detail-modern-meta div {
-          min-height: 124px !important;
-          padding: 24px 24px 22px 112px !important;
-          border-radius: 26px !important;
-          position: relative !important;
-          display: flex !important;
-          flex-direction: column !important;
-          justify-content: center !important;
-          background: rgba(255,255,255,0.82) !important;
-          border: 1px solid rgba(255,255,255,0.92) !important;
-          box-shadow: 0 18px 38px rgba(60,74,95,0.06) !important;
-        }
-
-        .detail-modern-meta div::before {
-          position: absolute;
-          left: 24px;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 62px;
-          height: 62px;
-          border-radius: 999px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 28px;
-          font-weight: 900;
-        }
-
-        .detail-modern-meta div:first-child::before {
-          content: "⌖";
-          color: #0f7778;
-          background: rgba(88,173,173,0.14);
-        }
-
-        .detail-modern-meta div:nth-child(2)::before {
-          content: "☕";
-          color: #f65a45;
-          background: rgba(246,90,69,0.10);
-        }
-
-        .detail-modern-meta span,
-        .modern-contact-row span,
-        .detail-modern-salary-card span {
-          color: #5D6B7F !important;
-          font-size: 14px !important;
-          font-weight: 950 !important;
-          line-height: 1.15 !important;
-          margin-bottom: 8px !important;
-        }
-
-        .detail-modern-meta strong,
-        .modern-contact-row strong {
-          color: #102142 !important;
-          font-size: 19px !important;
-          font-weight: 950 !important;
-          line-height: 1.22 !important;
-        }
-
-        .detail-modern-desc-card {
-          max-width: 720px !important;
-          min-height: 300px !important;
-          padding: 34px 34px 36px !important;
-          border-radius: 28px !important;
-          background: rgba(255,255,255,0.82) !important;
-          border: 1px solid rgba(255,255,255,0.94) !important;
-          box-shadow: 0 22px 48px rgba(60,74,95,0.07) !important;
-        }
-
-        .detail-modern-desc-card h4 {
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 16px !important;
-          margin: 0 0 24px !important;
-          color: #102142 !important;
-          font-size: 24px !important;
-          font-weight: 950 !important;
-          line-height: 1.1 !important;
-        }
-
-        .detail-modern-desc-card h4::before {
-          content: "i";
-          width: 54px;
-          height: 54px;
-          border-radius: 16px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          background: #f65a45;
-          color: #fff;
-          font-size: 26px;
-          font-weight: 950;
-          box-shadow: 0 12px 24px rgba(246,90,69,0.22);
-        }
-
-        .detail-modern-desc-card p {
-          margin: 0 !important;
-          color: #3C4A5F !important;
-          font-size: 17px !important;
-          line-height: 1.75 !important;
-          font-weight: 650 !important;
-          max-width: 620px !important;
-        }
-
-        .detail-modern-salary-card {
-          padding: 30px 30px 34px !important;
-          margin: 0 0 22px !important;
-          min-height: 180px !important;
-          border-radius: 28px !important;
-          border: none !important;
-          background: linear-gradient(135deg, #f65a45, #ff6f5b) !important;
-          box-shadow: 0 24px 48px rgba(246,90,69,0.24) !important;
-        }
-
-        .detail-modern-salary-card span {
-          color: rgba(255,255,255,0.88) !important;
-          font-size: 17px !important;
-          margin-bottom: 14px !important;
-        }
-
-        .detail-modern-salary-card strong {
-          display: block !important;
-          color: #fff !important;
-          font-size: clamp(34px, 3vw, 46px) !important;
-          line-height: 1.04 !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.055em !important;
-        }
-
-        .detail-modern-contact-card {
-          padding: 28px 28px 26px !important;
-          border-radius: 28px !important;
-          background: rgba(255,255,255,0.84) !important;
-          border: 1px solid rgba(255,255,255,0.94) !important;
-          box-shadow: 0 22px 48px rgba(60,74,95,0.075) !important;
-        }
-
-        .detail-modern-contact-card h4 {
-          position: relative !important;
-          margin: 0 0 28px !important;
-          color: #102142 !important;
-          font-size: 26px !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.04em !important;
-        }
-
-        .detail-modern-contact-card h4::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: -11px;
-          width: 52px;
-          height: 4px;
-          border-radius: 999px;
-          background: #f65a45;
-        }
-
-        .modern-contact-row {
-          position: relative !important;
-          min-height: 82px !important;
-          padding: 18px 0 18px 82px !important;
-          border-bottom: 1px solid rgba(60,74,95,0.10) !important;
-          display: flex !important;
-          flex-direction: column !important;
-          justify-content: center !important;
-        }
-
-        .modern-contact-row::before {
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 54px;
-          height: 54px;
-          border-radius: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(255,255,255,0.88);
-          border: 1px solid rgba(60,74,95,0.08);
-          box-shadow: 0 12px 24px rgba(60,74,95,0.065);
-          color: #102142;
-          font-size: 26px;
-        }
-
-        .modern-contact-row:nth-of-type(1)::before { content: "♙"; }
-        .modern-contact-row:nth-of-type(2)::before { content: "☎"; }
-        .modern-contact-row:nth-of-type(3)::before { content: "⌖"; }
-
-        .modern-whatsapp-btn {
-          min-height: 62px !important;
-          margin: 22px 0 16px !important;
-          border-radius: 17px !important;
-          background: #f65a45 !important;
-          color: #fff !important;
-          font-size: 18px !important;
-          font-weight: 950 !important;
-          box-shadow: 0 16px 28px rgba(246,90,69,0.22) !important;
-        }
-
-        .modern-whatsapp-btn::before {
-          content: "☏";
-          margin-right: 10px;
-          font-size: 25px;
-          line-height: 1;
-        }
-
-        .modern-mini-actions {
-          display: grid !important;
-          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-          gap: 12px !important;
-          margin: 0 0 18px !important;
-        }
-
-        .modern-mini-actions a,
-        .modern-mini-actions button {
-          min-height: 78px !important;
-          border-radius: 17px !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          background: rgba(255,255,255,0.86) !important;
-          color: #102142 !important;
-          box-shadow: 0 12px 24px rgba(60,74,95,0.065) !important;
-          font-size: 14px !important;
-          font-weight: 950 !important;
-          display: flex !important;
-          flex-direction: column !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 8px !important;
-          text-decoration: none !important;
-          cursor: pointer !important;
-          font-family: inherit !important;
-        }
-
-        .modern-mini-actions a:nth-child(1)::before { content: "📞"; font-size: 22px; }
-        .modern-mini-actions a:nth-child(2)::before { content: "🗺️"; font-size: 22px; }
-        .modern-mini-actions button:nth-child(3)::before { content: "🔗"; font-size: 22px; }
-
-        .modern-safe-note {
-          position: relative !important;
-          margin: 0 !important;
-          padding: 22px 22px 22px 66px !important;
-          border-radius: 20px !important;
-          background: #FFF2EC !important;
-          border: 1px solid rgba(246,90,69,0.16) !important;
-          color: #3C4A5F !important;
-          font-size: 14px !important;
-          font-weight: 850 !important;
-          line-height: 1.55 !important;
-        }
-
-        .modern-safe-note::before {
-          content: "✓";
-          position: absolute;
-          left: 22px;
-          top: 22px;
-          width: 28px;
-          height: 28px;
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #f65a45;
-          color: #fff;
-          font-size: 17px;
-          font-weight: 950;
-        }
-
-        @media (max-width: 980px) {
-          .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
-            max-height: 92vh !important;
-          }
-
-          .detail-modern-grid.detail-modern-grid-ref-v4 {
-            grid-template-columns: 1fr !important;
-            min-height: auto !important;
-          }
-
-          .detail-modern-main.detail-modern-main-ref-v4 {
-            border-right: none !important;
-            border-bottom: 1px solid rgba(60,74,95,0.08) !important;
-            padding: 34px 24px 28px !important;
-          }
-
-          .detail-modern-side.detail-modern-side-ref-v4 {
-            padding: 28px 24px 28px !important;
-          }
-
-          .detail-modern-title {
-            font-size: 42px !important;
-          }
-
-          .detail-modern-summary {
-            font-size: 17px !important;
-          }
-
-          .detail-modern-meta {
-            grid-template-columns: 1fr !important;
-          }
-        }
-
-        @media (max-width: 560px) {
-          .detail-modal-backdrop {
-            padding: 10px !important;
-          }
-
-          .detail-close.detail-close-modern {
-            width: 50px !important;
-            height: 50px !important;
-            top: 14px !important;
-            right: 14px !important;
-          }
-
-          .detail-modern-badges {
-            padding-right: 54px !important;
-            gap: 8px !important;
-          }
-
-          .modern-badge,
-          .modern-badge.hot,
-          .modern-badge.soft {
-            min-height: 34px !important;
-            padding: 0 12px !important;
-            font-size: 12px !important;
-          }
-
-          .detail-modern-main.detail-modern-main-ref-v4 {
-            padding: 28px 16px 22px !important;
-          }
-
-          .detail-modern-side.detail-modern-side-ref-v4 {
-            padding: 22px 16px 22px !important;
-          }
-
-          .detail-modern-title {
-            font-size: 34px !important;
-            letter-spacing: -0.055em !important;
-          }
-
-          .detail-modern-meta div {
-            min-height: 104px !important;
-            padding: 20px 18px 18px 88px !important;
-          }
-
-          .detail-modern-meta div::before {
-            left: 18px !important;
-            width: 52px !important;
-            height: 52px !important;
-          }
-
-          .modern-mini-actions {
-            grid-template-columns: 1fr !important;
-          }
-        }
-
-
-        /* =========================================================
-           İLAN DETAY POPUP - FINAL BİREBİR SABİT TASARIM
-           Tek App.jsx içinde kalır, eski popup stillerini güvenli şekilde ezer.
-        ========================================================= */
-
-        .detail-modal-backdrop {
-          background: rgba(35,48,68,0.38) !important;
-          backdrop-filter: blur(15px) saturate(1.02) !important;
-          padding: 18px !important;
-        }
-
-        .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
-          width: min(1280px, calc(100vw - 56px)) !important;
-          max-height: min(92vh, 820px) !important;
-          border-radius: 34px !important;
-          overflow: hidden !important;
-          background: rgba(255,255,255,0.96) !important;
-          border: 1px solid rgba(255,255,255,0.92) !important;
-          box-shadow: 0 42px 110px rgba(35,48,68,0.26) !important;
-        }
-
-        .detail-close.detail-close-modern {
-          top: 18px !important;
-          right: 18px !important;
-          width: 54px !important;
-          height: 54px !important;
-          border-radius: 999px !important;
-          border: 1px solid rgba(255,255,255,0.92) !important;
-          background: rgba(255,255,255,0.96) !important;
-          color: #102142 !important;
-          box-shadow: 0 16px 34px rgba(60,74,95,0.14) !important;
-          font-size: 32px !important;
-          line-height: 1 !important;
-          z-index: 20 !important;
-        }
-
-        .detail-modern-grid.detail-modern-grid-ref-v4 {
-          display: grid !important;
-          grid-template-columns: minmax(0, 1fr) 380px !important;
-          gap: 0 !important;
-          min-height: 760px !important;
-          max-height: min(92vh, 820px) !important;
-          overflow: auto !important;
-          background:
-            radial-gradient(circle at 7% 8%, rgba(88,173,173,0.08), transparent 28%),
-            radial-gradient(circle at 92% 8%, rgba(246,90,69,0.08), transparent 26%),
-            linear-gradient(135deg, #ffffff 0%, #fbfcfd 100%) !important;
-        }
-
-        .detail-modern-main.detail-modern-main-ref-v4 {
-          padding: 32px 44px 34px !important;
-          background: transparent !important;
-          border-right: 1px solid rgba(60,74,95,0.08) !important;
-        }
-
-        .detail-modern-side.detail-modern-side-ref-v4 {
-          padding: 32px 30px 30px !important;
-          background: rgba(252,252,253,0.82) !important;
-          border-left: none !important;
-        }
-
-        .detail-modern-badges {
-          display: flex !important;
-          align-items: center !important;
-          gap: 12px !important;
-          flex-wrap: wrap !important;
-          margin: 0 0 28px !important;
-          padding-right: 72px !important;
-        }
-
-        .modern-badge,
-        .modern-badge.hot {
-          min-height: 38px !important;
-          padding: 0 18px !important;
-          border-radius: 999px !important;
-          background: #f65a45 !important;
-          color: #fff !important;
-          border: 1px solid rgba(255,255,255,0.32) !important;
-          box-shadow: 0 12px 22px rgba(246,90,69,0.19) !important;
-          font-size: 13px !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.02em !important;
-        }
-
-        .modern-badge.soft {
-          background: rgba(255,255,255,0.82) !important;
-          color: #102142 !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          box-shadow: 0 10px 22px rgba(60,74,95,0.055) !important;
-        }
-
-        .detail-modern-company {
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 8px !important;
-          margin: 0 0 12px !important;
-          color: #f65a45 !important;
-          font-size: 18px !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.025em !important;
-        }
-
-        .detail-modern-company::after {
-          content: "✓";
-          width: 20px;
-          height: 20px;
-          border-radius: 999px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(246,90,69,0.13);
-          color: #f65a45;
-          font-size: 12px;
-          font-weight: 950;
-        }
-
-        .detail-modern-title {
-          margin: 0 !important;
-          max-width: 760px !important;
-          color: #071b4d !important;
-          font-size: clamp(44px, 4.6vw, 58px) !important;
-          line-height: 0.96 !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.075em !important;
-          text-shadow: 0 14px 28px rgba(60,74,95,0.055) !important;
-        }
-
-        .detail-modern-summary {
-          margin: 22px 0 28px !important;
-          max-width: 760px !important;
-          color: #3C4A5F !important;
-          font-size: 16px !important;
-          line-height: 1.58 !important;
-          font-weight: 800 !important;
-        }
-
-        .detail-modern-meta {
-          display: grid !important;
-          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-          gap: 14px !important;
-          margin: 0 0 24px !important;
-          max-width: 760px !important;
-        }
-
-        .detail-modern-meta div {
-          min-height: 82px !important;
-          padding: 18px 18px 18px 82px !important;
-          border-radius: 18px !important;
-          position: relative !important;
-          display: flex !important;
-          flex-direction: column !important;
-          justify-content: center !important;
-          background: rgba(255,255,255,0.86) !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          box-shadow: 0 14px 28px rgba(60,74,95,0.055) !important;
-        }
-
-        .detail-modern-meta div::before {
-          position: absolute;
-          left: 18px;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 48px;
-          height: 48px;
-          border-radius: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 22px;
-          font-weight: 900;
-        }
-
-        .detail-modern-meta div:first-child::before {
-          content: "⌖";
-          color: #0f7778;
-          background: rgba(88,173,173,0.14);
-        }
-
-        .detail-modern-meta div:nth-child(2)::before {
-          content: "☕";
-          color: #f65a45;
-          background: rgba(246,90,69,0.10);
-        }
-
-        .detail-modern-meta div:nth-child(3)::before {
-          content: "▣";
-          color: #0f7778;
-          background: rgba(88,173,173,0.12);
-        }
-
-        .detail-modern-meta span,
-        .modern-contact-row span,
-        .detail-modern-salary-card span {
-          color: #5D6B7F !important;
-          font-size: 12px !important;
-          font-weight: 950 !important;
-          line-height: 1.15 !important;
-          margin-bottom: 6px !important;
-        }
-
-        .detail-modern-meta strong,
-        .modern-contact-row strong {
-          color: #071b4d !important;
-          font-size: 15px !important;
-          font-weight: 950 !important;
-          line-height: 1.22 !important;
-        }
-
-        .detail-modern-desc-card {
-          max-width: 760px !important;
-          min-height: 320px !important;
-          padding: 28px 30px 30px !important;
-          border-radius: 24px !important;
-          background: rgba(255,255,255,0.86) !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          box-shadow: 0 18px 40px rgba(60,74,95,0.06) !important;
-        }
-
-        .detail-modern-desc-card h4 {
-          display: inline-flex !important;
-          align-items: center !important;
-          gap: 14px !important;
-          margin: 0 0 18px !important;
-          color: #071b4d !important;
-          font-size: 22px !important;
-          font-weight: 950 !important;
-          line-height: 1.1 !important;
-        }
-
-        .detail-modern-desc-card h4::before {
-          content: "i";
-          width: 46px;
-          height: 46px;
-          border-radius: 14px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          background: #f65a45;
-          color: #fff;
-          font-size: 24px;
-          font-weight: 950;
-          box-shadow: 0 12px 24px rgba(246,90,69,0.20);
-        }
-
-        .detail-modern-desc-card p {
-          margin: 0 !important;
-          color: #3C4A5F !important;
-          font-size: 14px !important;
-          line-height: 1.65 !important;
-          font-weight: 720 !important;
-          max-width: 660px !important;
-        }
-
-        .detail-modern-duty-list {
-          margin: 22px 0 0 !important;
-          padding: 0 0 0 18px !important;
-          color: #3C4A5F !important;
-          font-size: 14px !important;
-          line-height: 1.8 !important;
-          font-weight: 650 !important;
-        }
-
-        .detail-modern-duty-list li {
-          padding-left: 4px !important;
-          margin: 3px 0 !important;
-        }
-
-        .detail-modern-duty-list li::marker {
-          color: #f65a45;
-          font-size: 14px;
-        }
-
-        .detail-modern-process-note {
-          margin-top: 24px !important;
-          padding: 18px 20px 18px 66px !important;
-          border-radius: 18px !important;
-          background: #FFF2EC !important;
-          border: 1px solid rgba(246,90,69,0.14) !important;
-          color: #3C4A5F !important;
-          position: relative !important;
-          font-size: 13px !important;
-          line-height: 1.6 !important;
-          font-weight: 700 !important;
-        }
-
-        .detail-modern-process-note::before {
-          content: "✓";
-          position: absolute;
-          left: 20px;
-          top: 20px;
-          width: 30px;
-          height: 30px;
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #f65a45;
-          color: #fff;
-          font-size: 18px;
-          font-weight: 950;
-        }
-
-        .detail-modern-process-note strong,
-        .detail-modern-process-note span {
-          display: block !important;
-        }
-
-        .detail-modern-process-note span {
-          margin-top: 5px !important;
-        }
-
-        .detail-modern-salary-card {
-          padding: 24px 28px 28px !important;
-          margin: 0 0 20px !important;
-          min-height: 156px !important;
-          border-radius: 24px !important;
-          border: none !important;
-          background: linear-gradient(135deg, #f65a45, #ff6f5b) !important;
-          box-shadow: 0 24px 48px rgba(246,90,69,0.23) !important;
-        }
-
-        .detail-modern-salary-card span {
-          color: rgba(255,255,255,0.9) !important;
-          font-size: 15px !important;
-          margin-bottom: 12px !important;
-        }
-
-        .detail-modern-salary-card strong {
-          display: block !important;
-          color: #fff !important;
-          font-size: clamp(30px, 3vw, 42px) !important;
-          line-height: 1.04 !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.055em !important;
-        }
-
-        .detail-modern-contact-card {
-          padding: 24px 24px 24px !important;
-          border-radius: 24px !important;
-          background: rgba(255,255,255,0.88) !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          box-shadow: 0 18px 40px rgba(60,74,95,0.065) !important;
-        }
-
-        .detail-modern-contact-card h4 {
-          position: relative !important;
-          margin: 0 0 24px !important;
-          color: #071b4d !important;
-          font-size: 28px !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.045em !important;
-        }
-
-        .detail-modern-contact-card h4::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: -10px;
-          width: 44px;
-          height: 3px;
-          border-radius: 999px;
-          background: #f65a45;
-        }
-
-        .modern-contact-row {
-          position: relative !important;
-          min-height: 70px !important;
-          padding: 15px 0 15px 70px !important;
-          border-bottom: 1px solid rgba(60,74,95,0.10) !important;
-          display: flex !important;
-          flex-direction: column !important;
-          justify-content: center !important;
-        }
-
-        .modern-contact-row::before {
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 48px;
-          height: 48px;
-          border-radius: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: rgba(255,255,255,0.9);
-          border: 1px solid rgba(60,74,95,0.08);
-          box-shadow: 0 10px 20px rgba(60,74,95,0.055);
-          color: #102142;
-          font-size: 22px;
-        }
-
-        .modern-contact-row:nth-of-type(1)::before { content: "♙"; }
-        .modern-contact-row:nth-of-type(2)::before { content: "☎"; }
-        .modern-contact-row:nth-of-type(3)::before { content: "⌖"; }
-
-        .modern-whatsapp-btn {
-          min-height: 58px !important;
-          margin: 20px 0 14px !important;
-          border-radius: 16px !important;
-          background: #f65a45 !important;
-          color: #fff !important;
-          font-size: 17px !important;
-          font-weight: 950 !important;
-          box-shadow: 0 16px 28px rgba(246,90,69,0.20) !important;
-        }
-
-        .modern-whatsapp-btn::before {
-          content: "☏";
-          margin-right: 10px;
-          font-size: 23px;
-          line-height: 1;
-        }
-
-        .modern-mini-actions {
-          display: grid !important;
-          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-          gap: 12px !important;
-          margin: 0 0 16px !important;
-        }
-
-        .modern-mini-actions a,
-        .modern-mini-actions button {
-          min-height: 70px !important;
-          border-radius: 16px !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          background: rgba(255,255,255,0.88) !important;
-          color: #071b4d !important;
-          box-shadow: 0 10px 20px rgba(60,74,95,0.055) !important;
-          font-size: 14px !important;
-          font-weight: 950 !important;
-          display: flex !important;
-          flex-direction: column !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 7px !important;
-          text-decoration: none !important;
-          cursor: pointer !important;
-          font-family: inherit !important;
-        }
-
-        .modern-mini-actions a:nth-child(1)::before { content: "📞"; font-size: 21px; }
-        .modern-mini-actions a:nth-child(2)::before { content: "🗺️"; font-size: 21px; }
-        .modern-mini-actions button:nth-child(3)::before { content: "🔗"; font-size: 21px; }
-
-        .modern-safe-note {
-          position: relative !important;
-          margin: 0 !important;
-          padding: 18px 18px 18px 60px !important;
-          border-radius: 18px !important;
-          background: #FFF2EC !important;
-          border: 1px solid rgba(246,90,69,0.16) !important;
-          color: #3C4A5F !important;
-          font-size: 13px !important;
-          font-weight: 850 !important;
-          line-height: 1.55 !important;
-        }
-
-        .modern-safe-note::before {
-          content: "✓";
-          position: absolute;
-          left: 18px;
-          top: 18px;
-          width: 28px;
-          height: 28px;
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #f65a45;
-          color: #fff;
-          font-size: 17px;
-          font-weight: 950;
-        }
-
-        @media (max-width: 980px) {
-          .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
-            max-height: 92vh !important;
-          }
-
-          .detail-modern-grid.detail-modern-grid-ref-v4 {
-            grid-template-columns: 1fr !important;
-            min-height: auto !important;
-          }
-
-          .detail-modern-main.detail-modern-main-ref-v4 {
-            border-right: none !important;
-            border-bottom: 1px solid rgba(60,74,95,0.08) !important;
-            padding: 34px 24px 28px !important;
-          }
-
-          .detail-modern-side.detail-modern-side-ref-v4 {
-            padding: 28px 24px 28px !important;
-          }
-
-          .detail-modern-title {
-            font-size: 42px !important;
-          }
-
-          .detail-modern-summary {
-            font-size: 17px !important;
-          }
-
-          .detail-modern-meta {
-            grid-template-columns: 1fr !important;
-          }
-        }
-
-        @media (max-width: 560px) {
-          .detail-modal-backdrop {
-            padding: 10px !important;
-          }
-
-          .detail-close.detail-close-modern {
-            width: 48px !important;
-            height: 48px !important;
-            top: 12px !important;
-            right: 12px !important;
-          }
-
-          .detail-modern-badges {
-            padding-right: 52px !important;
-            gap: 8px !important;
-          }
-
-          .modern-badge,
-          .modern-badge.hot,
-          .modern-badge.soft {
-            min-height: 34px !important;
-            padding: 0 12px !important;
-            font-size: 12px !important;
-          }
-
-          .detail-modern-main.detail-modern-main-ref-v4 {
-            padding: 28px 16px 22px !important;
-          }
-
-          .detail-modern-side.detail-modern-side-ref-v4 {
-            padding: 22px 16px 22px !important;
-          }
-
-          .detail-modern-title {
-            font-size: 34px !important;
-            letter-spacing: -0.055em !important;
-          }
-
-          .modern-mini-actions {
-            grid-template-columns: 1fr !important;
-          }
-        }
-
+          .admin-table-row.header { display: none; }
+          .admin-table-actions { justify-content: flex-start; }
         }
 
-      `}
-</style>
+      `}</style>
 
       {isAdminRoute && (
         <div className="admin-page">
@@ -6748,7 +4694,7 @@ useEffect(() => {
                       </div>
 
                       <div className="admin-table-actions">
-                        <button className="admin-mini-btn light" type="button" onClick={() => openJobDetail(job)}>
+                        <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
                           Detay
                         </button>
 
@@ -6876,27 +4822,6 @@ useEffect(() => {
                   {errors.title && <div className="error-text">{errors.title}</div>}
                 </div>
 
-                <div className="post-field full">
-                  <label>Kategori<span className="required-star">*</span></label>
-                  <select
-                    className={errors.category ? "field-error" : ""}
-                    name="category"
-                    value={formData.category}
-                    onChange={handleFormChange}
-                  >
-                    <option value="">Kategori seç</option>
-                    {categories.filter((item) => item !== "Tümü").map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </select>
-                  {errors.category && <div className="error-text">{errors.category}</div>}
-                </div>
-
-                <div className="location-section">
-                  <div className="location-section-title">
-                    📍 Konum Bilgileri
-                  </div>
-
                 <div className="post-field">
                   <label>Şehir<span className="required-star">*</span></label>
                   <select
@@ -6914,57 +4839,16 @@ useEffect(() => {
                 </div>
 
                 <div className="post-field">
-                  <label>İlçe<span className="required-star">*</span></label>
+                  <label>İlçe / Konum<span className="required-star">*</span></label>
                   <input
                     className={errors.district ? "field-error" : ""}
                     name="district"
                     type="text"
-                    placeholder="Örn. Odunpazarı"
+                    placeholder="Örn. Kadıköy, Odunpazarı, Gebze"
                     value={formData.district}
                     onChange={handleFormChange}
                   />
                   {errors.district && <div className="error-text">{errors.district}</div>}
-                </div>
-
-                <div className="post-field">
-                  <label>Mahalle<span className="required-star">*</span></label>
-                  <input
-                    className={errors.neighborhood ? "field-error" : ""}
-                    name="neighborhood"
-                    type="text"
-                    placeholder="Örn. Vişnelik"
-                    value={formData.neighborhood}
-                    onChange={handleFormChange}
-                  />
-                  {errors.neighborhood && <div className="error-text">{errors.neighborhood}</div>}
-                </div>
-
-                <div className="post-field">
-                  <label>Sokak / Cadde<span className="required-star">*</span></label>
-                  <input
-                    className={errors.street ? "field-error" : ""}
-                    name="street"
-                    type="text"
-                    placeholder="Örn. İsmet İnönü Cad."
-                    value={formData.street}
-                    onChange={handleFormChange}
-                  />
-                  {errors.street && <div className="error-text">{errors.street}</div>}
-                </div>
-
-                <div className="post-field">
-                  <label>Kapı No <small>(opsiyonel - ilanda gösterilmez)</small></label>
-                  <input
-                    className={errors.doorNo ? "field-error" : ""}
-                    name="doorNo"
-                    type="text"
-                    placeholder="Örn. 12A"
-                    value={formData.doorNo}
-                    onChange={handleFormChange}
-                  />
-                  {errors.doorNo && <div className="error-text">{errors.doorNo}</div>}
-                </div>
-
                 </div>
 
                 <div className="post-field">
@@ -6974,6 +4858,19 @@ useEffect(() => {
                       <option key={item} value={item}>{item}</option>
                     ))}
                   </select>
+                </div>
+
+                <div className="post-field full">
+                  <label>İş adresi / buluşma noktası<span className="required-star">*</span></label>
+                  <input
+                    className={errors.workAddress ? "field-error" : ""}
+                    name="workAddress"
+                    type="text"
+                    placeholder="Örn. Kadıköy / Moda, AVM önü, depo giriş kapısı"
+                    value={formData.workAddress}
+                    onChange={handleFormChange}
+                  />
+                  {errors.workAddress && <div className="error-text">{errors.workAddress}</div>}
                 </div>
 
                 <div className="post-field">
@@ -7066,11 +4963,7 @@ useEffect(() => {
 
                   <h4 className="preview-title">{toTitleCase(formData.title) || "İlan başlığı burada görünecek"}</h4>
                   <div className="preview-company">{toTitleCase(formData.company) || "Firma adı burada görünecek"}</div>
-                  <div className="preview-location">{formData.category || "Kategori burada görünecek"}</div>
-                  <div className="preview-location">{normalizeLocation(formData.city, formData.district) || "Şehir / İlçe burada görünecek"}</div>
-                  <div className="preview-location">
-                    {buildPublicAddress({ neighborhood: formData.neighborhood, street: formData.street }) || "Mahalle / sokak bilgisi burada görünecek"}
-                  </div>
+                  <div className="preview-location">{normalizeLocation(formData.city, formData.district) || "Şehir / Konum burada görünecek"}</div>
                   <div className="preview-salary">{previewSalary || "Ücret bilgisi burada görünecek"}</div>
                   <p className="preview-desc">
                     {formData.description || "İş açıklaması burada görünecek. Kullanıcılar ilanı açtığında bu alanı okuyacak."}
@@ -7141,116 +5034,95 @@ useEffect(() => {
 
       {selectedJob && (
         <div className="detail-modal-backdrop" onClick={() => setSelectedJob(null)}>
-          <div className="detail-modal detail-modal-modern detail-modal-ref-v4" onClick={(e) => e.stopPropagation()}>
-            <button className="detail-close detail-close-modern" type="button" onClick={() => setSelectedJob(null)}>×</button>
+          <div className="detail-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="detail-close" type="button" onClick={() => setSelectedJob(null)}>×</button>
 
-            <div className="detail-modern-grid detail-modern-grid-ref-v4">
-              <section className="detail-modern-main detail-modern-main-ref-v4">
-                <div className="detail-modern-badges">
-                  {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
-                    <span className="modern-badge hot">★ Ekiş Acil</span>
-                  ) : (
-                    <span className="modern-badge">Yeni İlan</span>
-                  )}
-                  <span className="modern-badge soft">{selectedJob.type}</span>
-                  <span className="modern-badge soft">👁 {Number(selectedJob.viewsCount || 0)} görüntülenme</span>
-                </div>
-
-                <p className="detail-modern-company">{selectedJob.company}</p>
-                <h3 className="detail-modern-title">{selectedJob.title}</h3>
-                <p className="detail-modern-summary">
-                  {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
-                </p>
-
-                <div className="detail-modern-meta">
-                  <div>
-                    <span>Konum</span>
-                    <strong>{selectedJob.location}</strong>
-                  </div>
-                  <div>
-                    <span>Kategori</span>
-                    <strong>{selectedJob.category || "Genel"}</strong>
-                  </div>
-                  <div>
-                    <span>Çalışma Şekli</span>
-                    <strong>{selectedJob.type}</strong>
-                  </div>
-                </div>
-
-                <div className="detail-modern-desc-card">
-                  <h4>İş açıklaması</h4>
-                  <p>{selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}</p>
-
-                  <ul className="detail-modern-duty-list">
-                    <li>Müşterileri güler yüzle karşılamak ve yönlendirmek</li>
-                    <li>İş akışına ve ekibe destek olmak</li>
-                    <li>Çalışma alanının düzenli tutulmasına yardımcı olmak</li>
-                    <li>Ekip arkadaşlarıyla koordineli çalışmak</li>
-                    <li>Yoğun saatlerde hızlı ve çözüm odaklı hizmet sunmak</li>
-                  </ul>
-
-                  <div className="detail-modern-process-note">
-                    <strong>İşe alım süreci ve görüşmeler işveren tarafından yürütülmektedir.</strong>
-                    <span>Başvuru için sağdaki iletişim bilgilerini kullanarak doğrudan işverenle iletişime geçebilirsiniz.</span>
-                  </div>
-                </div>
-              </section>
-
-              <aside className="detail-modern-side detail-modern-side-ref-v4">
-                <div className="detail-modern-salary-card">
-                  <span>Ücret bilgisi</span>
-                  <strong>{selectedJob.salary}</strong>
-                </div>
-
-                <div className="detail-modern-contact-card">
-                  <h4>Başvuru</h4>
-
-                  <div className="modern-contact-row">
-                    <span>Yetkili</span>
-                    <strong>{selectedJob.contactName || "İşveren"}</strong>
-                  </div>
-                  <div className="modern-contact-row">
-                    <span>Telefon / WhatsApp</span>
-                    <strong>{selectedJob.contactPhone || "Belirtilmedi"}</strong>
-                  </div>
-                  <div className="modern-contact-row">
-                    <span>Adres</span>
-                    <strong>{selectedJob.workAddress || selectedJob.location}</strong>
+            <div className="detail-panel-inner">
+              <div className="detail-shell detail-shell-clean">
+                <aside className="detail-left detail-side-clean">
+                  <div className="detail-badge-row">
+                    {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
+                      <span className="detail-featured-badge">★ Öne Çıkan</span>
+                    ) : (
+                      <span className="detail-featured-badge">Yeni İlan</span>
+                    )}
+                    <span className="detail-type-badge">{selectedJob.type}</span>
+                    <span className="detail-type-badge detail-time-badge">{getDaysAgoLabel(selectedJob.createdAt)}</span>
                   </div>
 
-                  <a className="modern-whatsapp-btn" href={getWhatsappHref(selectedJob.contactPhone, selectedJob)} target="_blank" rel="noopener noreferrer">
-                    WhatsApp'tan Yaz
-                  </a>
-
-                  <div className="modern-mini-actions">
-                    <a href={getPhoneHref(selectedJob.contactPhone)}>Ara</a>
-                    <a href={getMapHref(selectedJob)} target="_blank" rel="noopener noreferrer">Harita</a>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const shareData = {
-                          title: selectedJob.title,
-                          text: getShareText(selectedJob),
-                          url: window.location.href,
-                        };
-
-                        if (navigator.share) {
-                          navigator.share(shareData).catch(() => {});
-                        } else {
-                          navigator.clipboard?.writeText(`${shareData.text} - ${shareData.url}`);
-                          alert("İlan bağlantısı kopyalandı 🚀");
-                        }
-                      }}
-                    >
-                      Paylaş
-                    </button>
+                  <div className="detail-salary-side compact-salary-card">
+                    <div className="detail-salary-side-top">
+                      <div>
+                        <div className="detail-salary-label">Ücret bilgisi</div>
+                        <div className="detail-salary">{selectedJob.salary}</div>
+                      </div>
+                      <div className="detail-salary-icon" aria-hidden="true">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                          <path d="M4 7.5h16v10H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                          <path d="M7 10.5h.01M17 14.5h.01M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      </div>
+                    </div>
                   </div>
 
-                  <p className="modern-safe-note">
-                    Kapı numarası ilanda gösterilmez. Kesin konum ve görüşme süreci işveren tarafından yürütülür.
+                  <div className="detail-contact-box detail-contact-box-left">
+                    <h4 className="detail-contact-title">İletişim bilgileri</h4>
+                    <div className="contact-item">
+                      <span className="contact-icon">👤</span>
+                      <div><span>Yetkili kişi</span><strong>{selectedJob.contactName || "İşveren"}</strong></div>
+                    </div>
+                    <div className="contact-item">
+                      <span className="contact-icon">☎</span>
+                      <div><span>Telefon / WhatsApp</span><strong>{selectedJob.contactPhone}</strong></div>
+                    </div>
+                    <div className="contact-item">
+                      <span className="contact-icon">⌖</span>
+                      <div><span>Adres</span><strong>{selectedJob.workAddress || selectedJob.location}</strong></div>
+                    </div>
+                    <p className="detail-apply-note clean-note">
+                      Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
+                    </p>
+                  </div>
+                </aside>
+
+                <section className="detail-right detail-main-clean">
+                  <p className="detail-company">{selectedJob.company}</p>
+                  <h3 className="detail-title">{selectedJob.title}</h3>
+                  <p className="detail-summary">
+                    {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
                   </p>
-                </div>
-              </aside>
+
+                  <div className="detail-left-meta detail-meta-clean">
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M4 7h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                      </svg>
+                      Çalışma tipi: <strong>{selectedJob.type}</strong>
+                    </span>
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 3 4 8l8 5 8-5-8-5Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                        <path d="M4 13l8 5 8-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                      Kategori: <strong>{selectedJob.category || "Vitrin ilan"}</strong>
+                    </span>
+                    <span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M7 3v3M17 3v3M4 8h16M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                      Yayın: <strong>{getDaysAgoLabel(selectedJob.createdAt)}</strong>
+                    </span>
+                  </div>
+
+                  <div className="detail-description-box detail-description-clean">
+                    <h4 className="detail-description-title">İş açıklaması</h4>
+                    <div className="detail-description">
+                      {selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}
+                    </div>
+                  </div>
+                </section>
+              </div>
             </div>
           </div>
         </div>
@@ -7320,7 +5192,7 @@ useEffect(() => {
                 <div className="hero-trust-pill">
                   <span className="hero-trust-icon" aria-hidden="true">
                     <svg viewBox="0 0 48 48" fill="none">
-                      <path d="M24 5.5 37 10.6v10.1c0 8.3-5.4 15.9-13 18.8-7.6-2.9-13-10.5-13-18.8V10.6L24 5.5Z" fill="#f65a45"/>
+                      <path d="M24 5.5 37 10.6v10.1c0 8.3-5.4 15.9-13 18.8-7.6-2.9-13-10.5-13-18.8V10.6L24 5.5Z" fill="#ff4f26"/>
                       <path d="M18.2 23.8 22.2 27.8 30.8 18.7" stroke="white" strokeWidth="3.3" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </span>
@@ -7332,7 +5204,7 @@ useEffect(() => {
                 <div className="hero-trust-pill">
                   <span className="hero-trust-icon" aria-hidden="true">
                     <svg viewBox="0 0 48 48" fill="none">
-                      <path d="M24 5.5c2.1 0 3.7 2.2 5.5 2.8 1.9.6 4.4-.4 6 .8 1.6 1.2 1.7 3.9 2.9 5.5 1.2 1.6 3.8 2.4 4.4 4.3.6 1.8-.9 4.1-.9 6.1s1.5 4.3.9 6.1c-.6 1.9-3.2 2.7-4.4 4.3-1.2 1.6-1.3 4.3-2.9 5.5-1.6 1.2-4.1.2-6 .8-1.8.6-3.4 2.8-5.5 2.8s-3.7-2.2-5.5-2.8c-1.9-.6-4.4.4-6-.8-1.6-1.2-1.7-3.9-2.9-5.5-1.2-1.6-3.8-2.4-4.4-4.3-.6-1.8.9-4.1.9-6.1s-1.5-4.3-.9-6.1c.6-1.9 3.2-2.7 4.4-4.3 1.2-1.6 1.3-4.3 2.9-5.5 1.6-1.2 4.1-.2 6-.8 1.8-.6 3.4-2.8 5.5-2.8Z" fill="#f65a45"/>
+                      <path d="M24 5.5c2.1 0 3.7 2.2 5.5 2.8 1.9.6 4.4-.4 6 .8 1.6 1.2 1.7 3.9 2.9 5.5 1.2 1.6 3.8 2.4 4.4 4.3.6 1.8-.9 4.1-.9 6.1s1.5 4.3.9 6.1c-.6 1.9-3.2 2.7-4.4 4.3-1.2 1.6-1.3 4.3-2.9 5.5-1.6 1.2-4.1.2-6 .8-1.8.6-3.4 2.8-5.5 2.8s-3.7-2.2-5.5-2.8c-1.9-.6-4.4.4-6-.8-1.6-1.2-1.7-3.9-2.9-5.5-1.2-1.6-3.8-2.4-4.4-4.3-.6-1.8.9-4.1.9-6.1s-1.5-4.3-.9-6.1c.6-1.9 3.2-2.7 4.4-4.3 1.2-1.6 1.3-4.3 2.9-5.5 1.6-1.2 4.1-.2 6-.8 1.8-.6 3.4-2.8 5.5-2.8Z" fill="#ff4f26"/>
                       <path d="M18.5 30.2 29.5 17.8" stroke="white" strokeWidth="3" strokeLinecap="round"/>
                       <circle cx="18.5" cy="18.8" r="2.8" stroke="white" strokeWidth="2.6"/>
                       <circle cx="29.6" cy="29.3" r="2.8" stroke="white" strokeWidth="2.6"/>
@@ -7346,7 +5218,7 @@ useEffect(() => {
                 <div className="hero-trust-pill">
                   <span className="hero-trust-icon" aria-hidden="true">
                     <svg viewBox="0 0 48 48" fill="none">
-                      <path d="M27.4 4.8 12.5 27.2h10.2l-2.2 16 15-22.5H25.2l2.2-15.9Z" fill="#f65a45"/>
+                      <path d="M27.4 4.8 12.5 27.2h10.2l-2.2 16 15-22.5H25.2l2.2-15.9Z" fill="#ff4f26"/>
                     </svg>
                   </span>
                   <span>
@@ -7370,7 +5242,7 @@ useEffect(() => {
 
           <div className="featured-grid">
             {visibleFeaturedJobs.map((job) => (
-              <article key={job.id} className="featured-card" onClick={() => openJobDetail(job)}>
+              <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
                 <div className="card-top">
                   <div className="pill"><span>★</span> Öne Çıkan</div>
                   <div className="card-top-right">
@@ -7449,7 +5321,7 @@ useEffect(() => {
             ) : (
               <div className="jobs-grid">
                 {sortedJobs.map((job) => (
-                  <article key={job.id} className="soft-job-card" onClick={() => openJobDetail(job)}>
+                  <article key={job.id} className="soft-job-card" onClick={() => setSelectedJob(job)}>
                     <div className="soft-top">
                       <div className="soft-company">{job.company}</div>
                       <div className="soft-days">{getDaysAgoLabel(job.createdAt)}</div>
