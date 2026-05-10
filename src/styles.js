@@ -864,5 +864,77 @@ export function getStyles(PALETTE) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-  `;
+ /* SITE HERO FIX */
+
+.hero-card {
+  min-height: auto;
+  padding: 28px 24px;
+  overflow: hidden;
+}
+
+.hero-title {
+  max-width: 720px;
+  font-size: clamp(30px, 4vw, 54px);
+  line-height: 1.05;
+  margin-bottom: 18px;
+}
+
+.hero-card img,
+.hero-card svg,
+.hero img,
+.hero svg {
+  max-width: 360px !important;
+  max-height: 320px !important;
+  width: 38vw !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block;
+  margin: 20px auto 0;
+}
+
+.hero-card > img,
+.hero-card > svg {
+  opacity: 0.95;
+}
+
+.topbar {
+  padding-top: 8px;
+}
+
+.topbar-inner {
+  min-height: 86px;
+}
+
+.brand-logo {
+  height: 82px !important;
+}
+
+.topbar.small .brand-logo {
+  height: 74px !important;
+}
+
+.filter-wrap {
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 900px) {
+  .hero-card {
+    padding: 22px 18px;
+  }
+
+  .hero-title {
+    font-size: 32px;
+  }
+
+  .hero-card img,
+  .hero-card svg,
+  .hero img,
+  .hero svg {
+    max-width: 240px !important;
+    max-height: 220px !important;
+    width: 70vw !important;
+  }
+}
+`;
 }
