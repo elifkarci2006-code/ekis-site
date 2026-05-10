@@ -1442,8 +1442,8 @@ export default function App() {
   const [logoSrc, setLogoSrc] = useState("/logo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
   const [headerOpacity, setHeaderOpacity] = useState(1);
-  const [jobs, setJobs] = useState(jobsSeed);
-  const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
+  const [jobs, setJobs] = useState(() => jobsSeed.map((job) => ({ ...job, source: "demo", status: "active", createdAt: new Date().toISOString(), durationDays: 30, plan: "free", featuredStatus: null })));
+  const [featuredJobs, setFeaturedJobs] = useState(() => featuredSeed.map((job) => ({ ...job, source: "demo", status: "active", createdAt: new Date().toISOString(), durationDays: 15, plan: "featured", featuredStatus: "live" })));
   const [pendingJobs, setPendingJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [errors, setErrors] = useState({});
@@ -1487,48 +1487,28 @@ useEffect(() => {
     }
 
     const formatted = data.map((job) => ({
-  id: job.id,
-  dbId: job.id,
-  source: "db",
-
-  title: toTitleCase(job.job_title),
-  company: toTitleCase(job.company_name),
-
-  location: normalizeLocation(job.city, job.district),
-
-  salary: job.salary,
-
-  type:
-    String(job.salary || "")
-      .toLocaleLowerCase("tr-TR")
-      .includes("saatlik")
-      ? "Saatlik"
-      : String(job.salary || "")
-          .toLocaleLowerCase("tr-TR")
-          .includes("part time")
-      ? "Part Time"
-      : "Günlük",
-
-  description: job.description,
-
-  contactPhone: job.phone,
-
-  createdAt: job.created_at,
-
-  category: job.category || "Genel",
-
-  status: job.status || "pending",
-
-  plan:
-    job.plan_type === "featured"
-      ? "featured"
-      : "free",
-
-  featuredStatus:
-    job.plan_type === "featured"
-      ? "live"
-      : null,
-}));
+      id: job.id,
+      dbId: job.id,
+      source: "db",
+      title: toTitleCase(job.job_title),
+      company: toTitleCase(job.company_name),
+      location: normalizeLocation(job.city, job.district),
+      salary: job.salary,
+      type:
+        String(job.salary || "").toLocaleLowerCase("tr-TR").includes("saatlik")
+          ? "Saatlik"
+          : String(job.salary || "").toLocaleLowerCase("tr-TR").includes("part time")
+          ? "Part Time"
+          : "Günlük",
+      description: job.description,
+      contactPhone: job.phone,
+      createdAt: job.created_at,
+      category: job.category || inferCategory(job.job_title || ""),
+      status: job.status || "pending",
+      plan: job.plan_type === "featured" ? "featured" : "free",
+      featuredStatus:
+        job.plan_type === "featured" ? "live" : null,
+    }));
 
     const pendingFromDb = formatted.filter(
       (j) => j.status === "pending"
@@ -1542,26 +1522,32 @@ useEffect(() => {
       (j) => j.status !== "pending" && j.featuredStatus === "live"
     );
 
-    setPendingJobs(pendingFromDb);
+    const now = new Date().toISOString();
+
     const demoJobs = jobsSeed.map((job) => ({
-  ...job,
-  source: "demo",
-}));
+      ...job,
+      source: "demo",
+      status: "active",
+      createdAt: now,
+      durationDays: 30,
+      plan: "free",
+      featuredStatus: null,
+    }));
 
-const demoFeatured = featuredSeed.map((job) => ({
-  ...job,
-  source: "demo",
-}));
+    const demoFeatured = featuredSeed.map((job) => ({
+      ...job,
+      source: "demo",
+      status: "active",
+      createdAt: now,
+      durationDays: 15,
+      plan: "featured",
+      featuredStatus: "live",
+    }));
 
-setJobs([
-  ...normalJobs,
-  ...demoJobs,
-]);
-
-setFeaturedJobs([
-  ...featuredJobsFromDb,
-  ...demoFeatured,
-]);
+    setPendingJobs(pendingFromDb);
+    setJobs([...normalJobs, ...demoJobs]);
+    setFeaturedJobs([...featuredJobsFromDb, ...demoFeatured]);
+  };
 
   fetchJobs();
 }, []);
@@ -1793,6 +1779,7 @@ setFeaturedJobs([
       ...pendingJob,
       id: data?.id || pendingJob.id,
       dbId: data?.id,
+      source: "db",
       plan: selectedPlan === "featured" ? "featured" : "free",
       durationDays: selectedPlan === "featured" ? 15 : 30,
       status: "pending",
@@ -1913,6 +1900,7 @@ setFeaturedJobs([
   const approvePendingJob = async (job) => {
     const approvedJob = {
       ...job,
+      source: job.source || "db",
       status: "active",
       approvedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
@@ -1993,7 +1981,19 @@ setFeaturedJobs([
   };
 
   const makeJobFeatured = async (job) => {
-    const ok = await updateDbJob(job, { plan_type: "featured", status: "active" }, "İlan Ekiş Acil yapılamadı 😥");
+    const now = new Date().toISOString();
+    const expiresAt = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString();
+
+    const ok = await updateDbJob(
+      job,
+      {
+        plan_type: "featured",
+        status: "active",
+        created_at: now,
+        expires_at: expiresAt,
+      },
+      "İlan Ekiş Acil yapılamadı 😥"
+    );
     if (!ok) return;
 
     setJobs((prev) => prev.filter((item) => item.id !== job.id));
@@ -2002,6 +2002,7 @@ setFeaturedJobs([
         ...job,
         plan: "featured",
         status: "active",
+        createdAt: now,
         durationDays: 15,
         featuredStatus: "live",
       },
@@ -2010,7 +2011,19 @@ setFeaturedJobs([
   };
 
   const makeJobStandard = async (job) => {
-    const ok = await updateDbJob(job, { plan_type: "normal", status: "active" }, "İlan standarda alınamadı 😥");
+    const now = new Date().toISOString();
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
+    const ok = await updateDbJob(
+      job,
+      {
+        plan_type: "normal",
+        status: "active",
+        created_at: now,
+        expires_at: expiresAt,
+      },
+      "İlan standarda alınamadı 😥"
+    );
     if (!ok) return;
 
     setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
@@ -2019,6 +2032,7 @@ setFeaturedJobs([
         ...job,
         plan: "free",
         status: "active",
+        createdAt: now,
         durationDays: 30,
         featuredStatus: null,
       },
@@ -4580,6 +4594,24 @@ setFeaturedJobs([
           gap: 10px;
           flex-wrap: wrap;
         }
+
+
+        .demo-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          height: 22px;
+          padding: 0 8px;
+          margin-left: 8px;
+          border-radius: 999px;
+          background: rgba(88, 173, 173, 0.12);
+          color: #58ADAD;
+          font-size: 11px;
+          font-style: normal;
+          font-weight: 900;
+          vertical-align: middle;
+        }
+
         @media (max-width: 1000px) {
           .admin-compact-layout { grid-template-columns: 1fr; }
           .admin-side { position: static; }
@@ -4725,7 +4757,10 @@ setFeaturedJobs([
                     <article className={`admin-table-row ${!isJobActive(job) ? "admin-expired" : ""}`} key={`${job.adminStatus}-${job.id}`}>
                       <div className="admin-table-title">
                         <strong>{job.title}</strong>
-                        <span>{job.company}</span>
+                        <span>
+                          {job.company}
+                          {job.source === "demo" && <em className="demo-badge">Demo</em>}
+                        </span>
                         <div className="admin-status-line">{job.adminStatus === "Onay Bekliyor" ? "Admin onayı bekliyor" : getDaysLeftLabel(job)}</div>
                       </div>
 
