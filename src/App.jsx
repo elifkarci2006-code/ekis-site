@@ -3232,15 +3232,14 @@ useEffect(() => {
           letter-spacing: -0.02em;
         }
         .detail-title {
-  margin: 0;
-  color: #071b4d;
-  font-size: clamp(52px, 4vw, 76px);
-  line-height: 0.96;
-  letter-spacing: -0.07em;
-  font-weight: 950;
-  max-width: 760px;
-  word-break: break-word;
-}
+          margin: 0;
+          max-width: 560px;
+          font-size: clamp(26px, 3vw, 38px);
+          line-height: 1.08;
+          font-weight: 950;
+          letter-spacing: -0.045em;
+          color: ${PALETTE.slate};
+        }
         .detail-body {
           padding: 22px 26px 26px;
         }
@@ -4015,11 +4014,11 @@ useEffect(() => {
         }
         .detail-shell {
           display: grid;
-          grid-template-columns: minmax(0, 1.2fr) 390px;
+          grid-template-columns: minmax(0, 1.5fr) minmax(380px, 0.82fr);
           min-height: 610px;
         }
         .detail-left {
-  padding: 34px 40px;
+  padding: 46px 52px 40px;
           background: linear-gradient(180deg, #fff 0%, #fcfdfe 100%);
         }
         .detail-right {
@@ -6049,457 +6048,504 @@ useEffect(() => {
           }
         }
 
-        }
 
         /* =========================================================
-           FINAL DETAIL POPUP - GENİŞ PREMIUM SÜRÜM
-           Tek App.jsx içinde kalır, dış styles.js gerekmez.
+           İLAN DETAY POPUP - FINAL BİREBİR SABİT TASARIM
+           Tek App.jsx içinde kalır, eski popup stillerini güvenli şekilde ezer.
         ========================================================= */
 
         .detail-modal-backdrop {
-          background: rgba(35,48,68,0.36) !important;
-          backdrop-filter: blur(18px) saturate(1.04) !important;
+          background: rgba(35,48,68,0.38) !important;
+          backdrop-filter: blur(15px) saturate(1.02) !important;
           padding: 18px !important;
         }
 
         .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
-          width: min(1540px, calc(100vw - 44px)) !important;
-          max-height: min(94vh, 980px) !important;
-          border-radius: 40px !important;
+          width: min(1280px, calc(100vw - 56px)) !important;
+          max-height: min(92vh, 820px) !important;
+          border-radius: 34px !important;
           overflow: hidden !important;
+          background: rgba(255,255,255,0.96) !important;
           border: 1px solid rgba(255,255,255,0.92) !important;
-          background:
-            radial-gradient(circle at 4% 4%, rgba(88,173,173,0.10), transparent 28%),
-            radial-gradient(circle at 96% 4%, rgba(246,90,69,0.10), transparent 26%),
-            linear-gradient(135deg, rgba(255,255,255,0.96), rgba(248,250,252,0.94)) !important;
-          box-shadow:
-            0 48px 120px rgba(35,48,68,0.32),
-            inset 0 1px 0 rgba(255,255,255,0.72) !important;
+          box-shadow: 0 42px 110px rgba(35,48,68,0.26) !important;
         }
 
-        .detail-modal.detail-modal-modern.detail-modal-ref-v4 .detail-panel-inner,
-        .detail-modal-ref-v4 .detail-panel-inner {
-          padding: 0 !important;
-          overflow-y: auto !important;
+        .detail-close.detail-close-modern {
+          top: 18px !important;
+          right: 18px !important;
+          width: 54px !important;
+          height: 54px !important;
+          border-radius: 999px !important;
+          border: 1px solid rgba(255,255,255,0.92) !important;
+          background: rgba(255,255,255,0.96) !important;
+          color: #102142 !important;
+          box-shadow: 0 16px 34px rgba(60,74,95,0.14) !important;
+          font-size: 32px !important;
+          line-height: 1 !important;
+          z-index: 20 !important;
         }
 
         .detail-modern-grid.detail-modern-grid-ref-v4 {
           display: grid !important;
-          grid-template-columns: minmax(0, 1fr) 430px !important;
+          grid-template-columns: minmax(0, 1fr) 380px !important;
+          gap: 0 !important;
           min-height: 760px !important;
+          max-height: min(92vh, 820px) !important;
+          overflow: auto !important;
+          background:
+            radial-gradient(circle at 7% 8%, rgba(88,173,173,0.08), transparent 28%),
+            radial-gradient(circle at 92% 8%, rgba(246,90,69,0.08), transparent 26%),
+            linear-gradient(135deg, #ffffff 0%, #fbfcfd 100%) !important;
         }
 
         .detail-modern-main.detail-modern-main-ref-v4 {
-          padding: 48px 52px 44px !important;
-          background:
-            radial-gradient(circle at 0% 0%, rgba(88,173,173,0.08), transparent 26%),
-            linear-gradient(180deg, #ffffff 0%, #fcfdfe 100%) !important;
+          padding: 32px 44px 34px !important;
+          background: transparent !important;
+          border-right: 1px solid rgba(60,74,95,0.08) !important;
         }
 
         .detail-modern-side.detail-modern-side-ref-v4 {
-          padding: 42px 36px 38px !important;
-          border-left: 1px solid rgba(60,74,95,0.08) !important;
-          background: #fcfcfd !important;
-        }
-
-        .detail-close.detail-close-modern {
-          top: 24px !important;
-          right: 24px !important;
-          width: 52px !important;
-          height: 52px !important;
-          border-radius: 999px !important;
-          border: 1px solid rgba(60,74,95,0.10) !important;
-          background: rgba(255,255,255,0.92) !important;
-          color: #071b4d !important;
-          font-size: 28px !important;
-          font-weight: 950 !important;
-          box-shadow: 0 14px 32px rgba(35,48,68,0.12) !important;
-          z-index: 5 !important;
+          padding: 32px 30px 30px !important;
+          background: rgba(252,252,253,0.82) !important;
+          border-left: none !important;
         }
 
         .detail-modern-badges {
           display: flex !important;
-          flex-wrap: wrap !important;
-          gap: 12px !important;
-          margin-bottom: 30px !important;
-          padding-right: 70px !important;
-        }
-
-        .modern-badge,
-        .modern-badge.soft,
-        .modern-badge.hot {
-          min-height: 44px !important;
-          padding: 0 20px !important;
-          border-radius: 999px !important;
-          display: inline-flex !important;
           align-items: center !important;
-          justify-content: center !important;
-          font-size: 15px !important;
-          line-height: 1 !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.02em !important;
-          box-shadow: none !important;
+          gap: 12px !important;
+          flex-wrap: wrap !important;
+          margin: 0 0 28px !important;
+          padding-right: 72px !important;
         }
 
         .modern-badge,
-        .modern-badge.soft {
-          background: #fff !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          color: #233044 !important;
-        }
-
         .modern-badge.hot {
+          min-height: 38px !important;
+          padding: 0 18px !important;
+          border-radius: 999px !important;
           background: #f65a45 !important;
           color: #fff !important;
-          border: none !important;
+          border: 1px solid rgba(255,255,255,0.32) !important;
+          box-shadow: 0 12px 22px rgba(246,90,69,0.19) !important;
+          font-size: 13px !important;
+          font-weight: 950 !important;
+          letter-spacing: -0.02em !important;
+        }
+
+        .modern-badge.soft {
+          background: rgba(255,255,255,0.82) !important;
+          color: #102142 !important;
+          border: 1px solid rgba(60,74,95,0.08) !important;
+          box-shadow: 0 10px 22px rgba(60,74,95,0.055) !important;
         }
 
         .detail-modern-company {
-          margin: 0 0 16px !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+          margin: 0 0 12px !important;
           color: #f65a45 !important;
-          font-size: 20px !important;
-          line-height: 1.1 !important;
+          font-size: 18px !important;
           font-weight: 950 !important;
           letter-spacing: -0.025em !important;
         }
 
+        .detail-modern-company::after {
+          content: "✓";
+          width: 20px;
+          height: 20px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(246,90,69,0.13);
+          color: #f65a45;
+          font-size: 12px;
+          font-weight: 950;
+        }
+
         .detail-modern-title {
           margin: 0 !important;
-          max-width: 860px !important;
+          max-width: 760px !important;
           color: #071b4d !important;
-          font-size: clamp(58px, 5.15vw, 86px) !important;
-          line-height: 0.95 !important;
-          letter-spacing: -0.08em !important;
+          font-size: clamp(44px, 4.6vw, 58px) !important;
+          line-height: 0.96 !important;
           font-weight: 950 !important;
+          letter-spacing: -0.075em !important;
+          text-shadow: 0 14px 28px rgba(60,74,95,0.055) !important;
         }
 
         .detail-modern-summary {
-          margin: 32px 0 34px !important;
-          max-width: 780px !important;
+          margin: 22px 0 28px !important;
+          max-width: 760px !important;
           color: #3C4A5F !important;
-          font-size: 21px !important;
-          line-height: 1.65 !important;
-          font-weight: 700 !important;
+          font-size: 16px !important;
+          line-height: 1.58 !important;
+          font-weight: 800 !important;
         }
 
         .detail-modern-meta {
           display: grid !important;
-          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          gap: 18px !important;
-          margin: 0 0 28px !important;
-          max-width: 840px !important;
+          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          gap: 14px !important;
+          margin: 0 0 24px !important;
+          max-width: 760px !important;
         }
 
         .detail-modern-meta div {
+          min-height: 82px !important;
+          padding: 18px 18px 18px 82px !important;
+          border-radius: 18px !important;
           position: relative !important;
-          min-height: 128px !important;
-          padding: 26px 24px 24px 96px !important;
-          border-radius: 28px !important;
-          background: #fff !important;
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: center !important;
+          background: rgba(255,255,255,0.86) !important;
           border: 1px solid rgba(60,74,95,0.08) !important;
-          box-shadow: 0 14px 30px rgba(60,74,95,0.06) !important;
-          overflow: hidden !important;
+          box-shadow: 0 14px 28px rgba(60,74,95,0.055) !important;
         }
 
         .detail-modern-meta div::before {
-          content: "📍" !important;
-          position: absolute !important;
-          left: 24px !important;
-          top: 50% !important;
-          transform: translateY(-50%) !important;
-          width: 56px !important;
-          height: 56px !important;
-          border-radius: 20px !important;
-          background: rgba(88,173,173,0.10) !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          font-size: 25px !important;
+          position: absolute;
+          left: 18px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 48px;
+          height: 48px;
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 22px;
+          font-weight: 900;
+        }
+
+        .detail-modern-meta div:first-child::before {
+          content: "⌖";
+          color: #0f7778;
+          background: rgba(88,173,173,0.14);
         }
 
         .detail-modern-meta div:nth-child(2)::before {
-          content: "☕" !important;
+          content: "☕";
+          color: #f65a45;
+          background: rgba(246,90,69,0.10);
         }
 
-        .detail-modern-meta span {
-          display: block !important;
-          margin-bottom: 8px !important;
-          color: #6b7280 !important;
-          font-size: 15px !important;
-          line-height: 1.1 !important;
-          font-weight: 850 !important;
+        .detail-modern-meta div:nth-child(3)::before {
+          content: "▣";
+          color: #0f7778;
+          background: rgba(88,173,173,0.12);
         }
 
-        .detail-modern-meta strong {
-          display: block !important;
-          color: #071b4d !important;
-          font-size: 22px !important;
-          line-height: 1.25 !important;
+        .detail-modern-meta span,
+        .modern-contact-row span,
+        .detail-modern-salary-card span {
+          color: #5D6B7F !important;
+          font-size: 12px !important;
           font-weight: 950 !important;
-          letter-spacing: -0.035em !important;
+          line-height: 1.15 !important;
+          margin-bottom: 6px !important;
+        }
+
+        .detail-modern-meta strong,
+        .modern-contact-row strong {
+          color: #071b4d !important;
+          font-size: 15px !important;
+          font-weight: 950 !important;
+          line-height: 1.22 !important;
         }
 
         .detail-modern-desc-card {
-          max-width: 840px !important;
-          min-height: auto !important;
-          padding: 34px 36px !important;
-          border-radius: 32px !important;
-          background: #fff !important;
+          max-width: 760px !important;
+          min-height: 320px !important;
+          padding: 28px 30px 30px !important;
+          border-radius: 24px !important;
+          background: rgba(255,255,255,0.86) !important;
           border: 1px solid rgba(60,74,95,0.08) !important;
-          box-shadow: 0 14px 30px rgba(60,74,95,0.055) !important;
+          box-shadow: 0 18px 40px rgba(60,74,95,0.06) !important;
         }
 
         .detail-modern-desc-card h4 {
-          position: relative !important;
-          margin: 0 0 22px !important;
-          padding-left: 70px !important;
-          min-height: 54px !important;
-          display: flex !important;
+          display: inline-flex !important;
           align-items: center !important;
+          gap: 14px !important;
+          margin: 0 0 18px !important;
           color: #071b4d !important;
-          font-size: 40px !important;
-          line-height: 1 !important;
+          font-size: 22px !important;
           font-weight: 950 !important;
-          letter-spacing: -0.06em !important;
+          line-height: 1.1 !important;
         }
 
         .detail-modern-desc-card h4::before {
-          content: "i" !important;
-          position: absolute !important;
-          left: 0 !important;
-          top: 0 !important;
-          width: 54px !important;
-          height: 54px !important;
-          border-radius: 18px !important;
-          background: #f65a45 !important;
-          color: #fff !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          font-size: 30px !important;
-          font-weight: 950 !important;
-          letter-spacing: 0 !important;
+          content: "i";
+          width: 46px;
+          height: 46px;
+          border-radius: 14px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: #f65a45;
+          color: #fff;
+          font-size: 24px;
+          font-weight: 950;
+          box-shadow: 0 12px 24px rgba(246,90,69,0.20);
         }
 
         .detail-modern-desc-card p {
           margin: 0 !important;
           color: #3C4A5F !important;
-          font-size: 20px !important;
+          font-size: 14px !important;
+          line-height: 1.65 !important;
+          font-weight: 720 !important;
+          max-width: 660px !important;
+        }
+
+        .detail-modern-duty-list {
+          margin: 22px 0 0 !important;
+          padding: 0 0 0 18px !important;
+          color: #3C4A5F !important;
+          font-size: 14px !important;
           line-height: 1.8 !important;
           font-weight: 650 !important;
         }
 
+        .detail-modern-duty-list li {
+          padding-left: 4px !important;
+          margin: 3px 0 !important;
+        }
+
+        .detail-modern-duty-list li::marker {
+          color: #f65a45;
+          font-size: 14px;
+        }
+
+        .detail-modern-process-note {
+          margin-top: 24px !important;
+          padding: 18px 20px 18px 66px !important;
+          border-radius: 18px !important;
+          background: #FFF2EC !important;
+          border: 1px solid rgba(246,90,69,0.14) !important;
+          color: #3C4A5F !important;
+          position: relative !important;
+          font-size: 13px !important;
+          line-height: 1.6 !important;
+          font-weight: 700 !important;
+        }
+
+        .detail-modern-process-note::before {
+          content: "✓";
+          position: absolute;
+          left: 20px;
+          top: 20px;
+          width: 30px;
+          height: 30px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #f65a45;
+          color: #fff;
+          font-size: 18px;
+          font-weight: 950;
+        }
+
+        .detail-modern-process-note strong,
+        .detail-modern-process-note span {
+          display: block !important;
+        }
+
+        .detail-modern-process-note span {
+          margin-top: 5px !important;
+        }
+
         .detail-modern-salary-card {
-          margin: 0 0 24px !important;
-          padding: 34px !important;
-          border-radius: 34px !important;
-          background: linear-gradient(135deg, #ff5b45 0%, #ff735f 100%) !important;
-          color: #fff !important;
-          box-shadow: 0 20px 38px rgba(246,90,69,0.22) !important;
+          padding: 24px 28px 28px !important;
+          margin: 0 0 20px !important;
+          min-height: 156px !important;
+          border-radius: 24px !important;
+          border: none !important;
+          background: linear-gradient(135deg, #f65a45, #ff6f5b) !important;
+          box-shadow: 0 24px 48px rgba(246,90,69,0.23) !important;
         }
 
         .detail-modern-salary-card span {
-          display: block !important;
-          margin-bottom: 16px !important;
-          color: rgba(255,255,255,0.92) !important;
-          font-size: 18px !important;
-          line-height: 1.15 !important;
-          font-weight: 950 !important;
+          color: rgba(255,255,255,0.9) !important;
+          font-size: 15px !important;
+          margin-bottom: 12px !important;
         }
 
         .detail-modern-salary-card strong {
           display: block !important;
           color: #fff !important;
-          font-size: clamp(42px, 3.9vw, 62px) !important;
-          line-height: 1.03 !important;
-          letter-spacing: -0.065em !important;
+          font-size: clamp(30px, 3vw, 42px) !important;
+          line-height: 1.04 !important;
           font-weight: 950 !important;
+          letter-spacing: -0.055em !important;
         }
 
         .detail-modern-contact-card {
-          padding: 34px !important;
-          border-radius: 32px !important;
-          background: #fff !important;
+          padding: 24px 24px 24px !important;
+          border-radius: 24px !important;
+          background: rgba(255,255,255,0.88) !important;
           border: 1px solid rgba(60,74,95,0.08) !important;
-          box-shadow: 0 14px 30px rgba(60,74,95,0.055) !important;
+          box-shadow: 0 18px 40px rgba(60,74,95,0.065) !important;
         }
 
         .detail-modern-contact-card h4 {
-          margin: 0 0 26px !important;
+          position: relative !important;
+          margin: 0 0 24px !important;
           color: #071b4d !important;
-          font-size: 40px !important;
-          line-height: 1 !important;
+          font-size: 28px !important;
           font-weight: 950 !important;
-          letter-spacing: -0.06em !important;
+          letter-spacing: -0.045em !important;
+        }
+
+        .detail-modern-contact-card h4::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: -10px;
+          width: 44px;
+          height: 3px;
+          border-radius: 999px;
+          background: #f65a45;
         }
 
         .modern-contact-row {
           position: relative !important;
-          display: block !important;
-          padding: 18px 0 18px 72px !important;
-          min-height: 72px !important;
-          border-bottom: 1px solid rgba(60,74,95,0.08) !important;
+          min-height: 70px !important;
+          padding: 15px 0 15px 70px !important;
+          border-bottom: 1px solid rgba(60,74,95,0.10) !important;
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: center !important;
         }
 
         .modern-contact-row::before {
-          content: "👤" !important;
-          position: absolute !important;
-          left: 0 !important;
-          top: 50% !important;
-          transform: translateY(-50%) !important;
-          width: 54px !important;
-          height: 54px !important;
-          border-radius: 18px !important;
-          background: #fff !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          font-size: 23px !important;
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 48px;
+          height: 48px;
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255,255,255,0.9);
+          border: 1px solid rgba(60,74,95,0.08);
+          box-shadow: 0 10px 20px rgba(60,74,95,0.055);
+          color: #102142;
+          font-size: 22px;
         }
 
-        .modern-contact-row:nth-of-type(2)::before {
-          content: "📞" !important;
-        }
-
-        .modern-contact-row:nth-of-type(3)::before {
-          content: "📍" !important;
-        }
-
-        .modern-contact-row span {
-          display: block !important;
-          margin-bottom: 5px !important;
-          color: #6b7280 !important;
-          font-size: 15px !important;
-          line-height: 1.1 !important;
-          font-weight: 850 !important;
-        }
-
-        .modern-contact-row strong {
-          display: block !important;
-          color: #071b4d !important;
-          font-size: 20px !important;
-          line-height: 1.28 !important;
-          font-weight: 950 !important;
-          letter-spacing: -0.03em !important;
-          word-break: break-word !important;
-        }
+        .modern-contact-row:nth-of-type(1)::before { content: "♙"; }
+        .modern-contact-row:nth-of-type(2)::before { content: "☎"; }
+        .modern-contact-row:nth-of-type(3)::before { content: "⌖"; }
 
         .modern-whatsapp-btn {
-          width: 100% !important;
-          min-height: 76px !important;
-          margin-top: 28px !important;
-          border-radius: 24px !important;
-          background: linear-gradient(135deg, #ff5b45 0%, #ff735f 100%) !important;
+          min-height: 58px !important;
+          margin: 20px 0 14px !important;
+          border-radius: 16px !important;
+          background: #f65a45 !important;
           color: #fff !important;
-          text-decoration: none !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          font-size: 25px !important;
-          line-height: 1 !important;
+          font-size: 17px !important;
           font-weight: 950 !important;
-          box-shadow: 0 16px 30px rgba(246,90,69,0.22) !important;
+          box-shadow: 0 16px 28px rgba(246,90,69,0.20) !important;
+        }
+
+        .modern-whatsapp-btn::before {
+          content: "☏";
+          margin-right: 10px;
+          font-size: 23px;
+          line-height: 1;
         }
 
         .modern-mini-actions {
           display: grid !important;
           grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-          gap: 14px !important;
-          margin-top: 20px !important;
+          gap: 12px !important;
+          margin: 0 0 16px !important;
         }
 
         .modern-mini-actions a,
         .modern-mini-actions button {
-          width: 100% !important;
-          min-height: 84px !important;
-          border-radius: 24px !important;
-          background: #fff !important;
+          min-height: 70px !important;
+          border-radius: 16px !important;
           border: 1px solid rgba(60,74,95,0.08) !important;
+          background: rgba(255,255,255,0.88) !important;
           color: #071b4d !important;
-          text-decoration: none !important;
+          box-shadow: 0 10px 20px rgba(60,74,95,0.055) !important;
+          font-size: 14px !important;
+          font-weight: 950 !important;
           display: flex !important;
+          flex-direction: column !important;
           align-items: center !important;
           justify-content: center !important;
-          font-size: 21px !important;
-          line-height: 1 !important;
-          font-weight: 950 !important;
+          gap: 7px !important;
+          text-decoration: none !important;
           cursor: pointer !important;
-          box-shadow: 0 10px 22px rgba(60,74,95,0.045) !important;
+          font-family: inherit !important;
         }
 
+        .modern-mini-actions a:nth-child(1)::before { content: "📞"; font-size: 21px; }
+        .modern-mini-actions a:nth-child(2)::before { content: "🗺️"; font-size: 21px; }
+        .modern-mini-actions button:nth-child(3)::before { content: "🔗"; font-size: 21px; }
+
         .modern-safe-note {
-          margin: 24px 0 0 !important;
-          padding: 22px 22px 22px 72px !important;
           position: relative !important;
-          border-radius: 24px !important;
-          background: #fff5f2 !important;
-          border: 1px solid rgba(246,90,69,0.14) !important;
+          margin: 0 !important;
+          padding: 18px 18px 18px 60px !important;
+          border-radius: 18px !important;
+          background: #FFF2EC !important;
+          border: 1px solid rgba(246,90,69,0.16) !important;
           color: #3C4A5F !important;
-          font-size: 15px !important;
-          line-height: 1.65 !important;
-          font-weight: 750 !important;
+          font-size: 13px !important;
+          font-weight: 850 !important;
+          line-height: 1.55 !important;
         }
 
         .modern-safe-note::before {
-          content: "✓" !important;
-          position: absolute !important;
-          left: 22px !important;
-          top: 22px !important;
-          width: 36px !important;
-          height: 36px !important;
-          border-radius: 999px !important;
-          background: #f65a45 !important;
-          color: #fff !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          font-size: 18px !important;
-          font-weight: 950 !important;
+          content: "✓";
+          position: absolute;
+          left: 18px;
+          top: 18px;
+          width: 28px;
+          height: 28px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #f65a45;
+          color: #fff;
+          font-size: 17px;
+          font-weight: 950;
         }
 
-        @media (max-width: 1180px) {
+        @media (max-width: 980px) {
           .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
-            width: min(980px, calc(100vw - 28px)) !important;
+            max-height: 92vh !important;
           }
 
           .detail-modern-grid.detail-modern-grid-ref-v4 {
             grid-template-columns: 1fr !important;
+            min-height: auto !important;
+          }
+
+          .detail-modern-main.detail-modern-main-ref-v4 {
+            border-right: none !important;
+            border-bottom: 1px solid rgba(60,74,95,0.08) !important;
+            padding: 34px 24px 28px !important;
           }
 
           .detail-modern-side.detail-modern-side-ref-v4 {
-            border-left: none !important;
-            border-top: 1px solid rgba(60,74,95,0.08) !important;
+            padding: 28px 24px 28px !important;
           }
 
           .detail-modern-title {
-            font-size: 56px !important;
-          }
-        }
-
-        @media (max-width: 760px) {
-          .detail-modal-backdrop {
-            padding: 10px !important;
-          }
-
-          .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
-            width: calc(100vw - 20px) !important;
-            max-height: 94vh !important;
-            border-radius: 28px !important;
-          }
-
-          .detail-modern-main.detail-modern-main-ref-v4,
-          .detail-modern-side.detail-modern-side-ref-v4 {
-            padding: 28px 18px 24px !important;
-          }
-
-          .detail-modern-badges {
-            padding-right: 58px !important;
-          }
-
-          .detail-modern-title {
-            font-size: 40px !important;
-            letter-spacing: -0.06em !important;
+            font-size: 42px !important;
           }
 
           .detail-modern-summary {
@@ -6509,15 +6555,44 @@ useEffect(() => {
           .detail-modern-meta {
             grid-template-columns: 1fr !important;
           }
+        }
 
-          .detail-modern-desc-card,
-          .detail-modern-contact-card {
-            padding: 24px !important;
+        @media (max-width: 560px) {
+          .detail-modal-backdrop {
+            padding: 10px !important;
           }
 
-          .detail-modern-desc-card h4,
-          .detail-modern-contact-card h4 {
-            font-size: 30px !important;
+          .detail-close.detail-close-modern {
+            width: 48px !important;
+            height: 48px !important;
+            top: 12px !important;
+            right: 12px !important;
+          }
+
+          .detail-modern-badges {
+            padding-right: 52px !important;
+            gap: 8px !important;
+          }
+
+          .modern-badge,
+          .modern-badge.hot,
+          .modern-badge.soft {
+            min-height: 34px !important;
+            padding: 0 12px !important;
+            font-size: 12px !important;
+          }
+
+          .detail-modern-main.detail-modern-main-ref-v4 {
+            padding: 28px 16px 22px !important;
+          }
+
+          .detail-modern-side.detail-modern-side-ref-v4 {
+            padding: 22px 16px 22px !important;
+          }
+
+          .detail-modern-title {
+            font-size: 34px !important;
+            letter-spacing: -0.055em !important;
           }
 
           .modern-mini-actions {
@@ -6525,6 +6600,7 @@ useEffect(() => {
           }
         }
 
+        }
 
       `}
 </style>
@@ -7095,12 +7171,28 @@ useEffect(() => {
                     <span>Kategori</span>
                     <strong>{selectedJob.category || "Genel"}</strong>
                   </div>
-
+                  <div>
+                    <span>Çalışma Şekli</span>
+                    <strong>{selectedJob.type}</strong>
+                  </div>
                 </div>
 
                 <div className="detail-modern-desc-card">
                   <h4>İş açıklaması</h4>
                   <p>{selectedJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}</p>
+
+                  <ul className="detail-modern-duty-list">
+                    <li>Müşterileri güler yüzle karşılamak ve yönlendirmek</li>
+                    <li>İş akışına ve ekibe destek olmak</li>
+                    <li>Çalışma alanının düzenli tutulmasına yardımcı olmak</li>
+                    <li>Ekip arkadaşlarıyla koordineli çalışmak</li>
+                    <li>Yoğun saatlerde hızlı ve çözüm odaklı hizmet sunmak</li>
+                  </ul>
+
+                  <div className="detail-modern-process-note">
+                    <strong>İşe alım süreci ve görüşmeler işveren tarafından yürütülmektedir.</strong>
+                    <span>Başvuru için sağdaki iletişim bilgilerini kullanarak doğrudan işverenle iletişime geçebilirsiniz.</span>
+                  </div>
                 </div>
               </section>
 
