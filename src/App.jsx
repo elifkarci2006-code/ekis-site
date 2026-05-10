@@ -3232,14 +3232,15 @@ useEffect(() => {
           letter-spacing: -0.02em;
         }
         .detail-title {
-          margin: 0;
-          max-width: 560px;
-          font-size: clamp(26px, 3vw, 38px);
-          line-height: 1.08;
-          font-weight: 950;
-          letter-spacing: -0.045em;
-          color: ${PALETTE.slate};
-        }
+  margin: 0;
+  color: #071b4d;
+  font-size: clamp(52px, 4vw, 76px);
+  line-height: 0.96;
+  letter-spacing: -0.07em;
+  font-weight: 950;
+  max-width: 760px;
+  word-break: break-word;
+}
         .detail-body {
           padding: 22px 26px 26px;
         }
@@ -4014,11 +4015,11 @@ useEffect(() => {
         }
         .detail-shell {
           display: grid;
-          grid-template-columns: minmax(0, 1.5fr) minmax(380px, 0.82fr);
+          grid-template-columns: minmax(0, 1.2fr) 390px;
           min-height: 610px;
         }
         .detail-left {
-  padding: 46px 52px 40px;
+  padding: 34px 40px;
           background: linear-gradient(180deg, #fff 0%, #fcfdfe 100%);
         }
         .detail-right {
