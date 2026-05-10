@@ -1,5 +1,37 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import { supabase } from "./supabaseClient";
+
+import {
+  PALETTE,
+  categories,
+  types,
+  SHOPIER_FEATURED_LINK,
+} from "./data";
+
+import {
+  getDaysAgoLabel,
+  getJobDurationDays,
+  getJobExpireDate,
+  getDaysLeftLabel,
+  isJobActive,
+  generateCaptchaQuestion,
+  inferCategory,
+  formatSalaryPreview,
+  toTitleCase,
+  normalizeLocation,
+  buildPublicAddress,
+  buildPrivateMapAddress,
+  cleanPhone,
+  getPhoneHref,
+  getWhatsappHref,
+  getMapHref,
+  getShareText,
+} from "./utils";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 const PALETTE = {
