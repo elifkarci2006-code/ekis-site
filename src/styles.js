@@ -755,70 +755,111 @@ export function getStyles(PALETTE) {
   color: #B91C1C;
 }
 
-/* SITE ANA SAYFA DÜZELTME */
+/* SITE ANA SAYFA ESKİ GÖRÜNÜME DÖNÜŞ */
+
+.container {
+  width: min(1920px, calc(100vw - 28px));
+  margin: 0 auto;
+}
+
+.topbar {
+  padding: 26px 0 54px;
+}
 
 .topbar-inner {
-  min-height: 72px;
+  min-height: 96px;
+  align-items: flex-start;
 }
 
 .brand-logo {
-  height: 82px !important;
+  height: 94px !important;
 }
 
 .topbar.small .brand-logo {
-  height: 74px !important;
+  height: 82px !important;
+}
+
+.top-actions {
+  padding-top: 18px;
+}
+
+.top-search {
+  padding: 0 0 16px;
 }
 
 .filter-wrap {
-  margin-top: 8px;
-  margin-bottom: 16px;
+  width: 100%;
+  margin: 0 auto 16px;
+  padding: 18px;
+  border-radius: 24px;
+  background: #58ADAD;
 }
 
-/* HERO */
+.filter-grid {
+  grid-template-columns:
+    1.45fr
+    1fr
+    1fr
+    1fr
+    0.9fr
+    0.9fr;
+  gap: 14px;
+}
+
+.field input,
+.field select,
+.search-btn {
+  height: 56px;
+  border-radius: 17px;
+}
 
 .hero {
-  padding: 4px 0 12px;
+  padding: 0 0 18px;
 }
 
 .hero-card {
-  padding: 24px 26px;
-  margin-bottom: 18px;
-  min-height: auto !important;
-  overflow: hidden;
+  min-height: 180px !important;
+  padding: 38px 28px;
+  border-radius: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
 }
 
 .hero-title {
-  margin: 0 0 18px;
-  max-width: 760px;
-  font-size: clamp(30px, 3.6vw, 46px);
-  line-height: 1.05;
-  letter-spacing: -0.05em;
+  margin: 0;
+  max-width: 780px;
+  font-size: clamp(44px, 4vw, 58px);
+  line-height: 1.04;
+  letter-spacing: -0.055em;
   font-weight: 950;
+  color: #3C4A5F;
 }
 
-/* Eski küçük baloncukları kapat */
 .hero-stats-inline,
 .hero-stat-bubble {
   display: none !important;
 }
 
-/* Yeni güven rozetleri */
 .hero-trust-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
+  flex-wrap: nowrap;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .hero-trust-pill {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  min-height: 54px;
-  padding: 9px 14px;
+  gap: 12px;
+  min-width: 230px;
+  min-height: 74px;
+  padding: 13px 18px;
   border-radius: 18px;
-  background: rgba(60,74,95,0.045);
-  border: 1px solid rgba(60,74,95,0.08);
+  background: #FFF2EC;
+  border: 1px solid rgba(246,90,69,0.18);
 }
 
 .hero-trust-icon {
@@ -836,14 +877,14 @@ export function getStyles(PALETTE) {
   height: 42px !important;
   max-width: 42px !important;
   max-height: 42px !important;
-  display: block !important;
   margin: 0 !important;
+  display: block !important;
 }
 
 .hero-trust-pill strong {
   display: block;
-  color: #233044;
-  font-size: 14px;
+  color: #f65a45;
+  font-size: 15px;
   line-height: 1.1;
   font-weight: 950;
   white-space: nowrap;
@@ -851,64 +892,90 @@ export function getStyles(PALETTE) {
 
 .hero-trust-pill small {
   display: block;
+  color: #233044;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 900;
   margin-top: 4px;
-  color: #5D6B7F;
-  font-size: 12px;
-  line-height: 1.1;
-  font-weight: 800;
   white-space: nowrap;
 }
 
-/* Ekiş Acil arkadaki dev sembol taşmasın */
 .featured-section {
+  border-radius: 28px;
+  padding: 34px 22px 26px;
+  margin-bottom: 28px;
   overflow: hidden;
 }
 
-.featured-section::before,
-.featured-section::after {
-  max-width: 180px !important;
-  max-height: 180px !important;
-  opacity: 0.12;
+.featured-section .section-title,
+.featured-section h2 {
+  color: #fff;
+}
+
+.featured-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.featured-card,
+.job-card {
+  border-radius: 24px;
+  padding: 28px;
 }
 
 @media (max-width: 1180px) {
-  .admin-table-row {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .admin-table-row:first-child {
-    display: none;
-  }
-
-  .admin-tools {
+  .hero-card {
     grid-template-columns: 1fr;
   }
 
-  .admin-stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .hero-trust-row {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .filter-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .featured-grid,
+  .jobs-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 900px) {
+  .container {
+    width: min(100%, calc(100vw - 22px));
+  }
+
+  .topbar {
+    padding: 16px 0 28px;
+  }
+
+  .topbar-inner {
+    min-height: auto;
+  }
+
+  .brand-logo {
+    height: 74px !important;
+  }
+
+  .filter-grid,
+  .featured-grid,
+  .jobs-grid {
+    grid-template-columns: 1fr;
+  }
+
   .hero-card {
-    padding: 20px 18px;
+    padding: 26px 20px;
   }
 
   .hero-title {
-    font-size: 32px;
+    font-size: 34px;
   }
 
   .hero-trust-pill {
     width: 100%;
-  }
-
-  .filter-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-stats {
-    grid-template-columns: 1fr;
   }
 }
 `;
