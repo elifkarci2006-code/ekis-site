@@ -4590,26 +4590,29 @@ useEffect(() => {
 
         .detail-modal-modern {
           background:
-            radial-gradient(circle at 8% 10%, rgba(255,75,43,0.10), transparent 26%),
-            radial-gradient(circle at 92% 12%, rgba(88,173,173,0.14), transparent 28%),
-            linear-gradient(135deg, #ffffff 0%, #fffaf7 48%, #f3fbfb 100%) !important;
-          box-shadow: 0 40px 100px rgba(35,48,68,0.30) !important;
+            radial-gradient(circle at 8% 10%, rgba(88,173,173,0.10), transparent 28%),
+            radial-gradient(circle at 92% 12%, rgba(255,75,43,0.07), transparent 30%),
+            linear-gradient(135deg, rgba(255,255,255,0.90), rgba(245,247,248,0.88)) !important;
+          backdrop-filter: blur(22px);
+          border: 1px solid rgba(255,255,255,0.72) !important;
+          box-shadow: 0 42px 100px rgba(35,48,68,0.22) !important;
         }
 
         .detail-modern-main {
           background:
-            linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.72)),
-            radial-gradient(circle at top left, rgba(255,75,43,0.08), transparent 34%) !important;
+            linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.58)),
+            radial-gradient(circle at left top, rgba(88,173,173,0.08), transparent 36%) !important;
         }
 
         .detail-modern-side {
           background:
-            linear-gradient(180deg, rgba(255,255,255,0.72), rgba(245,247,248,0.86)),
-            radial-gradient(circle at top right, rgba(118,191,190,0.18), transparent 38%) !important;
+            linear-gradient(180deg, rgba(255,255,255,0.62), rgba(245,247,248,0.72)),
+            radial-gradient(circle at top right, rgba(255,75,43,0.055), transparent 40%) !important;
+          border-left: 1px solid rgba(255,255,255,0.72) !important;
         }
 
         .detail-modern-company {
-          color: #ff4b2b !important;
+          color: ${PALETTE.teal} !important;
           display: inline-flex;
           align-items: center;
           gap: 8px;
@@ -4617,27 +4620,27 @@ useEffect(() => {
 
         .detail-modern-company::after {
           content: "✓";
-          width: 20px;
-          height: 20px;
+          width: 19px;
+          height: 19px;
           border-radius: 999px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: rgba(255,75,43,0.12);
+          background: rgba(255,75,43,0.10);
           color: #ff4b2b;
-          font-size: 12px;
+          font-size: 11px;
           font-weight: 950;
         }
 
         .detail-modern-title {
           color: #26354d !important;
-          text-shadow: 0 12px 28px rgba(60,74,95,0.08);
+          text-shadow: 0 12px 26px rgba(60,74,95,0.06);
         }
 
         .detail-modern-summary {
           font-size: 18px !important;
-          font-weight: 800 !important;
-          color: #334155 !important;
+          font-weight: 780 !important;
+          color: #3C4A5F !important;
           max-width: 660px !important;
         }
 
@@ -4650,31 +4653,30 @@ useEffect(() => {
           min-height: 82px;
           border-radius: 24px !important;
           background:
-            linear-gradient(180deg, #fff 0%, #fffdfc 100%) !important;
-          border-color: rgba(255,75,43,0.10) !important;
+            linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.64)) !important;
+          border: 1px solid rgba(255,255,255,0.80) !important;
+          box-shadow: 0 18px 38px rgba(60,74,95,0.055) !important;
         }
 
         .detail-modern-meta div:first-child {
-          border-color: rgba(88,173,173,0.18) !important;
           background:
             radial-gradient(circle at left, rgba(88,173,173,0.13), transparent 45%),
-            #fff !important;
+            rgba(255,255,255,0.78) !important;
         }
 
         .detail-modern-meta div:nth-child(2) {
-          border-color: rgba(255,75,43,0.16) !important;
           background:
-            radial-gradient(circle at left, rgba(255,75,43,0.11), transparent 45%),
-            #fff !important;
+            radial-gradient(circle at left, rgba(255,75,43,0.09), transparent 45%),
+            rgba(255,255,255,0.78) !important;
         }
 
         .detail-modern-desc-card {
-          padding: 28px !important;
-          min-height: 235px;
+          padding: 30px !important;
+          min-height: 255px;
           background:
-            linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,248,245,0.82)) !important;
-          border-color: rgba(255,75,43,0.16) !important;
-          box-shadow: 0 20px 45px rgba(255,75,43,0.075) !important;
+            linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.56)) !important;
+          border: 1px solid rgba(255,255,255,0.82) !important;
+          box-shadow: 0 20px 48px rgba(60,74,95,0.07) !important;
         }
 
         .detail-modern-desc-card h4 {
@@ -4686,7 +4688,7 @@ useEffect(() => {
 
         .detail-modern-desc-card h4::before {
           content: "▌";
-          color: #ff4b2b;
+          color: ${PALETTE.coral};
           font-size: 24px;
           line-height: 1;
         }
@@ -4699,22 +4701,26 @@ useEffect(() => {
 
         .detail-modern-salary-card {
           background:
-            radial-gradient(circle at 90% 20%, rgba(255,255,255,0.28), transparent 22%),
-            linear-gradient(135deg, #ff4424 0%, #ff7a1a 100%) !important;
-          color: #fff !important;
-          border: none !important;
-          box-shadow: 0 22px 46px rgba(255,75,43,0.28) !important;
+            radial-gradient(circle at 92% 16%, rgba(255,75,43,0.13), transparent 28%),
+            linear-gradient(135deg, rgba(255,255,255,0.84), rgba(255,244,239,0.72)) !important;
+          color: ${PALETTE.slate} !important;
+          border: 1px solid rgba(255,255,255,0.82) !important;
+          box-shadow: 0 22px 46px rgba(255,75,43,0.11) !important;
         }
 
-        .detail-modern-salary-card span,
+        .detail-modern-salary-card span {
+          color: ${PALETTE.softText} !important;
+        }
+
         .detail-modern-salary-card strong {
-          color: #fff !important;
+          color: #ff4b2b !important;
         }
 
         .detail-modern-contact-card {
-          background: rgba(255,255,255,0.88) !important;
-          border-color: rgba(60,74,95,0.08) !important;
-          box-shadow: 0 24px 55px rgba(60,74,95,0.12) !important;
+          background: rgba(255,255,255,0.72) !important;
+          border: 1px solid rgba(255,255,255,0.82) !important;
+          box-shadow: 0 24px 55px rgba(60,74,95,0.10) !important;
+          backdrop-filter: blur(14px);
         }
 
         .detail-modern-contact-card h4 {
@@ -4731,12 +4737,12 @@ useEffect(() => {
           width: 34px;
           height: 3px;
           border-radius: 999px;
-          background: #ff4b2b;
+          background: rgba(255,75,43,0.85);
         }
 
         .modern-whatsapp-btn {
-          background: linear-gradient(135deg, #11c76f 0%, #20d982 100%) !important;
-          box-shadow: 0 18px 35px rgba(17,199,111,0.26) !important;
+          background: linear-gradient(135deg, #18c878 0%, #23d68a 100%) !important;
+          box-shadow: 0 18px 34px rgba(17,199,111,0.18) !important;
         }
 
         .modern-mini-actions a,
@@ -4744,6 +4750,7 @@ useEffect(() => {
           min-height: 54px !important;
           flex-direction: column;
           gap: 4px;
+          background: rgba(255,255,255,0.78) !important;
         }
 
         .modern-mini-actions a:nth-child(1)::before {
