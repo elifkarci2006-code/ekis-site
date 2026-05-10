@@ -835,5 +835,31 @@ export function getStyles(PALETTE) {
     grid-template-columns: 1fr;
   }
 }
+/* HERO ORANGE VISUAL CONTROL */
+
+.hero-card svg {
+  max-width: 260px !important;
+  max-height: 220px !important;
+  width: 28vw !important;
+  height: auto !important;
+  display: block !important;
+  margin: 18px auto 0 !important;
+}
+
+.hero-card {
+  max-height: 420px;
+}
+
+@media (max-width: 900px) {
+  .hero-card {
+    max-height: none;
+  }
+
+  .hero-card svg {
+    max-width: 180px !important;
+    max-height: 160px !important;
+    width: 55vw !important;
+  }
+}
 `;
 }
