@@ -1487,22 +1487,48 @@ useEffect(() => {
     }
 
     const formatted = data.map((job) => ({
-      id: job.id,
-      dbId: job.id,
-      title: toTitleCase(job.job_title),
-      company: toTitleCase(job.company_name),
-      location: normalizeLocation(job.city, job.district),
-      salary: job.salary,
-      type: job.plan_type === "featured" ? "Öne Çıkan" : "Standart",
-      description: job.description,
-      contactPhone: job.phone,
-      createdAt: job.created_at,
-      category: "Genel",
-      status: job.status || "pending",
-      plan: job.plan_type === "featured" ? "featured" : "free",
-      featuredStatus:
-        job.plan_type === "featured" ? "live" : null,
-    }));
+  id: job.id,
+  dbId: job.id,
+  source: "db",
+
+  title: toTitleCase(job.job_title),
+  company: toTitleCase(job.company_name),
+
+  location: normalizeLocation(job.city, job.district),
+
+  salary: job.salary,
+
+  type:
+    String(job.salary || "")
+      .toLocaleLowerCase("tr-TR")
+      .includes("saatlik")
+      ? "Saatlik"
+      : String(job.salary || "")
+          .toLocaleLowerCase("tr-TR")
+          .includes("part time")
+      ? "Part Time"
+      : "Günlük",
+
+  description: job.description,
+
+  contactPhone: job.phone,
+
+  createdAt: job.created_at,
+
+  category: job.category || "Genel",
+
+  status: job.status || "pending",
+
+  plan:
+    job.plan_type === "featured"
+      ? "featured"
+      : "free",
+
+  featuredStatus:
+    job.plan_type === "featured"
+      ? "live"
+      : null,
+}));
 
     const pendingFromDb = formatted.filter(
       (j) => j.status === "pending"
@@ -1517,9 +1543,25 @@ useEffect(() => {
     );
 
     setPendingJobs(pendingFromDb);
-    setJobs([...normalJobs, ...jobsSeed]);
-    setFeaturedJobs([...featuredJobsFromDb, ...featuredSeed]);
-  };
+    const demoJobs = jobsSeed.map((job) => ({
+  ...job,
+  source: "demo",
+}));
+
+const demoFeatured = featuredSeed.map((job) => ({
+  ...job,
+  source: "demo",
+}));
+
+setJobs([
+  ...normalJobs,
+  ...demoJobs,
+]);
+
+setFeaturedJobs([
+  ...featuredJobsFromDb,
+  ...demoFeatured,
+]);
 
   fetchJobs();
 }, []);
