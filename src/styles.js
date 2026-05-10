@@ -271,3 +271,200 @@ export function getStyles(PALETTE) {
       font-weight: 800;
       color: ${PALETTE.slate};
     }
+    .section {
+      padding: 0 0 16px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      margin: 0;
+      color: ${PALETTE.slate};
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 950;
+    }
+
+    .section-title-vitrin {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+    }
+
+    .section-title-vitrin::before {
+      content: "★";
+      font-size: 18px;
+      color: #fff;
+    }
+
+    .section-sub {
+      color: ${PALETTE.softText};
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .featured-section {
+      background: ${PALETTE.coral};
+      border-radius: 28px;
+      padding: 30px 22px 26px;
+      margin-bottom: 28px;
+      box-shadow: 0 22px 44px rgba(246,90,69,0.20);
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .featured-card,
+    .job-card {
+      position: relative;
+      background: #fff;
+      border: 1px solid rgba(60,74,95,0.08);
+      border-radius: 26px;
+      padding: 22px;
+      box-shadow: 0 14px 28px rgba(60,74,95,0.05);
+      overflow: hidden;
+      cursor: pointer;
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+    }
+
+    .featured-card:hover,
+    .job-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 36px rgba(60,74,95,0.10);
+    }
+
+    .featured-card::after {
+      content: "";
+      position: absolute;
+      right: -20px;
+      bottom: -24px;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: rgba(246,90,69,0.12);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: ${PALETTE.coral};
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      box-shadow: 0 10px 18px rgba(246,90,69,0.18);
+    }
+
+    .type-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: ${PALETTE.warm};
+      color: ${PALETTE.coral};
+      border: 1px solid rgba(246,90,69,0.16);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .featured-company,
+    .job-company {
+      color: ${PALETTE.teal};
+      font-size: 14px;
+      font-weight: 950;
+      margin-bottom: 6px;
+    }
+
+    .featured-title,
+    .job-title {
+      margin: 0 0 10px;
+      color: ${PALETTE.slate};
+      font-size: 20px;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      font-weight: 950;
+    }
+
+    .featured-location,
+    .job-location {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: ${PALETTE.softText};
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .featured-divider,
+    .job-divider {
+      width: min(76%, 360px);
+      height: 1px;
+      background: rgba(246,90,69,0.18);
+      margin: 18px 0 14px;
+    }
+
+    .featured-salary-row,
+    .job-salary-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .featured-salary,
+    .job-salary {
+      margin: 0;
+      color: ${PALETTE.coral};
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .empty-box {
+      background:
+        linear-gradient(
+          180deg,
+          #fff 0%,
+          #fbfcfd 100%
+        );
+      border: 1px dashed rgba(60,74,95,0.14);
+      border-radius: 24px;
+      padding: 34px;
+      color: ${PALETTE.softText};
+      text-align: center;
+      box-shadow: 0 14px 24px rgba(60,74,95,0.04);
+    }
