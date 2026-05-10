@@ -543,3 +543,5 @@ export function getStyles(PALETTE) {
     grid-template-columns: 1fr;
   }
 }
+  `;
+}
