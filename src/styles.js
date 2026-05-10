@@ -943,3 +943,5 @@ export function getStyles(PALETTE) {
     gap: 8px;
   }
 }
+`;
+}
