@@ -5339,6 +5339,225 @@ useEffect(() => {
           .admin-table-actions { justify-content: flex-start; }
         }
 
+
+        /* === EKIS REAL FINAL: visible soft glass popup === */
+
+        .featured-section,
+        .btn-primary {
+          background: ${PALETTE.coral} !important;
+        }
+
+        .btn-primary {
+          color: #fff !important;
+          box-shadow: 0 12px 24px rgba(228,93,80,0.26) !important;
+        }
+
+        .detail-modal-backdrop {
+          background: rgba(35,48,68,0.34) !important;
+          backdrop-filter: blur(14px) saturate(1.08) !important;
+        }
+
+        .detail-modal-modern {
+          width: min(990px, calc(100vw - 24px)) !important;
+          border-radius: 34px !important;
+          background:
+            radial-gradient(circle at 0% 0%, rgba(88,173,173,0.18), transparent 34%),
+            radial-gradient(circle at 100% 0%, rgba(228,93,80,0.12), transparent 32%),
+            linear-gradient(135deg, rgba(255,255,255,0.72), rgba(245,247,248,0.62)) !important;
+          border: 1px solid rgba(255,255,255,0.82) !important;
+          box-shadow:
+            0 42px 110px rgba(35,48,68,0.28),
+            inset 0 1px 0 rgba(255,255,255,0.70) !important;
+          backdrop-filter: blur(28px) saturate(1.12) !important;
+        }
+
+        .detail-modern-grid {
+          background: transparent !important;
+        }
+
+        .detail-modern-main {
+          background:
+            radial-gradient(circle at 0% 22%, rgba(88,173,173,0.09), transparent 36%),
+            linear-gradient(180deg, rgba(255,255,255,0.56), rgba(255,255,255,0.38)) !important;
+          backdrop-filter: blur(18px) !important;
+        }
+
+        .detail-modern-side {
+          background:
+            radial-gradient(circle at 100% 0%, rgba(228,93,80,0.10), transparent 42%),
+            linear-gradient(180deg, rgba(255,255,255,0.46), rgba(245,247,248,0.62)) !important;
+          border-left: 1px solid rgba(255,255,255,0.78) !important;
+          backdrop-filter: blur(18px) !important;
+        }
+
+        .detail-modern-company {
+          color: ${PALETTE.teal} !important;
+          font-weight: 950 !important;
+        }
+
+        .detail-modern-company::after {
+          background: rgba(228,93,80,0.10) !important;
+          color: ${PALETTE.coral} !important;
+        }
+
+        .detail-modern-title {
+          color: #27364e !important;
+          letter-spacing: -0.075em !important;
+          text-shadow: 0 14px 34px rgba(60,74,95,0.08) !important;
+        }
+
+        .detail-modern-summary {
+          max-width: 680px !important;
+          color: #3C4A5F !important;
+          font-size: 18px !important;
+          font-weight: 800 !important;
+          line-height: 1.62 !important;
+        }
+
+        .modern-badge {
+          background: rgba(228,93,80,0.92) !important;
+          box-shadow: 0 12px 24px rgba(228,93,80,0.15) !important;
+        }
+
+        .modern-badge.soft {
+          background: rgba(255,255,255,0.58) !important;
+          color: ${PALETTE.slate} !important;
+          border: 1px solid rgba(255,255,255,0.78) !important;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.70) !important;
+          backdrop-filter: blur(12px) !important;
+        }
+
+        .detail-modern-meta {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          gap: 14px !important;
+          margin-bottom: 26px !important;
+        }
+
+        .detail-modern-meta div {
+          min-height: 86px !important;
+          border-radius: 24px !important;
+          background: rgba(255,255,255,0.52) !important;
+          border: 1px solid rgba(255,255,255,0.78) !important;
+          box-shadow:
+            0 18px 42px rgba(60,74,95,0.06),
+            inset 0 1px 0 rgba(255,255,255,0.68) !important;
+          backdrop-filter: blur(16px) !important;
+        }
+
+        .detail-modern-meta div:first-child {
+          background:
+            radial-gradient(circle at left, rgba(88,173,173,0.16), transparent 48%),
+            rgba(255,255,255,0.52) !important;
+        }
+
+        .detail-modern-meta div:nth-child(2) {
+          background:
+            radial-gradient(circle at left, rgba(228,93,80,0.10), transparent 48%),
+            rgba(255,255,255,0.52) !important;
+        }
+
+        .detail-modern-desc-card {
+          min-height: 285px !important;
+          padding: 32px !important;
+          border-radius: 30px !important;
+          background:
+            radial-gradient(circle at top left, rgba(228,93,80,0.055), transparent 38%),
+            rgba(255,255,255,0.50) !important;
+          border: 1px solid rgba(255,255,255,0.82) !important;
+          box-shadow:
+            0 26px 60px rgba(60,74,95,0.08),
+            inset 0 1px 0 rgba(255,255,255,0.72) !important;
+          backdrop-filter: blur(18px) !important;
+        }
+
+        .detail-modern-desc-card h4 {
+          font-size: 22px !important;
+          color: ${PALETTE.slate} !important;
+        }
+
+        .detail-modern-desc-card h4::before {
+          color: ${PALETTE.coral} !important;
+        }
+
+        .detail-modern-desc-card p {
+          font-size: 16px !important;
+          line-height: 1.9 !important;
+          color: #334155 !important;
+        }
+
+        .detail-modern-salary-card {
+          border-radius: 26px !important;
+          background:
+            radial-gradient(circle at 96% 8%, rgba(228,93,80,0.18), transparent 28%),
+            linear-gradient(135deg, rgba(255,255,255,0.72), rgba(255,242,236,0.58)) !important;
+          border: 1px solid rgba(255,255,255,0.84) !important;
+          box-shadow:
+            0 24px 52px rgba(228,93,80,0.12),
+            inset 0 1px 0 rgba(255,255,255,0.72) !important;
+          backdrop-filter: blur(16px) !important;
+        }
+
+        .detail-modern-salary-card span {
+          color: ${PALETTE.softText} !important;
+        }
+
+        .detail-modern-salary-card strong {
+          color: ${PALETTE.coral} !important;
+        }
+
+        .detail-modern-contact-card {
+          border-radius: 28px !important;
+          background: rgba(255,255,255,0.58) !important;
+          border: 1px solid rgba(255,255,255,0.84) !important;
+          box-shadow:
+            0 28px 64px rgba(60,74,95,0.12),
+            inset 0 1px 0 rgba(255,255,255,0.70) !important;
+          backdrop-filter: blur(18px) !important;
+        }
+
+        .detail-modern-contact-card h4 {
+          color: #0f7778 !important;
+          font-size: 20px !important;
+        }
+
+        .detail-modern-contact-card h4::after {
+          background: rgba(228,93,80,0.78) !important;
+        }
+
+        .modern-contact-row {
+          border-top-color: rgba(60,74,95,0.075) !important;
+        }
+
+        .modern-whatsapp-btn {
+          background: linear-gradient(135deg, #22c98a 0%, #28d993 100%) !important;
+          box-shadow: 0 18px 36px rgba(34,201,138,0.18) !important;
+        }
+
+        .modern-mini-actions a,
+        .modern-mini-actions button {
+          min-height: 54px !important;
+          background: rgba(255,255,255,0.66) !important;
+          border: 1px solid rgba(255,255,255,0.84) !important;
+          box-shadow:
+            0 12px 26px rgba(60,74,95,0.06),
+            inset 0 1px 0 rgba(255,255,255,0.72) !important;
+          backdrop-filter: blur(12px) !important;
+        }
+
+        .modern-safe-note {
+          background: rgba(88,173,173,0.095) !important;
+          border: 1px solid rgba(88,173,173,0.16) !important;
+          border-radius: 18px !important;
+          color: ${PALETTE.softText} !important;
+        }
+
+        @media (max-width: 880px) {
+          .detail-modern-side {
+            border-left: none !important;
+            border-top: 1px solid rgba(255,255,255,0.78) !important;
+          }
+        }
+
       `}
 </style>
 
