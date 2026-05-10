@@ -755,7 +755,7 @@ export function getStyles(PALETTE) {
   color: #B91C1C;
 }
 
-/* SITE SIZE FIX */
+/* SITE ANA SAYFA DÜZELTME */
 
 .topbar-inner {
   min-height: 72px;
@@ -769,34 +769,106 @@ export function getStyles(PALETTE) {
   height: 74px !important;
 }
 
+.filter-wrap {
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+/* HERO */
+
 .hero {
-  padding: 4px 0 10px;
+  padding: 4px 0 12px;
 }
 
 .hero-card {
-  padding: 16px 18px;
-  margin-bottom: 12px;
+  padding: 24px 26px;
+  margin-bottom: 18px;
+  min-height: auto !important;
+  overflow: hidden;
 }
 
 .hero-title {
-  font-size: clamp(22px, 2.8vw, 34px);
-  line-height: 1.08;
-  letter-spacing: -0.04em;
+  margin: 0 0 18px;
+  max-width: 760px;
+  font-size: clamp(30px, 3.6vw, 46px);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  font-weight: 950;
 }
 
-.hero-stats-inline {
-  margin-top: 10px;
-  gap: 8px;
-}
-
+/* Eski küçük baloncukları kapat */
+.hero-stats-inline,
 .hero-stat-bubble {
-  padding: 6px 10px;
-  font-size: 12px;
+  display: none !important;
 }
 
-.filter-wrap {
-  padding: 14px;
-  margin-bottom: 14px;
+/* Yeni güven rozetleri */
+.hero-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.hero-trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 9px 14px;
+  border-radius: 18px;
+  background: rgba(60,74,95,0.045);
+  border: 1px solid rgba(60,74,95,0.08);
+}
+
+.hero-trust-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f65a45;
+}
+
+.hero-trust-icon svg {
+  width: 42px !important;
+  height: 42px !important;
+  max-width: 42px !important;
+  max-height: 42px !important;
+  display: block !important;
+  margin: 0 !important;
+}
+
+.hero-trust-pill strong {
+  display: block;
+  color: #233044;
+  font-size: 14px;
+  line-height: 1.1;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.hero-trust-pill small {
+  display: block;
+  margin-top: 4px;
+  color: #5D6B7F;
+  font-size: 12px;
+  line-height: 1.1;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Ekiş Acil arkadaki dev sembol taşmasın */
+.featured-section {
+  overflow: hidden;
+}
+
+.featured-section::before,
+.featured-section::after {
+  max-width: 180px !important;
+  max-height: 180px !important;
+  opacity: 0.12;
 }
 
 @media (max-width: 1180px) {
@@ -820,11 +892,15 @@ export function getStyles(PALETTE) {
 
 @media (max-width: 900px) {
   .hero-card {
-    padding: 14px 16px;
+    padding: 20px 18px;
   }
 
   .hero-title {
-    font-size: 28px;
+    font-size: 32px;
+  }
+
+  .hero-trust-pill {
+    width: 100%;
   }
 
   .filter-grid {
@@ -833,32 +909,6 @@ export function getStyles(PALETTE) {
 
   .admin-stats {
     grid-template-columns: 1fr;
-  }
-}
-/* HERO ORANGE VISUAL CONTROL */
-
-.hero-card svg {
-  max-width: 260px !important;
-  max-height: 220px !important;
-  width: 28vw !important;
-  height: auto !important;
-  display: block !important;
-  margin: 18px auto 0 !important;
-}
-
-.hero-card {
-  max-height: 420px;
-}
-
-@media (max-width: 900px) {
-  .hero-card {
-    max-height: none;
-  }
-
-  .hero-card svg {
-    max-width: 180px !important;
-    max-height: 160px !important;
-    width: 55vw !important;
   }
 }
 `;
