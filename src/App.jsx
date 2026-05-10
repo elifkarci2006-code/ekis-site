@@ -3,7 +3,7 @@ import { supabase } from "./supabaseClient";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 const PALETTE = {
-  coral: "#E45D50",
+  coral: "#f65a45",
   sage: "#9BC78F",
   aqua: "#76BFBE",
   teal: "#58ADAD",
@@ -4773,788 +4773,211 @@ useEffect(() => {
           padding: 13px 14px;
         }
 
-        /* === EKIS FINAL OVERRIDES: soft blur popup + ortak acil renk === */
 
-        .featured-section,
-        .btn-primary {
-          background: ${PALETTE.coral} !important;
+        /* === EKIS GLASS V2 - net görünür popup değişimi === */
+
+        body .featured-section,
+        body .btn-primary {
+          background: #E45D50 !important;
         }
 
-        .btn-primary {
+        body .btn-primary {
           color: #fff !important;
-          box-shadow: 0 12px 24px rgba(228,93,80,0.28) !important;
+          box-shadow: 0 12px 24px rgba(228,93,80,0.24) !important;
         }
 
-        .detail-modal-modern {
+        body .detail-modal-backdrop {
+          background: rgba(35,48,68,0.42) !important;
+          backdrop-filter: blur(18px) saturate(1.05) !important;
+        }
+
+        body .detail-modal-glass-v2 {
+          width: min(1010px, calc(100vw - 24px)) !important;
+          border-radius: 36px !important;
           background:
-            radial-gradient(circle at 10% 12%, rgba(88,173,173,0.11), transparent 30%),
-            radial-gradient(circle at 92% 10%, rgba(228,93,80,0.065), transparent 30%),
-            linear-gradient(135deg, rgba(255,255,255,0.91), rgba(245,247,248,0.88)) !important;
-          backdrop-filter: blur(24px) !important;
-          border: 1px solid rgba(255,255,255,0.76) !important;
-          box-shadow: 0 42px 100px rgba(35,48,68,0.22) !important;
-        }
-
-        .detail-modern-main {
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.58)),
-            radial-gradient(circle at left top, rgba(88,173,173,0.075), transparent 36%) !important;
-        }
-
-        .detail-modern-side {
-          background:
-            linear-gradient(180deg, rgba(255,255,255,0.64), rgba(245,247,248,0.74)),
-            radial-gradient(circle at top right, rgba(228,93,80,0.05), transparent 40%) !important;
-          border-left: 1px solid rgba(255,255,255,0.76) !important;
-        }
-
-        .modern-badge.hot,
-        .modern-badge {
-          background: rgba(228,93,80,0.92) !important;
-          box-shadow: 0 12px 22px rgba(228,93,80,0.14) !important;
-        }
-
-        .modern-badge.soft {
-          color: ${PALETTE.slate} !important;
-          background: rgba(255,255,255,0.70) !important;
-          border: 1px solid rgba(60,74,95,0.08) !important;
-          box-shadow: none !important;
-        }
-
-        .detail-modern-company {
-          color: ${PALETTE.teal} !important;
-        }
-
-        .detail-modern-title {
-          color: #26354d !important;
-          text-shadow: 0 12px 26px rgba(60,74,95,0.055) !important;
-        }
-
-        .detail-modern-summary {
-          color: #3C4A5F !important;
-          font-size: 18px !important;
-          font-weight: 780 !important;
-          max-width: 660px !important;
-        }
-
-        .detail-modern-meta {
-          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          margin-bottom: 24px !important;
-        }
-
-        .detail-modern-meta div {
-          min-height: 82px !important;
-          border-radius: 24px !important;
-          background: rgba(255,255,255,0.68) !important;
-          border: 1px solid rgba(255,255,255,0.82) !important;
-          box-shadow: 0 18px 38px rgba(60,74,95,0.052) !important;
-        }
-
-        .detail-modern-meta div:first-child {
-          background:
-            radial-gradient(circle at left, rgba(88,173,173,0.12), transparent 45%),
-            rgba(255,255,255,0.70) !important;
-        }
-
-        .detail-modern-meta div:nth-child(2) {
-          background:
-            radial-gradient(circle at left, rgba(228,93,80,0.075), transparent 45%),
-            rgba(255,255,255,0.70) !important;
-        }
-
-        .detail-modern-desc-card {
-          padding: 30px !important;
-          min-height: 255px !important;
-          background: rgba(255,255,255,0.62) !important;
-          border: 1px solid rgba(255,255,255,0.84) !important;
-          box-shadow: 0 20px 48px rgba(60,74,95,0.07) !important;
-        }
-
-        .detail-modern-desc-card h4::before {
-          color: ${PALETTE.coral} !important;
-        }
-
-        .detail-modern-desc-card p {
-          color: #334155 !important;
-          font-size: 16px !important;
-          line-height: 1.85 !important;
-        }
-
-        .detail-modern-salary-card {
-          background:
-            radial-gradient(circle at 92% 16%, rgba(228,93,80,0.12), transparent 28%),
-            linear-gradient(135deg, rgba(255,255,255,0.84), rgba(255,244,239,0.70)) !important;
-          border: 1px solid rgba(255,255,255,0.82) !important;
-          box-shadow: 0 22px 46px rgba(228,93,80,0.10) !important;
-        }
-
-        .detail-modern-salary-card span {
-          color: ${PALETTE.softText} !important;
-        }
-
-        .detail-modern-salary-card strong {
-          color: ${PALETTE.coral} !important;
-        }
-
-        .detail-modern-contact-card {
-          background: rgba(255,255,255,0.72) !important;
-          border: 1px solid rgba(255,255,255,0.84) !important;
-          box-shadow: 0 24px 55px rgba(60,74,95,0.10) !important;
-          backdrop-filter: blur(14px) !important;
-        }
-
-        .detail-modern-contact-card h4 {
-          color: #0f7778 !important;
-        }
-
-        .detail-modern-contact-card h4::after {
-          background: rgba(228,93,80,0.82) !important;
-        }
-
-        .modern-whatsapp-btn {
-          background: linear-gradient(135deg, #20c987 0%, #25d990 100%) !important;
-          box-shadow: 0 18px 34px rgba(32,201,135,0.16) !important;
-        }
-
-        .modern-mini-actions a,
-        .modern-mini-actions button {
-          background: rgba(255,255,255,0.76) !important;
-          box-shadow: 0 10px 22px rgba(60,74,95,0.05) !important;
-        }
-
-        .modern-safe-note {
-          background: rgba(88,173,173,0.10) !important;
-          border: 1px solid rgba(88,173,173,0.14) !important;
-        }
-
-        .plan-grid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 12px;
-          margin-top: 10px;
-        }
-        .plan-card {
-          border: 1px solid rgba(60,74,95,0.12);
-          background: #fff;
-          border-radius: 20px;
-          padding: 18px;
-          text-align: left;
-          cursor: pointer;
-          display: grid;
-          gap: 6px;
-          box-shadow: 0 10px 22px rgba(60,74,95,0.05);
-          color: ${PALETTE.slate};
-        }
-        .plan-card.active {
-          border-color: rgba(255,75,43,0.38);
-          background: linear-gradient(180deg, #fff8f5 0%, #fff 100%);
-          box-shadow: 0 16px 34px rgba(255,75,43,0.13);
-        }
-        .plan-card strong {
-          font-size: 18px;
-          font-weight: 950;
-          letter-spacing: -0.03em;
-        }
-        .plan-card small {
-          color: ${PALETTE.softText};
-          font-size: 13px;
-          font-weight: 800;
-        }
-        .plan-kicker {
-          color: #ff4b2b;
-          font-size: 12px;
-          font-weight: 950;
-          text-transform: uppercase;
-          letter-spacing: 0.02em;
-        }
-        .detail-shell-clean {
-          grid-template-columns: 390px 1fr;
-          min-height: 700px;
-        }
-        .detail-side-clean {
-          border-right: 1px solid rgba(255,75,43,0.10);
-          padding: 34px 32px;
-          background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
-        }
-        .detail-main-clean {
-          padding: 120px 44px 40px;
-          background: #fff;
-          border-left: none;
-          border-top: none;
-        }
-        .compact-salary-card {
-          margin-top: 26px;
-          border-radius: 22px;
-          border: 1px solid rgba(255,75,43,0.14);
-          background: linear-gradient(180deg, #fff8f5 0%, #fff 100%);
-          padding: 22px;
-        }
-        .compact-salary-card .detail-salary {
-          font-size: 34px;
-          line-height: 1.12;
-        }
-        .detail-contact-box-left {
-          margin-top: 18px;
-          padding: 22px;
-          border-radius: 22px;
-          background: rgba(88,173,173,0.10);
-          border: 1px solid rgba(88,173,173,0.16);
-        }
-        .detail-contact-box-left .detail-contact-title {
-          margin-bottom: 16px;
-          color: #0f766e;
-        }
-        .contact-item {
-          display: grid;
-          grid-template-columns: 42px 1fr;
-          gap: 12px;
-          align-items: center;
-          padding: 14px 0;
-          border-bottom: 1px solid rgba(60,74,95,0.08);
-        }
-        .contact-item:last-of-type { border-bottom: none; }
-        .contact-icon {
-          width: 42px;
-          height: 42px;
-          border-radius: 999px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          background: #fff;
-          color: ${PALETTE.slate};
-          box-shadow: 0 8px 18px rgba(60,74,95,0.06);
-        }
-        .contact-item span:not(.contact-icon) {
-          display: block;
-          color: ${PALETTE.softText};
-          font-size: 12px;
-          font-weight: 900;
-          margin-bottom: 4px;
-        }
-        .contact-item strong {
-          display: block;
-          color: ${PALETTE.slate};
-          font-size: 15px;
-          font-weight: 950;
-          line-height: 1.25;
-        }
-        .clean-note {
-          margin: 18px 0 0;
-          padding: 0;
-          background: transparent;
-          border: none;
-          color: ${PALETTE.softText};
-          font-size: 13px;
-          line-height: 1.55;
-        }
-        .detail-meta-clean {
-          margin-top: 28px;
-          padding-bottom: 26px;
-          border-bottom: 1px solid rgba(60,74,95,0.10);
-        }
-        .detail-meta-clean span strong {
-          margin-left: 4px;
-          color: ${PALETTE.slate};
-        }
-        .detail-description-clean {
-          margin-top: 28px;
-          padding: 24px 26px;
-        }
-        @media (max-width: 1100px) {
-          .filter-grid { grid-template-columns: 1fr; }
-          .featured-grid { grid-template-columns: 1fr; }
-          .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        }
-        @media (max-width: 760px) {
-          .container { width: calc(100% - 16px); max-width: none; }
-          .footer-grid { grid-template-columns: 1fr; gap: 22px; }
-          .topbar-inner {
-            min-height: auto;
-            padding: 4px 0 8px;
-            align-items: flex-start;
-            flex-direction: column;
-          }
-          .brand-wrap { width: 100%; }
-          .brand-logo { height: 92px; }
-          .topbar.small .brand-logo { height: 92px; }
-          .top-actions {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-          }
-          .btn { width: 100%; padding: 12px 14px; }
-          .hero-card { padding: 14px 16px; border-radius: 20px; }
-          .hero-title { font-size: 24px; }
-          .hero-content { grid-template-columns: 1fr; gap: 14px; }
-          .hero-trust-row { justify-content: flex-start; flex-wrap: wrap; }
-          .hero-trust-pill { width: 100%; min-width: 0; }
-          .featured-head-actions { gap: 12px; font-size: 12px; }
-          .featured-card { min-height: 220px; }
-          .featured-icon-circle { width: 64px; height: 64px; right: 18px; bottom: 22px; }
-          .featured-icon-circle svg { width: 38px; height: 38px; }
-          .all-jobs-panel { padding: 16px; border-radius: 22px; }
-          .all-jobs-top { align-items: flex-start; flex-direction: column; }
-          .sort-control { width: 100%; justify-content: space-between; }
-          .sort-control select { flex: 1; min-width: 0; }
-          .quick-type-tabs { gap: 8px; }
-          .quick-type-tab { min-width: auto; padding: 0 14px; }
-          .jobs-grid { grid-template-columns: 1fr; }
-          .post-form-grid { grid-template-columns: 1fr; }
-          .detail-meta { grid-template-columns: 1fr; }
-          .detail-actions { grid-template-columns: 1fr; }
-          .detail-hero { padding: 22px 18px 20px; }
-          .detail-body { padding: 18px; }
-
-          .detail-shell { grid-template-columns: 1fr; min-height: auto; }
-          .detail-left, .detail-right { padding: 22px 18px; }
-          .detail-right { border-left: none; border-top: 1px solid rgba(255,75,43,0.10); }
-          .detail-side-clean { border-right: none; border-bottom: 1px solid rgba(255,75,43,0.10); }
-          .detail-main-clean { padding: 22px 18px; }
-          .detail-title { font-size: 32px; }
-          .detail-left-meta { gap: 14px; }
-          .plan-grid { grid-template-columns: 1fr; }
-
-        }
-
-        .admin-compact-layout {
-          display: grid;
-          grid-template-columns: 280px 1fr;
-          gap: 16px;
-          align-items: start;
-        }
-        .admin-side {
-          background: rgba(255,255,255,0.94);
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 26px;
-          padding: 18px;
-          box-shadow: 0 18px 42px rgba(60,74,95,0.08);
-          position: sticky;
-          top: 18px;
-        }
-        .admin-side-title {
-          margin: 0 0 12px;
-          color: ${PALETTE.slate};
-          font-size: 18px;
-          font-weight: 950;
-          letter-spacing: -0.03em;
-        }
-        .admin-side-list {
-          display: grid;
-          gap: 8px;
-        }
-        .admin-side-item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 12px;
-          width: 100%;
-          border: 1px solid rgba(60,74,95,0.08);
-          background: #fff;
-          color: ${PALETTE.slate};
-          border-radius: 16px;
-          padding: 12px 13px;
-          font-family: inherit;
-          font-size: 13px;
-          font-weight: 900;
-          cursor: pointer;
-          box-shadow: 0 8px 18px rgba(60,74,95,0.04);
-        }
-        .admin-side-item span {
-          color: ${PALETTE.coral};
-          font-weight: 950;
-        }
-        .admin-main-panel {
-          background: rgba(255,255,255,0.94);
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 26px;
-          padding: 18px;
-          box-shadow: 0 18px 42px rgba(60,74,95,0.08);
-        }
-        .admin-main-head {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          gap: 16px;
-          margin-bottom: 14px;
-        }
-        .admin-main-head h2 {
-          margin: 0;
-          color: ${PALETTE.slate};
-          font-size: 24px;
-          font-weight: 950;
-          letter-spacing: -0.04em;
-        }
-        .admin-table {
-          display: grid;
-          gap: 10px;
-        }
-        .admin-table-row {
-          display: grid;
-          grid-template-columns: 1.4fr 1fr 0.8fr 0.9fr auto;
-          align-items: center;
-          gap: 12px;
-          padding: 14px;
-          border-radius: 18px;
-          background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
-          border: 1px solid rgba(60,74,95,0.08);
-        }
-        .admin-table-row.header {
-          background: transparent;
-          border: none;
-          box-shadow: none;
-          color: ${PALETTE.softText};
-          font-size: 12px;
-          font-weight: 950;
-          padding: 4px 14px;
-        }
-        .admin-table-title {
-          min-width: 0;
-        }
-        .admin-table-title strong {
-          display: block;
-          color: ${PALETTE.slate};
-          font-size: 15px;
-          line-height: 1.15;
-          font-weight: 950;
-          letter-spacing: -0.02em;
-        }
-        .admin-table-title span,
-        .admin-table-cell {
-          display: block;
-          color: ${PALETTE.softText};
-          font-size: 12px;
-          font-weight: 850;
-          margin-top: 4px;
-        }
-        .admin-table-actions {
-          display: flex;
-          justify-content: flex-end;
-          flex-wrap: wrap;
-          gap: 7px;
-        }
-        .admin-tools {
-          display: grid;
-          grid-template-columns: 1fr auto;
-          gap: 10px;
-          margin-bottom: 14px;
-        }
-        .admin-tools input,
-        .admin-tools select {
-          height: 44px;
-          border: 1px solid rgba(60,74,95,0.12);
-          background: #fff;
-          color: ${PALETTE.slate};
-          border-radius: 14px;
-          padding: 0 14px;
-          font-size: 13px;
-          font-weight: 850;
-          outline: none;
-        }
-        .admin-expired {
-          opacity: 0.68;
-          background: #f7f8fa;
-        }
-        .admin-status-line {
-          margin-top: 5px;
-          color: ${PALETTE.softText};
-          font-size: 12px;
-          font-weight: 900;
-        }
-        .captcha-box {
-          display: grid;
-          grid-template-columns: 1fr 1fr auto;
-          gap: 10px;
-          align-items: end;
-          grid-column: 1 / -1;
-          padding: 14px;
-          border-radius: 18px;
-          background: rgba(88,173,173,0.08);
-          border: 1px solid rgba(88,173,173,0.14);
-        }
-        .captcha-question {
-          height: 46px;
-          display: flex;
-          align-items: center;
-          padding: 0 14px;
-          border-radius: 14px;
-          background: #fff;
-          color: ${PALETTE.slate};
-          font-weight: 950;
-          border: 1px solid rgba(60,74,95,0.10);
-        }
-        .admin-login-card {
-          max-width: 460px;
-          margin: 80px auto 0;
-          background: #fff;
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 28px;
-          padding: 28px;
-          box-shadow: 0 24px 60px rgba(60,74,95,0.12);
-        }
-        .admin-login-card h1 {
-          margin: 0 0 8px;
-          color: ${PALETTE.slate};
-          font-size: 34px;
-          font-weight: 950;
-          letter-spacing: -0.05em;
-        }
-        .admin-login-card p {
-          margin: 0 0 18px;
-          color: ${PALETTE.softText};
-          font-size: 14px;
-          font-weight: 800;
-          line-height: 1.45;
-        }
-        .admin-login-card input {
-          width: 100%;
-          height: 50px;
-          border: 1px solid rgba(60,74,95,0.12);
-          border-radius: 16px;
-          padding: 0 15px;
-          color: ${PALETTE.slate};
-          font-size: 15px;
-          font-weight: 850;
-          outline: none;
-          margin-bottom: 12px;
-        }
-        .admin-login-error {
-          color: ${PALETTE.coral};
-          font-size: 13px;
-          font-weight: 900;
-          margin: 0 0 12px;
-        }
-        .admin-login-actions {
-          display: flex;
-          gap: 10px;
-          flex-wrap: wrap;
-        }
-        @media (max-width: 1000px) {
-          .admin-compact-layout { grid-template-columns: 1fr; }
-          .admin-side { position: static; }
-          .admin-table-row {
-            grid-template-columns: 1fr;
-            align-items: start;
-          }
-          .admin-table-row.header { display: none; }
-          .admin-table-actions { justify-content: flex-start; }
-        }
-
-
-        /* === EKIS REAL FINAL: visible soft glass popup === */
-
-        .featured-section,
-        .btn-primary {
-          background: ${PALETTE.coral} !important;
-        }
-
-        .btn-primary {
-          color: #fff !important;
-          box-shadow: 0 12px 24px rgba(228,93,80,0.26) !important;
-        }
-
-        .detail-modal-backdrop {
-          background: rgba(35,48,68,0.34) !important;
-          backdrop-filter: blur(14px) saturate(1.08) !important;
-        }
-
-        .detail-modal-modern {
-          width: min(990px, calc(100vw - 24px)) !important;
-          border-radius: 34px !important;
-          background:
-            radial-gradient(circle at 0% 0%, rgba(88,173,173,0.18), transparent 34%),
-            radial-gradient(circle at 100% 0%, rgba(228,93,80,0.12), transparent 32%),
-            linear-gradient(135deg, rgba(255,255,255,0.72), rgba(245,247,248,0.62)) !important;
-          border: 1px solid rgba(255,255,255,0.82) !important;
+            linear-gradient(135deg, rgba(255,255,255,0.52), rgba(245,247,248,0.34)),
+            radial-gradient(circle at 0% 0%, rgba(88,173,173,0.20), transparent 34%),
+            radial-gradient(circle at 100% 0%, rgba(228,93,80,0.13), transparent 34%) !important;
+          border: 1px solid rgba(255,255,255,0.88) !important;
           box-shadow:
-            0 42px 110px rgba(35,48,68,0.28),
-            inset 0 1px 0 rgba(255,255,255,0.70) !important;
-          backdrop-filter: blur(28px) saturate(1.12) !important;
+            0 46px 120px rgba(35,48,68,0.36),
+            inset 0 1px 0 rgba(255,255,255,0.78) !important;
+          backdrop-filter: blur(32px) saturate(1.14) !important;
+          overflow: hidden !important;
         }
 
-        .detail-modern-grid {
+        body .detail-modern-grid-v2 {
           background: transparent !important;
         }
 
-        .detail-modern-main {
+        body .detail-modern-main-v2 {
+          padding: 48px 48px 38px !important;
           background:
-            radial-gradient(circle at 0% 22%, rgba(88,173,173,0.09), transparent 36%),
-            linear-gradient(180deg, rgba(255,255,255,0.56), rgba(255,255,255,0.38)) !important;
-          backdrop-filter: blur(18px) !important;
+            linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28)),
+            radial-gradient(circle at 4% 18%, rgba(88,173,173,0.13), transparent 38%) !important;
+          backdrop-filter: blur(22px) !important;
         }
 
-        .detail-modern-side {
+        body .detail-modern-side-v2 {
+          padding: 48px 30px 38px !important;
           background:
-            radial-gradient(circle at 100% 0%, rgba(228,93,80,0.10), transparent 42%),
-            linear-gradient(180deg, rgba(255,255,255,0.46), rgba(245,247,248,0.62)) !important;
-          border-left: 1px solid rgba(255,255,255,0.78) !important;
-          backdrop-filter: blur(18px) !important;
+            linear-gradient(180deg, rgba(255,255,255,0.38), rgba(245,247,248,0.50)),
+            radial-gradient(circle at 90% 0%, rgba(228,93,80,0.11), transparent 44%) !important;
+          border-left: 1px solid rgba(255,255,255,0.86) !important;
+          backdrop-filter: blur(22px) !important;
         }
 
-        .detail-modern-company {
-          color: ${PALETTE.teal} !important;
+        body .detail-modern-company {
+          color: #58ADAD !important;
           font-weight: 950 !important;
         }
 
-        .detail-modern-company::after {
-          background: rgba(228,93,80,0.10) !important;
-          color: ${PALETTE.coral} !important;
+        body .detail-modern-title {
+          color: #24324a !important;
+          text-shadow: 0 16px 36px rgba(60,74,95,0.10) !important;
         }
 
-        .detail-modern-title {
-          color: #27364e !important;
-          letter-spacing: -0.075em !important;
-          text-shadow: 0 14px 34px rgba(60,74,95,0.08) !important;
-        }
-
-        .detail-modern-summary {
-          max-width: 680px !important;
+        body .detail-modern-summary {
+          max-width: 700px !important;
           color: #3C4A5F !important;
           font-size: 18px !important;
           font-weight: 800 !important;
-          line-height: 1.62 !important;
+          line-height: 1.65 !important;
         }
 
-        .modern-badge {
-          background: rgba(228,93,80,0.92) !important;
-          box-shadow: 0 12px 24px rgba(228,93,80,0.15) !important;
+        body .modern-badge {
+          background: #E45D50 !important;
+          box-shadow: 0 12px 24px rgba(228,93,80,0.16) !important;
         }
 
-        .modern-badge.soft {
-          background: rgba(255,255,255,0.58) !important;
-          color: ${PALETTE.slate} !important;
-          border: 1px solid rgba(255,255,255,0.78) !important;
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.70) !important;
-          backdrop-filter: blur(12px) !important;
-        }
-
-        .detail-modern-meta {
-          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-          gap: 14px !important;
-          margin-bottom: 26px !important;
-        }
-
-        .detail-modern-meta div {
-          min-height: 86px !important;
-          border-radius: 24px !important;
-          background: rgba(255,255,255,0.52) !important;
-          border: 1px solid rgba(255,255,255,0.78) !important;
+        body .modern-badge.soft {
+          background: rgba(255,255,255,0.48) !important;
+          color: #3C4A5F !important;
+          border: 1px solid rgba(255,255,255,0.86) !important;
           box-shadow:
-            0 18px 42px rgba(60,74,95,0.06),
-            inset 0 1px 0 rgba(255,255,255,0.68) !important;
-          backdrop-filter: blur(16px) !important;
-        }
-
-        .detail-modern-meta div:first-child {
-          background:
-            radial-gradient(circle at left, rgba(88,173,173,0.16), transparent 48%),
-            rgba(255,255,255,0.52) !important;
-        }
-
-        .detail-modern-meta div:nth-child(2) {
-          background:
-            radial-gradient(circle at left, rgba(228,93,80,0.10), transparent 48%),
-            rgba(255,255,255,0.52) !important;
-        }
-
-        .detail-modern-desc-card {
-          min-height: 285px !important;
-          padding: 32px !important;
-          border-radius: 30px !important;
-          background:
-            radial-gradient(circle at top left, rgba(228,93,80,0.055), transparent 38%),
-            rgba(255,255,255,0.50) !important;
-          border: 1px solid rgba(255,255,255,0.82) !important;
-          box-shadow:
-            0 26px 60px rgba(60,74,95,0.08),
+            0 8px 18px rgba(60,74,95,0.04),
             inset 0 1px 0 rgba(255,255,255,0.72) !important;
+          backdrop-filter: blur(14px) !important;
+        }
+
+        body .detail-modern-meta {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          gap: 16px !important;
+          margin-bottom: 28px !important;
+        }
+
+        body .detail-modern-meta div {
+          min-height: 92px !important;
+          border-radius: 26px !important;
+          background: rgba(255,255,255,0.44) !important;
+          border: 1px solid rgba(255,255,255,0.86) !important;
+          box-shadow:
+            0 20px 46px rgba(60,74,95,0.07),
+            inset 0 1px 0 rgba(255,255,255,0.75) !important;
           backdrop-filter: blur(18px) !important;
         }
 
-        .detail-modern-desc-card h4 {
-          font-size: 22px !important;
-          color: ${PALETTE.slate} !important;
+        body .detail-modern-meta div:first-child {
+          background:
+            radial-gradient(circle at left, rgba(88,173,173,0.18), transparent 48%),
+            rgba(255,255,255,0.44) !important;
         }
 
-        .detail-modern-desc-card h4::before {
-          color: ${PALETTE.coral} !important;
+        body .detail-modern-meta div:nth-child(2) {
+          background:
+            radial-gradient(circle at left, rgba(228,93,80,0.12), transparent 48%),
+            rgba(255,255,255,0.44) !important;
         }
 
-        .detail-modern-desc-card p {
-          font-size: 16px !important;
-          line-height: 1.9 !important;
+        body .detail-modern-desc-card {
+          min-height: 315px !important;
+          padding: 34px !important;
+          border-radius: 32px !important;
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.48), rgba(255,255,255,0.30)),
+            radial-gradient(circle at 0% 0%, rgba(228,93,80,0.07), transparent 36%) !important;
+          border: 1px solid rgba(255,255,255,0.88) !important;
+          box-shadow:
+            0 30px 70px rgba(60,74,95,0.10),
+            inset 0 1px 0 rgba(255,255,255,0.76) !important;
+          backdrop-filter: blur(22px) !important;
+        }
+
+        body .detail-modern-desc-card h4 {
+          font-size: 23px !important;
+          color: #3C4A5F !important;
+        }
+
+        body .detail-modern-desc-card h4::before {
+          color: #E45D50 !important;
+        }
+
+        body .detail-modern-desc-card p {
+          font-size: 16.5px !important;
+          line-height: 1.95 !important;
           color: #334155 !important;
         }
 
-        .detail-modern-salary-card {
-          border-radius: 26px !important;
-          background:
-            radial-gradient(circle at 96% 8%, rgba(228,93,80,0.18), transparent 28%),
-            linear-gradient(135deg, rgba(255,255,255,0.72), rgba(255,242,236,0.58)) !important;
-          border: 1px solid rgba(255,255,255,0.84) !important;
-          box-shadow:
-            0 24px 52px rgba(228,93,80,0.12),
-            inset 0 1px 0 rgba(255,255,255,0.72) !important;
-          backdrop-filter: blur(16px) !important;
-        }
-
-        .detail-modern-salary-card span {
-          color: ${PALETTE.softText} !important;
-        }
-
-        .detail-modern-salary-card strong {
-          color: ${PALETTE.coral} !important;
-        }
-
-        .detail-modern-contact-card {
+        body .detail-modern-salary-card {
           border-radius: 28px !important;
-          background: rgba(255,255,255,0.58) !important;
-          border: 1px solid rgba(255,255,255,0.84) !important;
+          background:
+            linear-gradient(135deg, rgba(255,255,255,0.56), rgba(255,242,236,0.40)),
+            radial-gradient(circle at 95% 8%, rgba(228,93,80,0.16), transparent 30%) !important;
+          border: 1px solid rgba(255,255,255,0.88) !important;
           box-shadow:
-            0 28px 64px rgba(60,74,95,0.12),
-            inset 0 1px 0 rgba(255,255,255,0.70) !important;
+            0 24px 56px rgba(228,93,80,0.13),
+            inset 0 1px 0 rgba(255,255,255,0.74) !important;
           backdrop-filter: blur(18px) !important;
         }
 
-        .detail-modern-contact-card h4 {
+        body .detail-modern-salary-card strong {
+          color: #E45D50 !important;
+        }
+
+        body .detail-modern-contact-card {
+          border-radius: 30px !important;
+          background: rgba(255,255,255,0.46) !important;
+          border: 1px solid rgba(255,255,255,0.88) !important;
+          box-shadow:
+            0 30px 72px rgba(60,74,95,0.14),
+            inset 0 1px 0 rgba(255,255,255,0.74) !important;
+          backdrop-filter: blur(22px) !important;
+        }
+
+        body .detail-modern-contact-card h4 {
           color: #0f7778 !important;
           font-size: 20px !important;
         }
 
-        .detail-modern-contact-card h4::after {
-          background: rgba(228,93,80,0.78) !important;
+        body .detail-modern-contact-card h4::after {
+          background: #E45D50 !important;
         }
 
-        .modern-contact-row {
-          border-top-color: rgba(60,74,95,0.075) !important;
-        }
-
-        .modern-whatsapp-btn {
+        body .modern-whatsapp-btn {
           background: linear-gradient(135deg, #22c98a 0%, #28d993 100%) !important;
           box-shadow: 0 18px 36px rgba(34,201,138,0.18) !important;
         }
 
-        .modern-mini-actions a,
-        .modern-mini-actions button {
-          min-height: 54px !important;
-          background: rgba(255,255,255,0.66) !important;
-          border: 1px solid rgba(255,255,255,0.84) !important;
+        body .modern-mini-actions a,
+        body .modern-mini-actions button {
+          background: rgba(255,255,255,0.54) !important;
+          border: 1px solid rgba(255,255,255,0.88) !important;
           box-shadow:
-            0 12px 26px rgba(60,74,95,0.06),
-            inset 0 1px 0 rgba(255,255,255,0.72) !important;
-          backdrop-filter: blur(12px) !important;
+            0 14px 30px rgba(60,74,95,0.07),
+            inset 0 1px 0 rgba(255,255,255,0.74) !important;
+          backdrop-filter: blur(14px) !important;
         }
 
-        .modern-safe-note {
-          background: rgba(88,173,173,0.095) !important;
-          border: 1px solid rgba(88,173,173,0.16) !important;
+        body .modern-safe-note {
+          background: rgba(88,173,173,0.12) !important;
+          border: 1px solid rgba(88,173,173,0.18) !important;
           border-radius: 18px !important;
-          color: ${PALETTE.softText} !important;
         }
 
         @media (max-width: 880px) {
-          .detail-modern-side {
+          body .detail-modern-side-v2 {
             border-left: none !important;
-            border-top: 1px solid rgba(255,255,255,0.78) !important;
+            border-top: 1px solid rgba(255,255,255,0.86) !important;
           }
         }
 
@@ -6097,11 +5520,11 @@ useEffect(() => {
 
       {selectedJob && (
         <div className="detail-modal-backdrop" onClick={() => setSelectedJob(null)}>
-          <div className="detail-modal detail-modal-modern" onClick={(e) => e.stopPropagation()}>
+          <div className="detail-modal detail-modal-modern detail-modal-glass-v2" onClick={(e) => e.stopPropagation()}>
             <button className="detail-close detail-close-modern" type="button" onClick={() => setSelectedJob(null)}>×</button>
 
-            <div className="detail-modern-grid">
-              <section className="detail-modern-main">
+            <div className="detail-modern-grid detail-modern-grid-v2">
+              <section className="detail-modern-main detail-modern-main-v2">
                 <div className="detail-modern-badges">
                   {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
                     <span className="modern-badge hot">★ Ekiş Acil</span>
@@ -6136,7 +5559,7 @@ useEffect(() => {
                 </div>
               </section>
 
-              <aside className="detail-modern-side">
+              <aside className="detail-modern-side detail-modern-side-v2">
                 <div className="detail-modern-salary-card">
                   <span>Ücret bilgisi</span>
                   <strong>{selectedJob.salary}</strong>
