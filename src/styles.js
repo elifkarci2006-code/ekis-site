@@ -145,9 +145,7 @@ export function getStyles(PALETTE) {
     }
 
     /* CSS devam ediyor... */
-  `;
-}
-```
+
 
 ```
 .top-search {
