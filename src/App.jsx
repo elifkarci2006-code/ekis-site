@@ -1,38 +1,68 @@
-import React, {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
+import React, { useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabaseClient";
+const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
-import {
-  PALETTE,
-  categories,
-  types,
-  SHOPIER_FEATURED_LINK,
-} from "./data";
+const PALETTE = {
+  coral: "#f65a45",
+  sage: "#9BC78F",
+  aqua: "#76BFBE",
+  teal: "#58ADAD",
+  slate: "#3C4A5F",
+  bg: "#F5F7F8",
+  white: "#FFFFFF",
+  text: "#233044",
+  softText: "#5D6B7F",
+  border: "#DDE5EA",
+  warm: "#FFF2EC",
+};
 
-import {
-  getDaysAgoLabel,
-  getJobDurationDays,
-  getJobExpireDate,
-  getDaysLeftLabel,
-  isJobActive,
-  generateCaptchaQuestion,
-  inferCategory,
-  formatSalaryPreview,
-  toTitleCase,
-  normalizeLocation,
-  buildPublicAddress,
-  buildPrivateMapAddress,
-  cleanPhone,
-  getPhoneHref,
-  getWhatsappHref,
-  getMapHref,
-  getShareText,
-} from "./utils";
-
+const featuredSeed = [
+  {
+    id: 1,
+    title: "Garson Aranıyor",
+    company: "Mavi Masa Kafe",
+    location: "İstanbul / Kadıköy",
+    salary: "Günlük 1.200 TL + yemek",
+    type: "Günlük",
+    description:
+      "Servis ve karşılama süreçlerinde destek olacak, güler yüzlü ekip arkadaşı aranıyor.",
+    createdAt: "2026-04-14T10:00:00",
+    category: "Kafe & Restoran",
+    workAddress: "İstanbul / Kadıköy",
+    contactName: "Mavi Masa Yetkilisi",
+    contactPhone: "0555 111 22 33",
+  },
+  {
+    id: 2,
+    title: "Etkinlik Karşılama Elemanı",
+    company: "Nova Organizasyon",
+    location: "Ankara / Çankaya",
+    salary: "Günlük 1.500 TL",
+    type: "Part Time",
+    description:
+      "Etkinlik giriş alanında misafir karşılama ve yönlendirme görevlerinde çalışacak personel aranıyor.",
+    createdAt: "2026-04-14T10:00:00",
+    category: "Etkinlik & Organizasyon",
+    workAddress: "Ankara / Çankaya",
+    contactName: "Nova Organizasyon",
+    contactPhone: "0555 222 33 44",
+  },
+  {
+    id: 3,
+    title: "Kurye Aranıyor",
+    company: "Hızlı Paket",
+    location: "İzmir / Bornova",
+    salary: "Saatlik 200 TL + prim",
+    type: "Saatlik",
+    description:
+      "Yoğun saatlerde teslimat süreçlerinde görev alacak, hızlı ve dikkatli kurye aranıyor.",
+    createdAt: "2026-04-14T10:00:00",
+    category: "Kurye & Dağıtım",
+    workAddress: "İzmir / Bornova",
+    contactName: "Hızlı Paket",
+    contactPhone: "0555 333 44 55",
+  },
+];
 
 const jobsSeed = [
   {
@@ -157,10 +187,157 @@ const jobsSeed = [
   },
 ];
 
+const categories = [
+  "Tümü",
+  "Kafe & Restoran",
+  "Kurye & Dağıtım",
+  "Depo & Lojistik",
+  "Temizlik",
+  "Etkinlik & Organizasyon",
+  "Satış & Mağaza",
+  "Ofis & Yardımcı İşler",
+  "İnşaat & Fiziksel İş",
+  "Freelance / Dijital",
+];
 
-
+const types = ["Tümü", "Günlük", "Saatlik", "Part Time"];
 
 const cities = ["Tümü", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin", "Aydın", "Balıkesir", "Bartın", "Batman", "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Düzce", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Iğdır", "Isparta", "İstanbul", "İzmir", "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kırıkkale", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Şanlıurfa", "Şırnak", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak"];
+
+function getDaysAgoLabel(createdAt) {
+  const created = new Date(createdAt);
+  const now = new Date();
+  const diffMs = now - created;
+  const diffDays = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+  if (diffDays === 0) return "Bugün yayında";
+  if (diffDays === 1) return "1 gündür yayında";
+  return `${diffDays} gündür yayında`;
+}
+
+function getJobDurationDays(job) {
+  return job.plan === "featured" || job.featuredStatus === "live" ? 15 : 30;
+}
+
+function getJobExpireDate(job) {
+  const created = new Date(job.createdAt);
+  const duration = Number(job.durationDays || getJobDurationDays(job));
+  return new Date(created.getTime() + duration * 24 * 60 * 60 * 1000);
+}
+
+function getDaysLeftLabel(job) {
+  const diffMs = getJobExpireDate(job) - new Date();
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays <= 0) return "Süresi doldu";
+  if (diffDays === 1) return "1 gün kaldı";
+  return `${diffDays} gün kaldı`;
+}
+
+function isJobActive(job) {
+  return getJobExpireDate(job) > new Date() && job.status !== "passive";
+}
+
+function generateCaptchaQuestion() {
+  const a = Math.floor(Math.random() * 7) + 3;
+  const b = Math.floor(Math.random() * 6) + 2;
+  return { question: `${a} + ${b}`, answer: String(a + b) };
+}
+
+function inferCategory(title) {
+  const lower = title.toLocaleLowerCase("tr-TR");
+  if (lower.includes("garson") || lower.includes("barista") || lower.includes("kafe")) return "Kafe & Restoran";
+  if (lower.includes("kurye") || lower.includes("dağıtım")) return "Kurye & Dağıtım";
+  if (lower.includes("depo") || lower.includes("paketleme") || lower.includes("lojistik")) return "Depo & Lojistik";
+  if (lower.includes("temizlik")) return "Temizlik";
+  if (lower.includes("etkinlik") || lower.includes("organizasyon") || lower.includes("karşılama")) return "Etkinlik & Organizasyon";
+  if (lower.includes("mağaza") || lower.includes("kasiyer") || lower.includes("satış") || lower.includes("stand")) return "Satış & Mağaza";
+  if (lower.includes("ofis") || lower.includes("destek")) return "Ofis & Yardımcı İşler";
+  if (lower.includes("içerik") || lower.includes("dijital")) return "Freelance / Dijital";
+  return "Ofis & Yardımcı İşler";
+}
+
+function formatSalaryPreview(workType, salary) {
+  if (!salary) return "";
+  const formatted = new Intl.NumberFormat("tr-TR").format(Number(salary));
+  if (workType === "Saatlik") return `Saatlik ${formatted} TL`;
+  if (workType === "Part Time") return `Part Time ${formatted} TL / ay`;
+  return `Günlük ${formatted} TL`;
+}
+
+function toTitleCase(value) {
+  return String(value || "")
+    .trim()
+    .toLocaleLowerCase("tr-TR")
+    .replace(/(^|[\s/.,()-])([a-zçğıöşü])/g, (match, separator, char) =>
+      `${separator}${char.toLocaleUpperCase("tr-TR")}`
+    )
+    .replace(/\s+/g, " ");
+}
+
+function normalizeLocation(city, district) {
+  const normalizedCity = toTitleCase(city);
+  const normalizedDistrict = toTitleCase(district);
+  if (normalizedCity && normalizedDistrict) return `${normalizedCity} / ${normalizedDistrict}`;
+  return normalizedCity || normalizedDistrict;
+}
+
+function buildPublicAddress(parts = {}) {
+  const neighborhood = toTitleCase(parts.neighborhood);
+  const street = toTitleCase(parts.street);
+
+  return [neighborhood && `${neighborhood} Mah.`, street]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function buildPrivateMapAddress(parts = {}) {
+  return [
+    toTitleCase(parts.city),
+    toTitleCase(parts.district),
+    toTitleCase(parts.neighborhood) && `${toTitleCase(parts.neighborhood)} Mah.`,
+    toTitleCase(parts.street),
+    parts.doorNo ? `No:${String(parts.doorNo).trim()}` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function cleanPhone(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+function getPhoneHref(value) {
+  const phone = cleanPhone(value);
+  return phone ? `tel:${phone}` : "#";
+}
+
+function getWhatsappHref(value, job) {
+  let phone = cleanPhone(value);
+  if (!phone) return "#";
+  if (phone.startsWith("0")) phone = `90${phone.slice(1)}`;
+  if (!phone.startsWith("90")) phone = `90${phone}`;
+  const message = encodeURIComponent(
+    `Merhaba, Ekiş'teki "${job?.title || "ilan"}" ilanınız için yazıyorum.`
+  );
+  return `https://wa.me/${phone}?text=${message}`;
+}
+
+function getMapHref(job) {
+  const query = encodeURIComponent(
+    buildPrivateMapAddress({
+      city: job?.city,
+      district: job?.district,
+      neighborhood: job?.neighborhood,
+      street: job?.street,
+      doorNo: job?.doorNo,
+    }) || job?.workAddress || job?.location || ""
+  );
+  return query ? `https://www.google.com/maps/search/?api=1&query=${query}` : "#";
+}
+
+function getShareText(job) {
+  return `${job?.title || "Ekiş ilanı"} - ${job?.company || ""} | ${job?.location || ""}`;
+}
+
 
 function getJobVisualKey(job) {
   const text = `${job.title || ""} ${job.category || ""}`.toLocaleLowerCase("tr-TR");
