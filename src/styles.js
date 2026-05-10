@@ -544,3 +544,4 @@ export function getStyles(PALETTE) {
   .admin-compact-layout {
     grid-template-columns: 1fr;
   }
+}
