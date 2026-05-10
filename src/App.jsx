@@ -1528,7 +1528,7 @@ useEffect(() => {
 
     if (error) {
       console.error("İlan kaydedilemedi:", error);
-      alert("İlan kaydedilemedi 😥");
+      alert(`İlan kaydedilemedi 😥\n${error?.message || ""}`);
       return;
     }
 
@@ -1541,6 +1541,11 @@ useEffect(() => {
       status: "pending",
       paymentStatus: selectedPlan === "featured" ? "pending" : "not_required",
       submittedAt: new Date().toISOString(),
+      city: toTitleCase(formData.city),
+      district: toTitleCase(formData.district),
+      neighborhood: toTitleCase(formData.neighborhood),
+      street: toTitleCase(formData.street),
+      doorNo: String(formData.doorNo || "").trim(),
     };
 
     setPendingJobs((prev) => [reviewJob, ...prev]);
@@ -1744,7 +1749,7 @@ useEffect(() => {
 
     if (error) {
       console.error(errorMessage, error);
-      alert(errorMessage);
+      alert(`${errorMessage}\n${error?.message || ""}`);
       return false;
     }
 
@@ -5234,6 +5239,88 @@ useEffect(() => {
 
           .admin-table-row {
             padding: 14px;
+          }
+        }
+
+
+        /* === PHASE 2 HOTFIX: plan modal + admin clickable layout === */
+
+        .plan-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 14px;
+          margin: 18px 0 4px;
+        }
+
+        .plan-card {
+          text-align: left;
+          min-height: 106px;
+          border: 1px solid rgba(60,74,95,0.12);
+          background: #fff;
+          color: ${PALETTE.slate};
+          border-radius: 22px;
+          padding: 18px;
+          font-family: inherit;
+          cursor: pointer;
+          display: grid;
+          gap: 8px;
+          box-shadow: 0 12px 26px rgba(60,74,95,0.06);
+          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        }
+
+        .plan-card:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 18px 34px rgba(60,74,95,0.09);
+        }
+
+        .plan-card.active {
+          border-color: rgba(246,90,69,0.32);
+          background:
+            radial-gradient(circle at top right, rgba(246,90,69,0.10), transparent 36%),
+            #fff8f6;
+          box-shadow: 0 18px 38px rgba(246,90,69,0.12);
+        }
+
+        .plan-kicker {
+          color: #f65a45;
+          font-size: 12px;
+          font-weight: 950;
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
+        }
+
+        .plan-card strong {
+          color: ${PALETTE.slate};
+          font-size: 20px;
+          line-height: 1.08;
+          font-weight: 950;
+          letter-spacing: -0.035em;
+        }
+
+        .plan-card small {
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          line-height: 1.35;
+          font-weight: 800;
+        }
+
+        .admin-mini-btn,
+        .admin-side-item,
+        .admin-tools input,
+        .admin-tools select {
+          pointer-events: auto !important;
+          position: relative;
+          z-index: 2;
+        }
+
+        .admin-table-actions {
+          position: relative;
+          z-index: 3;
+        }
+
+        @media (max-width: 680px) {
+          .plan-grid {
+            grid-template-columns: 1fr;
           }
         }
 
