@@ -6050,6 +6050,481 @@ useEffect(() => {
 
         }
 
+        /* =========================================================
+           FINAL DETAIL POPUP - GENİŞ PREMIUM SÜRÜM
+           Tek App.jsx içinde kalır, dış styles.js gerekmez.
+        ========================================================= */
+
+        .detail-modal-backdrop {
+          background: rgba(35,48,68,0.36) !important;
+          backdrop-filter: blur(18px) saturate(1.04) !important;
+          padding: 18px !important;
+        }
+
+        .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
+          width: min(1540px, calc(100vw - 44px)) !important;
+          max-height: min(94vh, 980px) !important;
+          border-radius: 40px !important;
+          overflow: hidden !important;
+          border: 1px solid rgba(255,255,255,0.92) !important;
+          background:
+            radial-gradient(circle at 4% 4%, rgba(88,173,173,0.10), transparent 28%),
+            radial-gradient(circle at 96% 4%, rgba(246,90,69,0.10), transparent 26%),
+            linear-gradient(135deg, rgba(255,255,255,0.96), rgba(248,250,252,0.94)) !important;
+          box-shadow:
+            0 48px 120px rgba(35,48,68,0.32),
+            inset 0 1px 0 rgba(255,255,255,0.72) !important;
+        }
+
+        .detail-modal.detail-modal-modern.detail-modal-ref-v4 .detail-panel-inner,
+        .detail-modal-ref-v4 .detail-panel-inner {
+          padding: 0 !important;
+          overflow-y: auto !important;
+        }
+
+        .detail-modern-grid.detail-modern-grid-ref-v4 {
+          display: grid !important;
+          grid-template-columns: minmax(0, 1fr) 430px !important;
+          min-height: 760px !important;
+        }
+
+        .detail-modern-main.detail-modern-main-ref-v4 {
+          padding: 48px 52px 44px !important;
+          background:
+            radial-gradient(circle at 0% 0%, rgba(88,173,173,0.08), transparent 26%),
+            linear-gradient(180deg, #ffffff 0%, #fcfdfe 100%) !important;
+        }
+
+        .detail-modern-side.detail-modern-side-ref-v4 {
+          padding: 42px 36px 38px !important;
+          border-left: 1px solid rgba(60,74,95,0.08) !important;
+          background: #fcfcfd !important;
+        }
+
+        .detail-close.detail-close-modern {
+          top: 24px !important;
+          right: 24px !important;
+          width: 52px !important;
+          height: 52px !important;
+          border-radius: 999px !important;
+          border: 1px solid rgba(60,74,95,0.10) !important;
+          background: rgba(255,255,255,0.92) !important;
+          color: #071b4d !important;
+          font-size: 28px !important;
+          font-weight: 950 !important;
+          box-shadow: 0 14px 32px rgba(35,48,68,0.12) !important;
+          z-index: 5 !important;
+        }
+
+        .detail-modern-badges {
+          display: flex !important;
+          flex-wrap: wrap !important;
+          gap: 12px !important;
+          margin-bottom: 30px !important;
+          padding-right: 70px !important;
+        }
+
+        .modern-badge,
+        .modern-badge.soft,
+        .modern-badge.hot {
+          min-height: 44px !important;
+          padding: 0 20px !important;
+          border-radius: 999px !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          font-size: 15px !important;
+          line-height: 1 !important;
+          font-weight: 950 !important;
+          letter-spacing: -0.02em !important;
+          box-shadow: none !important;
+        }
+
+        .modern-badge,
+        .modern-badge.soft {
+          background: #fff !important;
+          border: 1px solid rgba(60,74,95,0.08) !important;
+          color: #233044 !important;
+        }
+
+        .modern-badge.hot {
+          background: #f65a45 !important;
+          color: #fff !important;
+          border: none !important;
+        }
+
+        .detail-modern-company {
+          margin: 0 0 16px !important;
+          color: #f65a45 !important;
+          font-size: 20px !important;
+          line-height: 1.1 !important;
+          font-weight: 950 !important;
+          letter-spacing: -0.025em !important;
+        }
+
+        .detail-modern-title {
+          margin: 0 !important;
+          max-width: 860px !important;
+          color: #071b4d !important;
+          font-size: clamp(58px, 5.15vw, 86px) !important;
+          line-height: 0.95 !important;
+          letter-spacing: -0.08em !important;
+          font-weight: 950 !important;
+        }
+
+        .detail-modern-summary {
+          margin: 32px 0 34px !important;
+          max-width: 780px !important;
+          color: #3C4A5F !important;
+          font-size: 21px !important;
+          line-height: 1.65 !important;
+          font-weight: 700 !important;
+        }
+
+        .detail-modern-meta {
+          display: grid !important;
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          gap: 18px !important;
+          margin: 0 0 28px !important;
+          max-width: 840px !important;
+        }
+
+        .detail-modern-meta div {
+          position: relative !important;
+          min-height: 128px !important;
+          padding: 26px 24px 24px 96px !important;
+          border-radius: 28px !important;
+          background: #fff !important;
+          border: 1px solid rgba(60,74,95,0.08) !important;
+          box-shadow: 0 14px 30px rgba(60,74,95,0.06) !important;
+          overflow: hidden !important;
+        }
+
+        .detail-modern-meta div::before {
+          content: "📍" !important;
+          position: absolute !important;
+          left: 24px !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          width: 56px !important;
+          height: 56px !important;
+          border-radius: 20px !important;
+          background: rgba(88,173,173,0.10) !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          font-size: 25px !important;
+        }
+
+        .detail-modern-meta div:nth-child(2)::before {
+          content: "☕" !important;
+        }
+
+        .detail-modern-meta span {
+          display: block !important;
+          margin-bottom: 8px !important;
+          color: #6b7280 !important;
+          font-size: 15px !important;
+          line-height: 1.1 !important;
+          font-weight: 850 !important;
+        }
+
+        .detail-modern-meta strong {
+          display: block !important;
+          color: #071b4d !important;
+          font-size: 22px !important;
+          line-height: 1.25 !important;
+          font-weight: 950 !important;
+          letter-spacing: -0.035em !important;
+        }
+
+        .detail-modern-desc-card {
+          max-width: 840px !important;
+          min-height: auto !important;
+          padding: 34px 36px !important;
+          border-radius: 32px !important;
+          background: #fff !important;
+          border: 1px solid rgba(60,74,95,0.08) !important;
+          box-shadow: 0 14px 30px rgba(60,74,95,0.055) !important;
+        }
+
+        .detail-modern-desc-card h4 {
+          position: relative !important;
+          margin: 0 0 22px !important;
+          padding-left: 70px !important;
+          min-height: 54px !important;
+          display: flex !important;
+          align-items: center !important;
+          color: #071b4d !important;
+          font-size: 40px !important;
+          line-height: 1 !important;
+          font-weight: 950 !important;
+          letter-spacing: -0.06em !important;
+        }
+
+        .detail-modern-desc-card h4::before {
+          content: "i" !important;
+          position: absolute !important;
+          left: 0 !important;
+          top: 0 !important;
+          width: 54px !important;
+          height: 54px !important;
+          border-radius: 18px !important;
+          background: #f65a45 !important;
+          color: #fff !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          font-size: 30px !important;
+          font-weight: 950 !important;
+          letter-spacing: 0 !important;
+        }
+
+        .detail-modern-desc-card p {
+          margin: 0 !important;
+          color: #3C4A5F !important;
+          font-size: 20px !important;
+          line-height: 1.8 !important;
+          font-weight: 650 !important;
+        }
+
+        .detail-modern-salary-card {
+          margin: 0 0 24px !important;
+          padding: 34px !important;
+          border-radius: 34px !important;
+          background: linear-gradient(135deg, #ff5b45 0%, #ff735f 100%) !important;
+          color: #fff !important;
+          box-shadow: 0 20px 38px rgba(246,90,69,0.22) !important;
+        }
+
+        .detail-modern-salary-card span {
+          display: block !important;
+          margin-bottom: 16px !important;
+          color: rgba(255,255,255,0.92) !important;
+          font-size: 18px !important;
+          line-height: 1.15 !important;
+          font-weight: 950 !important;
+        }
+
+        .detail-modern-salary-card strong {
+          display: block !important;
+          color: #fff !important;
+          font-size: clamp(42px, 3.9vw, 62px) !important;
+          line-height: 1.03 !important;
+          letter-spacing: -0.065em !important;
+          font-weight: 950 !important;
+        }
+
+        .detail-modern-contact-card {
+          padding: 34px !important;
+          border-radius: 32px !important;
+          background: #fff !important;
+          border: 1px solid rgba(60,74,95,0.08) !important;
+          box-shadow: 0 14px 30px rgba(60,74,95,0.055) !important;
+        }
+
+        .detail-modern-contact-card h4 {
+          margin: 0 0 26px !important;
+          color: #071b4d !important;
+          font-size: 40px !important;
+          line-height: 1 !important;
+          font-weight: 950 !important;
+          letter-spacing: -0.06em !important;
+        }
+
+        .modern-contact-row {
+          position: relative !important;
+          display: block !important;
+          padding: 18px 0 18px 72px !important;
+          min-height: 72px !important;
+          border-bottom: 1px solid rgba(60,74,95,0.08) !important;
+        }
+
+        .modern-contact-row::before {
+          content: "👤" !important;
+          position: absolute !important;
+          left: 0 !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          width: 54px !important;
+          height: 54px !important;
+          border-radius: 18px !important;
+          background: #fff !important;
+          border: 1px solid rgba(60,74,95,0.08) !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          font-size: 23px !important;
+        }
+
+        .modern-contact-row:nth-of-type(2)::before {
+          content: "📞" !important;
+        }
+
+        .modern-contact-row:nth-of-type(3)::before {
+          content: "📍" !important;
+        }
+
+        .modern-contact-row span {
+          display: block !important;
+          margin-bottom: 5px !important;
+          color: #6b7280 !important;
+          font-size: 15px !important;
+          line-height: 1.1 !important;
+          font-weight: 850 !important;
+        }
+
+        .modern-contact-row strong {
+          display: block !important;
+          color: #071b4d !important;
+          font-size: 20px !important;
+          line-height: 1.28 !important;
+          font-weight: 950 !important;
+          letter-spacing: -0.03em !important;
+          word-break: break-word !important;
+        }
+
+        .modern-whatsapp-btn {
+          width: 100% !important;
+          min-height: 76px !important;
+          margin-top: 28px !important;
+          border-radius: 24px !important;
+          background: linear-gradient(135deg, #ff5b45 0%, #ff735f 100%) !important;
+          color: #fff !important;
+          text-decoration: none !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          font-size: 25px !important;
+          line-height: 1 !important;
+          font-weight: 950 !important;
+          box-shadow: 0 16px 30px rgba(246,90,69,0.22) !important;
+        }
+
+        .modern-mini-actions {
+          display: grid !important;
+          grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+          gap: 14px !important;
+          margin-top: 20px !important;
+        }
+
+        .modern-mini-actions a,
+        .modern-mini-actions button {
+          width: 100% !important;
+          min-height: 84px !important;
+          border-radius: 24px !important;
+          background: #fff !important;
+          border: 1px solid rgba(60,74,95,0.08) !important;
+          color: #071b4d !important;
+          text-decoration: none !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          font-size: 21px !important;
+          line-height: 1 !important;
+          font-weight: 950 !important;
+          cursor: pointer !important;
+          box-shadow: 0 10px 22px rgba(60,74,95,0.045) !important;
+        }
+
+        .modern-safe-note {
+          margin: 24px 0 0 !important;
+          padding: 22px 22px 22px 72px !important;
+          position: relative !important;
+          border-radius: 24px !important;
+          background: #fff5f2 !important;
+          border: 1px solid rgba(246,90,69,0.14) !important;
+          color: #3C4A5F !important;
+          font-size: 15px !important;
+          line-height: 1.65 !important;
+          font-weight: 750 !important;
+        }
+
+        .modern-safe-note::before {
+          content: "✓" !important;
+          position: absolute !important;
+          left: 22px !important;
+          top: 22px !important;
+          width: 36px !important;
+          height: 36px !important;
+          border-radius: 999px !important;
+          background: #f65a45 !important;
+          color: #fff !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          font-size: 18px !important;
+          font-weight: 950 !important;
+        }
+
+        @media (max-width: 1180px) {
+          .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
+            width: min(980px, calc(100vw - 28px)) !important;
+          }
+
+          .detail-modern-grid.detail-modern-grid-ref-v4 {
+            grid-template-columns: 1fr !important;
+          }
+
+          .detail-modern-side.detail-modern-side-ref-v4 {
+            border-left: none !important;
+            border-top: 1px solid rgba(60,74,95,0.08) !important;
+          }
+
+          .detail-modern-title {
+            font-size: 56px !important;
+          }
+        }
+
+        @media (max-width: 760px) {
+          .detail-modal-backdrop {
+            padding: 10px !important;
+          }
+
+          .detail-modal.detail-modal-modern.detail-modal-ref-v4 {
+            width: calc(100vw - 20px) !important;
+            max-height: 94vh !important;
+            border-radius: 28px !important;
+          }
+
+          .detail-modern-main.detail-modern-main-ref-v4,
+          .detail-modern-side.detail-modern-side-ref-v4 {
+            padding: 28px 18px 24px !important;
+          }
+
+          .detail-modern-badges {
+            padding-right: 58px !important;
+          }
+
+          .detail-modern-title {
+            font-size: 40px !important;
+            letter-spacing: -0.06em !important;
+          }
+
+          .detail-modern-summary {
+            font-size: 17px !important;
+          }
+
+          .detail-modern-meta {
+            grid-template-columns: 1fr !important;
+          }
+
+          .detail-modern-desc-card,
+          .detail-modern-contact-card {
+            padding: 24px !important;
+          }
+
+          .detail-modern-desc-card h4,
+          .detail-modern-contact-card h4 {
+            font-size: 30px !important;
+          }
+
+          .modern-mini-actions {
+            grid-template-columns: 1fr !important;
+          }
+        }
+
+
       `}
 </style>
 
