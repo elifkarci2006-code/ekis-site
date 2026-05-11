@@ -5367,10 +5367,9 @@ if (job.plan === "featured") {
                     value={formData.contactPhone}
                     onChange={handleFormChange}
                   />
-              {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>}
-</div>
+                  {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>
 
-<div className="field">
+                <div className="field">
                   <label>E-posta adresi</label>
 
                   <input
@@ -5385,7 +5384,6 @@ if (job.plan === "featured") {
                     }
                   />
                 </div>
-}
                 </div>
 
                 <div className="captcha-box">
