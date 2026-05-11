@@ -3,7 +3,7 @@ import { supabase } from "./supabaseClient";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 const PALETTE = {
-  coral: "#E45D50",
+  coral: "#f65a45",
   sage: "#9BC78F",
   aqua: "#76BFBE",
   teal: "#58ADAD",
@@ -3217,7 +3217,7 @@ useEffect(() => {
         }
         .detail-featured-badge {
           color: #fff;
-          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
           box-shadow: 0 10px 20px rgba(255,75,43,0.18);
         }
         .detail-type-badge {
@@ -4068,7 +4068,7 @@ useEffect(() => {
         }
         .detail-featured-badge {
           color: #fff;
-          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
           box-shadow: 0 10px 20px rgba(255,75,43,0.18);
         }
         .detail-type-badge {
@@ -4948,26 +4948,37 @@ useEffect(() => {
         }
 
         /* MOBILE FILTER + FOOTER UX POLISH */
-        .mobile-filter-toggle {
-          display: none;
-        }
+        
+.mobile-filter-toggle {
+  display: none;
+}
 
-        @media (max-width: 760px) {
-          .mobile-filter-toggle {
-            width: 100%;
-            min-height: 54px;
-            border: none;
-            border-radius: 18px;
-            margin-bottom: 14px;
-            background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
-            color: #fff;
-            font-size: 16px;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 12px 24px rgba(255,75,43,0.18);
-          }
+@media (max-width: 760px) {
+  .filter-wrap {
+    position: relative;
+    padding-top: 68px;
+  }
+
+  .mobile-filter-toggle {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    min-width: 118px;
+    height: 42px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.10);
+  }
+
 
           .filter-grid {
             display: none;
@@ -5655,7 +5666,7 @@ useEffect(() => {
               type="button"
               onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
             >
-              {mobileFiltersOpen ? "Filtreyi Kapat" : "Filtrele"}
+              {mobileFiltersOpen ? "✕ Kapat" : "⚙ Filtrele"}
             </button>
             <div className={`filter-grid ${mobileFiltersOpen ? "open" : ""}`}>
               <div className="field">
