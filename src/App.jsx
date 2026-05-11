@@ -3,7 +3,7 @@ import { supabase } from "./supabaseClient";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 const PALETTE = {
-  coral: "#f65a45",
+  coral: "#E45D50",
   sage: "#9BC78F",
   aqua: "#76BFBE",
   teal: "#58ADAD",
@@ -278,75 +278,6 @@ function normalizeLocation(city, district) {
   const normalizedDistrict = toTitleCase(district);
   if (normalizedCity && normalizedDistrict) return `${normalizedCity} / ${normalizedDistrict}`;
   return normalizedCity || normalizedDistrict;
-}
-
-
-function buildPublicAddress(parts = {}) {
-  const neighborhood = toTitleCase(parts.neighborhood);
-  const street = toTitleCase(parts.street);
-  const district = toTitleCase(parts.district);
-  const city = toTitleCase(parts.city);
-  const extra = toTitleCase(parts.extra);
-
-  return [
-    neighborhood && `${neighborhood} Mah.`,
-    street,
-    district,
-    city,
-    extra,
-  ]
-    .filter(Boolean)
-    .join(" / ");
-}
-
-function buildPrivateMapAddress(parts = {}) {
-  return [
-    toTitleCase(parts.city),
-    toTitleCase(parts.district),
-    toTitleCase(parts.neighborhood) && `${toTitleCase(parts.neighborhood)} Mah.`,
-    toTitleCase(parts.street),
-    parts.doorNo ? `No:${String(parts.doorNo).trim()}` : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-}
-
-function cleanPhone(value) {
-  return String(value || "").replace(/\D/g, "");
-}
-
-function getPhoneHref(value) {
-  const phone = cleanPhone(value);
-  return phone ? `tel:${phone}` : "#";
-}
-
-function getWhatsappHref(value, job) {
-  let phone = cleanPhone(value);
-  if (!phone) return "#";
-  if (phone.startsWith("0")) phone = `90${phone.slice(1)}`;
-  if (!phone.startsWith("90")) phone = `90${phone}`;
-
-  const message = encodeURIComponent(
-    `Merhaba, Ekiş'teki "${job?.title || "ilan"}" ilanınız için yazıyorum.`
-  );
-
-  return `https://wa.me/${phone}?text=${message}`;
-}
-
-function getMapHref(job) {
-  const privateAddress = buildPrivateMapAddress({
-    city: job?.city,
-    district: job?.district,
-    neighborhood: job?.neighborhood,
-    street: job?.street,
-    doorNo: job?.doorNo,
-  });
-
-  const query = encodeURIComponent(
-    privateAddress || job?.workAddress || job?.location || ""
-  );
-
-  return query ? `https://www.google.com/maps/search/?api=1&query=${query}` : "#";
 }
 
 
@@ -1511,8 +1442,8 @@ export default function App() {
   const [logoSrc, setLogoSrc] = useState("/logo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
   const [headerOpacity, setHeaderOpacity] = useState(1);
-  const [jobs, setJobs] = useState(() => jobsSeed.map((job) => ({ ...job, source: "demo", status: "active", createdAt: new Date().toISOString(), durationDays: 30, plan: "free", featuredStatus: null })));
-  const [featuredJobs, setFeaturedJobs] = useState(() => featuredSeed.map((job) => ({ ...job, source: "demo", status: "active", createdAt: new Date().toISOString(), durationDays: 15, plan: "featured", featuredStatus: "live" })));
+  const [jobs, setJobs] = useState(jobsSeed);
+  const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
   const [pendingJobs, setPendingJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [errors, setErrors] = useState({});
@@ -1529,9 +1460,6 @@ export default function App() {
     title: "",
     city: "",
     district: "",
-    neighborhood: "",
-    street: "",
-    doorNo: "",
     workType: "Günlük",
     salary: "",
     description: "",
@@ -1561,33 +1489,15 @@ useEffect(() => {
     const formatted = data.map((job) => ({
       id: job.id,
       dbId: job.id,
-      source: "db",
       title: toTitleCase(job.job_title),
       company: toTitleCase(job.company_name),
-      city: toTitleCase(job.city),
-      district: toTitleCase(job.district),
-      neighborhood: toTitleCase(job.neighborhood),
-      street: toTitleCase(job.street),
-      doorNo: String(job.door_no || "").trim(),
       location: normalizeLocation(job.city, job.district),
-      workAddress:
-        buildPublicAddress({
-          city: job.city,
-          district: job.district,
-          neighborhood: job.neighborhood,
-          street: job.street,
-        }) || normalizeLocation(job.city, job.district),
       salary: job.salary,
-      type:
-        String(job.salary || "").toLocaleLowerCase("tr-TR").includes("saatlik")
-          ? "Saatlik"
-          : String(job.salary || "").toLocaleLowerCase("tr-TR").includes("part time")
-          ? "Part Time"
-          : "Günlük",
+      type: job.plan_type === "featured" ? "Öne Çıkan" : "Standart",
       description: job.description,
       contactPhone: job.phone,
       createdAt: job.created_at,
-      category: job.category || inferCategory(job.job_title || ""),
+      category: "Genel",
       status: job.status || "pending",
       plan: job.plan_type === "featured" ? "featured" : "free",
       featuredStatus:
@@ -1606,31 +1516,9 @@ useEffect(() => {
       (j) => j.status !== "pending" && j.featuredStatus === "live"
     );
 
-    const now = new Date().toISOString();
-
-    const demoJobs = jobsSeed.map((job) => ({
-      ...job,
-      source: "demo",
-      status: "active",
-      createdAt: now,
-      durationDays: 30,
-      plan: "free",
-      featuredStatus: null,
-    }));
-
-    const demoFeatured = featuredSeed.map((job) => ({
-      ...job,
-      source: "demo",
-      status: "active",
-      createdAt: now,
-      durationDays: 15,
-      plan: "featured",
-      featuredStatus: "live",
-    }));
-
     setPendingJobs(pendingFromDb);
-    setJobs([...normalJobs, ...demoJobs]);
-    setFeaturedJobs([...featuredJobsFromDb, ...demoFeatured]);
+    setJobs([...normalJobs, ...jobsSeed]);
+    setFeaturedJobs([...featuredJobsFromDb, ...featuredSeed]);
   };
 
   fetchJobs();
@@ -1699,10 +1587,6 @@ useEffect(() => {
         company: "",
         title: "",
         city: "",
-        district: "",
-        neighborhood: "",
-        street: "",
-        doorNo: "",
         workType: "Günlük",
         salary: "",
         description: "",
@@ -1721,9 +1605,8 @@ useEffect(() => {
     if (!formData.company.trim()) nextErrors.company = "Firma adı zorunludur.";
     if (!formData.title.trim()) nextErrors.title = "İlan başlığı zorunludur.";
     if (!formData.city.trim()) nextErrors.city = "Şehir seçimi zorunludur.";
-    if (!formData.district.trim()) nextErrors.district = "İlçe zorunludur.";
-    if (!formData.neighborhood.trim()) nextErrors.neighborhood = "Mahalle zorunludur.";
-    if (!formData.street.trim()) nextErrors.street = "Sokak / cadde zorunludur.";
+    if (!formData.district.trim()) nextErrors.district = "İlçe / konum zorunludur.";
+    if (!formData.workAddress.trim()) nextErrors.workAddress = "İş adresi / buluşma noktası zorunludur.";
 
     const phoneDigits = formData.contactPhone.replace(/\D/g, "");
     const invalidRepeatingPhone = /^(\d)\1+$/.test(phoneDigits);
@@ -1809,23 +1692,12 @@ useEffect(() => {
     id: Date.now(),
     title: toTitleCase(formData.title),
     company: toTitleCase(formData.company),
-    city: toTitleCase(formData.city),
-    district: toTitleCase(formData.district),
-    neighborhood: toTitleCase(formData.neighborhood),
-    street: toTitleCase(formData.street),
-    doorNo: String(formData.doorNo || "").trim(),
     location: normalizeLocation(formData.city, formData.district),
     salary: formatSalaryPreview(formData.workType, formData.salary),
     type: formData.workType,
     category: inferCategory(formData.title),
     description: formData.description.trim(),
-    workAddress: buildPublicAddress({
-      city: formData.city,
-      district: formData.district,
-      neighborhood: formData.neighborhood,
-      street: formData.street,
-      extra: formData.workAddress,
-    }),
+    workAddress: toTitleCase(formData.workAddress),
     contactName: toTitleCase(formData.contactName),
     contactPhone: formData.contactPhone.trim(),
     status: "active",
@@ -1846,17 +1718,12 @@ useEffect(() => {
     const payload = {
       company_name: pendingJob.company,
       job_title: pendingJob.title,
-      category: pendingJob.category,
       city: toTitleCase(formData.city),
       district: toTitleCase(formData.district),
-      neighborhood: toTitleCase(formData.neighborhood),
-      street: toTitleCase(formData.street),
-      door_no: String(formData.doorNo || "").trim(),
       salary: pendingJob.salary,
       description: pendingJob.description,
       phone: pendingJob.contactPhone,
       plan_type: selectedPlan === "featured" ? "featured" : "normal",
-      views_count: 0,
       status: "pending",
       expires_at: new Date(
         Date.now() +
@@ -1884,7 +1751,6 @@ useEffect(() => {
       ...pendingJob,
       id: data?.id || pendingJob.id,
       dbId: data?.id,
-      source: "db",
       plan: selectedPlan === "featured" ? "featured" : "free",
       durationDays: selectedPlan === "featured" ? 15 : 30,
       status: "pending",
@@ -1911,9 +1777,6 @@ useEffect(() => {
       title: "",
       city: "",
       district: "",
-      neighborhood: "",
-      street: "",
-      doorNo: "",
       workType: "Günlük",
       salary: "",
       description: "",
@@ -2008,7 +1871,6 @@ useEffect(() => {
   const approvePendingJob = async (job) => {
     const approvedJob = {
       ...job,
-      source: job.source || "db",
       status: "active",
       approvedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
@@ -2089,19 +1951,7 @@ useEffect(() => {
   };
 
   const makeJobFeatured = async (job) => {
-    const now = new Date().toISOString();
-    const expiresAt = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString();
-
-    const ok = await updateDbJob(
-      job,
-      {
-        plan_type: "featured",
-        status: "active",
-        created_at: now,
-        expires_at: expiresAt,
-      },
-      "İlan Ekiş Acil yapılamadı 😥"
-    );
+    const ok = await updateDbJob(job, { plan_type: "featured", status: "active" }, "İlan Ekiş Acil yapılamadı 😥");
     if (!ok) return;
 
     setJobs((prev) => prev.filter((item) => item.id !== job.id));
@@ -2110,7 +1960,6 @@ useEffect(() => {
         ...job,
         plan: "featured",
         status: "active",
-        createdAt: now,
         durationDays: 15,
         featuredStatus: "live",
       },
@@ -2119,19 +1968,7 @@ useEffect(() => {
   };
 
   const makeJobStandard = async (job) => {
-    const now = new Date().toISOString();
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-
-    const ok = await updateDbJob(
-      job,
-      {
-        plan_type: "normal",
-        status: "active",
-        created_at: now,
-        expires_at: expiresAt,
-      },
-      "İlan standarda alınamadı 😥"
-    );
+    const ok = await updateDbJob(job, { plan_type: "normal", status: "active" }, "İlan standarda alınamadı 😥");
     if (!ok) return;
 
     setFeaturedJobs((prev) => prev.filter((item) => item.id !== job.id));
@@ -2140,7 +1977,6 @@ useEffect(() => {
         ...job,
         plan: "free",
         status: "active",
-        createdAt: now,
         durationDays: 30,
         featuredStatus: null,
       },
@@ -3216,7 +3052,7 @@ useEffect(() => {
         }
         .detail-featured-badge {
           color: #fff;
-          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
           box-shadow: 0 10px 20px rgba(255,75,43,0.18);
         }
         .detail-type-badge {
@@ -4067,7 +3903,7 @@ useEffect(() => {
         }
         .detail-featured-badge {
           color: #fff;
-          background: linear-gradient(180deg, #f65a45 0%, #f65a45 100%);
+          background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
           box-shadow: 0 10px 20px rgba(255,75,43,0.18);
         }
         .detail-type-badge {
@@ -4412,37 +4248,6 @@ useEffect(() => {
           font-weight: 950;
           line-height: 1.25;
         }
-        .detail-contact-actions {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 10px;
-          margin-top: 16px;
-        }
-        .detail-contact-btn {
-          min-height: 48px;
-          border-radius: 16px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-          font-size: 13px;
-          font-weight: 950;
-          border: 1px solid rgba(60,74,95,0.10);
-          transition: transform .16s ease, box-shadow .16s ease;
-        }
-        .detail-contact-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 10px 18px rgba(60,74,95,0.10);
-        }
-        .detail-contact-btn.whatsapp {
-          background: ${PALETTE.coral};
-          color: #fff;
-          border-color: transparent;
-        }
-        .detail-contact-btn.map {
-          background: #fff;
-          color: ${PALETTE.slate};
-        }
         .clean-note {
           margin: 18px 0 0;
           padding: 0;
@@ -4733,24 +4538,6 @@ useEffect(() => {
           gap: 10px;
           flex-wrap: wrap;
         }
-
-
-        .demo-badge {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          height: 22px;
-          padding: 0 8px;
-          margin-left: 8px;
-          border-radius: 999px;
-          background: rgba(88, 173, 173, 0.12);
-          color: #58ADAD;
-          font-size: 11px;
-          font-style: normal;
-          font-weight: 900;
-          vertical-align: middle;
-        }
-
         @media (max-width: 1000px) {
           .admin-compact-layout { grid-template-columns: 1fr; }
           .admin-side { position: static; }
@@ -4762,224 +4549,168 @@ useEffect(() => {
           .admin-table-actions { justify-content: flex-start; }
         }
 
-        /* MOBILE POPUP ORDER FIX - Başlık ve iş açıklaması önce gelsin */
-        @media (max-width: 760px) {
-          .detail-shell.detail-shell-clean {
-            display: flex;
-            flex-direction: column;
-          }
+        /* =========================
+           ADMIN V2 HYBRID REDESIGN
+        ========================= */
 
-          .detail-main-clean {
-            order: 1;
-          }
-
-          .detail-side-clean {
-            order: 2;
-          }
-
-          .detail-panel-inner {
-            max-height: 86vh;
-            overflow-y: auto;
-          }
-
-          .detail-company {
-            margin-top: 0;
-          }
-
-          .detail-title {
-            font-size: 30px;
-            line-height: 1.08;
-          }
-
-          .detail-summary {
-            margin-bottom: 16px;
-          }
-
-          .detail-left-meta {
-            margin-bottom: 16px;
-          }
-
-          .detail-description-clean {
-            margin-top: 14px;
-          }
-
-          .detail-contact-box-left {
-            margin-top: 16px;
-          }
+        .admin-shell {
+          display: grid;
+          grid-template-columns: 280px minmax(0, 1fr);
+          gap: 24px;
+          align-items: start;
         }
 
-        /* MOBILE POPUP POLISH - daha kompakt ve kullanışlı */
-        @media (max-width: 760px) {
-          .detail-modal {
-            width: calc(100vw - 18px);
-            max-height: 88vh;
-            border-radius: 22px;
-          }
+        .admin-sidebar {
+          position: sticky;
+          top: 24px;
+          min-height: calc(100vh - 48px);
+          border-radius: 32px;
+          padding: 24px;
+          background:
+            linear-gradient(180deg,#1f2937 0%,#111827 100%);
+          color: #fff;
+          box-shadow: 0 24px 60px rgba(15,23,42,0.22);
+        }
 
-          .detail-main-clean {
-            padding: 20px 16px 16px;
-          }
+        .admin-main {
+          display: flex;
+          flex-direction: column;
+          gap: 22px;
+        }
 
-          .detail-side-clean {
-            padding: 16px;
-          }
+        .admin-stats {
+          display: grid;
+          grid-template-columns: repeat(4,minmax(0,1fr));
+          gap: 18px;
+        }
 
-          .detail-company {
-            font-size: 15px;
-            margin-bottom: 8px;
-          }
+        .admin-stat-card,
+        .admin-stat {
+          border-radius: 28px;
+          background: #fff;
+          padding: 24px;
+          border: 1px solid rgba(15,23,42,0.06);
+          box-shadow: 0 16px 40px rgba(15,23,42,0.05);
+        }
 
-          .detail-title {
-            font-size: 28px;
-            line-height: 1.08;
-            margin-bottom: 12px;
-            letter-spacing: -0.04em;
-          }
+        .admin-stat strong,
+        .admin-stat-card strong {
+          display: block;
+          color: #111827;
+          font-size: 42px;
+          line-height: 1;
+          font-weight: 950;
+        }
 
-          .detail-summary {
-            font-size: 15px;
-            line-height: 1.65;
-            margin-bottom: 16px;
-          }
+        .admin-panel,
+        .admin-list-panel,
+        .admin-content-card {
+          border-radius: 32px;
+          background: #fff;
+          border: 1px solid rgba(15,23,42,0.06);
+          box-shadow: 0 18px 40px rgba(15,23,42,0.05);
+          overflow: hidden;
+        }
 
-          .detail-left-meta {
-            gap: 8px;
-            padding-bottom: 14px;
-            margin-bottom: 14px;
-          }
+        .admin-table-row {
+          display: grid;
+          grid-template-columns:
+            minmax(260px,1.3fr)
+            minmax(140px,0.7fr)
+            minmax(110px,0.5fr)
+            minmax(120px,0.6fr)
+            minmax(220px,0.8fr);
+          gap: 18px;
+          align-items: center;
+          padding: 22px 24px;
+          border-bottom: 1px solid rgba(15,23,42,0.06);
+        }
 
-          .detail-left-meta span {
-            font-size: 13px;
-            line-height: 1.35;
-          }
+        .admin-table-row:last-child {
+          border-bottom: none;
+        }
 
-          .detail-description-clean {
-            padding: 18px;
-            border-radius: 20px;
-          }
+        .admin-table-row.header {
+          background: #fafafa;
+          font-size: 13px;
+          font-weight: 900;
+          color: #6b7280;
+        }
 
-          .detail-description-title {
-            font-size: 17px;
-            margin-bottom: 12px;
-          }
+        .admin-job-title {
+          color: #111827;
+          font-size: 18px;
+          font-weight: 900;
+        }
 
-          .detail-description {
-            font-size: 14px;
-            line-height: 1.65;
-          }
+        .admin-job-sub {
+          color: #6b7280;
+          font-size: 13px;
+          font-weight: 700;
+        }
 
-          .detail-side-clean .detail-badge-row {
-            display: none;
-          }
+        .admin-status-pill {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 34px;
+          padding: 0 14px;
+          border-radius: 999px;
+          background: rgba(246,90,69,0.10);
+          color: #f65a45;
+          font-size: 12px;
+          font-weight: 900;
+        }
 
-          .compact-salary-card {
-            margin-top: 0;
-            padding: 20px;
-            border-radius: 20px;
-          }
+        .admin-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          justify-content: flex-end;
+        }
 
-          .detail-salary-label {
-            font-size: 13px;
-            margin-bottom: 8px;
-          }
+        .admin-actions button {
+          min-height: 38px;
+          border: none;
+          border-radius: 14px;
+          padding: 0 14px;
+          background: #f8fafc;
+          color: #233044;
+          font-size: 12px;
+          font-weight: 900;
+        }
 
-          .detail-salary {
-            font-size: 26px;
-            line-height: 1.12;
-            letter-spacing: -0.04em;
-          }
+        .admin-actions button:last-child {
+          background: rgba(239,68,68,0.10);
+          color: #ef4444;
+        }
 
-          .detail-salary-icon {
-            width: 44px;
-            height: 44px;
-          }
-
-          .detail-contact-box-left {
-            margin-top: 16px;
-            padding: 18px;
-            border-radius: 20px;
-          }
-
-          .detail-contact-title {
-            font-size: 17px;
-            margin-bottom: 14px;
-          }
-
-          .contact-item {
-            padding: 12px 0;
-            gap: 10px;
-          }
-
-          .contact-icon {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-          }
-
-          .contact-item span {
-            font-size: 11px;
-          }
-
-          .contact-item strong {
-            font-size: 14px;
-          }
-
-          .detail-contact-actions {
-            display: grid;
+        @media (max-width: 1100px) {
+          .admin-shell {
             grid-template-columns: 1fr;
-            gap: 10px;
-            margin-top: 14px;
           }
 
-          .detail-contact-btn {
-            width: 100%;
-            min-height: 46px;
-            border-radius: 16px;
-            font-size: 14px;
-            justify-content: center;
+          .admin-stats {
+            grid-template-columns: repeat(2,minmax(0,1fr));
           }
 
-          .clean-note {
-            font-size: 12px;
-            line-height: 1.55;
-            margin-top: 12px;
-          }
-        }
-
-        
-        /* MOBILE FOOTER POLISH */
-        @media (max-width: 760px) {
-          .footer-grid {
+          .admin-table-row {
+            grid-template-columns: 1fr;
             gap: 14px;
           }
 
-          .footer-column h4 {
-            margin-bottom: 10px;
-            font-size: 18px;
-          }
-
-          .footer-column a,
-          .footer-column button {
-            min-height: 30px;
-            font-size: 14px;
-          }
-
-          .footer-cta-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-          }
-
-          .footer-cta-card {
-            min-height: 74px;
-            padding: 12px;
-          }
-
-          .footer-bottom {
-            margin-top: 18px;
-            padding-top: 14px;
+          .admin-actions {
+            justify-content: flex-start;
           }
         }
-`}</style>
+
+        @media (max-width: 760px) {
+          .admin-stats {
+            grid-template-columns: 1fr;
+          }
+        }
+
+      `}</style>
 
       {isAdminRoute && (
         <div className="admin-page">
@@ -5113,10 +4844,7 @@ useEffect(() => {
                     <article className={`admin-table-row ${!isJobActive(job) ? "admin-expired" : ""}`} key={`${job.adminStatus}-${job.id}`}>
                       <div className="admin-table-title">
                         <strong>{job.title}</strong>
-                        <span>
-                          {job.company}
-                          {job.source === "demo" && <em className="demo-badge">Demo</em>}
-                        </span>
+                        <span>{job.company}</span>
                         <div className="admin-status-line">{job.adminStatus === "Onay Bekliyor" ? "Admin onayı bekliyor" : getDaysLeftLabel(job)}</div>
                       </div>
 
@@ -5272,7 +5000,7 @@ useEffect(() => {
                 </div>
 
                 <div className="post-field">
-                  <label>İlçe<span className="required-star">*</span></label>
+                  <label>İlçe / Konum<span className="required-star">*</span></label>
                   <input
                     className={errors.district ? "field-error" : ""}
                     name="district"
@@ -5285,43 +5013,6 @@ useEffect(() => {
                 </div>
 
                 <div className="post-field">
-                  <label>Mahalle<span className="required-star">*</span></label>
-                  <input
-                    className={errors.neighborhood ? "field-error" : ""}
-                    name="neighborhood"
-                    type="text"
-                    placeholder="Örn. Moda, Vişnelik, Osman Yılmaz"
-                    value={formData.neighborhood}
-                    onChange={handleFormChange}
-                  />
-                  {errors.neighborhood && <div className="error-text">{errors.neighborhood}</div>}
-                </div>
-
-                <div className="post-field">
-                  <label>Sokak / Cadde<span className="required-star">*</span></label>
-                  <input
-                    className={errors.street ? "field-error" : ""}
-                    name="street"
-                    type="text"
-                    placeholder="Örn. Bahariye Cad., Atatürk Bulvarı"
-                    value={formData.street}
-                    onChange={handleFormChange}
-                  />
-                  {errors.street && <div className="error-text">{errors.street}</div>}
-                </div>
-
-                <div className="post-field">
-                  <label>Kapı No</label>
-                  <input
-                    name="doorNo"
-                    type="text"
-                    placeholder="Örn. 12/A"
-                    value={formData.doorNo}
-                    onChange={handleFormChange}
-                  />
-                </div>
-
-                <div className="post-field">
                   <label>Çalışma tipi</label>
                   <select name="workType" value={formData.workType} onChange={handleFormChange}>
                     {types.filter((item) => item !== "Tümü").map((item) => (
@@ -5331,14 +5022,16 @@ useEffect(() => {
                 </div>
 
                 <div className="post-field full">
-                  <label>Ek adres tarifi</label>
+                  <label>İş adresi / buluşma noktası<span className="required-star">*</span></label>
                   <input
+                    className={errors.workAddress ? "field-error" : ""}
                     name="workAddress"
                     type="text"
-                    placeholder="Örn. AVM önü, depo giriş kapısı, arka kapı"
+                    placeholder="Örn. Kadıköy / Moda, AVM önü, depo giriş kapısı"
                     value={formData.workAddress}
                     onChange={handleFormChange}
                   />
+                  {errors.workAddress && <div className="error-text">{errors.workAddress}</div>}
                 </div>
 
                 <div className="post-field">
@@ -5547,26 +5240,6 @@ useEffect(() => {
                       <span className="contact-icon">⌖</span>
                       <div><span>Adres</span><strong>{selectedJob.workAddress || selectedJob.location}</strong></div>
                     </div>
-
-                    <div className="detail-contact-actions">
-                      <a
-                        className="detail-contact-btn whatsapp"
-                        href={getWhatsappHref(selectedJob.contactPhone, selectedJob)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        WhatsApp'tan Yaz
-                      </a>
-                      <a
-                        className="detail-contact-btn map"
-                        href={getMapHref(selectedJob)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Haritada Aç
-                      </a>
-                    </div>
-
                     <p className="detail-apply-note clean-note">
                       Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
                     </p>
