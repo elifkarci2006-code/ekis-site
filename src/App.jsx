@@ -4710,6 +4710,162 @@ useEffect(() => {
           }
         }
 
+        /* REAL ADMIN REDESIGN PATCH */
+        .admin-shell {
+          display: grid;
+          grid-template-columns: 280px minmax(0,1fr);
+          gap: 24px;
+          align-items: start;
+        }
+
+        .admin-sidebar {
+          position: sticky;
+          top: 24px;
+          border-radius: 32px;
+          padding: 24px;
+          background: linear-gradient(180deg,#1f2937 0%,#111827 100%);
+          color: #fff;
+          min-height: calc(100vh - 48px);
+          box-shadow: 0 24px 60px rgba(15,23,42,0.22);
+        }
+
+        .admin-main {
+          display: flex;
+          flex-direction: column;
+          gap: 22px;
+        }
+
+        .admin-main h1,
+        .admin-panel-title {
+          font-size: 42px;
+          line-height: 1;
+          letter-spacing: -0.05em;
+          font-weight: 950;
+          color: #111827;
+        }
+
+        .admin-stats {
+          display: grid;
+          grid-template-columns: repeat(4,minmax(0,1fr));
+          gap: 18px;
+        }
+
+        .admin-stat {
+          border-radius: 28px;
+          background: #fff;
+          border: 1px solid rgba(15,23,42,0.06);
+          box-shadow: 0 16px 40px rgba(15,23,42,0.05);
+          padding: 24px;
+        }
+
+        .admin-stat strong {
+          display: block;
+          margin-top: 10px;
+          font-size: 48px;
+          line-height: 1;
+          font-weight: 950;
+          color: #111827;
+        }
+
+        .admin-panel,
+        .admin-main-card,
+        .admin-list-card {
+          border-radius: 32px;
+          background: #fff;
+          border: 1px solid rgba(15,23,42,0.06);
+          box-shadow: 0 18px 40px rgba(15,23,42,0.05);
+        }
+
+        .admin-table-row {
+          display: grid;
+          grid-template-columns:
+            minmax(260px,1.3fr)
+            minmax(140px,0.7fr)
+            minmax(110px,0.5fr)
+            minmax(120px,0.6fr)
+            minmax(240px,0.9fr);
+          gap: 18px;
+          align-items: center;
+          padding: 22px 24px;
+          border-bottom: 1px solid rgba(15,23,42,0.06);
+        }
+
+        .admin-table-row.header {
+          background: #fafafa;
+          color: #6b7280;
+          font-size: 13px;
+          font-weight: 900;
+        }
+
+        .admin-table-row:last-child {
+          border-bottom: none;
+        }
+
+        .admin-job-pill {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 34px;
+          padding: 0 14px;
+          border-radius: 999px;
+          background: rgba(246,90,69,0.10);
+          color: #f65a45;
+          font-size: 12px;
+          font-weight: 900;
+        }
+
+        .admin-row-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          justify-content: flex-end;
+        }
+
+        .admin-row-actions button {
+          min-height: 38px;
+          border: none;
+          border-radius: 14px;
+          padding: 0 14px;
+          background: #f8fafc;
+          color: #233044;
+          font-size: 12px;
+          font-weight: 900;
+        }
+
+        .admin-row-actions button:last-child {
+          background: rgba(239,68,68,0.10);
+          color: #ef4444;
+        }
+
+        @media (max-width: 1100px) {
+          .admin-shell {
+            grid-template-columns: 1fr;
+          }
+
+          .admin-sidebar {
+            position: static;
+            min-height: auto;
+          }
+
+          .admin-stats {
+            grid-template-columns: repeat(2,minmax(0,1fr));
+          }
+
+          .admin-table-row {
+            grid-template-columns: 1fr;
+          }
+
+          .admin-row-actions {
+            justify-content: flex-start;
+          }
+        }
+
+        @media (max-width: 760px) {
+          .admin-stats {
+            grid-template-columns: 1fr;
+          }
+        }
+
       `}</style>
 
       {isAdminRoute && (
@@ -4784,8 +4940,8 @@ useEffect(() => {
               </div>
             </div>
 
-            <div className="admin-compact-layout">
-              <aside className="admin-side">
+            <div className="admin-shell">
+              <aside className="admin-sidebar">
                 <h2 className="admin-side-title">Hızlı İşlemler</h2>
                 <div className="admin-side-list">
                   <button className="admin-side-item" type="button">
@@ -4806,7 +4962,7 @@ useEffect(() => {
                 </div>
               </aside>
 
-              <section className="admin-main-panel">
+              <section className="admin-main">
                 <div className="admin-main-head">
                   <h2>Tüm İlanlar</h2>
                   <span className="admin-badge">{adminJobs.length} kayıt</span>
@@ -4854,7 +5010,7 @@ useEffect(() => {
                         <span className="admin-badge">{job.adminStatus === "Onay Bekliyor" ? "Onay bekliyor" : isJobActive(job) ? job.adminStatus : "Süresi doldu"}</span>
                       </div>
 
-                      <div className="admin-table-actions">
+                      <div className="admin-row-actions">
                         <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
                           Detay
                         </button>
