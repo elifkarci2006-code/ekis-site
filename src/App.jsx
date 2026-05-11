@@ -1816,7 +1816,13 @@ useEffect(() => {
     };
 
     setPendingJobs((prev) => [reviewJob, ...prev]);
-
+setAdminNotifications((prev) => [
+  {
+    id: Date.now(),
+    text: `Yeni ilan: ${newJob.title}`,
+  },
+  ...prev,
+]);
     if (selectedPlan === "featured") {
       window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     }
