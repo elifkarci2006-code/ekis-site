@@ -1504,6 +1504,7 @@ useEffect(() => {
       type: job.plan_type === "featured" ? "Öne Çıkan" : "Standart",
       description: job.description,
       contactPhone: job.phone,
+      email: job.email || "",
       createdAt: job.created_at,
       category: "Genel",
       status: job.status || "pending",
@@ -1669,6 +1670,7 @@ useEffect(() => {
         workAddress: "",
         contactName: "",
         contactPhone: "",
+        email: "",
         captchaAnswer: "",
       });
       setCaptcha(generateCaptchaQuestion());
@@ -1699,6 +1701,14 @@ useEffect(() => {
       nextErrors.contactPhone = "Lütfen gerçek bir telefon numarası giriniz.";
     } else if (duplicatePhoneCount >= 3) {
       nextErrors.contactPhone = "Bu numara ile çok fazla ilan girilmiş. Lütfen farklı bir numara kullanın.";
+    }
+
+    const emailValue = formData.email.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailValue) {
+      nextErrors.email = "E-posta adresi zorunludur.";
+    } else if (!emailPattern.test(emailValue)) {
+      nextErrors.email = "Geçerli bir e-posta adresi giriniz.";
     }
 
     if (!formData.salary.trim()) nextErrors.salary = "Ücret bilgisi zorunludur.";
@@ -1776,6 +1786,7 @@ useEffect(() => {
     workAddress: toTitleCase(formData.workAddress),
     contactName: toTitleCase(formData.contactName),
     contactPhone: formData.contactPhone.trim(),
+    email: formData.email.trim(),
     status: "active",
     durationDays: selectedPlan === "featured" ? 15 : 30,
     createdAt: new Date().toISOString(),
@@ -1799,7 +1810,7 @@ useEffect(() => {
       salary: pendingJob.salary,
       description: pendingJob.description,
       phone: pendingJob.contactPhone,
-            email: pendingJob.email,
+      email: pendingJob.email,
       plan_type: selectedPlan === "featured" ? "featured" : "normal",
       status: "pending",
       expires_at: new Date(
@@ -1837,6 +1848,37 @@ useEffect(() => {
 
     setPendingJobs((prev) => [reviewJob, ...prev]);
 
+    try {
+      await fetch(
+        "https://zybqjnoeslzniwhecrrn.supabase.co/functions/v1/send-mail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            to: "ekissosyal@gmail.com",
+            subject: "Yeni ilan geldi 🎉",
+            html: `
+              <div style="font-family:Arial;padding:24px;line-height:1.6;color:#233044;">
+                <h2 style="margin:0 0 16px;color:#f65a45;">Ekiş - Yeni İlan</h2>
+                <p><strong>Firma:</strong> ${reviewJob.company}</p>
+                <p><strong>İlan:</strong> ${reviewJob.title}</p>
+                <p><strong>Konum:</strong> ${reviewJob.location}</p>
+                <p><strong>Çalışma tipi:</strong> ${reviewJob.type}</p>
+                <p><strong>Ücret:</strong> ${reviewJob.salary}</p>
+                <p><strong>Telefon:</strong> ${reviewJob.contactPhone}</p>
+                <p><strong>E-posta:</strong> ${reviewJob.email}</p>
+                <p style="margin-top:18px;">Admin panelinden onay bekliyor.</p>
+              </div>
+            `,
+          }),
+        }
+      );
+    } catch (error) {
+      console.error("Admin bildirim maili gönderilemedi:", error);
+    }
+
     if (selectedPlan === "featured") {
       window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     }
@@ -1860,6 +1902,7 @@ useEffect(() => {
       workAddress: "",
       contactName: "",
       contactPhone: "",
+      email: "",
       captchaAnswer: "",
     });
 
@@ -5374,12 +5417,14 @@ if (job.plan === "featured") {
                   <label>E-posta adresi</label>
 
                   <input
+                    className={errors.email ? "field-error" : ""}
                     type="email"
                     name="email"
                     placeholder="ornek@mail.com"
                     value={formData.email}
                     onChange={handleFormChange}
                   />
+                  {errors.email && <div className="error-text">{errors.email}</div>}
                 </div>
 
                 <div className="captcha-box">
