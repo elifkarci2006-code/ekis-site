@@ -3,7 +3,7 @@ import { supabase } from "./supabaseClient";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 const PALETTE = {
-  coral: "#E45D50",
+  coral: "#f65a45",
   sage: "#9BC78F",
   aqua: "#76BFBE",
   teal: "#58ADAD",
