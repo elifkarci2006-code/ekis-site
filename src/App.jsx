@@ -1847,7 +1847,31 @@ useEffect(() => {
     };
 
     setPendingJobs((prev) => [reviewJob, ...prev]);
-
+try {
+  await fetch("https://zybqjnoeslzniwhecrrn.supabase.co/functions/v1/send-mail", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      to: "ekissosyal@gmail.com",
+      subject: "Yeni ilan geldi 🎉",
+      html: `
+        <div style="font-family:Arial;padding:24px;">
+          <h2>Yeni ilan geldi</h2>
+          <p><strong>Firma:</strong> ${reviewJob.company}</p>
+          <p><strong>İlan:</strong> ${reviewJob.title}</p>
+          <p><strong>Konum:</strong> ${reviewJob.location}</p>
+          <p><strong>Tip:</strong> ${reviewJob.type}</p>
+          <p><strong>Telefon:</strong> ${reviewJob.contactPhone}</p>
+          <p><strong>E-posta:</strong> ${reviewJob.email || "Belirtilmedi"}</p>
+        </div>
+      `,
+    }),
+  });
+} catch (error) {
+  console.error("Admin maili gönderilemedi:", error);
+}
     try {
       await fetch(
         "https://zybqjnoeslzniwhecrrn.supabase.co/functions/v1/send-mail",
