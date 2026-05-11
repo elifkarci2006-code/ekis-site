@@ -1474,6 +1474,7 @@ export default function App() {
     contactName: "",
     contactPhone: "",
     captchaAnswer: "",
+    email: "",
   });
 useEffect(() => {
   const fetchJobs = async () => {
