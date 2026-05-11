@@ -1446,6 +1446,7 @@ export default function App() {
   const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
   const [pendingJobs, setPendingJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [adminNotifications, setAdminNotifications] = useState([]);
   const [errors, setErrors] = useState({});
   const [infoModal, setInfoModal] = useState(null);
   const [isAdminRoute, setIsAdminRoute] = useState(false);
@@ -1549,6 +1550,62 @@ useEffect(() => {
     window.addEventListener("hashchange", syncAdminRoute);
     return () => window.removeEventListener("hashchange", syncAdminRoute);
   }, []);
+
+
+  useEffect(() => {
+    const expireJobs = async () => {
+      const now = new Date();
+
+      const expireList = (list) =>
+        list.map((job) => {
+          const expireDate = getJobExpireDate(job);
+          const shouldExpire =
+            expireDate <= now &&
+            job.status !== "passive" &&
+            job.adminStatus !== "Süresi Doldu";
+
+          if (!shouldExpire) return job;
+
+          return {
+            ...job,
+            status: "passive",
+            adminStatus: "Süresi Doldu",
+          };
+        });
+
+      setJobs((prev) => expireList(prev));
+      setFeaturedJobs((prev) => expireList(prev));
+
+      const expiredDbJobs = [...jobs, ...featuredJobs].filter((job) => {
+        if (!job.dbId) return false;
+        return getJobExpireDate(job) <= now && job.status !== "passive";
+      });
+
+      if (expiredDbJobs.length > 0) {
+        await Promise.all(
+          expiredDbJobs.map((job) =>
+            supabase
+              .from("job_posts")
+              .update({ status: "passive" })
+              .eq("id", job.dbId)
+          )
+        );
+
+        setAdminNotifications((prev) => [
+          {
+            id: Date.now(),
+            text: `${expiredDbJobs.length} ilanın süresi doldu ve pasife alındı.`,
+          },
+          ...prev,
+        ]);
+      }
+    };
+
+    expireJobs();
+    const interval = setInterval(expireJobs, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [jobs, featuredJobs]);
 
   const goHome = () => {
     setIsAdminRoute(false);
@@ -1892,7 +1949,15 @@ useEffect(() => {
 
     setPendingJobs((prev) => prev.filter((item) => item.id !== job.id));
 
-    if (job.plan === "featured") {
+    
+    setAdminNotifications((prev) => [
+      {
+        id: Date.now(),
+        text: `${job.title} yayına alındı.`,
+      },
+      ...prev,
+    ]);
+if (job.plan === "featured") {
       setFeaturedJobs((prev) => [approvedJob, ...prev]);
     } else {
       setJobs((prev) => [approvedJob, ...prev]);
@@ -4816,6 +4881,52 @@ useEffect(() => {
           }
         }
 
+        /* ADMIN AUTOMATION NOTIFICATIONS */
+        .admin-notification-box {
+          min-width: 260px;
+          max-width: 360px;
+          border-radius: 22px;
+          padding: 16px;
+          background: #fff;
+          border: 1px solid rgba(60,74,95,0.08);
+          box-shadow: 0 12px 28px rgba(60,74,95,0.06);
+        }
+
+        .admin-notification-box strong {
+          display: block;
+          margin-bottom: 12px;
+          color: #233044;
+          font-size: 15px;
+          font-weight: 950;
+        }
+
+        .admin-notification-box span {
+          color: #7A8798;
+          font-size: 13px;
+          font-weight: 800;
+        }
+
+        .admin-notification-item {
+          min-height: 42px;
+          border-radius: 14px;
+          padding: 10px 12px;
+          margin-bottom: 8px;
+          background: rgba(246,90,69,0.08);
+          color: #f65a45;
+          display: flex;
+          align-items: center;
+          font-size: 13px;
+          font-weight: 900;
+          line-height: 1.35;
+        }
+
+        @media (max-width: 1180px) {
+          .admin-notification-box {
+            width: 100%;
+            max-width: none;
+          }
+        }
+
       `}</style>
 
       {isAdminRoute && (
@@ -4860,6 +4971,19 @@ useEffect(() => {
                 />
                 <h1>Admin Paneli</h1>
                 <p>Daha sade yönetim ekranı: ilanları tek listeden kontrol et.</p>
+              </div>
+
+              <div className="admin-notification-box">
+                <strong>Bildirimler</strong>
+                {adminNotifications.length === 0 ? (
+                  <span>Yeni bildirim yok</span>
+                ) : (
+                  adminNotifications.slice(0, 4).map((item) => (
+                    <div className="admin-notification-item" key={item.id}>
+                      {item.text}
+                    </div>
+                  ))
+                )}
               </div>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <button className="btn btn-secondary" type="button" onClick={handleAdminLogout}>
