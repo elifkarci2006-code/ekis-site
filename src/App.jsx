@@ -305,187 +305,8 @@ const jobsSeed = [
     description:
       "Online sipariş paketleme süreçlerinde görev alacak ekip arkadaşı aranıyor.",
     createdAt: "2026-05-08T10:00:00",
-  },
-  {
-    id: 27,
-    title: "Etkinlik Kurulum Elemanı",
-    company: "Sahne Plus",
-    location: "İstanbul / Maslak",
-    salary: "Günlük 1.600 TL",
-    type: "Günlük",
-    category: "Etkinlik & Organizasyon",
-    workAddress: "İstanbul / Maslak",
-    contactName: "Sahne Plus",
-    contactPhone: "0555 909 90 90",
-    description:
-      "Etkinlik alanı kurulum, masa-sandalye düzeni ve yönlendirme süreçlerinde destek olacak personel aranıyor.",
-    createdAt: "2026-05-07T13:00:00",
-  },
-  {
-    id: 28,
-    title: "AVM Stand Satış Destek",
-    company: "Viva Stand",
-    location: "Ankara / Yenimahalle",
-    salary: "Günlük 1.300 TL + prim",
-    type: "Günlük",
-    category: "Satış & Mağaza",
-    workAddress: "Ankara / Yenimahalle",
-    contactName: "Viva Stand",
-    contactPhone: "0555 111 00 28",
-    description:
-      "AVM standında ürün tanıtımı ve müşteri yönlendirmesi yapacak ekip arkadaşı aranıyor.",
-    createdAt: "2026-05-07T09:00:00",
-  },
-  {
-    id: 29,
-    title: "Motorlu Kurye",
-    company: "Lezzet Paket",
-    location: "İstanbul / Üsküdar",
-    salary: "Saatlik 230 TL + prim",
-    type: "Saatlik",
-    category: "Kurye & Dağıtım",
-    workAddress: "İstanbul / Üsküdar",
-    contactName: "Lezzet Paket",
-    contactPhone: "0555 111 00 29",
-    description:
-      "Akşam yoğun saatlerinde teslimat yapabilecek motorlu kurye aranıyor.",
-    createdAt: "2026-05-06T18:00:00",
-  },
-  {
-    id: 30,
-    title: "Part Time Kasiyer",
-    company: "Mini Market",
-    location: "Eskişehir / Odunpazarı",
-    salary: "Part Time 11.000 TL / ay",
-    type: "Part Time",
-    category: "Satış & Mağaza",
-    workAddress: "Eskişehir / Odunpazarı",
-    contactName: "Mini Market",
-    contactPhone: "0555 111 00 30",
-    description:
-      "Akşam vardiyasında kasa ve reyon desteği verecek part time personel aranıyor.",
-    createdAt: "2026-05-06T11:00:00",
-  },
-  {
-    id: 31,
-    title: "Otel Kat Görevlisi",
-    company: "Mira Hotel",
-    location: "Antalya / Muratpaşa",
-    salary: "Günlük 1.250 TL",
-    type: "Günlük",
-    category: "Temizlik",
-    workAddress: "Antalya / Muratpaşa",
-    contactName: "Mira Hotel",
-    contactPhone: "0555 111 00 31",
-    description:
-      "Otel oda düzeni ve genel temizlik süreçlerinde çalışacak ekip arkadaşı aranıyor.",
-    createdAt: "2026-05-05T14:00:00",
-  },
-  {
-    id: 32,
-    title: "Ofis Evrak Destek",
-    company: "Atlas Danışmanlık",
-    location: "Ankara / Kızılay",
-    salary: "Saatlik 170 TL",
-    type: "Saatlik",
-    category: "Ofis & Yardımcı İşler",
-    workAddress: "Ankara / Kızılay",
-    contactName: "Atlas Danışmanlık",
-    contactPhone: "0555 111 00 32",
-    description:
-      "Dosyalama, çıktı alma ve temel ofis düzenine destek verecek ekip arkadaşı aranıyor.",
-    createdAt: "2026-05-05T10:00:00",
-  },
-  {
-    id: 33,
-    title: "Kahve Barı Yardımcısı",
-    company: "Roast House",
-    location: "İstanbul / Ataşehir",
-    salary: "Part Time 13.500 TL / ay",
-    type: "Part Time",
-    category: "Kafe & Restoran",
-    workAddress: "İstanbul / Ataşehir",
-    contactName: "Roast House",
-    contactPhone: "0555 111 00 33",
-    description:
-      "Kahve hazırlık ve servis süreçlerinde destek olacak ekip arkadaşı aranıyor.",
-    createdAt: "2026-05-04T17:00:00",
-  },
-  {
-    id: 34,
-    title: "Kısa Süreli Taşıma Destek",
-    company: "Kolay Nakliye",
-    location: "Bursa / Nilüfer",
-    salary: "Günlük 1.500 TL",
-    type: "Günlük",
-    category: "Diger",
-    workAddress: "Bursa / Nilüfer",
-    contactName: "Kolay Nakliye",
-    contactPhone: "0555 111 00 34",
-    description:
-      "Kısa süreli taşıma ve yükleme desteği verecek fiziksel çalışmaya uygun personel aranıyor.",
-    createdAt: "2026-05-04T09:00:00",
-  },
-  {
-    id: 35,
-    title: "Sosyal Medya İçerik Destek",
-    company: "Pixel Studio",
-    location: "Uzaktan / Türkiye",
-    salary: "Part Time 12.000 TL / ay",
-    type: "Part Time",
-    category: "Freelance / Dijital",
-    workAddress: "Uzaktan / Türkiye",
-    contactName: "Pixel Studio",
-    contactPhone: "0555 111 00 35",
-    description:
-      "Basit içerik planı, görsel düzenleme ve paylaşım hazırlığına destek olacak ekip arkadaşı aranıyor.",
-    createdAt: "2026-05-03T12:00:00",
-  },
-  {
-    id: 36,
-    title: "Depo Etiketleme Elemanı",
-    company: "Rafline",
-    location: "İzmir / Gaziemir",
-    salary: "Saatlik 180 TL",
-    type: "Saatlik",
-    category: "Depo & Lojistik",
-    workAddress: "İzmir / Gaziemir",
-    contactName: "Rafline",
-    contactPhone: "0555 111 00 36",
-    description:
-      "Ürün etiketleme, kutu düzenleme ve sevkiyat hazırlığında görev alacak personel aranıyor.",
-    createdAt: "2026-05-03T09:00:00",
-  },
-  {
-    id: 37,
-    title: "Restoran Komi",
-    company: "Anadolu Lezzet",
-    location: "Ankara / Bahçelievler",
-    salary: "Günlük 1.150 TL + yemek",
-    type: "Günlük",
-    category: "Kafe & Restoran",
-    workAddress: "Ankara / Bahçelievler",
-    contactName: "Anadolu Lezzet",
-    contactPhone: "0555 111 00 37",
-    description:
-      "Servis öncesi hazırlık ve masa düzenine destek olacak komi aranıyor.",
-    createdAt: "2026-05-02T15:00:00",
-  },
-  {
-    id: 38,
-    title: "Promosyon Dağıtım Elemanı",
-    company: "Aktif Tanıtım",
-    location: "Eskişehir / Tepebaşı",
-    salary: "Saatlik 160 TL",
-    type: "Saatlik",
-    category: "Diger",
-    workAddress: "Eskişehir / Tepebaşı",
-    contactName: "Aktif Tanıtım",
-    contactPhone: "0555 111 00 38",
-    description:
-      "Belirlenen noktalarda broşür ve promosyon dağıtımı yapacak personel aranıyor.",
-    createdAt: "2026-05-02T10:00:00",
   }
+
 ];
 
 const categories = [
@@ -1783,7 +1604,6 @@ useEffect(() => {
       .from("job_posts")
       .select("*")
       .neq("status", "rejected")
-      .neq("status", "passive")
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -1878,24 +1698,21 @@ useEffect(() => {
       const now = new Date();
 
       const expireList = (list) =>
-        list
-          .map((job) => {
-            const expireDate = getJobExpireDate(job);
-            const shouldExpire =
-              expireDate <= now &&
-              job.status !== "passive" &&
-              job.adminStatus !== "Süresi Doldu";
+        list.map((job) => {
+          const expireDate = getJobExpireDate(job);
+          const shouldExpire =
+            expireDate <= now &&
+            job.status !== "passive" &&
+            job.adminStatus !== "Süresi Doldu";
 
-            if (!shouldExpire) return job;
+          if (!shouldExpire) return job;
 
-            return {
-              ...job,
-              status: "passive",
-              adminStatus: "Süresi Doldu",
-            };
-          })
-          // Süresi biten / pasif ilanlar admin panelden ve listelerden kaldırılır
-          .filter((job) => isJobActive(job));
+          return {
+            ...job,
+            status: "passive",
+            adminStatus: "Süresi Doldu",
+          };
+        });
 
       setJobs((prev) => expireList(prev));
       setFeaturedJobs((prev) => expireList(prev));
@@ -5346,19 +5163,19 @@ if (job.plan === "featured") {
             <div className="admin-stats">
               <div className="admin-stat">
                 <span>Toplam ilan</span>
-                <strong>{jobs.filter(isJobActive).length + featuredJobs.filter(isJobActive).length + pendingJobs.filter(isJobActive).length}</strong>
+                <strong>{jobs.length + featuredJobs.length + pendingJobs.length}</strong>
               </div>
               <div className="admin-stat">
                 <span>Standart ilan</span>
-                <strong>{jobs.filter(isJobActive).length}</strong>
+                <strong>{jobs.length}</strong>
               </div>
               <div className="admin-stat">
                 <span>Ekiş Acil</span>
-                <strong>{featuredJobs.filter(isJobActive).length}</strong>
+                <strong>{featuredJobs.length}</strong>
               </div>
               <div className="admin-stat">
                 <span>Bekleyen işlem</span>
-                <strong>{pendingJobs.filter(isJobActive).length}</strong>
+                <strong>{pendingJobs.length}</strong>
               </div>
             </div>
 
@@ -5367,16 +5184,16 @@ if (job.plan === "featured") {
                 <h2 className="admin-side-title">Hızlı İşlemler</h2>
                 <div className="admin-side-list">
                   <button className="admin-side-item" type="button">
-                    Toplam ilan <span>{jobs.filter(isJobActive).length + featuredJobs.filter(isJobActive).length + pendingJobs.filter(isJobActive).length}</span>
+                    Toplam ilan <span>{jobs.length + featuredJobs.length + pendingJobs.length}</span>
                   </button>
                   <button className="admin-side-item" type="button" onClick={() => setAdminFilter("pending")}>
-                    Onay bekleyen <span>{pendingJobs.filter(isJobActive).length}</span>
+                    Onay bekleyen <span>{pendingJobs.length}</span>
                   </button>
                   <button className="admin-side-item" type="button">
-                    Ekiş Acil <span>{featuredJobs.filter(isJobActive).length}</span>
+                    Ekiş Acil <span>{featuredJobs.length}</span>
                   </button>
                   <button className="admin-side-item" type="button">
-                    Standart ilan <span>{jobs.filter(isJobActive).length}</span>
+                    Standart ilan <span>{jobs.length}</span>
                   </button>
                   <button className="admin-side-item" type="button" onClick={() => setShowForm(true)}>
                     Yeni ilan ekle <span>+</span>
