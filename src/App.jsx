@@ -4808,6 +4808,144 @@ useEffect(() => {
           }
         }
 
+        /* MOBILE POPUP POLISH - daha kompakt ve kullanışlı */
+        @media (max-width: 760px) {
+          .detail-modal {
+            width: calc(100vw - 18px);
+            max-height: 88vh;
+            border-radius: 22px;
+          }
+
+          .detail-main-clean {
+            padding: 20px 16px 16px;
+          }
+
+          .detail-side-clean {
+            padding: 16px;
+          }
+
+          .detail-company {
+            font-size: 15px;
+            margin-bottom: 8px;
+          }
+
+          .detail-title {
+            font-size: 28px;
+            line-height: 1.08;
+            margin-bottom: 12px;
+            letter-spacing: -0.04em;
+          }
+
+          .detail-summary {
+            font-size: 15px;
+            line-height: 1.65;
+            margin-bottom: 16px;
+          }
+
+          .detail-left-meta {
+            gap: 8px;
+            padding-bottom: 14px;
+            margin-bottom: 14px;
+          }
+
+          .detail-left-meta span {
+            font-size: 13px;
+            line-height: 1.35;
+          }
+
+          .detail-description-clean {
+            padding: 18px;
+            border-radius: 20px;
+          }
+
+          .detail-description-title {
+            font-size: 17px;
+            margin-bottom: 12px;
+          }
+
+          .detail-description {
+            font-size: 14px;
+            line-height: 1.65;
+          }
+
+          .detail-side-clean .detail-badge-row {
+            display: none;
+          }
+
+          .compact-salary-card {
+            margin-top: 0;
+            padding: 20px;
+            border-radius: 20px;
+          }
+
+          .detail-salary-label {
+            font-size: 13px;
+            margin-bottom: 8px;
+          }
+
+          .detail-salary {
+            font-size: 26px;
+            line-height: 1.12;
+            letter-spacing: -0.04em;
+          }
+
+          .detail-salary-icon {
+            width: 44px;
+            height: 44px;
+          }
+
+          .detail-contact-box-left {
+            margin-top: 16px;
+            padding: 18px;
+            border-radius: 20px;
+          }
+
+          .detail-contact-title {
+            font-size: 17px;
+            margin-bottom: 14px;
+          }
+
+          .contact-item {
+            padding: 12px 0;
+            gap: 10px;
+          }
+
+          .contact-icon {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+          }
+
+          .contact-item span {
+            font-size: 11px;
+          }
+
+          .contact-item strong {
+            font-size: 14px;
+          }
+
+          .detail-contact-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 14px;
+          }
+
+          .detail-contact-btn {
+            width: 100%;
+            min-height: 46px;
+            border-radius: 16px;
+            font-size: 14px;
+            justify-content: center;
+          }
+
+          .clean-note {
+            font-size: 12px;
+            line-height: 1.55;
+            margin-top: 12px;
+          }
+        }
+
       `}</style>
 
       {isAdminRoute && (
