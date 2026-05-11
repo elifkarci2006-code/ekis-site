@@ -1473,8 +1473,8 @@ export default function App() {
     workAddress: "",
     contactName: "",
     contactPhone: "",
-    captchaAnswer: "",
     email: "",
+    captchaAnswer: "",
   });
 useEffect(() => {
   const fetchJobs = async () => {
@@ -1799,6 +1799,7 @@ useEffect(() => {
       salary: pendingJob.salary,
       description: pendingJob.description,
       phone: pendingJob.contactPhone,
+            email: pendingJob.email,
       plan_type: selectedPlan === "featured" ? "featured" : "normal",
       status: "pending",
       expires_at: new Date(
@@ -1832,35 +1833,10 @@ useEffect(() => {
       status: "pending",
       paymentStatus: selectedPlan === "featured" ? "pending" : "not_required",
       submittedAt: new Date().toISOString(),
-      email: formData.email,
     };
 
     setPendingJobs((prev) => [reviewJob, ...prev]);
-try {
-  await fetch(
-    "https://zybqjnoeslzniwhecrrn.supabase.co/functions/v1/send-mail",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        to: "nkarci95@gmail.com",
-        subject: "Yeni ilan geldi 🎉",
-        html: `
-          <h2>Yeni ilan gönderildi</h2>
 
-          <p><strong>Firma:</strong> ${reviewJob.company}</p>
-          <p><strong>İlan:</strong> ${reviewJob.title}</p>
-          <p><strong>Konum:</strong> ${reviewJob.location}</p>
-          <p><strong>Tip:</strong> ${reviewJob.type}</p>
-        `,
-      }),
-    }
-  );
-} catch (error) {
-  console.error("Mail gönderilemedi:", error);
-}
     if (selectedPlan === "featured") {
       window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     }
@@ -2006,6 +1982,47 @@ if (job.plan === "featured") {
     } else {
       setJobs((prev) => [approvedJob, ...prev]);
     }
+
+    try {
+      if (job.email) {
+        await fetch(
+          "https://zybqjnoeslzniwhecrrn.supabase.co/functions/v1/send-mail",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              to: job.email,
+              subject: "İlanınız Yayına Alındı 🎉",
+              html: `
+                <div style="font-family:Arial;padding:24px;">
+                  <h2>Ekiş</h2>
+
+                  <p>Merhaba 👋</p>
+
+                  <p>
+                    <strong>${job.title}</strong>
+                    ilanınız yayına alınmıştır.
+                  </p>
+
+                  <p>
+                    İlanınız artık Ekiş üzerinde görüntülenebilir.
+                  </p>
+
+                  <br />
+
+                  <p>Teşekkürler 🙌</p>
+                </div>
+              `,
+            }),
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Onay maili gönderilemedi:", error);
+    }
+
   };
 
   const rejectPendingJob = async (jobId) => {
@@ -5350,7 +5367,24 @@ if (job.plan === "featured") {
                     value={formData.contactPhone}
                     onChange={handleFormChange}
                   />
-                  {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>}
+                  {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>
+
+                <div className="field">
+                  <label>E-posta adresi</label>
+
+                  <input
+                    type="email"
+                    placeholder="ornek@mail.com"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+}
                 </div>
 
                 <div className="captcha-box">
