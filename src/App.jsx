@@ -1832,6 +1832,7 @@ useEffect(() => {
       status: "pending",
       paymentStatus: selectedPlan === "featured" ? "pending" : "not_required",
       submittedAt: new Date().toISOString(),
+      email: formData.email,
     };
 
     setPendingJobs((prev) => [reviewJob, ...prev]);
