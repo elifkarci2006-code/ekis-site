@@ -4549,231 +4549,76 @@ useEffect(() => {
           .admin-table-actions { justify-content: flex-start; }
         }
 
-        /* =========================
-           ADMIN V2 HYBRID REDESIGN
-        ========================= */
-
-        .admin-shell {
-          display: grid;
-          grid-template-columns: 280px minmax(0, 1fr);
-          gap: 24px;
-          align-items: start;
-        }
-
-        .admin-sidebar {
-          position: sticky;
-          top: 24px;
-          min-height: calc(100vh - 48px);
-          border-radius: 32px;
-          padding: 24px;
-          background:
-            linear-gradient(180deg,#1f2937 0%,#111827 100%);
-          color: #fff;
-          box-shadow: 0 24px 60px rgba(15,23,42,0.22);
-        }
-
-        .admin-main {
-          display: flex;
-          flex-direction: column;
-          gap: 22px;
-        }
-
-        .admin-stats {
-          display: grid;
-          grid-template-columns: repeat(4,minmax(0,1fr));
-          gap: 18px;
-        }
-
-        .admin-stat-card,
-        .admin-stat {
-          border-radius: 28px;
-          background: #fff;
-          padding: 24px;
-          border: 1px solid rgba(15,23,42,0.06);
-          box-shadow: 0 16px 40px rgba(15,23,42,0.05);
-        }
-
-        .admin-stat strong,
-        .admin-stat-card strong {
-          display: block;
-          color: #111827;
-          font-size: 42px;
-          line-height: 1;
-          font-weight: 950;
-        }
-
-        .admin-panel,
-        .admin-list-panel,
-        .admin-content-card {
-          border-radius: 32px;
-          background: #fff;
-          border: 1px solid rgba(15,23,42,0.06);
-          box-shadow: 0 18px 40px rgba(15,23,42,0.05);
-          overflow: hidden;
-        }
-
-        .admin-table-row {
-          display: grid;
-          grid-template-columns:
-            minmax(260px,1.3fr)
-            minmax(140px,0.7fr)
-            minmax(110px,0.5fr)
-            minmax(120px,0.6fr)
-            minmax(220px,0.8fr);
-          gap: 18px;
-          align-items: center;
-          padding: 22px 24px;
-          border-bottom: 1px solid rgba(15,23,42,0.06);
-        }
-
-        .admin-table-row:last-child {
-          border-bottom: none;
-        }
-
-        .admin-table-row.header {
-          background: #fafafa;
-          font-size: 13px;
-          font-weight: 900;
-          color: #6b7280;
-        }
-
-        .admin-job-title {
-          color: #111827;
-          font-size: 18px;
-          font-weight: 900;
-        }
-
-        .admin-job-sub {
-          color: #6b7280;
-          font-size: 13px;
-          font-weight: 700;
-        }
-
-        .admin-status-pill {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 34px;
-          padding: 0 14px;
-          border-radius: 999px;
-          background: rgba(246,90,69,0.10);
-          color: #f65a45;
-          font-size: 12px;
-          font-weight: 900;
-        }
-
-        .admin-actions {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          justify-content: flex-end;
-        }
-
-        .admin-actions button {
-          min-height: 38px;
-          border: none;
-          border-radius: 14px;
-          padding: 0 14px;
-          background: #f8fafc;
-          color: #233044;
-          font-size: 12px;
-          font-weight: 900;
-        }
-
-        .admin-actions button:last-child {
-          background: rgba(239,68,68,0.10);
-          color: #ef4444;
-        }
-
-        @media (max-width: 1100px) {
-          .admin-shell {
-            grid-template-columns: 1fr;
-          }
-
-          .admin-stats {
-            grid-template-columns: repeat(2,minmax(0,1fr));
-          }
-
-          .admin-table-row {
-            grid-template-columns: 1fr;
-            gap: 14px;
-          }
-
-          .admin-actions {
-            justify-content: flex-start;
-          }
-        }
-
-        @media (max-width: 760px) {
-          .admin-stats {
-            grid-template-columns: 1fr;
-          }
-        }
-
-        /* REAL ADMIN REDESIGN PATCH */
-        .admin-shell {
+        /* ADMIN DASHBOARD FINAL UI */
+        .admin-compact-layout {
           display: grid;
           grid-template-columns: 280px minmax(0,1fr);
           gap: 24px;
           align-items: start;
         }
 
-        .admin-sidebar {
+        .admin-side {
           position: sticky;
-          top: 24px;
+          top: 20px;
           border-radius: 32px;
           padding: 24px;
-          background: linear-gradient(180deg,#1f2937 0%,#111827 100%);
+          background: linear-gradient(180deg,#101826 0%,#182235 100%);
           color: #fff;
-          min-height: calc(100vh - 48px);
-          box-shadow: 0 24px 60px rgba(15,23,42,0.22);
+          min-height: calc(100vh - 40px);
+          box-shadow: 0 30px 60px rgba(15,23,42,0.25);
         }
 
-        .admin-main {
-          display: flex;
-          flex-direction: column;
-          gap: 22px;
-        }
-
-        .admin-main h1,
-        .admin-panel-title {
-          font-size: 42px;
-          line-height: 1;
-          letter-spacing: -0.05em;
-          font-weight: 950;
-          color: #111827;
+        .admin-main-panel {
+          width: 100%;
         }
 
         .admin-stats {
           display: grid;
           grid-template-columns: repeat(4,minmax(0,1fr));
           gap: 18px;
+          margin-bottom: 24px;
         }
 
         .admin-stat {
           border-radius: 28px;
           background: #fff;
-          border: 1px solid rgba(15,23,42,0.06);
-          box-shadow: 0 16px 40px rgba(15,23,42,0.05);
           padding: 24px;
+          box-shadow: 0 16px 40px rgba(15,23,42,0.05);
         }
 
         .admin-stat strong {
-          display: block;
-          margin-top: 10px;
-          font-size: 48px;
+          font-size: 46px;
           line-height: 1;
           font-weight: 950;
-          color: #111827;
         }
 
-        .admin-panel,
-        .admin-main-card,
-        .admin-list-card {
+        .admin-panel {
           border-radius: 32px;
           background: #fff;
-          border: 1px solid rgba(15,23,42,0.06);
           box-shadow: 0 18px 40px rgba(15,23,42,0.05);
+          overflow: hidden;
+        }
+
+        .admin-tools {
+          display: flex;
+          gap: 12px;
+          padding: 24px;
+          border-bottom: 1px solid rgba(15,23,42,0.06);
+        }
+
+        .admin-tools input,
+        .admin-tools select {
+          height: 52px;
+          border-radius: 18px;
+          border: 1px solid rgba(15,23,42,0.08);
+          background: #fff;
+          padding: 0 16px;
+          font-size: 14px;
+          font-weight: 700;
+        }
+
+        .admin-tools input {
+          flex: 1;
         }
 
         .admin-table-row {
@@ -4781,68 +4626,55 @@ useEffect(() => {
           grid-template-columns:
             minmax(260px,1.3fr)
             minmax(140px,0.7fr)
-            minmax(110px,0.5fr)
-            minmax(120px,0.6fr)
-            minmax(240px,0.9fr);
+            minmax(100px,0.4fr)
+            minmax(120px,0.5fr)
+            minmax(240px,0.8fr);
           gap: 18px;
           align-items: center;
-          padding: 22px 24px;
+          padding: 20px 24px;
           border-bottom: 1px solid rgba(15,23,42,0.06);
         }
 
         .admin-table-row.header {
           background: #fafafa;
-          color: #6b7280;
           font-size: 13px;
           font-weight: 900;
+          color: #6b7280;
         }
 
-        .admin-table-row:last-child {
-          border-bottom: none;
-        }
-
-        .admin-job-pill {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 34px;
-          padding: 0 14px;
-          border-radius: 999px;
-          background: rgba(246,90,69,0.10);
-          color: #f65a45;
-          font-size: 12px;
-          font-weight: 900;
-        }
-
-        .admin-row-actions {
+        .admin-table-actions {
           display: flex;
           flex-wrap: wrap;
           gap: 8px;
           justify-content: flex-end;
         }
 
-        .admin-row-actions button {
+        .admin-table-actions button {
           min-height: 38px;
           border: none;
           border-radius: 14px;
           padding: 0 14px;
           background: #f8fafc;
-          color: #233044;
           font-size: 12px;
           font-weight: 900;
         }
 
-        .admin-row-actions button:last-child {
+        .admin-table-actions button:nth-child(3) {
+          background: linear-gradient(180deg,#ff7b65 0%,#f65a45 100%);
+          color: #fff;
+        }
+
+        .admin-table-actions button:last-child {
           background: rgba(239,68,68,0.10);
           color: #ef4444;
         }
 
-        @media (max-width: 1100px) {
-          .admin-shell {
+        @media (max-width: 1200px) {
+          .admin-compact-layout {
             grid-template-columns: 1fr;
           }
 
-          .admin-sidebar {
+          .admin-side {
             position: static;
             min-height: auto;
           }
@@ -4855,7 +4687,7 @@ useEffect(() => {
             grid-template-columns: 1fr;
           }
 
-          .admin-row-actions {
+          .admin-table-actions {
             justify-content: flex-start;
           }
         }
@@ -4863,6 +4695,10 @@ useEffect(() => {
         @media (max-width: 760px) {
           .admin-stats {
             grid-template-columns: 1fr;
+          }
+
+          .admin-tools {
+            flex-direction: column;
           }
         }
 
@@ -4940,8 +4776,8 @@ useEffect(() => {
               </div>
             </div>
 
-            <div className="admin-shell">
-              <aside className="admin-sidebar">
+            <div className="admin-compact-layout">
+              <aside className="admin-side">
                 <h2 className="admin-side-title">Hızlı İşlemler</h2>
                 <div className="admin-side-list">
                   <button className="admin-side-item" type="button">
@@ -4962,7 +4798,7 @@ useEffect(() => {
                 </div>
               </aside>
 
-              <section className="admin-main">
+              <section className="admin-main-panel">
                 <div className="admin-main-head">
                   <h2>Tüm İlanlar</h2>
                   <span className="admin-badge">{adminJobs.length} kayıt</span>
@@ -5010,7 +4846,7 @@ useEffect(() => {
                         <span className="admin-badge">{job.adminStatus === "Onay Bekliyor" ? "Onay bekliyor" : isJobActive(job) ? job.adminStatus : "Süresi doldu"}</span>
                       </div>
 
-                      <div className="admin-row-actions">
+                      <div className="admin-table-actions">
                         <button className="admin-mini-btn light" type="button" onClick={() => setSelectedJob(job)}>
                           Detay
                         </button>
