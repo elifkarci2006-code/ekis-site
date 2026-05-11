@@ -1446,7 +1446,13 @@ export default function App() {
   const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
   const [pendingJobs, setPendingJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [adminNotifications, setAdminNotifications] = useState([]);
+  const [adminNotifications, setAdminNotifications] = useState(() => {
+    try {
+      return JSON.parse(window.localStorage.getItem("ekisAdminNotifications") || "[]");
+    } catch {
+      return [];
+    }
+  });
   const [errors, setErrors] = useState({});
   const [infoModal, setInfoModal] = useState(null);
   const [isAdminRoute, setIsAdminRoute] = useState(false);
@@ -1551,6 +1557,18 @@ useEffect(() => {
     return () => window.removeEventListener("hashchange", syncAdminRoute);
   }, []);
 
+
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        "ekisAdminNotifications",
+        JSON.stringify(adminNotifications.slice(0, 20))
+      );
+    } catch {
+      // localStorage yazılamazsa sessiz geç
+    }
+  }, [adminNotifications]);
 
   useEffect(() => {
     const expireJobs = async () => {
@@ -1816,13 +1834,7 @@ useEffect(() => {
     };
 
     setPendingJobs((prev) => [reviewJob, ...prev]);
-setAdminNotifications((prev) => [
-  {
-    id: Date.now(),
-    text: `Yeni ilan: ${newJob.title}`,
-  },
-  ...prev,
-]);
+
     if (selectedPlan === "featured") {
       window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     }
@@ -4933,6 +4945,18 @@ if (job.plan === "featured") {
           }
         }
 
+        .admin-notification-clear {
+          width: 100%;
+          min-height: 34px;
+          border: none;
+          border-radius: 12px;
+          background: #F3F6FA;
+          color: #5D6B7F;
+          font-size: 12px;
+          font-weight: 900;
+          cursor: pointer;
+        }
+
       `}</style>
 
       {isAdminRoute && (
@@ -4984,11 +5008,20 @@ if (job.plan === "featured") {
                 {adminNotifications.length === 0 ? (
                   <span>Yeni bildirim yok</span>
                 ) : (
-                  adminNotifications.slice(0, 4).map((item) => (
-                    <div className="admin-notification-item" key={item.id}>
-                      {item.text}
-                    </div>
-                  ))
+                  <>
+                    {adminNotifications.slice(0, 4).map((item) => (
+                      <div className="admin-notification-item" key={item.id}>
+                        {item.text}
+                      </div>
+                    ))}
+                    <button
+                      className="admin-notification-clear"
+                      type="button"
+                      onClick={() => setAdminNotifications([])}
+                    >
+                      Bildirimleri temizle
+                    </button>
+                  </>
                 )}
               </div>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
