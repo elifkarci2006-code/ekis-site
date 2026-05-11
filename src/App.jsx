@@ -1511,6 +1511,7 @@ export default function App() {
   const [logoSrc, setLogoSrc] = useState("/logo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
   const [headerOpacity, setHeaderOpacity] = useState(1);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [jobs, setJobs] = useState(() => jobsSeed.map((job) => ({ ...job, source: "demo", status: "active", createdAt: new Date().toISOString(), durationDays: 30, plan: "free", featuredStatus: null })));
   const [featuredJobs, setFeaturedJobs] = useState(() => featuredSeed.map((job) => ({ ...job, source: "demo", status: "active", createdAt: new Date().toISOString(), durationDays: 15, plan: "featured", featuredStatus: "live" })));
   const [pendingJobs, setPendingJobs] = useState([]);
@@ -4946,6 +4947,69 @@ useEffect(() => {
           }
         }
 
+        /* MOBILE FILTER + FOOTER UX POLISH */
+        .mobile-filter-toggle {
+          display: none;
+        }
+
+        @media (max-width: 760px) {
+          .mobile-filter-toggle {
+            width: 100%;
+            min-height: 54px;
+            border: none;
+            border-radius: 18px;
+            margin-bottom: 14px;
+            background: linear-gradient(180deg, #ff6548 0%, #ff4424 100%);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 12px 24px rgba(255,75,43,0.18);
+          }
+
+          .filter-grid {
+            display: none;
+          }
+
+          .filter-grid.open {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+          }
+
+          .footer-grid {
+            gap: 14px;
+          }
+
+          .footer-column h4 {
+            margin-bottom: 10px;
+            font-size: 18px;
+          }
+
+          .footer-column a,
+          .footer-column button {
+            min-height: 30px;
+            font-size: 14px;
+          }
+
+          .footer-cta-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+          }
+
+          .footer-cta-card {
+            min-height: 74px;
+            padding: 12px;
+          }
+
+          .footer-bottom {
+            margin-top: 18px;
+            padding-top: 14px;
+          }
+        }
+
       `}</style>
 
       {isAdminRoute && (
@@ -5586,7 +5650,14 @@ useEffect(() => {
       <main className="container">
         <section className="top-search" id="ilanlar">
           <div className="filter-wrap">
-            <div className="filter-grid">
+            <button
+              className="mobile-filter-toggle"
+              type="button"
+              onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+            >
+              {mobileFiltersOpen ? "Filtreyi Kapat" : "Filtrele"}
+            </button>
+            <div className={`filter-grid ${mobileFiltersOpen ? "open" : ""}`}>
               <div className="field">
                 <label>İlanlarda ara</label>
                 <input
