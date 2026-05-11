@@ -198,6 +198,7 @@ const categories = [
   "Ofis & Yardımcı İşler",
   "İnşaat & Fiziksel İş",
   "Freelance / Dijital",
+  "Diger",
 ];
 
 const types = ["Tümü", "Günlük", "Saatlik", "Part Time"];
