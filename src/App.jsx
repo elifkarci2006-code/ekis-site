@@ -185,6 +185,133 @@ const jobsSeed = [
       "Temel içerik hazırlama, paylaşım planlama ve dijital destek süreçlerinde çalışacak ekip arkadaşı aranıyor.",
     createdAt: "2026-04-14T10:00:00",
   },
+    {
+    id: 19,
+    title: "Kargo Ayıklama Personeli",
+    company: "Jet Kargo",
+    location: "İstanbul / Bağcılar",
+    salary: "Saatlik 210 TL",
+    type: "Saatlik",
+    category: "Depo & Lojistik",
+    workAddress: "İstanbul / Bağcılar",
+    contactName: "Jet Kargo",
+    contactPhone: "0555 101 10 10",
+    description:
+      "Yoğun sevkiyat döneminde paket ayrıştırma ve yükleme süreçlerinde çalışacak ekip arkadaşı aranıyor.",
+    createdAt: "2026-04-14T10:00:00",
+  },
+
+  {
+    id: 20,
+    title: "Stand Görevlisi",
+    company: "Expo Event",
+    location: "Ankara / Çankaya",
+    salary: "Günlük 1.450 TL",
+    type: "Günlük",
+    category: "Etkinlik & Organizasyon",
+    workAddress: "Ankara / Çankaya",
+    contactName: "Expo Event",
+    contactPhone: "0555 202 20 20",
+    description:
+      "Fuar alanında ziyaretçi karşılama ve stand yönlendirme süreçlerinde görev alacak personel aranıyor.",
+    createdAt: "2026-04-13T10:00:00",
+  },
+
+  {
+    id: 21,
+    title: "Market Reyon Destek Elemanı",
+    company: "Mega Market",
+    location: "İzmir / Karşıyaka",
+    salary: "Günlük 1.200 TL",
+    type: "Günlük",
+    category: "Satış & Mağaza",
+    workAddress: "İzmir / Karşıyaka",
+    contactName: "Mega Market",
+    contactPhone: "0555 303 30 30",
+    description:
+      "Reyon düzeni ve ürün yerleşiminde görev alacak ekip arkadaşı aranıyor.",
+    createdAt: "2026-04-12T10:00:00",
+  },
+
+  {
+    id: 22,
+    title: "Kafede Servis Personeli",
+    company: "Mood Coffee",
+    location: "Eskişehir / Tepebaşı",
+    salary: "Part Time 12.500 TL / ay",
+    type: "Part Time",
+    category: "Kafe & Restoran",
+    workAddress: "Eskişehir / Tepebaşı",
+    contactName: "Mood Coffee",
+    contactPhone: "0555 404 40 40",
+    description:
+      "Yoğun saatlerde servis ve masa düzenine destek verecek ekip arkadaşı aranıyor.",
+    createdAt: "2026-04-11T10:00:00",
+  },
+
+  {
+    id: 23,
+    title: "Depo Sayım Personeli",
+    company: "Hızlı Tedarik",
+    location: "Bursa / Osmangazi",
+    salary: "Saatlik 190 TL",
+    type: "Saatlik",
+    category: "Depo & Lojistik",
+    workAddress: "Bursa / Osmangazi",
+    contactName: "Hızlı Tedarik",
+    contactPhone: "0555 505 50 50",
+    description:
+      "Stok sayımı ve ürün kontrol süreçlerinde görev alacak ekip arkadaşı aranıyor.",
+    createdAt: "2026-04-10T10:00:00",
+  },
+
+  {
+    id: 24,
+    title: "Saha Tanıtım Personeli",
+    company: "Nova Ajans",
+    location: "İstanbul / Beşiktaş",
+    salary: "Günlük 1.350 TL",
+    type: "Günlük",
+    category: "Diger",
+    workAddress: "İstanbul / Beşiktaş",
+    contactName: "Nova Ajans",
+    contactPhone: "0555 606 60 60",
+    description:
+      "Marka tanıtım etkinliklerinde görev alacak saha personeli aranıyor.",
+    createdAt: "2026-04-09T10:00:00",
+  },
+
+  {
+    id: 25,
+    title: "Cafe Temizlik Destek",
+    company: "Luna Cafe",
+    location: "İzmir / Bornova",
+    salary: "Günlük 1.100 TL",
+    type: "Günlük",
+    category: "Temizlik",
+    workAddress: "İzmir / Bornova",
+    contactName: "Luna Cafe",
+    contactPhone: "0555 707 70 70",
+    description:
+      "Kapanış sonrası genel düzen ve temizlik süreçlerinde görev alacak ekip arkadaşı aranıyor.",
+    createdAt: "2026-04-08T10:00:00",
+  },
+
+  {
+    id: 26,
+    title: "Paketleme Destek Personeli",
+    company: "Boxgo",
+    location: "Kocaeli / Gebze",
+    salary: "Saatlik 185 TL",
+    type: "Saatlik",
+    category: "Depo & Lojistik",
+    workAddress: "Kocaeli / Gebze",
+    contactName: "Boxgo",
+    contactPhone: "0555 808 80 80",
+    description:
+      "Online sipariş paketleme süreçlerinde görev alacak ekip arkadaşı aranıyor.",
+    createdAt: "2026-04-07T10:00:00",
+  }
 ];
 
 const categories = [
