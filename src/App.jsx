@@ -1834,7 +1834,31 @@ useEffect(() => {
     };
 
     setPendingJobs((prev) => [reviewJob, ...prev]);
+try {
+  await fetch(
+    "https://zybqjnoeslzniwhecrrn.supabase.co/functions/v1/send-mail",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: "nkarci95@gmail.com",
+        subject: "Yeni ilan geldi 🎉",
+        html: `
+          <h2>Yeni ilan gönderildi</h2>
 
+          <p><strong>Firma:</strong> ${reviewJob.company}</p>
+          <p><strong>İlan:</strong> ${reviewJob.title}</p>
+          <p><strong>Konum:</strong> ${reviewJob.location}</p>
+          <p><strong>Tip:</strong> ${reviewJob.type}</p>
+        `,
+      }),
+    }
+  );
+} catch (error) {
+  console.error("Mail gönderilemedi:", error);
+}
     if (selectedPlan === "featured") {
       window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     }
