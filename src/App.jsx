@@ -5367,23 +5367,19 @@ if (job.plan === "featured") {
                     value={formData.contactPhone}
                     onChange={handleFormChange}
                   />
-                  {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>
+                  {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>}
+                </div>
 
-                <div className="field">
+                <div className="post-field">
                   <label>E-posta adresi</label>
 
                   <input
                     type="email"
+                    name="email"
                     placeholder="ornek@mail.com"
                     value={formData.email}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        email: e.target.value,
-                      }))
-                    }
+                    onChange={handleFormChange}
                   />
-                </div>
                 </div>
 
                 <div className="captcha-box">
