@@ -1511,7 +1511,6 @@ export default function App() {
   const [logoSrc, setLogoSrc] = useState("/logo-ekis.png");
   const [headerSmall, setHeaderSmall] = useState(false);
   const [headerOpacity, setHeaderOpacity] = useState(1);
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [jobs, setJobs] = useState(() => jobsSeed.map((job) => ({ ...job, source: "demo", status: "active", createdAt: new Date().toISOString(), durationDays: 30, plan: "free", featuredStatus: null })));
   const [featuredJobs, setFeaturedJobs] = useState(() => featuredSeed.map((job) => ({ ...job, source: "demo", status: "active", createdAt: new Date().toISOString(), durationDays: 15, plan: "featured", featuredStatus: "live" })));
   const [pendingJobs, setPendingJobs] = useState([]);
@@ -4947,49 +4946,9 @@ useEffect(() => {
           }
         }
 
-        /* MOBILE FILTER + FOOTER UX POLISH */
         
-.mobile-filter-toggle {
-  display: none;
-}
-
-@media (max-width: 760px) {
-  .filter-wrap {
-    position: relative;
-    padding-top: 68px;
-  }
-
-  .mobile-filter-toggle {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    min-width: 118px;
-    height: 42px;
-    border: none;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.22);
-    backdrop-filter: blur(10px);
-    color: #fff;
-    font-size: 14px;
-    font-weight: 900;
-    padding: 0 18px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.10);
-  }
-
-
-          .filter-grid {
-            display: none;
-          }
-
-          .filter-grid.open {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
-          }
-
+        /* MOBILE FOOTER POLISH */
+        @media (max-width: 760px) {
           .footer-grid {
             gap: 14px;
           }
@@ -5020,8 +4979,7 @@ useEffect(() => {
             padding-top: 14px;
           }
         }
-
-      `}</style>
+`}</style>
 
       {isAdminRoute && (
         <div className="admin-page">
@@ -5661,14 +5619,7 @@ useEffect(() => {
       <main className="container">
         <section className="top-search" id="ilanlar">
           <div className="filter-wrap">
-            <button
-              className="mobile-filter-toggle"
-              type="button"
-              onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-            >
-              {mobileFiltersOpen ? "✕ Kapat" : "⚙ Filtrele"}
-            </button>
-            <div className={`filter-grid ${mobileFiltersOpen ? "open" : ""}`}>
+            <div className="filter-grid">
               <div className="field">
                 <label>İlanlarda ara</label>
                 <input
