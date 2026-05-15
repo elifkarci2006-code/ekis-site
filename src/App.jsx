@@ -268,7 +268,7 @@ const jobsSeed = [
     location: "İstanbul / Beşiktaş",
     salary: "Günlük 1.350 TL",
     type: "Günlük",
-    category: "Diğer",
+    category: "Diger",
     workAddress: "İstanbul / Beşiktaş",
     contactName: "Nova Ajans",
     contactPhone: "0555 606 60 60",
@@ -418,7 +418,7 @@ const jobsSeed = [
     location: "Bursa / Nilüfer",
     salary: "Günlük 1.500 TL",
     type: "Günlük",
-    category: "Diğer",
+    category: "Diger",
     workAddress: "Bursa / Nilüfer",
     contactName: "Kolay Nakliye",
     contactPhone: "0555 111 00 34",
@@ -478,7 +478,7 @@ const jobsSeed = [
     location: "Eskişehir / Tepebaşı",
     salary: "Saatlik 160 TL",
     type: "Saatlik",
-    category: "Diğer",
+    category: "Diger",
     workAddress: "Eskişehir / Tepebaşı",
     contactName: "Aktif Tanıtım",
     contactPhone: "0555 111 00 38",
@@ -499,7 +499,7 @@ const categories = [
   "Ofis & Yardımcı İşler",
   "İnşaat & Fiziksel İş",
   "Freelance / Dijital",
-  "Diğer",
+  "Diger",
 ];
 
 const types = ["Tümü", "Günlük", "Saatlik", "Part Time"];
@@ -708,7 +708,6 @@ export default function App() {
     title: "",
     city: "",
     district: "",
-    category: "",
     workType: "Günlük",
     salary: "",
     description: "",
@@ -747,7 +746,7 @@ useEffect(() => {
       description: job.description,
       contactPhone: job.phone,
       createdAt: job.created_at,
-      category: inferCategory(job.job_title),
+      category: "Genel",
       status: job.status || "pending",
       plan: job.plan_type === "featured" ? "featured" : "free",
       featuredStatus:
@@ -941,10 +940,13 @@ useEffect(() => {
     const nextErrors = {};
 
     if (!formData.company.trim()) nextErrors.company = "Firma adı zorunludur.";
-    if (!formData.title.trim()) nextErrors.title = "İlan başlığı zorunludur.";
+    if (!formData.title.trim()) {
+      nextErrors.title = "İlan başlığı zorunludur.";
+    } else if (formData.title.trim().length < 5) {
+      nextErrors.title = "İlan başlığı en az 5 karakter olmalıdır.";
+    }
     if (!formData.city.trim()) nextErrors.city = "Şehir seçimi zorunludur.";
     if (!formData.district.trim()) nextErrors.district = "İlçe / konum zorunludur.";
-    if (!formData.category.trim()) nextErrors.category = "Kategori seçimi zorunludur.";
     if (!formData.workAddress.trim()) nextErrors.workAddress = "İş adresi / buluşma noktası zorunludur.";
 
     const phoneDigits = formData.contactPhone.replace(/\D/g, "");
@@ -964,13 +966,50 @@ useEffect(() => {
       nextErrors.contactPhone = "Bu numara ile çok fazla ilan girilmiş. Lütfen farklı bir numara kullanın.";
     }
 
-    if (!formData.salary.trim()) nextErrors.salary = "Ücret bilgisi zorunludur.";
-    if (!formData.description.trim()) nextErrors.description = "İş açıklaması zorunludur.";
+    if (!formData.salary.trim()) {
+      nextErrors.salary = "Ücret bilgisi zorunludur.";
+    } else {
+      const salaryValue = Number(formData.salary);
+
+      if (salaryValue < 10) {
+        nextErrors.salary = "Minimum ücret 10 TL olabilir.";
+      } else if (salaryValue > 50000) {
+        nextErrors.salary = "Maximum ücret 50.000 TL olabilir.";
+      }
+    }
+
+    if (!formData.description.trim()) {
+      nextErrors.description = "İş açıklaması zorunludur.";
+    } else if (formData.description.trim().length < 30) {
+      nextErrors.description = "İş açıklaması en az 30 karakter olmalıdır.";
+    }
 
     if (!formData.captchaAnswer.trim()) {
       nextErrors.captchaAnswer = "Güvenlik sorusunu cevaplayınız.";
     } else if (formData.captchaAnswer.trim() !== captcha.answer) {
       nextErrors.captchaAnswer = "Güvenlik sorusu hatalı cevaplandı.";
+    }
+
+
+    const bannedWords = [
+      "bahis",
+      "telegram",
+      "kripto",
+      "yatırım fırsatı",
+      "evden milyon",
+      "forex",
+      "casino",
+      "iddaa"
+    ];
+
+    const spamText = `
+      ${formData.title}
+      ${formData.description}
+      ${formData.company}
+    `.toLocaleLowerCase("tr-TR");
+
+    if (bannedWords.some((word) => spamText.includes(word))) {
+      nextErrors.description = "İlan içeriği platform kurallarına uygun değil.";
     }
 
     setErrors(nextErrors);
@@ -1034,7 +1073,7 @@ useEffect(() => {
     location: normalizeLocation(formData.city, formData.district),
     salary: formatSalaryPreview(formData.workType, formData.salary),
     type: formData.workType,
-    category: formData.category || inferCategory(formData.title),
+    category: inferCategory(formData.title),
     description: formData.description.trim(),
     workAddress: toTitleCase(formData.workAddress),
     contactName: toTitleCase(formData.contactName),
@@ -1045,7 +1084,30 @@ useEffect(() => {
   });
 
   const handlePublishClick = () => {
+    const lastAttempts = JSON.parse(
+      window.localStorage.getItem("ekisPostAttempts") || "[]"
+    );
+
+    const now = Date.now();
+
+    const recentAttempts = lastAttempts.filter(
+      (time) => now - time < 5 * 60 * 1000
+    );
+
+    if (recentAttempts.length >= 2) {
+      alert("Çok sık ilan gönderiyorsun 😄 Lütfen birkaç dakika bekle.");
+      return;
+    }
+
     if (!validateForm()) return;
+
+    recentAttempts.push(now);
+
+    window.localStorage.setItem(
+      "ekisPostAttempts",
+      JSON.stringify(recentAttempts)
+    );
+
     setPendingJob(buildJobFromForm());
     setSelectedPlan("free");
     setShowPlanModal(true);
@@ -1116,7 +1178,6 @@ useEffect(() => {
       title: "",
       city: "",
       district: "",
-      category: "",
       workType: "Günlük",
       salary: "",
       description: "",
@@ -2234,34 +2295,6 @@ if (job.plan === "featured") {
           color: ${PALETTE.softText};
           font-size: 14px;
           line-height: 1.55;
-        }
-        .form-section-label {
-          grid-column: 1 / -1;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin: 4px 0 2px;
-          color: ${PALETTE.slate};
-          font-size: 13px;
-          font-weight: 900;
-          letter-spacing: -0.01em;
-        }
-        .form-section-label::before {
-          content: "";
-          width: 8px;
-          height: 8px;
-          border-radius: 999px;
-          background: ${PALETTE.coral};
-          box-shadow: 0 0 0 4px rgba(246,90,69,0.10);
-        }
-        .input-hint {
-          font-size: 11px;
-          font-weight: 700;
-          color: ${PALETTE.softText};
-          margin-top: -3px;
-        }
-        .post-field select {
-          cursor: pointer;
         }
         .check-row {
           display: flex;
@@ -4518,10 +4551,9 @@ if (job.plan === "featured") {
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-panel-inner">
               <h3 className="post-title">İlan ver</h3>
-              <p className="post-desc">Formu doldur, ilanını ön izle, admin onayına gönder.</p>
+              <p className="post-desc">Formu doldur, istersen ilanını vitrine çıkar ve ön izlemesini gör.</p>
 
               <div className="post-form-grid">
-                <div className="form-section-label">İlan bilgileri</div>
                 <div className="post-field">
                   <label>Firma adı<span className="required-star">*</span></label>
                   <input
@@ -4546,7 +4578,6 @@ if (job.plan === "featured") {
                     onChange={handleFormChange}
                   />
                   {errors.title && <div className="error-text">{errors.title}</div>}
-                  <div className="input-hint">Örn: Garson, Kurye, Depo Personeli gibi net başlık kullan.</div>
                 </div>
 
                 <div className="post-field">
@@ -4576,23 +4607,6 @@ if (job.plan === "featured") {
                     onChange={handleFormChange}
                   />
                   {errors.district && <div className="error-text">{errors.district}</div>}
-                  <div className="input-hint">Mahalle yazmak zorunda değilsin; ilçe veya semt yeterli.</div>
-                </div>
-
-                <div className="post-field">
-                  <label>Kategori<span className="required-star">*</span></label>
-                  <select
-                    className={errors.category ? "field-error" : ""}
-                    name="category"
-                    value={formData.category}
-                    onChange={handleFormChange}
-                  >
-                    <option value="">Kategori seç</option>
-                    {categories.filter((item) => item !== "Tümü").map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </select>
-                  {errors.category && <div className="error-text">{errors.category}</div>}
                 </div>
 
                 <div className="post-field">
@@ -4603,8 +4617,6 @@ if (job.plan === "featured") {
                     ))}
                   </select>
                 </div>
-
-                <div className="form-section-label">Adres ve iletişim</div>
 
                 <div className="post-field full">
                   <label>İş adresi / buluşma noktası<span className="required-star">*</span></label>
@@ -4617,7 +4629,6 @@ if (job.plan === "featured") {
                     onChange={handleFormChange}
                   />
                   {errors.workAddress && <div className="error-text">{errors.workAddress}</div>}
-                  <div className="input-hint">Tam adres yerine adayın anlayacağı buluşma noktası da yazılabilir.</div>
                 </div>
 
                 <div className="post-field">
@@ -4643,9 +4654,6 @@ if (job.plan === "featured") {
                   />
                   {errors.contactPhone && <div className="error-text">{errors.contactPhone}</div>}
                 </div>
-
-                <div className="form-section-label">Güvenlik ve detay</div>
-
                 <div className="captcha-box">
                   <div className="post-field">
                     <label>Güvenlik sorusu<span className="required-star">*</span></label>
