@@ -2235,28 +2235,6 @@ if (job.plan === "featured") {
           font-size: 14px;
           line-height: 1.55;
         }
-        .post-helper-card {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 10px;
-          margin: 0 0 18px;
-        }
-        .post-helper-pill {
-          background: rgba(88,173,173,0.08);
-          border: 1px solid rgba(88,173,173,0.18);
-          border-radius: 16px;
-          padding: 12px;
-          color: ${PALETTE.slate};
-          font-size: 12px;
-          font-weight: 800;
-          line-height: 1.4;
-        }
-        .post-helper-pill strong {
-          display: block;
-          font-size: 13px;
-          margin-bottom: 3px;
-          color: ${PALETTE.text};
-        }
         .form-section-label {
           grid-column: 1 / -1;
           display: flex;
@@ -3711,7 +3689,6 @@ if (job.plan === "featured") {
           .quick-type-tab { min-width: auto; padding: 0 14px; }
           .jobs-grid { grid-template-columns: 1fr; }
           .post-form-grid { grid-template-columns: 1fr; }
-          .post-helper-card { grid-template-columns: 1fr; }
           .detail-meta { grid-template-columns: 1fr; }
           .detail-actions { grid-template-columns: 1fr; }
           .detail-hero { padding: 22px 18px 20px; }
@@ -4542,21 +4519,6 @@ if (job.plan === "featured") {
             <div className="post-panel-inner">
               <h3 className="post-title">İlan ver</h3>
               <p className="post-desc">Formu doldur, ilanını ön izle, admin onayına gönder.</p>
-
-              <div className="post-helper-card">
-                <div className="post-helper-pill">
-                  <strong>1. Bilgileri yaz</strong>
-                  Firma, konum ve kategori net olsun.
-                </div>
-                <div className="post-helper-pill">
-                  <strong>2. Ön izle</strong>
-                  İlanın kullanıcıya nasıl görüneceğini kontrol et.
-                </div>
-                <div className="post-helper-pill">
-                  <strong>3. Onaya gönder</strong>
-                  Admin panelden kontrol edip yayına al.
-                </div>
-              </div>
 
               <div className="post-form-grid">
                 <div className="form-section-label">İlan bilgileri</div>
