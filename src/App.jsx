@@ -1011,8 +1011,7 @@ useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleAdminLogin = () => {
-   const handleAdminLogin = async () => {
+  const handleAdminLogin = async () => {
   const { error } = await supabase.auth.signInWithPassword({
     email: adminEmail,
     password: adminPassword,
@@ -1029,9 +1028,6 @@ useEffect(() => {
   setAdminEmail("");
   setAdminPassword("");
 };
-
-    setAdminLoginError("Şifre hatalı kankam 😄");
-  };
 
   const handleAdminLogout = async () => {
   await supabase.auth.signOut();
