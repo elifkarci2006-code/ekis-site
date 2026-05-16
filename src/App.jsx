@@ -5613,14 +5613,14 @@ if (job.plan === "featured") {
                 </div>
 
                 <div className="footer-boxes">
-                  <a className="footer-app-box" href="#">
+                  <div className="footer-app-box">
                     <span className="footer-app-icon">▶</span>
                     <span className="footer-app-text">
                       <strong>Mobil uygulama</strong>
                       <span>Yakında yayında</span>
                     </span>
-                  </a>
-                  <a className="footer-app-box" href="#">
+                  </div>
+                  <div className="footer-app-box">
                     <span className="footer-app-icon">★</span>
                     <span className="footer-app-text">
                       <strong>İşveren paketi</strong>
