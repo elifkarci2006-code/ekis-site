@@ -812,6 +812,7 @@ export default function App() {
   const [infoModal, setInfoModal] = useState(null);
   const [isAdminRoute, setIsAdminRoute] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
   const [adminLoginError, setAdminLoginError] = useState("");
   const [adminAuthenticated, setAdminAuthenticated] = useState(
     () => window.localStorage.getItem("ekisAdminAuth") === "true"
@@ -1011,22 +1012,34 @@ useEffect(() => {
   };
 
   const handleAdminLogin = () => {
-    if (adminPassword === "ekis2026") {
-      window.localStorage.setItem("ekisAdminAuth", "true");
-      setAdminAuthenticated(true);
-      setAdminLoginError("");
-      setAdminPassword("");
-      return;
-    }
+   const handleAdminLogin = async () => {
+  const { error } = await supabase.auth.signInWithPassword({
+    email: adminEmail,
+    password: adminPassword,
+  });
+
+  if (error) {
+    setAdminLoginError("E-posta veya şifre hatalı.");
+    return;
+  }
+
+  window.localStorage.setItem("ekisAdminAuth", "true");
+  setAdminAuthenticated(true);
+  setAdminLoginError("");
+  setAdminEmail("");
+  setAdminPassword("");
+};
 
     setAdminLoginError("Şifre hatalı kankam 😄");
   };
 
-  const handleAdminLogout = () => {
-    window.localStorage.removeItem("ekisAdminAuth");
-    setAdminAuthenticated(false);
-    setAdminPassword("");
-  };
+  const handleAdminLogout = async () => {
+  await supabase.auth.signOut();
+  window.localStorage.removeItem("ekisAdminAuth");
+  setAdminAuthenticated(false);
+  setAdminEmail("");
+  setAdminPassword("");
+};
 
   useEffect(() => {
     if (!showForm) {
@@ -4548,6 +4561,12 @@ if (job.plan === "featured") {
               <h1>Admin Girişi</h1>
               <p>Admin paneline devam etmek için şifre gir.</p>
               <input
+  type="email"
+  placeholder="E-posta adresiniz"
+  value={adminEmail}
+  onChange={(e) => setAdminEmail(e.target.value)}
+  className="admin-input"
+/>
                 type="password"
                 placeholder="Admin şifresi"
                 value={adminPassword}
