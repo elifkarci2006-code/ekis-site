@@ -858,7 +858,7 @@ useEffect(() => {
       company: toTitleCase(job.company_name),
       location: normalizeLocation(job.city, job.district),
       salary: job.salary,
-      type: job.plan_type === "featured" ? "Öne Çıkan" : "Standart",
+      type: job.work_type || "Günlük",
       description: job.description,
       contactPhone: job.phone,
       createdAt: job.created_at,
@@ -1257,6 +1257,7 @@ district: "",
       description: pendingJob.description,
       phone: pendingJob.contactPhone,
       plan_type: selectedPlan === "featured" ? "featured" : "normal",
+      work_type: pendingJob.type,
       status: "pending",
       expires_at: new Date(
         Date.now() +
