@@ -4560,25 +4560,26 @@ if (job.plan === "featured") {
             <div className="admin-login-card">
               <h1>Admin Girişi</h1>
               <p>Admin paneline devam etmek için şifre gir.</p>
-              <input
-                <input
+    <input
   type="email"
   placeholder="E-posta adresiniz"
   value={adminEmail}
   onChange={(e) => setAdminEmail(e.target.value)}
   className="admin-input"
 />
-                type="password"
-                placeholder="Admin şifresi"
-                value={adminPassword}
-                onChange={(e) => {
-                  setAdminPassword(e.target.value);
-                  setAdminLoginError("");
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleAdminLogin();
-                }}
-              />
+<input
+  type="password"
+  placeholder="Admin şifresi"
+  value={adminPassword}
+  onChange={(e) => {
+    setAdminPassword(e.target.value);
+    setAdminLoginError("");
+  }}
+  onKeyDown={(e) => {
+    if (e.key === "Enter") handleAdminLogin();
+  }}
+  className="admin-input"
+/>
               {adminLoginError && <div className="admin-login-error">{adminLoginError}</div>}
               <div className="admin-login-actions">
                 <button className="btn btn-primary" type="button" onClick={handleAdminLogin}>
