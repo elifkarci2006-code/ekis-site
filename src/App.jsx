@@ -1048,6 +1048,7 @@ useEffect(() => {
         company: "",
         title: "",
         city: "",
+district: "",
         workType: "Günlük",
         salary: "",
         description: "",
@@ -2852,6 +2853,25 @@ if (job.plan === "featured") {
           gap: 12px;
           margin-top: 18px;
         }
+        .detail-action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.detail-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.detail-action-call { background: #f65a45; color: white; }
+.detail-action-whatsapp { background: #25D366; color: white; }
+.detail-action-map { background: #4285F4; color: white; }
         .detail-apply-note {
           color: ${PALETTE.softText};
           font-size: 13px;
@@ -5149,6 +5169,11 @@ if (job.plan === "featured") {
                       <span className="contact-icon">⌖</span>
                       <div><span>Adres</span><strong>{selectedJob.workAddress || selectedJob.location}</strong></div>
                     </div>
+          <div className="detail-action-buttons">
+                  <a className="detail-action-btn detail-action-call" href={`tel:${(selectedJob.contactPhone || "").replace(/\s/g, "")}`}>📞 Ara</a>
+                  <a className="detail-action-btn detail-action-whatsapp" href={`https://wa.me/90${(selectedJob.contactPhone || "").replace(/\D/g, "").replace(/^0/, "")}`} target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
+                  <a className="detail-action-btn detail-action-map" href={`https://maps.google.com/?q=${encodeURIComponent(selectedJob.workAddress || selectedJob.location || "")}`} target="_blank" rel="noopener noreferrer">🗺️ Haritada Gör</a>
+                </div>
                     <p className="detail-apply-note clean-note">
                       Görüşme ve işe alım süreci işveren tarafından yürütülür. Ekiş yalnızca ilan ve iletişim bilgisini gösterir.
                     </p>
