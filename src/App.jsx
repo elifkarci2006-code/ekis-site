@@ -16,6 +16,9 @@ const PALETTE = {
   warm: "#FFF2EC",
 };
 
+const ADS_ENABLED = false;
+
+
 const featuredSeed = [
   {
     id: 1,
@@ -747,6 +750,31 @@ function CategoryIcon({ job }) {
   );
 }
 
+
+
+function AdPlaceholder({ type = "banner" }) {
+  if (!ADS_ENABLED) return null;
+
+  return (
+    <div className={`ad-slot ad-slot-${type}`}>
+      <span>Reklam Alanı</span>
+    </div>
+  );
+}
+
+function InlineAdCard() {
+  if (!ADS_ENABLED) return null;
+
+  return (
+    <div className="inline-ad-card">
+      <div className="inline-ad-badge">Sponsorlu</div>
+      <div className="inline-ad-content">
+        <strong>Reklam Alanı</strong>
+        <span>Google Adsense veya manuel sponsor alanı</span>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [search, setSearch] = useState("");
@@ -1897,6 +1925,75 @@ if (job.plan === "featured") {
           color: #fff;
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
         }
+
+        .ad-slot {
+          width: 100%;
+          border-radius: 24px;
+          border: 1px dashed rgba(60,74,95,0.14);
+          background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(245,247,248,0.96) 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #7A8798;
+          font-size: 13px;
+          font-weight: 900;
+          letter-spacing: 0.02em;
+        }
+        .ad-slot-banner {
+          height: 92px;
+          margin: 10px 0 18px;
+        }
+        .ad-slot-footer {
+          height: 110px;
+          margin-top: 24px;
+        }
+        .inline-ad-card {
+          position: relative;
+          overflow: hidden;
+          border-radius: 24px;
+          border: 1px solid rgba(60,74,95,0.08);
+          background:
+            radial-gradient(circle at top left, rgba(246,90,69,0.08), transparent 36%),
+            linear-gradient(180deg,#fff 0%,#f9fafb 100%);
+          min-height: 138px;
+          padding: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .inline-ad-badge {
+          position: absolute;
+          top: 14px;
+          right: 14px;
+          height: 28px;
+          padding: 0 12px;
+          border-radius: 999px;
+          background: rgba(246,90,69,0.10);
+          color: #f65a45;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 11px;
+          font-weight: 900;
+        }
+        .inline-ad-content {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          align-items: center;
+          text-align: center;
+        }
+        .inline-ad-content strong {
+          color: #233044;
+          font-size: 20px;
+          font-weight: 950;
+        }
+        .inline-ad-content span {
+          color: #5D6B7F;
+          font-size: 13px;
+          font-weight: 700;
+        }
+
         .hero {
           padding: 4px 0 6px;
         }
@@ -5391,6 +5488,8 @@ if (job.plan === "featured") {
             </div>
           </div>
         )}
+
+        <AdPlaceholder type="footer" />
 
         <footer className="site-footer">
           <div className="site-footer-topline" />
