@@ -4561,6 +4561,7 @@ if (job.plan === "featured") {
               <h1>Admin Girişi</h1>
               <p>Admin paneline devam etmek için şifre gir.</p>
               <input
+                <input
   type="email"
   placeholder="E-posta adresiniz"
   value={adminEmail}
