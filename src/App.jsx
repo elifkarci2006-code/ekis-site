@@ -5626,7 +5626,7 @@ if (job.plan === "featured") {
                       <strong>İşveren paketi</strong>
                       <span>Daha fazla görünürlük</span>
                     </span>
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>
