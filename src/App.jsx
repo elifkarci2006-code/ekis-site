@@ -17,6 +17,8 @@ import {
 import { AdPlaceholder, InlineAdCard } from "./components/AdSlots";
 import FeaturedJobCard from "./components/FeaturedJobCard";
 import JobCard from "./components/JobCard";
+import InfoModal from "./components/InfoModal";
+import FeaturedListModal from "./components/FeaturedListModal";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 
@@ -4640,75 +4642,21 @@ if (job.plan === "featured") {
           </div>
         </section>
 
-        {infoModal && (
-          <div className="post-modal-backdrop" onClick={() => setInfoModal(null)}>
-            <div className="info-modal" onClick={(e) => e.stopPropagation()}>
-              <div className="info-modal-head">
-                <h3 className="info-modal-title">{footerInfoContent[infoModal].title}</h3>
-                <button className="info-modal-close" type="button" onClick={() => setInfoModal(null)}>×</button>
-              </div>
-              <div className="info-modal-body">
-                {footerInfoContent[infoModal].blocks.map((block, index) => {
-                  if (block.type === "list") {
-                    return (
-                      <ul key={index}>
-                        {block.items.map((item) => (
-                          <li key={item}>{item}</li>
-                        ))}
-                      </ul>
-                    );
-                  }
+        <InfoModal
+          modalKey={infoModal}
+          content={footerInfoContent}
+          onClose={() => setInfoModal(null)}
+        />
 
-                  if (block.type === "note") {
-                    return (
-                      <div className="info-modal-note" key={index}>
-                        {block.text}
-                      </div>
-                    );
-                  }
-
-                  return <p key={index}>{block.text}</p>;
-                })}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {showFeaturedList && (
-          <div className="post-modal-backdrop" onClick={() => setShowFeaturedList(false)}>
-            <div className="info-modal" onClick={(e) => e.stopPropagation()}>
-              <div className="info-modal-head">
-                <h3 className="info-modal-title">Tüm Ekiş Acil İlanları</h3>
-                <button className="info-modal-close" type="button" onClick={() => setShowFeaturedList(false)}>×</button>
-              </div>
-              <div className="info-modal-body">
-                {filteredFeaturedJobs.length === 0 ? (
-                  <div className="empty-box">Seçili filtrelere uygun Ekiş Acil ilanı bulunamadı.</div>
-                ) : (
-                  <div className="featured-list-modal-grid">
-                    {filteredFeaturedJobs.map((job) => (
-                      <article
-                        key={job.id}
-                        className="featured-list-modal-card"
-                        onClick={() => {
-                          setShowFeaturedList(false);
-                          setSelectedJob(job);
-                        }}
-                      >
-                        <div>
-                          <div className="featured-list-modal-company">{job.company}</div>
-                          <h4>{job.title}</h4>
-                          <p>{job.location}</p>
-                        </div>
-                        <strong>{job.salary}</strong>
-                      </article>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+        <FeaturedListModal
+          show={showFeaturedList}
+          jobs={filteredFeaturedJobs}
+          onClose={() => setShowFeaturedList(false)}
+          onOpen={(job) => {
+            setShowFeaturedList(false);
+            setSelectedJob(job);
+          }}
+        />
 
         <AdPlaceholder type="footer" />
 
