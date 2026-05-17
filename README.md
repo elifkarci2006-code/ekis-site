@@ -1,6 +1,6 @@
 # ekis-site
 
-Ek iş, part-time ve günlük işler için hazırlanmış demo / MVP site..
+Ek iş, part-time ve günlük işler için hazırlanmış demo / MVP site.
 
 ## Kurulum
 
