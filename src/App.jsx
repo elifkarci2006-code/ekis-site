@@ -14,8 +14,9 @@ import {
   normalizeLocation,
   toTitleCase,
 } from "./utils/jobUtils";
-import CategoryIcon from "./components/CategoryIcon";
 import { AdPlaceholder, InlineAdCard } from "./components/AdSlots";
+import FeaturedJobCard from "./components/FeaturedJobCard";
+import JobCard from "./components/JobCard";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 
@@ -4588,42 +4589,7 @@ if (job.plan === "featured") {
 
           <div className="featured-grid">
             {visibleFeaturedJobs.map((job) => (
-              <article key={job.id} className="featured-card" onClick={() => setSelectedJob(job)}>
-                <div className="card-top">
-                  <div className="pill"><span>★</span> Öne Çıkan</div>
-                  <div className="card-top-right">
-                    <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
-                    <div className="type-tag">{job.type}</div>
-                  </div>
-                </div>
-
-                <div className="job-company featured-company">{job.company}</div>
-                <h3 className="job-title featured-title">{job.title}</h3>
-                <div className="featured-location">
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="2" />
-                  </svg>
-                  <span>{job.location}</span>
-                </div>
-
-                <div className="featured-divider" />
-
-                <div className="featured-salary-row">
-                  <div className="salary-wallet" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M4 8.5h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-                      <path d="M4 8.5 17 5v3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M17 13h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                  <div className="job-salary featured-salary">{job.salary}</div>
-                </div>
-
-                <div className="featured-icon-circle">
-                  <CategoryIcon job={job} />
-                </div>
-              </article>
+              <FeaturedJobCard key={job.id} job={job} onOpen={setSelectedJob} />
             ))}
           </div>
         </section>
@@ -4667,45 +4633,7 @@ if (job.plan === "featured") {
             ) : (
               <div className="jobs-grid">
                 {sortedJobs.map((job) => (
-                  <article key={job.id} className="soft-job-card" onClick={() => setSelectedJob(job)}>
-                    <div className="soft-top">
-                      <div className="soft-company">{job.company}</div>
-                      <div className="soft-days">{getDaysAgoLabel(job.createdAt)}</div>
-                    </div>
-
-                    <h3 className="soft-title">{job.title}</h3>
-
-                    <div className="soft-details">
-                      <div className="soft-detail">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                          <path d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z" fill="currentColor" opacity="0.20"></path>
-                          <circle cx="12" cy="10" r="2.6" fill="currentColor"></circle>
-                        </svg>
-                        <span>{job.location}</span>
-                      </div>
-                      <div className="soft-detail">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                          <path d="M12 3 4 8l8 5 8-5-8-5Z" fill="currentColor" opacity="0.18"></path>
-                          <path d="m4 12 8 5 8-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"></path>
-                        </svg>
-                        <span>{job.category}</span>
-                      </div>
-                    </div>
-
-                    <div className="soft-divider" />
-
-                    <div className="soft-footer">
-                      <div className="soft-salary">
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                          <path d="M4 8.5h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-                          <path d="M4 8.5 17 5v3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M17 13h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                        <span>{job.salary}</span>
-                      </div>
-                      <div className="soft-badge">{job.type}</div>
-                    </div>
-                  </article>
+                  <JobCard key={job.id} job={job} onOpen={setSelectedJob} />
                 ))}
               </div>
             )}
