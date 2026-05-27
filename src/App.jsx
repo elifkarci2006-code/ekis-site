@@ -647,7 +647,7 @@ district: "",
     return [...cityMatched, ...fallbackTurkey, ...remainingPool];
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
-  const visibleFeaturedJobs = filteredFeaturedJobs.slice(0, 6);
+  const visibleFeaturedJobs = filteredFeaturedJobs;
   const approvePendingJob = async (job) => {
     const approvedJob = {
       ...job,
