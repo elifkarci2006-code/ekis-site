@@ -45,6 +45,63 @@ export default function JobCard({ job, onOpen }) {
       <div className="soft-divider" />
 
       <div className="soft-footer">
+  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+    <div className="soft-salary">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M4 8.5h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9Z"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M4 8.5 17 5v3.5"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M17 13h3"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span>{job.salary}</span>
+    </div>
+
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 4,
+        fontSize: 13,
+        color: "#94a3b8",
+        fontWeight: 600,
+      }}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        width="16"
+        height="16"
+        aria-hidden="true"
+      >
+        <path
+          d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+        <circle cx="12" cy="12" r="3" fill="currentColor" />
+      </svg>
+
+      <span>{job.view_count || 0}</span>
+    </div>
+  </div>
+
+  <div className="soft-badge">{job.type}</div>
+</div>
         <div className="soft-salary">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
