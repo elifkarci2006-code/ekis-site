@@ -98,7 +98,7 @@ export default function JobCard({ job, onOpen }) {
               />
               <circle cx="12" cy="12" r="3" fill="currentColor" />
             </svg>
-            <span>{job.view_count || 0}</span>
+            <span>{job.viewCount || job.view_count || 0}</span>
           </div>
 
           <div className="soft-badge">{job.type}</div>
