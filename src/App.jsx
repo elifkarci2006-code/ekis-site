@@ -114,6 +114,8 @@ useEffect(() => {
       plan: job.plan_type === "featured" ? "featured" : "free",
       featuredStatus:
         job.plan_type === "featured" ? "live" : null,
+      viewCount: job.view_count || 0,
+view_count: job.view_count || 0,
     }));
 
     const pendingFromDb = formatted.filter(
