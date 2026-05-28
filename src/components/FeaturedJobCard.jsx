@@ -86,7 +86,7 @@ export default function FeaturedJobCard({ job, onOpen }) {
             fontWeight: 700,
           }}
         >
-          👁 {job.view_count || 0}
+          👁 {job.viewCount || job.view_count || 0}
         </div>
       </div>
 
