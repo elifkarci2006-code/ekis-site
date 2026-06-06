@@ -4456,7 +4456,7 @@ if (job.plan === "featured") {
     <React.Fragment key={job.id}>
       <JobCard
         job={job}
-        onOpen={handleOpenJob};
+        onOpen={handleOpenJob}
       />
 
       {(index + 1) % 6 === 0 && (
