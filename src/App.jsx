@@ -713,16 +713,6 @@ district: "",
     )
   );
 
-  if (job.dbId) {
-    const { error } = await supabase
-      .from("job_posts")
-      .update({ view_count: nextCount })
-      .eq("id", job.dbId);
-
-    if (error) {
-      console.error("View count güncellenemedi:", error);
-    }
-  }
 };
   const approvePendingJob = async (job) => {
     const approvedJob = {
