@@ -4409,7 +4409,7 @@ if (job.plan === "featured") {
 
           <div className="featured-grid">
             {visibleFeaturedJobs.map((job) => (
-              <FeaturedJobCard key={job.id} job={job} onOpen={setSelectedJob} />
+              <FeaturedJobCard key={job.id} job={job} onOpen={handleOpenJob} />
             ))}
           </div>
         </section>
@@ -4591,3 +4591,4 @@ if (job.plan === "featured") {
     </div>
   );
 
+}
