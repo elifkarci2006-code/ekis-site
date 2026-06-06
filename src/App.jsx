@@ -689,31 +689,6 @@ district: "",
   }
 };
 
-  const updatedJob = {
-    ...job,
-    viewCount: nextCount,
-    view_count: nextCount,
-  };
-
-  setSelectedJob(updatedJob);
-
-  setJobs((prev) =>
-    prev.map((item) =>
-      item.id === job.id
-        ? { ...item, viewCount: nextCount, view_count: nextCount }
-        : item
-    )
-  );
-
-  setFeaturedJobs((prev) =>
-    prev.map((item) =>
-      item.id === job.id
-        ? { ...item, viewCount: nextCount, view_count: nextCount }
-        : item
-    )
-  );
-
-};
   const approvePendingJob = async (job) => {
     const approvedJob = {
       ...job,
