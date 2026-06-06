@@ -4505,7 +4505,7 @@ if (job.plan === "featured") {
                   </a>
                   <a
                     className="footer-social"
-                    https://www.facebook.com/profile.php?id=61589063615089"
+                    href="https://www.facebook.com/profile.php?id=61589063615089"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Facebook"
