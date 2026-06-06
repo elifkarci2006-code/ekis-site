@@ -650,9 +650,44 @@ district: "",
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
   const visibleFeaturedJobs = filteredFeaturedJobs;
-  const handleOpenJob = async (job) => {
+ const handleOpenJob = async (job) => {
   const currentCount = Number(job.viewCount || job.view_count || 0);
   const nextCount = currentCount + 1;
+  const dbId = job.dbId || job.id;
+
+  const updatedJob = {
+    ...job,
+    viewCount: nextCount,
+    view_count: nextCount,
+  };
+
+  setSelectedJob(updatedJob);
+
+  setJobs((prev) =>
+    prev.map((item) =>
+      item.id === job.id
+        ? { ...item, viewCount: nextCount, view_count: nextCount }
+        : item
+    )
+  );
+
+  setFeaturedJobs((prev) =>
+    prev.map((item) =>
+      item.id === job.id
+        ? { ...item, viewCount: nextCount, view_count: nextCount }
+        : item
+    )
+  );
+
+  const { error } = await supabase
+    .from("job_posts")
+    .update({ view_count: nextCount })
+    .eq("id", dbId);
+
+  if (error) {
+    console.error("View count güncellenemedi:", error);
+  }
+};
 
   const updatedJob = {
     ...job,
