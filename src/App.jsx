@@ -4407,11 +4407,15 @@ if (job.plan === "featured") {
             </div>
           </div>
 
-          <div className="featured-grid">
-            {visibleFeaturedJobs.map((job) => (
-              <FeaturedJobCard key={job.id} job={job} onOpen={handleOpenJob} />
-            ))}
-          </div>
+         <div className="featured-grid">
+  {visibleFeaturedJobs.slice(0, 6).map((job) => (
+    <FeaturedJobCard
+      key={job.id}
+      job={job}
+      onOpen={handleOpenJob}
+    />
+  ))}
+</div>
         </section>
 
         <section className="section">
