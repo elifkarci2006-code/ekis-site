@@ -4314,6 +4314,7 @@ if (job.plan === "featured") {
               <div>
                 <h1 className="hero-title">Günlük, saatlik ve part time işleri kolayca keşfet.</h1>
               </div>
+              <AdPlaceholder type="banner" />
 
               <div className="hero-trust-row">
                 <div className="hero-trust-pill">
