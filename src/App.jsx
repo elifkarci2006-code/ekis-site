@@ -4420,7 +4420,7 @@ if (job.plan === "featured") {
         onOpen={setSelectedJob}
       />
 
-      {(index + 1) % 8 === 0 && (
+      {(index + 1) % 6 === 0 && (
         <InlineAdCard />
       )}
     </React.Fragment>
