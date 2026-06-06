@@ -12,7 +12,7 @@ export const PALETTE = {
   warm: "#FFF2EC",
 };
 
-export const ADS_ENABLED = false;
+export const ADS_ENABLED = true;
 
 export const categories = [
   "Tümü",
