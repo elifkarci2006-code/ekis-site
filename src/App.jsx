@@ -4412,10 +4412,19 @@ if (job.plan === "featured") {
               <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
             ) : (
               <div className="jobs-grid">
-                {sortedJobs.map((job) => (
-                  <JobCard key={job.id} job={job} onOpen={setSelectedJob} />
-                ))}
-              </div>
+  {sortedJobs.map((job, index) => (
+    <React.Fragment key={job.id}>
+      <JobCard
+        job={job}
+        onOpen={setSelectedJob}
+      />
+
+      {(index + 1) % 8 === 0 && (
+        <InlineAdCard />
+      )}
+    </React.Fragment>
+  ))}
+</div>
             )}
           </div>
         </section>
