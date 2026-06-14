@@ -48,6 +48,7 @@ export default function App() {
   const [featuredJobs, setFeaturedJobs] = useState(featuredSeed);
   const [pendingJobs, setPendingJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [adminDetailJob, setAdminDetailJob] = useState(null);
   const [adminNotifications, setAdminNotifications] = useState(() => {
     try {
       return JSON.parse(window.localStorage.getItem("ekisAdminNotifications") || "[]");
@@ -107,11 +108,21 @@ useEffect(() => {
       salary: job.salary,
       type: job.work_type || "Günlük",
       description: job.description,
-      contactPhone: job.phone,
+      contactName: job.contact_name,
+      contactPhone: job.phone || job.contact_phone,
+      email: job.email,
+      workAddress:
+        job.work_address ||
+        [job.door_no, job.street, job.neighnorhood]
+          .filter(Boolean)
+          .join(" "),
       createdAt: job.created_at,
+      expiresAt: job.expires_at,
+      featuredExpiresAt: job.featured_expires_at,
       category: inferCategory(job.job_title),
       status: job.status || "pending",
       plan: job.plan_type === "featured" ? "featured" : "free",
+      planTypeRaw: job.plan_type,
       featuredStatus:
         job.plan_type === "featured" ? "live" : null,
       viewCount: job.view_count || 0,
@@ -3354,6 +3365,11 @@ if (job.plan === "featured") {
           color: ${PALETTE.coral};
           font-weight: 950;
         }
+        .admin-side-item.admin-side-static {
+          cursor: default;
+          background: rgba(60,74,95,0.035);
+          color: ${PALETTE.softText};
+        }
         .admin-main-panel {
           background: rgba(255,255,255,0.94);
           border: 1px solid rgba(60,74,95,0.08);
@@ -3726,9 +3742,14 @@ if (job.plan === "featured") {
 
         .admin-mini-btn:hover,
         .admin-table-actions button:hover,
-        .admin-side-item:hover {
+        .admin-side-item:not(.admin-side-static):hover {
           transform: translateY(-1px);
           filter: brightness(0.98);
+        }
+
+        .admin-side-item.admin-side-static:hover {
+          transform: none !important;
+          filter: none !important;
         }
 
         @media (max-width: 1180px) {
@@ -3855,6 +3876,100 @@ if (job.plan === "featured") {
           cursor: pointer;
         }
 
+        /* Admin detay penceresi */
+        .admin-detail-modal {
+          width: min(620px, calc(100vw - 28px));
+          max-height: min(86vh, 760px);
+          overflow-y: auto;
+          background: linear-gradient(180deg, #fff 0%, #fcfcfd 100%);
+          border-radius: 28px;
+          border: 1px solid rgba(60,74,95,0.08);
+          box-shadow: 0 34px 80px rgba(35,48,68,0.24);
+          padding: 30px 28px;
+          position: relative;
+        }
+
+        .admin-detail-head {
+          margin-bottom: 18px;
+          padding-right: 36px;
+        }
+
+        .admin-detail-head h3 {
+          margin: 8px 0 4px;
+          font-size: 24px;
+          font-weight: 950;
+          color: ${PALETTE.slate};
+          letter-spacing: -0.02em;
+        }
+
+        .admin-detail-head p {
+          margin: 0;
+          color: ${PALETTE.softText};
+          font-size: 14px;
+          font-weight: 800;
+        }
+
+        .admin-detail-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+
+        .admin-detail-item {
+          background: rgba(60,74,95,0.035);
+          border-radius: 14px;
+          padding: 10px 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .admin-detail-item span {
+          font-size: 11px;
+          font-weight: 900;
+          color: ${PALETTE.softText};
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
+
+        .admin-detail-item strong {
+          font-size: 14px;
+          font-weight: 900;
+          color: ${PALETTE.slate};
+          word-break: break-word;
+        }
+
+        .admin-detail-contact {
+          margin-bottom: 20px;
+        }
+
+        .admin-detail-contact h4,
+        .admin-detail-description h4 {
+          margin: 0 0 10px;
+          font-size: 14px;
+          font-weight: 950;
+          color: ${PALETTE.slate};
+        }
+
+        .admin-detail-contact .admin-detail-item {
+          margin-bottom: 8px;
+        }
+
+        .admin-detail-description p {
+          margin: 0;
+          font-size: 14px;
+          line-height: 1.6;
+          color: ${PALETTE.slate};
+          white-space: pre-wrap;
+        }
+
+        @media (max-width: 600px) {
+          .admin-detail-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
       `}</style>
 
       {isAdminRoute && (
@@ -3963,18 +4078,18 @@ if (job.plan === "featured") {
               <aside className="admin-side">
                 <h2 className="admin-side-title">Hızlı İşlemler</h2>
                 <div className="admin-side-list">
-                  <button className="admin-side-item" type="button">
+                  <div className="admin-side-item admin-side-static">
                     Toplam ilan <span>{jobs.filter(isJobActive).length + featuredJobs.filter(isJobActive).length + pendingJobs.filter(isJobActive).length}</span>
-                  </button>
+                  </div>
                   <button className="admin-side-item" type="button" onClick={() => setAdminFilter("pending")}>
                     Onay bekleyen <span>{pendingJobs.filter(isJobActive).length}</span>
                   </button>
-                  <button className="admin-side-item" type="button">
+                  <div className="admin-side-item admin-side-static">
                     Ekiş Acil <span>{featuredJobs.filter(isJobActive).length}</span>
-                  </button>
-                  <button className="admin-side-item" type="button">
+                  </div>
+                  <div className="admin-side-item admin-side-static">
                     Standart ilan <span>{jobs.filter(isJobActive).length}</span>
-                  </button>
+                  </div>
                   <button className="admin-side-item" type="button" onClick={() => setShowForm(true)}>
                     Yeni ilan ekle <span>+</span>
                   </button>
@@ -4029,7 +4144,7 @@ if (job.plan === "featured") {
                       </div>
 
                       <div className="admin-table-actions">
-                        <button className="admin-mini-btn light" type="button" onClick={() => handleOpenJob(job)}>
+                        <button className="admin-mini-btn light" type="button" onClick={() => setAdminDetailJob(job)}>
                           Detay
                         </button>
 
@@ -4289,6 +4404,80 @@ if (job.plan === "featured") {
                   </div>
                 </section>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {adminDetailJob && (
+        <div className="detail-modal-backdrop" onClick={() => setAdminDetailJob(null)}>
+          <div className="admin-detail-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="detail-close" type="button" onClick={() => setAdminDetailJob(null)}>×</button>
+
+            <div className="admin-detail-head">
+              <span className="admin-badge">{adminDetailJob.adminStatus === "Onay Bekliyor" ? "Onay bekliyor" : isJobActive(adminDetailJob) ? adminDetailJob.adminStatus : "Süresi doldu"}</span>
+              <h3>{adminDetailJob.title}</h3>
+              <p>{adminDetailJob.company}</p>
+            </div>
+
+            <div className="admin-detail-grid">
+              <div className="admin-detail-item">
+                <span>Konum</span>
+                <strong>{adminDetailJob.location || "—"}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>Çalışma tipi</span>
+                <strong>{adminDetailJob.type || "—"}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>Kategori</span>
+                <strong>{adminDetailJob.category || "—"}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>Ücret</span>
+                <strong>{adminDetailJob.salary || "—"}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>Plan</span>
+                <strong>{adminDetailJob.plan === "featured" ? "Ekiş Acil" : "Standart"}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>Görüntülenme</span>
+                <strong>{adminDetailJob.viewCount || 0}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>Yayın</span>
+                <strong>{getDaysAgoLabel(adminDetailJob.createdAt)}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>Süre</span>
+                <strong>{adminDetailJob.adminStatus === "Onay Bekliyor" ? "Admin onayı bekliyor" : getDaysLeftLabel(adminDetailJob)}</strong>
+              </div>
+            </div>
+
+            <div className="admin-detail-contact">
+              <h4>İletişim bilgileri</h4>
+              <div className="admin-detail-item">
+                <span>Yetkili kişi</span>
+                <strong>{adminDetailJob.contactName || "—"}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>Telefon</span>
+                <strong>{adminDetailJob.contactPhone || "—"}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>E-posta</span>
+                <strong>{adminDetailJob.email || "—"}</strong>
+              </div>
+              <div className="admin-detail-item">
+                <span>Adres</span>
+                <strong>{adminDetailJob.workAddress || "—"}</strong>
+              </div>
+            </div>
+
+            <div className="admin-detail-description">
+              <h4>İlan açıklaması</h4>
+              <p>{adminDetailJob.description || "Bu ilan için açıklama bilgisi bulunmuyor."}</p>
             </div>
           </div>
         </div>
