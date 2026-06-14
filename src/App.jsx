@@ -1750,7 +1750,7 @@ if (job.plan === "featured") {
           inset: 0;
           background: rgba(35,48,68,0.38);
           backdrop-filter: blur(6px);
-          z-index: 90;
+          z-index: 200;
           display: grid;
           place-items: center;
           padding: 18px;
