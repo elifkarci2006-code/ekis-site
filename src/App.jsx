@@ -42,7 +42,7 @@ export default function App() {
   const [selectedPlan, setSelectedPlan] = useState("free");
   const [pendingJob, setPendingJob] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [logoSrc, setLogoSrc] = useState("/logo-ekis.png");
+  const [logoSrc, setLogoSrc] = useState("/logo-ekis.webp");
   const [headerSmall, setHeaderSmall] = useState(false);
   const [headerOpacity, setHeaderOpacity] = useState(1);
   const [jobs, setJobs] = useState(jobsSeed);
@@ -4018,7 +4018,7 @@ if (job.plan === "featured") {
                   src={logoSrc}
                   alt="Ekiş logo"
                   onError={() => {
-                    if (logoSrc !== "/logo-ekis.png") setLogoSrc("/logo-ekis.png");
+                    if (logoSrc !== "/logo-ekis.webp") setLogoSrc("/logo-ekis.webp");
                   }}
                 />
                 <h1>Admin Paneli</h1>
