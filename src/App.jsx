@@ -20,6 +20,7 @@ import JobCard from "./components/JobCard";
 import InfoModal from "./components/InfoModal";
 import FeaturedListModal from "./components/FeaturedListModal";
 import PostJobModal from "./components/PostJobModal";
+import CookieBanner from "./components/CookieBanner";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 
@@ -4780,8 +4781,8 @@ if (job.plan === "featured") {
             </div>
           </div>
         </footer>
-      </main>
+           </main>
+      <CookieBanner />
     </div>
   );
-
 }
