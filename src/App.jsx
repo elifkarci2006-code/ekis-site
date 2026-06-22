@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, lazy, Suspense } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabaseClient";
 import { PALETTE, categories, cities, types } from "./data/constants";
 import { featuredSeed, jobsSeed } from "./data/seeds";
@@ -17,9 +17,9 @@ import {
 import { AdPlaceholder, InlineAdCard } from "./components/AdSlots";
 import FeaturedJobCard from "./components/FeaturedJobCard";
 import JobCard from "./components/JobCard";
-const InfoModal = lazy(() => import("./components/InfoModal"));
-const FeaturedListModal = lazy(() => import("./components/FeaturedListModal"));
-const PostJobModal = lazy(() => import("./components/PostJobModal"));
+import InfoModal from "./components/InfoModal";
+import FeaturedListModal from "./components/FeaturedListModal";
+import PostJobModal from "./components/PostJobModal";
 import CookieBanner from "./components/CookieBanner";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
@@ -1077,7 +1077,6 @@ if (job.plan === "featured") {
   };
 
  return (
-  <Suspense fallback={null}>
     <div className="app-shell">
       <style>{`
         * { box-sizing: border-box; }
@@ -4785,6 +4784,5 @@ if (job.plan === "featured") {
            </main>
       <CookieBanner />
     </div>
-  </Suspense>
   );
 }
