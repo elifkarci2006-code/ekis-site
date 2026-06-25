@@ -2133,7 +2133,7 @@ district: "",
         }
         .footer-bottom-link,
         .footer-copy {
-          color: rgba(255,255,255,0.85);
+         color: #FF5A3C;
           text-decoration: none;
           font-size: 13px;
           font-weight: 700;
