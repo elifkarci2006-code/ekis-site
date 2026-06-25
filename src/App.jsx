@@ -944,13 +944,13 @@ district: "",
           margin: 0;
         }
         .brand-logo {
-          height: 52px;
+          height: 108px;
           width: auto;
           display: block;
           object-fit: contain;
           transition: height 0.22s ease, opacity 0.18s ease;
         }
-        .topbar.small .brand-logo { height: 48px; }
+        .topbar.small .brand-logo { height: 102px; }
         .top-actions {
           display: flex;
           align-items: center;
