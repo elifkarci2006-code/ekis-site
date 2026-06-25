@@ -5,7 +5,6 @@ import { supabase } from "../supabaseClient";
 export default function AccountMenu({ currentUser, onLogout, onNewPost, onMyPosts, onAdminPanel }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
-  const isAdmin = currentUser && ADMIN_EMAILS.includes(currentUser.email);
 
   // Dışarı tıklayınca kapat
   useEffect(() => {
