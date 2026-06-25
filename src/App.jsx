@@ -908,7 +908,6 @@ if (job.plan === "featured") {
       ],
     },
         
-
     kvkk: {
       title: "KVKK Aydınlatma Metni",
       blocks: [
