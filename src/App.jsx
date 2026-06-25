@@ -2057,6 +2057,10 @@ district: "",
           cursor: pointer;
           font-family: inherit;
         }
+        .footer-link:hover {
+  color: #FF5A3C;
+  text-decoration: none;
+}
         .footer-socials {
           display: flex;
           gap: 10px;
