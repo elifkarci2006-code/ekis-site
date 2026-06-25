@@ -2146,6 +2146,10 @@ district: "",
           cursor: pointer;
           font-family: inherit;
         }
+        .footer-bottom-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
         .info-modal {
           width: min(760px, calc(100vw - 28px));
           max-height: min(86vh, 820px);
