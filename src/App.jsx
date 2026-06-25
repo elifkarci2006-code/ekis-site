@@ -21,6 +21,7 @@ import InfoModal from "./components/InfoModal";
 import FeaturedListModal from "./components/FeaturedListModal";
 import PostJobModal from "./components/PostJobModal";
 import CookieBanner from "./components/CookieBanner";
+import AuthModal from "./components/AuthModal";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 
@@ -35,6 +36,8 @@ export default function App() {
   const [submittedCity, setSubmittedCity] = useState("Tümü");
   const [sortOption, setSortOption] = useState("newest");
   const [showForm, setShowForm] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+const [currentUser, setCurrentUser] = useState(null);
   const [showPlanModal, setShowPlanModal] = useState(false);
   const [showFeaturedList, setShowFeaturedList] = useState(false);
   const [adminFilter, setAdminFilter] = useState("all");
@@ -148,6 +151,17 @@ view_count: job.view_count || 0,
   };
 
   fetchJobs();
+}, []);
+  useEffect(() => {
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    setCurrentUser(session?.user ?? null);
+  });
+
+  const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    setCurrentUser(session?.user ?? null);
+  });
+
+  return () => subscription.unsubscribe();
 }, []);
   useEffect(() => {
     const onScroll = () => {
@@ -4228,14 +4242,14 @@ if (job.plan === "featured") {
             </a>
           </div>
 
-          <div className="top-actions">
-            <button className="btn btn-primary" onClick={() => setShowForm(true)}>
-              Hemen İlan Ver
-            </button>
-            <a className="btn btn-secondary" href="#ilanlar">
-              Hemen İş Bul
-            </a>
-          </div>
+         <div className="top-actions">
+  <button className="btn btn-primary" onClick={() => setShowForm(true)}>
+    Hemen İlan Ver
+  </button>
+  <button className="btn btn-secondary" onClick={() => setShowAuthModal(true)}>
+    {currentUser ? "Hesabım" : "Giriş Yap"}
+  </button>
+</div>
         </div>
       </header>
 
@@ -4782,6 +4796,16 @@ if (job.plan === "featured") {
           </div>
         </footer>
            </main>
+      {showAuthModal && (
+  <AuthModal
+    onClose={() => setShowAuthModal(false)}
+    onAuthSuccess={() => {
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        setCurrentUser(user);
+      });
+    }}
+  />
+)}
       <CookieBanner />
     </div>
   );
