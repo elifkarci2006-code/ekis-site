@@ -2063,19 +2063,21 @@ district: "",
           margin-bottom: 18px;
         }
         .footer-social {
-          width: 42px;
-          height: 42px;
-          border-radius: 999px;
-          background: rgba(255,255,255,0.10);
-          border: 1px solid rgba(255,255,255,0.12);
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          text-decoration: none;
-          font-size: 16px;
-          font-weight: 900;
-        }
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.footer-social:hover {
+  background: rgba(255,255,255,0.22);
+  transform: translateY(-2px);
+}
         .footer-boxes {
           display: grid;
           gap: 12px;
@@ -3666,7 +3668,7 @@ district: "",
                     aria-label="Instagram"
                     title="Instagram"
                   >
-                    <svg viewBox="0 0 24 24" width="19" height="19" fill="none" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
                       <rect x="4" y="4" width="16" height="16" rx="5" stroke="currentColor" strokeWidth="2" />
                       <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="2" />
                       <circle cx="17" cy="7" r="1.2" fill="currentColor" />
