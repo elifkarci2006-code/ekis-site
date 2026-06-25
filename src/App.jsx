@@ -4243,12 +4243,27 @@ if (job.plan === "featured") {
           </div>
 
          <div className="top-actions">
-  <button className="btn btn-primary" onClick={() => setShowForm(true)}>
+  <button className="btn btn-primary" onClick={() => {
+    if (!currentUser) {
+      setShowAuthModal(true);
+    } else {
+      setShowForm(true);
+    }
+  }}>
     Hemen İlan Ver
   </button>
-  <button className="btn btn-secondary" onClick={() => setShowAuthModal(true)}>
-    {currentUser ? "Hesabım" : "Giriş Yap"}
-  </button>
+  {currentUser ? (
+    <button className="btn btn-secondary" onClick={async () => {
+      await supabase.auth.signOut();
+      setCurrentUser(null);
+    }}>
+      Çıkış Yap
+    </button>
+  ) : (
+    <button className="btn btn-secondary" onClick={() => setShowAuthModal(true)}>
+      Giriş Yap
+    </button>
+  )}
 </div>
         </div>
       </header>
