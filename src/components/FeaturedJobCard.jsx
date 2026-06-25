@@ -6,11 +6,10 @@ export default function FeaturedJobCard({ job, onOpen }) {
     <article className="featured-card" onClick={() => onOpen(job)}>
       <div className="card-top">
         <div className="pill">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{marginRight: "5px", verticalAlign: "middle"}}>
-  <path d="M12 3C9 3 6.5 5.5 6.5 8.5c0 2 .8 3.5 1.5 4.5L6 15h12l-2-2c.7-1 1.5-2.5 1.5-4.5C17.5 5.5 15 3 12 3z" fill="white" opacity="0.9"/>
-  <rect x="9" y="15" width="6" height="1.5" rx="0.75" fill="white" opacity="0.7"/>
-  <circle cx="12" cy="20" r="1.5" fill="white" opacity="0.6"/>
-  <path d="M9 8h6M12 6v4" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="white" style={{marginRight: "5px", verticalAlign: "middle"}}>
+  <path d="M12 2a5 5 0 00-5 5v4L5 13v1h14v-1l-2-2V7a5 5 0 00-5-5z"/>
+  <path d="M10 15a2 2 0 004 0h-4z"/>
+  <path d="M12 1v1M4.2 4.2l.7.7M2 12h1M22 12h-1M19.8 4.2l-.7.7" stroke="white" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
 </svg> Öne Çıkan
         </div>
 
