@@ -2002,8 +2002,9 @@ district: "",
           background: #2F3949;
           color: rgba(255,255,255,0.92);
         }
-        .site-footer-topline {
-  display: none;
+       .site-footer-topline {
+  height: 12px;
+  background: linear-gradient(90deg, ${PALETTE.coral} 0%, #f25b7a 100%);
 }
         .site-footer-inner { padding: 34px 28px 20px; }
         .footer-grid {
