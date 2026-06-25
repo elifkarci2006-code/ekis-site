@@ -3537,11 +3537,15 @@ district: "",
         <section className="section featured-section" id="one-cikanlar">
           <div className="section-head featured-head">
             <h2 className="section-title section-title-vitrin">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={{marginRight: "8px", verticalAlign: "middle", flexShrink: 0}}>
-    <path d="M12 2a5 5 0 00-5 5v4L5 13v1h14v-1l-2-2V7a5 5 0 00-5-5z"/>
-    <path d="M10 15a2 2 0 004 0h-4z"/>
-    <path d="M12 1v1M4.2 4.2l.7.7M2 12h1M22 12h-1M19.8 4.2l-.7.7" stroke="white" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-  </svg>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: "8px", verticalAlign: "middle", flexShrink: 0}}>
+  <rect x="4" y="12" width="16" height="4" rx="1"/>
+  <path d="M6 12V9a6 6 0 0112 0v3"/>
+  <path d="M12 2v1"/>
+  <path d="M4.2 4.2l.7.7"/>
+  <path d="M2 12h1"/>
+  <path d="M19.8 4.2l-.7.7"/>
+  <path d="M21 12h1"/>
+</svg>
   Ekiş Acil
 </h2>
             <div className="featured-head-actions">
