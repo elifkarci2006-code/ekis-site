@@ -23,6 +23,7 @@ import PostJobModal from "./components/PostJobModal";
 import CookieBanner from "./components/CookieBanner";
 import AuthModal from "./components/AuthModal";
 import AccountMenu from "./components/AccountMenu";
+import MyJobsModal from "./components/MyJobsModal";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 
@@ -54,6 +55,7 @@ const [currentUser, setCurrentUser] = useState(null);
   const [pendingJobs, setPendingJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [adminDetailJob, setAdminDetailJob] = useState(null);
+  const [showMyJobs, setShowMyJobs] = useState(false);
   const [adminNotifications, setAdminNotifications] = useState(() => {
     try {
       return JSON.parse(window.localStorage.getItem("ekisAdminNotifications") || "[]");
