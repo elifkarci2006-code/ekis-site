@@ -525,8 +525,9 @@ district: "",
     if (!pendingJob) return;
 
     const payload = {
-      company_name: pendingJob.company,
-      job_title: pendingJob.title,
+  user_id: currentUser?.id || null,
+  company_name: pendingJob.company,
+  job_title: pendingJob.title,
       city: toTitleCase(formData.city),
       district: toTitleCase(formData.district),
       salary: pendingJob.salary,
@@ -574,8 +575,7 @@ district: "",
       window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
     }
 
-    alert("İlan admin onayına gönderildi 🚀");
-
+   setInfoModal("jobSubmitted");
     setShowPlanModal(false);
     setShowForm(false);
     setShowPreview(false);
@@ -891,6 +891,19 @@ if (job.plan === "featured") {
           type: "p",
           text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan ilan platformudur.",
         },
+        jobSubmitted: {
+      title: "İlanın Alındı! 🚀",
+      blocks: [
+        {
+          type: "p",
+          text: "İlanın başarıyla gönderildi. Admin onayından geçtikten sonra sitede yayınlanacak.",
+        },
+        {
+          type: "note",
+          text: "Onay süreci genellikle 24 saat içinde tamamlanır. İlanlarım bölümünden durumunu takip edebilirsin.",
+        },
+      ],
+    },
         {
           type: "p",
           text: "Platformun amacı, kısa süreli personel ihtiyacı olan işverenlerle ek gelir veya esnek çalışma fırsatı arayan kişileri daha hızlı ve sade bir ilan akışı içinde buluşturmaktır.",
