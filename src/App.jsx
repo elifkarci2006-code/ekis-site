@@ -4260,7 +4260,7 @@ if (job.plan === "featured") {
                 currentUser={currentUser}
                 onLogout={() => setCurrentUser(null)}
                 onNewPost={() => setShowForm(true)}
-                onMyPosts={() => alert("İlanlarım yakında!")}
+               onMyPosts={() => setShowMyJobs(true)}
                 onAdminPanel={() => window.location.hash = "#admin"}
               />
             ) : (
@@ -4823,6 +4823,12 @@ if (job.plan === "featured") {
         setCurrentUser(user);
       });
     }}
+  />
+)}
+      {showMyJobs && (
+  <MyJobsModal
+    currentUser={currentUser}
+    onClose={() => setShowMyJobs(false)}
   />
 )}
       <CookieBanner />
