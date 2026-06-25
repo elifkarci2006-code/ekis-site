@@ -892,7 +892,7 @@ district: "",
 
  return (
     <div className="app-shell">
-      <style>{`      <style>{`
+      <style>{`
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
