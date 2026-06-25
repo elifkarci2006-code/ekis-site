@@ -907,16 +907,7 @@ if (job.plan === "featured") {
         },
       ],
     },
-        {
-          type: "p",
-          text: "Platformun amacı, kısa süreli personel ihtiyacı olan işverenlerle ek gelir veya esnek çalışma fırsatı arayan kişileri daha hızlı ve sade bir ilan akışı içinde buluşturmaktır.",
-        },
-        {
-          type: "note",
-          text: "Ekiş, işveren ile aday arasında doğrudan iş ilişkisi kurmaz; ilan ve iletişim altyapısı sağlar. İşe alım, görüşme, ücret, çalışma koşulları ve taraflar arasındaki anlaşmalar işveren ile adayın sorumluluğundadır.",
-        },
-      ],
-    },
+        
 
     kvkk: {
       title: "KVKK Aydınlatma Metni",
