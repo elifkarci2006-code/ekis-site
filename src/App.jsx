@@ -2003,9 +2003,8 @@ district: "",
           color: rgba(255,255,255,0.92);
         }
         .site-footer-topline {
-          height: 12px;
-          background: linear-gradient(90deg, ${PALETTE.coral} 0%, #f25b7a 100%);
-        }
+  display: none;
+}
         .site-footer-inner { padding: 34px 28px 20px; }
         .footer-grid {
           display: grid;
@@ -3631,7 +3630,7 @@ district: "",
                   }}
                 />
                 <p className="footer-brand-text">
-                  Günlük, saatlik ve part time iş fırsatlarını tek yerde buluşturan sade ve hızlı iş ilan platformu.
+                  Türkiye'nin ek iş platformu. Günlük, saatlik ve part time fırsatlar tek yerde.
                 </p>
               </div>
 
