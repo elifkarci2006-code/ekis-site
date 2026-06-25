@@ -22,6 +22,7 @@ import FeaturedListModal from "./components/FeaturedListModal";
 import PostJobModal from "./components/PostJobModal";
 import CookieBanner from "./components/CookieBanner";
 import AuthModal from "./components/AuthModal";
+import AccountMenu from "./components/AccountMenu";
 const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
 
 
@@ -4242,29 +4243,30 @@ if (job.plan === "featured") {
             </a>
           </div>
 
-         <div className="top-actions">
-  <button className="btn btn-primary" onClick={() => {
-    if (!currentUser) {
-      setShowAuthModal(true);
-    } else {
-      setShowForm(true);
-    }
-  }}>
-    Hemen İlan Ver
-  </button>
-  {currentUser ? (
-    <button className="btn btn-secondary" onClick={async () => {
-      await supabase.auth.signOut();
-      setCurrentUser(null);
-    }}>
-      Çıkış Yap
-    </button>
-  ) : (
-    <button className="btn btn-secondary" onClick={() => setShowAuthModal(true)}>
-      Giriş Yap
-    </button>
-  )}
-</div>
+        <div className="top-actions">
+            <button className="btn btn-primary" onClick={() => {
+              if (!currentUser) {
+                setShowAuthModal(true);
+              } else {
+                setShowForm(true);
+              }
+            }}>
+              Hemen İlan Ver
+            </button>
+            {currentUser ? (
+              <AccountMenu
+                currentUser={currentUser}
+                onLogout={() => setCurrentUser(null)}
+                onNewPost={() => setShowForm(true)}
+                onMyPosts={() => alert("İlanlarım yakında!")}
+                onAdminPanel={() => window.location.hash = "#admin"}
+              />
+            ) : (
+              <button className="btn btn-secondary" onClick={() => setShowAuthModal(true)}>
+                Giriş Yap
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
