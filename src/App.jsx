@@ -2370,7 +2370,7 @@ district: "",
           text-decoration: none;
         }
         .section-title-vitrin::before {
-          content: "★";
+          content: "";
           width: auto;
           height: auto;
           background: transparent;
@@ -3536,7 +3536,14 @@ district: "",
 
         <section className="section featured-section" id="one-cikanlar">
           <div className="section-head featured-head">
-            <h2 className="section-title section-title-vitrin">Ekiş Acil</h2>
+            <h2 className="section-title section-title-vitrin">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style={{marginRight: "8px", verticalAlign: "middle", flexShrink: 0}}>
+    <path d="M12 2a5 5 0 00-5 5v4L5 13v1h14v-1l-2-2V7a5 5 0 00-5-5z"/>
+    <path d="M10 15a2 2 0 004 0h-4z"/>
+    <path d="M12 1v1M4.2 4.2l.7.7M2 12h1M22 12h-1M19.8 4.2l-.7.7" stroke="white" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+  </svg>
+  Ekiş Acil
+</h2>
             <div className="featured-head-actions">
               <span>{filteredFeaturedJobs.length} ilan</span>
               <a href="#one-cikanlar" onClick={(e) => { e.preventDefault(); setShowFeaturedList(true); }}>Tümünü Gör →</a>
