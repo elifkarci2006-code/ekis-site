@@ -3537,7 +3537,7 @@ district: "",
         <section className="section featured-section" id="one-cikanlar">
           <div className="section-head featured-head">
             <h2 className="section-title section-title-vitrin">
- <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: "8px", verticalAlign: "middle", flexShrink: 0}}>
+ <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: "8px", verticalAlign: "middle", flexShrink: 0}}>
   <path d="M12 2v1"/>
   <path d="M4.2 4.2l.7.7"/>
   <path d="M19.8 4.2l-.7.7"/>
