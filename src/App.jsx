@@ -891,7 +891,10 @@ if (job.plan === "featured") {
           type: "p",
           text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan ilan platformudur.",
         },
-        jobSubmitted: {
+      ],
+    },
+
+   jobSubmitted: {
       title: "İlanın Alındı! 🚀",
       blocks: [
         {
