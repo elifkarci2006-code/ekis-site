@@ -6,7 +6,12 @@ export default function FeaturedJobCard({ job, onOpen }) {
     <article className="featured-card" onClick={() => onOpen(job)}>
       <div className="card-top">
         <div className="pill">
-          <span>★</span> Öne Çıkan
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{marginRight: "5px", verticalAlign: "middle"}}>
+  <path d="M12 3C9 3 6.5 5.5 6.5 8.5c0 2 .8 3.5 1.5 4.5L6 15h12l-2-2c.7-1 1.5-2.5 1.5-4.5C17.5 5.5 15 3 12 3z" fill="white" opacity="0.9"/>
+  <rect x="9" y="15" width="6" height="1.5" rx="0.75" fill="white" opacity="0.7"/>
+  <circle cx="12" cy="20" r="1.5" fill="white" opacity="0.6"/>
+  <path d="M9 8h6M12 6v4" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+</svg> Öne Çıkan
         </div>
 
         <div className="card-top-right">
