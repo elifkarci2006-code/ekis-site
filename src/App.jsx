@@ -57,6 +57,7 @@ const [currentUser, setCurrentUser] = useState(null);
   const [errors, setErrors] = useState({});
   const [infoModal, setInfoModal] = useState(null);
   const [isAdminRoute, setIsAdminRoute] = useState(false);
+
   const [captcha, setCaptcha] = useState(() => generateCaptchaQuestion());
   const [formData, setFormData] = useState({
     company: "",
@@ -261,6 +262,8 @@ view_count: job.view_count || 0,
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+
 
   useEffect(() => {
     if (!showForm) {
@@ -2213,8 +2216,7 @@ district: "",
           color: ${PALETTE.slate};
           font-weight: 800;
         }
-
-      `}</style>
+`}</style>
 
       {isAdminRoute && (
         <AdminPanel
