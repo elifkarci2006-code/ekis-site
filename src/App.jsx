@@ -2375,7 +2375,7 @@ district: "",
           height: auto;
           background: transparent;
           box-shadow: none;
-          font-size: 17px;
+          font-size: 25px;
           color: #fff;
         }
         .featured-card {
