@@ -48,8 +48,16 @@ export function generateCaptchaQuestion() {
 export function inferCategory(title) {
   const lower = title.toLocaleLowerCase("tr-TR");
 
-  if (lower.includes("garson") || lower.includes("barista") || lower.includes("kafe")) {
+  if (lower.includes("garson") || lower.includes("servis eleman")) {
+    return "Garson / Servis";
+  }
+
+  if (lower.includes("barista") || lower.includes("kafe")) {
     return "Kafe & Restoran";
+  }
+
+  if (lower.includes("inşaat") || lower.includes("tadilat") || lower.includes("boyacı") || lower.includes("usta")) {
+    return "İnşaat & Fiziksel İş";
   }
 
   if (lower.includes("kurye") || lower.includes("dağıtım")) {

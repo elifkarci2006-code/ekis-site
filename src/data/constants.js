@@ -22,8 +22,11 @@ export const featuredPackages = [
   { id: 3, title: "20 Gün", days: 20, price: 699 },
 ];
 
+// Kept in sync with the mobile app's categories list (ekis-mobile/src/app/index.tsx)
+// -- both platforms write this into the same job_posts.category text column.
 export const categories = [
   "Tümü",
+  "Garson / Servis",
   "Kafe & Restoran",
   "Kurye & Dağıtım",
   "Depo & Lojistik",
