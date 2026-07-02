@@ -3805,6 +3805,10 @@ district: "",
                   <a className="footer-link" href="#one-cikanlar">Ekiş Acil</a>
                   <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("cityJobs")}>Şehre göre işler</button>
                   <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("faq")}>Sık sorulanlar</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekIsBul")}>Ek iş nasıl bulunur?</button>
+<button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("partTimeAvantajlari")}>Part time çalışma rehberi</button>
+<button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("gunlukIsRehber")}>Günlük iş rehberi</button>
+<button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekisNedir")}>Ekiş nedir?</button>
                 </div>
               </div>
 
@@ -3815,6 +3819,7 @@ district: "",
                   <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); setSelectedPlan("featured"); }}>Ekiş Acil’e çıkar</a>
                   <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("pricing")}>Fiyatlandırma</button>
                   <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("support")}>Destek al</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("isverenRehber")}>İşveren rehberi</button>
                 </div>
               </div>
 
