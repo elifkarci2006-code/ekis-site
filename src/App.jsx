@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabaseClient";
-import { PALETTE, categories, cities, types } from "./data/constants";
+import { PALETTE, categories, cities, types, featuredPackages } from "./data/constants";
 import { featuredSeed, jobsSeed } from "./data/seeds";
 import { cityDistricts } from "./data/cityDistricts";
 import {
@@ -25,7 +25,10 @@ import AuthModal from "./components/AuthModal";
 import AccountMenu from "./components/AccountMenu";
 import MyJobsModal from "./components/MyJobsModal";
 import AdminPanel from "./components/AdminPanel";
-const SHOPIER_FEATURED_LINK = "https://shopier.com/46018405";
+
+const SITE_URL = "https://www.ekiş.com.tr";
+const PAYTR_OK_URL = `${SITE_URL}/?paytr_result=success`;
+const PAYTR_FAIL_URL = `${SITE_URL}/?paytr_result=fail`;
 
 
 export default function App() {
@@ -45,6 +48,11 @@ const [currentUser, setCurrentUser] = useState(null);
   const [showFeaturedList, setShowFeaturedList] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("free");
   const [pendingJob, setPendingJob] = useState(null);
+  const [selectedPackageId, setSelectedPackageId] = useState(featuredPackages[0].id);
+  const [paymentStage, setPaymentStage] = useState("plan"); // 'plan' | 'package' | 'iframe' | 'processing'
+  const [paytrToken, setPaytrToken] = useState("");
+  const [paymentError, setPaymentError] = useState("");
+  const [paymentSubmitting, setPaymentSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [logoSrc, setLogoSrc] = useState("/logo-ekis.webp");
   const [headerSmall, setHeaderSmall] = useState(false);
@@ -73,7 +81,6 @@ const [currentUser, setCurrentUser] = useState(null);
     contactPhone: "",
     captchaAnswer: "",
   });
-useEffect(() => {
   const fetchJobs = async () => {
     const { data, error } = await supabase
       .from("job_posts")
@@ -139,8 +146,9 @@ view_count: job.view_count || 0,
     setFeaturedJobs([...featuredJobsFromDb, ...featuredSeed]);
   };
 
-  fetchJobs();
-}, []);
+  useEffect(() => {
+    fetchJobs();
+  }, []);
   useEffect(() => {
   supabase.auth.getSession().then(({ data: { session } }) => {
     setCurrentUser(session?.user ?? null);
@@ -473,29 +481,25 @@ district: "",
     setShowPlanModal(true);
   };
 
+  // Handles the free-plan branch only -- the paid "featured" branch goes
+  // through handleFeaturedPayment instead, since it needs a create-payment
+  // call before the job can be considered submitted.
   const handlePlanContinue = async () => {
     if (!pendingJob) return;
 
     const payload = {
-  user_id: currentUser?.id || null,
-  company_name: pendingJob.company,
-  job_title: pendingJob.title,
+      user_id: currentUser?.id || null,
+      company_name: pendingJob.company,
+      job_title: pendingJob.title,
       city: toTitleCase(formData.city),
       district: toTitleCase(formData.district),
       salary: pendingJob.salary,
       description: pendingJob.description,
       phone: pendingJob.contactPhone,
-      plan_type: selectedPlan === "featured" ? "featured" : "normal",
+      plan_type: "normal",
       work_type: pendingJob.type,
       status: "pending",
-      expires_at: new Date(
-        Date.now() +
-          (selectedPlan === "featured" ? 15 : 30) *
-            24 *
-            60 *
-            60 *
-            1000
-      ).toISOString(),
+      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
     };
 
     const { data, error } = await supabase
@@ -514,25 +518,29 @@ district: "",
       ...pendingJob,
       id: data?.id || pendingJob.id,
       dbId: data?.id,
-      plan: selectedPlan === "featured" ? "featured" : "free",
-      durationDays: selectedPlan === "featured" ? 15 : 30,
+      plan: "free",
+      durationDays: 30,
       status: "pending",
-      paymentStatus: selectedPlan === "featured" ? "pending" : "not_required",
+      paymentStatus: "not_required",
       submittedAt: new Date().toISOString(),
     };
 
     setPendingJobs((prev) => [reviewJob, ...prev]);
 
-    if (selectedPlan === "featured") {
-      window.open(SHOPIER_FEATURED_LINK, "_blank", "noopener,noreferrer");
-    }
+    setInfoModal("jobSubmitted");
+    resetPostFlow();
+  };
 
-   setInfoModal("jobSubmitted");
+  const resetPostFlow = () => {
     setShowPlanModal(false);
     setShowForm(false);
     setShowPreview(false);
     setPendingJob(null);
     setSelectedPlan("free");
+    setSelectedPackageId(featuredPackages[0].id);
+    setPaymentStage("plan");
+    setPaytrToken("");
+    setPaymentError("");
 
     setFormData({
       company: "",
@@ -551,6 +559,128 @@ district: "",
 
     setCaptcha(generateCaptchaQuestion());
   };
+
+  const handleFeaturedPayment = async () => {
+    if (!pendingJob) return;
+
+    setPaymentSubmitting(true);
+    setPaymentError("");
+
+    const pkg = featuredPackages.find((p) => p.id === selectedPackageId);
+
+    const payload = {
+      user_id: currentUser?.id || null,
+      company_name: pendingJob.company,
+      job_title: pendingJob.title,
+      city: toTitleCase(formData.city),
+      district: toTitleCase(formData.district),
+      salary: pendingJob.salary,
+      description: pendingJob.description,
+      phone: pendingJob.contactPhone,
+      plan_type: "featured",
+      work_type: pendingJob.type,
+      status: "pending",
+      expires_at: new Date(Date.now() + pkg.days * 24 * 60 * 60 * 1000).toISOString(),
+    };
+
+    const { data: job, error: insertError } = await supabase
+      .from("job_posts")
+      .insert([payload])
+      .select()
+      .single();
+
+    if (insertError || !job) {
+      console.error("İlan kaydedilemedi:", insertError);
+      setPaymentSubmitting(false);
+      setPaymentError("İlan kaydedilemedi. Lütfen tekrar dene.");
+      return;
+    }
+
+    setPendingJobs((prev) => [
+      {
+        ...pendingJob,
+        id: job.id,
+        dbId: job.id,
+        plan: "featured",
+        durationDays: pkg.days,
+        status: "pending",
+        paymentStatus: "pending",
+        submittedAt: new Date().toISOString(),
+      },
+      ...prev,
+    ]);
+
+    const { data: fnData, error: fnError } = await supabase.functions.invoke("create-payment", {
+      body: {
+        jobId: job.id,
+        packageId: selectedPackageId,
+        okUrl: PAYTR_OK_URL,
+        failUrl: PAYTR_FAIL_URL,
+      },
+    });
+
+    setPaymentSubmitting(false);
+
+    if (fnError || !fnData?.token) {
+      const code = fnData?.error;
+      setPaymentError(
+        code === "payment_not_configured"
+          ? "Ödeme sistemi çok yakında aktif olacak."
+          : "Ödeme başlatılamadı. Lütfen daha sonra tekrar dene."
+      );
+      return;
+    }
+
+    setPaytrToken(fnData.token);
+    setPaymentStage("iframe");
+  };
+
+  const closePaymentFlow = () => {
+    setPaytrToken("");
+    setPaymentStage("plan");
+  };
+
+  const finishPayment = (status) => {
+    setPaytrToken("");
+    setPaymentStage("processing");
+
+    setTimeout(async () => {
+      await fetchJobs();
+      resetPostFlow();
+      setInfoModal(status === "success" ? "jobSubmitted" : "paymentFailed");
+    }, 1200);
+  };
+
+  // PayTR redirects the iframe to merchant_ok_url/fail_url once the user
+  // finishes checkout. Reading contentWindow.location only succeeds once the
+  // iframe navigates back to our own origin (it throws while still on
+  // paytr.com, which is the expected state during checkout).
+  const handleIframeLoad = (event) => {
+    let href = null;
+
+    try {
+      href = event.target.contentWindow.location.href;
+    } catch {
+      return;
+    }
+
+    if (!href || !href.includes("paytr_result=")) return;
+
+    const status = new URL(href).searchParams.get("paytr_result");
+    finishPayment(status);
+  };
+
+  // Defensive fallback: some banks' 3D Secure pages break out of the iframe
+  // (X-Frame-Options) and navigate the whole tab instead, landing back here
+  // as a full page load rather than an iframe onLoad event.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get("paytr_result");
+    if (!status) return;
+
+    window.history.replaceState({}, "", window.location.pathname);
+    finishPayment(status);
+  }, []);
 
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
@@ -724,7 +854,22 @@ district: "",
         },
       ],
     },
-        
+
+    paymentFailed: {
+      title: "Ödeme Tamamlanamadı",
+      blocks: [
+        {
+          type: "p",
+          text: "İlanın kaydedildi ama ödeme tamamlanmadı, bu yüzden Ekiş Acil olarak öne çıkmayacak.",
+        },
+        {
+          type: "note",
+          text: "İlanlarım bölümünden ödemeyi tekrar deneyebilirsin.",
+        },
+      ],
+    },
+
+
     kvkk: {
       title: "KVKK Aydınlatma Metni",
       blocks: [
@@ -3454,7 +3599,7 @@ district: "",
         onPublish={handlePublishClick}
       />
 
-      {showPlanModal && (
+      {showPlanModal && paymentStage !== "iframe" && paymentStage !== "processing" && (
         <div className="post-modal-backdrop" onClick={() => setShowPlanModal(false)}>
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-panel-inner">
@@ -3485,14 +3630,73 @@ district: "",
                 </button>
               </div>
 
+              {selectedPlan === "featured" && (
+                <div className="plan-grid" style={{ marginTop: 14 }}>
+                  {featuredPackages.map((pkg) => (
+                    <button
+                      key={pkg.id}
+                      type="button"
+                      className={`plan-card ${selectedPackageId === pkg.id ? "active" : ""}`}
+                      onClick={() => setSelectedPackageId(pkg.id)}
+                    >
+                      <span className="plan-kicker">{pkg.title}</span>
+                      <strong>{pkg.price} TL</strong>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {paymentError ? (
+                <p className="post-desc" style={{ color: "#DC2626", marginTop: 12 }}>
+                  {paymentError}
+                </p>
+              ) : null}
+
               <div className="modal-actions" style={{ marginTop: 18 }}>
-                <button className="btn btn-primary" type="button" onClick={handlePlanContinue}>
-                  {selectedPlan === "featured" ? "Ödeme Adımına Geç" : "Onaya Gönder"}
+                <button
+                  className="btn btn-primary"
+                  type="button"
+                  onClick={selectedPlan === "featured" ? handleFeaturedPayment : handlePlanContinue}
+                  disabled={paymentSubmitting}
+                >
+                  {paymentSubmitting
+                    ? "İşleniyor..."
+                    : selectedPlan === "featured"
+                    ? "Öde ve Gönder"
+                    : "Onaya Gönder"}
                 </button>
                 <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
                   Geri
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {paymentStage === "iframe" && paytrToken && (
+        <div className="post-modal-backdrop">
+          <div className="post-modal" style={{ width: "100%", height: "100%", maxWidth: "100%", maxHeight: "100%", padding: 0 }}>
+            <div style={{ display: "flex", justifyContent: "flex-end", padding: 8 }}>
+              <button className="detail-close" type="button" onClick={closePaymentFlow}>×</button>
+            </div>
+            <iframe
+              title="PayTR Ödeme"
+              src={`https://www.paytr.com/odeme/guvenli/${paytrToken}`}
+              style={{ width: "100%", height: "calc(100% - 44px)", border: "none" }}
+              onLoad={handleIframeLoad}
+            />
+          </div>
+        </div>
+      )}
+
+      {paymentStage === "processing" && (
+        <div className="post-modal-backdrop">
+          <div className="post-modal">
+            <div className="post-panel-inner" style={{ textAlign: "center", padding: "40px 20px" }}>
+              <p className="post-desc">
+                Ödeme sonucu işleniyor, birkaç saniye içinde ilanının durumu güncellenecek.
+              </p>
             </div>
           </div>
         </div>

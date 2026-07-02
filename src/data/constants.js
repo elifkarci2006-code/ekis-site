@@ -14,6 +14,14 @@ export const PALETTE = {
 
 export const ADS_ENABLED = false;
 
+// Kept in sync with the mobile app's featuredPackages (ekis-mobile/src/app/index.tsx)
+// and the server-side authoritative copy in ekis-mobile/supabase/functions/_shared/paytr.ts.
+export const featuredPackages = [
+  { id: 1, title: "24 Saat", days: 1, price: 149 },
+  { id: 2, title: "10 Gün", days: 10, price: 499 },
+  { id: 3, title: "20 Gün", days: 20, price: 699 },
+];
+
 export const categories = [
   "Tümü",
   "Kafe & Restoran",
