@@ -893,7 +893,7 @@ district: "",
       blocks: [
         {
           type: "p",
-          text: "Günümüzde pek çok kişi ana işinin yanı sıra ek gelir elde etmek istiyor. Ancak doğru platformu bulmak, güvenilir işverenlerle buluşmak ve hızlı başvuru yapmak her zaman kolay olmayabiliyor. İşte tam bu noktada Ekiş devreye giriyor.",
+          text: "Günümüzde pek çok kişi ana işinin yanı sıra ek gelir elde etmek istiyor. Ancak doğru platformu bulmak, güvenilir işverenlerle buluşmak ve hızlı başvuru yapmak her zaman kolay olmayabiliyor. Işte tam bu noktada Ekiş devreye giriyor.",
         },
         {
           type: "p",
@@ -910,11 +910,11 @@ district: "",
         },
         {
           type: "p",
-          text: "Ekiş'te kayıt olmadan ilanları görüntüleyebilir, işveren bilgilerine ulaşabilirsiniz. İlan vermek isteyen işverenler ise ücretsiz hesap oluşturarak dakikalar içinde ilanlarını yayınlayabilir.",
+          text: "Ekiş'te kayıt olmadan ilanları görüntüleyebilir, işveren bilgilerine ulaşabilirsiniz. Ilan vermek isteyen işverenler ise ücretsiz hesap oluşturarak dakikalar içinde ilanlarını yayınlayabilir.",
         },
         {
           type: "note",
-          text: "İpucu: Ekiş Acil bölümündeki ilanlar daha hızlı kapanır. Düzenli kontrol etmeyi unutmayın!",
+          text: "Ipucu: Ekiş Acil bölümündeki ilanlar daha hızlı kapanır. Düzenli kontrol etmeyi unutmayın!",
         },
       ],
     },
