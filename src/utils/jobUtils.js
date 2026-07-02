@@ -10,15 +10,15 @@ export function getDaysAgoLabel(createdAt) {
   return `${diffDays} gündür yayında`;
 }
 
-export function getJobDurationDays(job) {
-  return job.plan === "featured" || job.featuredStatus === "live" ? 15 : 30;
-}
-
+// Base listing lifetime (30 days from creation, or the stored expires_at if
+// present) is independent of the "featured/Ekiş Acil" badge -- a listing
+// whose featured badge expires stays live as a normal listing, it doesn't
+// get taken down. Kept in sync with the mobile app's getJobExpiryTime.
 export function getJobExpireDate(job) {
-  const created = new Date(job.createdAt);
-  const duration = Number(job.durationDays || getJobDurationDays(job));
+  if (job.expiresAt) return new Date(job.expiresAt);
 
-  return new Date(created.getTime() + duration * 24 * 60 * 60 * 1000);
+  const created = new Date(job.createdAt);
+  return new Date(created.getTime() + 30 * 24 * 60 * 60 * 1000);
 }
 
 export function getDaysLeftLabel(job) {
@@ -33,6 +33,18 @@ export function getDaysLeftLabel(job) {
 
 export function isJobActive(job) {
   return getJobExpireDate(job) > new Date() && job.status !== "passive";
+}
+
+// Whether the "Ekiş Acil" (featured) badge should still show -- governed by
+// featured_expires_at (set per the paid package's duration at purchase time).
+// Featured jobs with no featured_expires_at (e.g. manually toggled by an
+// admin, or predating the payment system) stay featured indefinitely, same
+// as the mobile app's isFeaturedActive.
+export function isFeaturedActive(job) {
+  const isFeatured = job.plan === "featured" || job.featuredStatus === "live";
+  if (!isFeatured) return false;
+  if (!job.featuredExpiresAt) return true;
+  return new Date(job.featuredExpiresAt) > new Date();
 }
 
 export function generateCaptchaQuestion() {

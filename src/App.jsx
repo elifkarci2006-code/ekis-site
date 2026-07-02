@@ -10,6 +10,7 @@ import {
   getDaysLeftLabel,
   getJobExpireDate,
   inferCategory,
+  isFeaturedActive,
   isJobActive,
   normalizeLocation,
   toTitleCase,
@@ -134,11 +135,11 @@ view_count: job.view_count || 0,
     );
 
     const normalJobs = formatted.filter(
-      (j) => j.status !== "pending" && j.featuredStatus !== "live"
+      (j) => j.status !== "pending" && !isFeaturedActive(j)
     );
 
     const featuredJobsFromDb = formatted.filter(
-      (j) => j.status !== "pending" && j.featuredStatus === "live"
+      (j) => j.status !== "pending" && isFeaturedActive(j)
     );
 
     setPendingJobs(pendingFromDb);
@@ -3713,7 +3714,7 @@ district: "",
               <div className="detail-shell detail-shell-clean">
                 <aside className="detail-left detail-side-clean">
                   <div className="detail-badge-row">
-                    {selectedJob.plan === "featured" || selectedJob.featuredStatus === "live" ? (
+                    {isFeaturedActive(selectedJob) ? (
                       <span className="detail-featured-badge">★ Öne Çıkan</span>
                     ) : (
                       <span className="detail-featured-badge">Yeni İlan</span>
