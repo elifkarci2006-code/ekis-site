@@ -3810,15 +3810,18 @@ district: "",
                   <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("faq")}>Sık sorulanlar</button>
                 </div>
               </div>
-              <h3 className="footer-subheading">Rehber</h3>
-             <div className="footer-links">
-               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekIsBul")}>Ek iş nasıl bulunur?</button>
-               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("partTimeAvantajlari")}>Part time çalışma rehberi</button>
-               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("gunlukIsRehber")}>Günlük iş rehberi</button>
-               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("isverenRehber")}>İşveren rehberi</button>
-               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekisNedir")}>Ekiş nedir?</button>
-  </div>
-</div>
+              <div>
+                <h3 className="footer-subheading">Rehber</h3>
+                <div className="footer-links">
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekIsBul")}>Ek is nasil bulunur?</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("partTimeAvantajlari")}>Part time calisma rehberi</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("gunlukIsRehber")}>Gunluk is rehberi</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("isverenRehber")}>Isveren rehberi</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekisNedir")}>Ekis nedir?</button>
+                </div>
+              </div>
+
+              <div>
                 <h3 className="footer-subheading">İşveren</h3>
                 <div className="footer-links">
                   <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>İlan ver</a>
