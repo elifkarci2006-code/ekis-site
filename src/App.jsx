@@ -2150,7 +2150,7 @@ district: "",
         .site-footer-inner { padding: 34px 28px 20px; }
         .footer-grid {
           display: grid;
-          grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
+         grid-template-columns: 1.2fr 1fr 1fr 1fr 1.2fr;
           gap: 28px;
           align-items: start;
         }
@@ -2175,11 +2175,14 @@ district: "",
           margin: 0;
         }
         .footer-subheading {
-          font-size: 16px;
-          font-weight: 900;
-          color: #fff;
-          margin: 0 0 12px;
-        }
+  font-size: 13px;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+}
         .footer-links {
           display: grid;
           gap: 10px;
@@ -3805,14 +3808,17 @@ district: "",
                   <a className="footer-link" href="#one-cikanlar">Ekiş Acil</a>
                   <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("cityJobs")}>Şehre göre işler</button>
                   <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("faq")}>Sık sorulanlar</button>
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekIsBul")}>Ek iş nasıl bulunur?</button>
-<button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("partTimeAvantajlari")}>Part time çalışma rehberi</button>
-<button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("gunlukIsRehber")}>Günlük iş rehberi</button>
-<button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekisNedir")}>Ekiş nedir?</button>
                 </div>
               </div>
-
-              <div>
+              <h3 className="footer-subheading">Rehber</h3>
+             <div className="footer-links">
+               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekIsBul")}>Ek iş nasıl bulunur?</button>
+               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("partTimeAvantajlari")}>Part time çalışma rehberi</button>
+               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("gunlukIsRehber")}>Günlük iş rehberi</button>
+               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("isverenRehber")}>İşveren rehberi</button>
+               <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekisNedir")}>Ekiş nedir?</button>
+  </div>
+</div>
                 <h3 className="footer-subheading">İşveren</h3>
                 <div className="footer-links">
                   <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>İlan ver</a>
