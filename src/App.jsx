@@ -676,14 +676,40 @@ district: "",
 
   const footerInfoContent = {
     about: {
-      title: "Hakkımızda",
-      blocks: [
-        {
-          type: "p",
-          text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan ilan platformudur.",
-        },
+  title: "Hakkımızda",
+  blocks: [
+    {
+      type: "p",
+      text: "Ekiş; günlük, saatlik, part time ve ek gelir odaklı iş fırsatlarını iş arayanlarla buluşturan Türkiye'nin ek iş platformudur.",
+    },
+    {
+      type: "p",
+      text: "Kurulma amacımız basit: Kısa süreli veya esnek çalışma fırsatlarını tek bir platformda toplamak ve hem iş arayanların hem de işverenlerin hayatını kolaylaştırmak. Türkiye'de milyonlarca insan ek gelir arayışında, aynı zamanda pek çok işveren acil personel ihtiyacını karşılamakta zorlanıyor. Ekiş bu iki kesimi hızlı ve sade bir şekilde bir araya getiriyor.",
+    },
+    {
+      type: "list",
+      items: [
+        "Türkiye geneli tüm şehirlerde ilan yayınlama imkânı",
+        "Günlük, saatlik ve part time iş kategorileri",
+        "Admin onaylı ilanlar ile güvenli platform ortamı",
+        "Ücretsiz ilan verme ve iş arama",
+        "Ekiş Acil ile acil personel ihtiyaçlarına hızlı çözüm",
       ],
     },
+    {
+      type: "p",
+      text: "Ekiş olarak inanıyoruz ki herkesin zamanına ve emeğine değer katacak bir iş fırsatı bulunabilir. Platformumuz aracılığıyla binlerce iş arayan kişi ek gelir elde ederken, işverenler de kısa sürede doğru personele ulaşabiliyor.",
+    },
+    {
+      type: "p",
+      text: "Platformumuz sürekli gelişmeye devam etmektedir. Yakında mobil uygulamamız da yayına girecek; böylece iş fırsatlarına her an, her yerden ulaşmak daha da kolaylaşacak.",
+    },
+    {
+      type: "note",
+      text: "Ekiş, işveren ile aday arasında doğrudan iletişim altyapısı sağlar. İşe alım süreci, ücret ve çalışma koşulları tamamen taraflar arasında belirlenir.",
+    },
+  ],
+},
 
    jobSubmitted: {
       title: "İlanın Alındı! 🚀",
