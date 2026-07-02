@@ -888,6 +888,147 @@ district: "",
         },
       ],
     },
+    ekIsBul: {
+      title: "Ek İş Nasıl Bulunur? Ekiş ile Kolayca Başlayın",
+      blocks: [
+        {
+          type: "p",
+          text: "Günümüzde pek çok kişi ana işinin yanı sıra ek gelir elde etmek istiyor. Ancak doğru platformu bulmak, güvenilir işverenlerle buluşmak ve hızlı başvuru yapmak her zaman kolay olmayabiliyor. İşte tam bu noktada Ekiş devreye giriyor.",
+        },
+        {
+          type: "p",
+          text: "Ekiş üzerinde günlük, saatlik ve part time iş ilanlarına kolayca ulaşabilirsiniz. Şehir, meslek ve çalışma tipine göre filtreleme yaparak size en uygun fırsatı bulabilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Şehir ve ilçenizi seçerek yakın fırsatları keşfedin",
+            "Günlük, saatlik veya part time çalışma tipini belirleyin",
+            "Ekiş Acil bölümünden acil işverenlere öncelikli başvurun",
+            "İlan detaylarında işverenle doğrudan iletişime geçin",
+          ],
+        },
+        {
+          type: "p",
+          text: "Ekiş'te kayıt olmadan ilanları görüntüleyebilir, işveren bilgilerine ulaşabilirsiniz. İlan vermek isteyen işverenler ise ücretsiz hesap oluşturarak dakikalar içinde ilanlarını yayınlayabilir.",
+        },
+        {
+          type: "note",
+          text: "İpucu: Ekiş Acil bölümündeki ilanlar daha hızlı kapanır. Düzenli kontrol etmeyi unutmayın!",
+        },
+      ],
+    },
+
+    partTimeAvantajlari: {
+      title: "Part Time Çalışmanın Avantajları",
+      blocks: [
+        {
+          type: "p",
+          text: "Part time çalışma, özellikle öğrenciler, ev hanımları ve ana işinin yanı sıra ek gelir arayan kişiler için büyük avantajlar sunuyor. Esnek çalışma saatleri ve çeşitli iş imkânlarıyla hayat kalitenizi artırabilirsiniz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Esnek çalışma saatleri sayesinde kişisel hayatınızı düzenleyebilirsiniz",
+            "Farklı sektörlerde deneyim kazanarak kariyerinizi geliştirebilirsiniz",
+            "Ek gelir ile finansal özgürlüğünüzü artırabilirsiniz",
+            "Öğrenciler için okul-iş dengesini kolayca kurabilirsiniz",
+            "Yeni insanlarla tanışarak profesyonel ağınızı genişletebilirsiniz",
+          ],
+        },
+        {
+          type: "p",
+          text: "Türkiye'de part time çalışma giderek yaygınlaşıyor. Özellikle etkinlik, kafe-restoran, depo ve satış sektörlerinde esnek çalışma fırsatları her geçen gün artıyor.",
+        },
+        {
+          type: "note",
+          text: "Ekiş üzerindeki ilanların büyük çoğunluğu part time ve günlük çalışma fırsatlarından oluşmaktadır.",
+        },
+      ],
+    },
+
+    isverenRehber: {
+      title: "İşveren Olarak Nasıl İlan Veririm?",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş, kısa süreli personel ihtiyacınızı hızlıca karşılamanızı sağlayan bir platform. Etkinlik, depo, kafe, restoran veya herhangi bir sektörde geçici personel arayanlar için ücretsiz ilan verme imkânı sunuyoruz.",
+        },
+        {
+          type: "list",
+          items: [
+            "Sağ üstteki 'Hemen İlan Ver' butonuna tıklayın",
+            "İşveren hesabı oluşturun veya giriş yapın",
+            "İlan başlığı, şehir, ücret ve açıklama bilgilerini doldurun",
+            "İlanınızı admin onayına gönderin",
+            "Onay sonrası ilanınız yayına alınır ve başvurular gelmeye başlar",
+          ],
+        },
+        {
+          type: "p",
+          text: "Daha fazla görünürlük için Ekiş Acil bölümünde öne çıkarabilirsiniz. Ekiş Acil ilanları ana sayfanın en üstünde gösterilir ve daha hızlı sonuç almanızı sağlar.",
+        },
+        {
+          type: "note",
+          text: "Tüm ilanlar admin kontrolünden geçerek yayına alınır. Bu sayede platform güvenliği ve ilan kalitesi korunur.",
+        },
+      ],
+    },
+
+    gunlukIsRehber: {
+      title: "Günlük ve Saatlik İşlerde Dikkat Edilmesi Gerekenler",
+      blocks: [
+        {
+          type: "p",
+          text: "Günlük veya saatlik işlere başlamadan önce bazı önemli konulara dikkat etmek, hem sizi hem de işvereni korur. İşte bilmeniz gereken temel bilgiler:",
+        },
+        {
+          type: "list",
+          items: [
+            "İlan detaylarını dikkatlice okuyun, çalışma saatlerini ve ücreti netleştirin",
+            "İşveren ile iletişime geçmeden önce ilanı kaydedin",
+            "Buluşma noktasını ve iş adresini önceden teyit edin",
+            "Ücret ödemesinin nasıl ve ne zaman yapılacağını sorun",
+            "Şüpheli görünen ilanları platforma bildirin",
+          ],
+        },
+        {
+          type: "p",
+          text: "Ekiş'teki tüm ilanlar admin onayından geçmektedir. Yine de çalışma öncesinde işveren ile detayları netleştirmenizi öneririz.",
+        },
+        {
+          type: "note",
+          text: "Güvenliğiniz için nakit para transferi veya ön ödeme talep eden ilanlardan uzak durun ve durumu bize bildirin.",
+        },
+      ],
+    },
+
+    ekisNedir: {
+      title: "Ekiş Nedir? Nasıl Çalışır?",
+      blocks: [
+        {
+          type: "p",
+          text: "Ekiş, Türkiye'nin ek iş platformudur. Günlük, saatlik ve part time iş fırsatlarını tek bir platformda buluşturarak iş arayanlarla işverenleri hızlı ve sade bir şekilde bir araya getirir.",
+        },
+        {
+          type: "p",
+          text: "Platform ücretsiz olarak kullanılabilir. İş arayanlar herhangi bir kayıt olmadan ilanları görüntüleyebilir ve işverenlerle iletişime geçebilir. İşverenler ise ücretsiz hesap oluşturarak ilan yayınlayabilir.",
+        },
+        {
+          type: "list",
+          items: [
+            "Tüm ilanlar admin onayından geçer — güvenli platform",
+            "Türkiye geneli tüm şehirlerde ilanlar mevcuttur",
+            "Ekiş Acil bölümü ile acil personel ihtiyacınızı hızla karşılayın",
+            "Mobil uyumlu tasarım ile her cihazdan kolayca erişin",
+          ],
+        },
+        {
+          type: "note",
+          text: "Ekiş, işveren ile aday arasında doğrudan iletişim altyapısı sağlar. İşe alım süreci tamamen taraflar arasında gerçekleşir.",
+        },
+      ],
+    },
   };
 
  return (
