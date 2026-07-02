@@ -860,20 +860,29 @@ district: "",
     },
 
     faq: {
-      title: "Sık Sorulanlar",
-      blocks: [
-        {
-          type: "list",
-          items: [
-            "İlanlara başvurmak için üyelik zorunlu değildir.",
-            "İlan detayındaki iletişim bilgileri üzerinden işverenle doğrudan görüşebilirsiniz.",
-            "Tüm ilanlar yayına alınmadan önce admin kontrolünden geçer.",
-            "Ekiş Acil ilanlar daha görünür alanda listelenir.",
-            "Sahte veya yanıltıcı ilanlar tespit edildiğinde yayından kaldırılabilir.",
-          ],
-        },
+  title: "Sık Sorulanlar",
+  blocks: [
+    {
+      type: "p",
+      text: "Ekiş hakkında en çok merak edilen soruların yanıtlarını burada bulabilirsiniz.",
+    },
+    {
+      type: "list",
+      items: [
+        "İlanlara başvurmak için üyelik zorunlu değildir. İlan detayındaki iletişim bilgileri üzerinden işverenle doğrudan görüşebilirsiniz.",
+        "İlan vermek için işveren hesabı oluşturmanız gerekmektedir. Kayıt ücretsizdir.",
+        "Tüm ilanlar yayına alınmadan önce admin kontrolünden geçer. Bu süreç genellikle 24 saat içinde tamamlanır.",
+        "Ekiş Acil ilanlar ana sayfanın en üstünde öne çıkan alanda listelenir ve daha fazla görünürlük sağlar.",
+        "Sahte veya yanıltıcı ilanlar tespit edildiğinde yayından kaldırılır. Şüpheli ilanları bize bildirebilirsiniz.",
+        "Platform Türkiye genelinde tüm şehirlerde hizmet vermektedir.",
+        "Günlük, saatlik ve part time olmak üzere üç farklı çalışma tipinde ilan bulabilirsiniz.",
+        "İşverenler ilanlarını 'İlanlarım' panelinden takip edebilir, düzenleyebilir veya silebilir.",
+        "Ekiş, işveren ile aday arasında iletişim altyapısı sağlar. Ücret ve çalışma koşulları taraflar arasında belirlenir.",
+        "Herhangi bir sorun yaşadığınızda 'Destek Al' bölümünden bize ulaşabilirsiniz.",
       ],
     },
+  ],
+},
 
     pricing: {
       title: "Fiyatlandırma",
