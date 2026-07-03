@@ -93,6 +93,9 @@ export default function FeaturedJobCard({ job, onOpen }) {
             color: "#94a3b8",
             fontSize: 13,
             fontWeight: 700,
+            // Clears the 82px decorative category-icon circle absolutely
+            // positioned at the card's bottom-right corner.
+            marginRight: 60,
           }}
         >
           👁 {job.viewCount || job.view_count || 0}
