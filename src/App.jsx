@@ -47,6 +47,7 @@ export default function App() {
 const [currentUser, setCurrentUser] = useState(null);
   const [showPlanModal, setShowPlanModal] = useState(false);
   const [showFeaturedList, setShowFeaturedList] = useState(false);
+  const [featuredPage, setFeaturedPage] = useState(0);
   const [selectedPlan, setSelectedPlan] = useState("free");
   const [pendingJob, setPendingJob] = useState(null);
   const [selectedPackageId, setSelectedPackageId] = useState(featuredPackages[0].id);
@@ -150,6 +151,45 @@ view_count: job.view_count || 0,
   useEffect(() => {
     fetchJobs();
   }, []);
+
+  // Soft location suggestion: pre-select the city filter based on the user's
+  // approximate location, but never hide results or block anything -- the
+  // user can freely change or clear the city filter afterwards. Uses the
+  // browser's native permission prompt and OpenStreetMap's free Nominatim
+  // reverse-geocoding endpoint (no API key required, no backend involved).
+  useEffect(() => {
+    if (!navigator.geolocation || city !== "Tümü") return;
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=tr`
+          );
+          const data = await response.json();
+          const detectedCity = data?.address?.province || data?.address?.city || data?.address?.state;
+          if (!detectedCity) return;
+
+          const matchedCity = cities.find(
+            (c) => c.toLocaleLowerCase("tr-TR") === detectedCity.toLocaleLowerCase("tr-TR")
+          );
+
+          if (matchedCity) {
+            setCity(matchedCity);
+            setSubmittedCity(matchedCity);
+          }
+        } catch (err) {
+          console.log("Konuma göre şehir tespiti başarısız:", err);
+        }
+      },
+      () => {
+        // Permission denied or unavailable -- silently do nothing, keep "Tümü".
+      },
+      { timeout: 8000 }
+    );
+  }, []);
+
   useEffect(() => {
   supabase.auth.getSession().then(({ data: { session } }) => {
     setCurrentUser(session?.user ?? null);
@@ -763,7 +803,16 @@ district: "",
     return [...cityMatched, ...fallbackTurkey, ...remainingPool];
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
-  const visibleFeaturedJobs = filteredFeaturedJobs;
+  const FEATURED_PAGE_SIZE = 6;
+  const featuredTotalPages = Math.max(1, Math.ceil(filteredFeaturedJobs.length / FEATURED_PAGE_SIZE));
+  const featuredPages = Array.from({ length: featuredTotalPages }, (_, pageIndex) =>
+    filteredFeaturedJobs.slice(pageIndex * FEATURED_PAGE_SIZE, pageIndex * FEATURED_PAGE_SIZE + FEATURED_PAGE_SIZE)
+  );
+
+  useEffect(() => {
+    setFeaturedPage(0);
+  }, [filteredFeaturedJobs]);
+
  const handleOpenJob = async (job) => {
   const currentCount = Number(job.viewCount || job.view_count || 0);
   const nextCount = currentCount + 1;
@@ -1517,6 +1566,61 @@ district: "",
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 16px;
+        }
+        .featured-carousel-viewport {
+          overflow: hidden;
+        }
+        .featured-carousel-track {
+          display: flex;
+          transition: transform 0.4s ease;
+        }
+        .featured-carousel-page {
+          flex: 0 0 100%;
+          min-width: 100%;
+        }
+        .featured-carousel-controls {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          margin-top: 18px;
+        }
+        .featured-carousel-arrow {
+          width: 36px;
+          height: 36px;
+          border-radius: 999px;
+          border: none;
+          background: rgba(255,255,255,0.22);
+          color: #fff;
+          font-size: 18px;
+          font-weight: 900;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .featured-carousel-arrow:disabled {
+          opacity: 0.35;
+          cursor: default;
+        }
+        .featured-carousel-dots {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .featured-carousel-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 999px;
+          border: none;
+          background: rgba(255,255,255,0.4);
+          padding: 0;
+          cursor: pointer;
+          transition: width 0.2s ease, background 0.2s ease;
+        }
+        .featured-carousel-dot.active {
+          width: 22px;
+          background: #fff;
         }
         .featured-section {
           background: ${PALETTE.coral};
@@ -3941,15 +4045,60 @@ district: "",
             </div>
           </div>
 
-         <div className="featured-grid">
-  {visibleFeaturedJobs.slice(0, 6).map((job) => (
-    <FeaturedJobCard
-      key={job.id}
-      job={job}
-      onOpen={handleOpenJob}
-    />
-  ))}
+         <div className="featured-carousel-viewport">
+  <div
+    className="featured-carousel-track"
+    style={{ transform: `translateX(-${featuredPage * 100}%)` }}
+  >
+    {featuredPages.map((pageJobs, pageIndex) => (
+      <div className="featured-grid featured-carousel-page" key={pageIndex}>
+        {pageJobs.map((job) => (
+          <FeaturedJobCard
+            key={job.id}
+            job={job}
+            onOpen={handleOpenJob}
+          />
+        ))}
+      </div>
+    ))}
+  </div>
 </div>
+
+{featuredTotalPages > 1 && (
+  <div className="featured-carousel-controls">
+    <button
+      type="button"
+      className="featured-carousel-arrow"
+      onClick={() => setFeaturedPage((p) => Math.max(0, p - 1))}
+      disabled={featuredPage === 0}
+      aria-label="Önceki"
+    >
+      ‹
+    </button>
+
+    <div className="featured-carousel-dots">
+      {featuredPages.map((_, pageIndex) => (
+        <button
+          key={pageIndex}
+          type="button"
+          className={`featured-carousel-dot ${pageIndex === featuredPage ? "active" : ""}`}
+          onClick={() => setFeaturedPage(pageIndex)}
+          aria-label={`${pageIndex + 1}. sayfa`}
+        />
+      ))}
+    </div>
+
+    <button
+      type="button"
+      className="featured-carousel-arrow"
+      onClick={() => setFeaturedPage((p) => Math.min(featuredTotalPages - 1, p + 1))}
+      disabled={featuredPage === featuredTotalPages - 1}
+      aria-label="Sonraki"
+    >
+      ›
+    </button>
+  </div>
+)}
         </section>
 
         <section className="section">
