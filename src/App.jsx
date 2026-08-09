@@ -51,10 +51,15 @@ const [currentUser, setCurrentUser] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState("free");
   const [pendingJob, setPendingJob] = useState(null);
   const [selectedPackageId, setSelectedPackageId] = useState(featuredPackages[0].id);
-  const [paymentStage, setPaymentStage] = useState("plan"); // 'plan' | 'package' | 'iframe' | 'processing'
+  const [paymentStage, setPaymentStage] = useState("plan"); // 'plan' | 'package' | 'bankTransfer' | 'iframe' | 'processing'
   const [paytrToken, setPaytrToken] = useState("");
   const [paymentError, setPaymentError] = useState("");
   const [paymentSubmitting, setPaymentSubmitting] = useState(false);
+  const [bankTransferInfo, setBankTransferInfo] = useState(null);
+  const [selectedBankName, setSelectedBankName] = useState("");
+  const [transferNote, setTransferNote] = useState("");
+  const [bankTransferSubmitting, setBankTransferSubmitting] = useState(false);
+  const [bankTransferSubmitted, setBankTransferSubmitted] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [logoSrc, setLogoSrc] = useState("/logo-ekis.webp");
   const [headerSmall, setHeaderSmall] = useState(false);
@@ -583,6 +588,10 @@ district: "",
     setPaymentStage("plan");
     setPaytrToken("");
     setPaymentError("");
+    setBankTransferInfo(null);
+    setSelectedBankName("");
+    setTransferNote("");
+    setBankTransferSubmitted(false);
 
     setFormData({
       company: "",
@@ -602,7 +611,12 @@ district: "",
     setCaptcha(generateCaptchaQuestion());
   };
 
-  const handleFeaturedPayment = async () => {
+  // Temporary route while PayTR merchant credentials aren't configured yet
+  // (create-payment / handlePaytrPayment below) -- inserts the job the same
+  // way, then requests a bank transfer instead of a PayTR token, routing the
+  // request through manual admin approval. Kept alongside the PayTR path so
+  // PayTR can be offered again once it's live.
+  const startBankTransfer = async () => {
     if (!pendingJob) return;
 
     setPaymentSubmitting(true);
@@ -653,29 +667,51 @@ district: "",
       ...prev,
     ]);
 
-    const { data: fnData, error: fnError } = await supabase.functions.invoke("create-payment", {
+    const { data: fnData, error: fnError } = await supabase.functions.invoke("create-bank-transfer-request", {
       body: {
         jobId: job.id,
         packageId: selectedPackageId,
-        okUrl: PAYTR_OK_URL,
-        failUrl: PAYTR_FAIL_URL,
       },
     });
 
     setPaymentSubmitting(false);
 
-    if (fnError || !fnData?.token) {
-      const code = fnData?.error;
-      setPaymentError(
-        code === "payment_not_configured"
-          ? "Ödeme sistemi çok yakında aktif olacak."
-          : "Ödeme başlatılamadı. Lütfen daha sonra tekrar dene."
-      );
+    if (fnError || !fnData?.paymentId) {
+      console.error("create-bank-transfer-request error:", fnError, fnData);
+      setPaymentError("Havale talebi oluşturulamadı. Lütfen daha sonra tekrar dene.");
       return;
     }
 
-    setPaytrToken(fnData.token);
-    setPaymentStage("iframe");
+    setBankTransferInfo(fnData);
+    setSelectedBankName(fnData.banks?.[0]?.name || "");
+    setTransferNote("");
+    setBankTransferSubmitted(false);
+    setPaymentStage("bankTransfer");
+  };
+
+  const submitBankTransferConfirmation = async () => {
+    if (!bankTransferInfo || !selectedBankName) return;
+
+    setBankTransferSubmitting(true);
+    setPaymentError("");
+
+    const { error } = await supabase.functions.invoke("confirm-bank-transfer", {
+      body: {
+        paymentId: bankTransferInfo.paymentId,
+        bankName: selectedBankName,
+        referenceNote: transferNote,
+      },
+    });
+
+    setBankTransferSubmitting(false);
+
+    if (error) {
+      console.error("confirm-bank-transfer error:", error);
+      setPaymentError("Bildirim gönderilemedi. Lütfen daha sonra tekrar dene.");
+      return;
+    }
+
+    setBankTransferSubmitted(true);
   };
 
   const closePaymentFlow = () => {
@@ -3248,6 +3284,44 @@ district: "",
           text-transform: uppercase;
           letter-spacing: 0.02em;
         }
+        .bank-iban-value {
+          font-size: 15px;
+          letter-spacing: 0.02em;
+        }
+        .bank-ref-box {
+          background: rgba(255,75,43,0.08);
+          border-radius: 15px;
+          padding: 14px;
+          margin-top: 12px;
+          display: grid;
+          gap: 4px;
+        }
+        .bank-ref-label {
+          color: ${PALETTE.softText};
+          font-size: 12px;
+          font-weight: 800;
+        }
+        .bank-ref-value {
+          color: #ff4b2b;
+          font-size: 16px;
+          font-weight: 950;
+          letter-spacing: 0.03em;
+        }
+        .bank-note-input {
+          width: 100%;
+          min-height: 72px;
+          margin-top: 12px;
+          padding: 12px 14px;
+          border-radius: 15px;
+          border: 1px solid rgba(60,74,95,0.12);
+          background: ${PALETTE.bg};
+          color: ${PALETTE.text};
+          font-size: 14px;
+          font-weight: 600;
+          font-family: inherit;
+          resize: vertical;
+          box-sizing: border-box;
+        }
         .detail-shell-clean {
           grid-template-columns: 390px 1fr;
           min-height: 700px;
@@ -3710,72 +3784,153 @@ district: "",
         <div className="post-modal-backdrop" onClick={() => setShowPlanModal(false)}>
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-panel-inner">
-              <h3 className="post-title">İlanını nasıl yayınlamak istersin?</h3>
-              <p className="post-desc">
-                İlanın admin onayına düşer. Onay sonrası standart listede veya Ekiş Acil alanında yayınlanır.
-              </p>
+              {paymentStage === "bankTransfer" ? (
+                bankTransferSubmitted ? (
+                  <>
+                    <h3 className="post-title">Talebin alındı</h3>
+                    <p className="post-desc">
+                      Admin havaleni onayladığında "{pendingJob?.title}" ilanın Ekiş Acil alanında otomatik yayına
+                      girecek.
+                    </p>
+                    <div className="modal-actions" style={{ marginTop: 18 }}>
+                      <button
+                        className="btn btn-primary"
+                        type="button"
+                        onClick={() => {
+                          setShowPlanModal(false);
+                          resetPostFlow();
+                        }}
+                      >
+                        Kapat
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="post-title">Havale / EFT ile Öde</h3>
+                    <p className="post-desc">
+                      {bankTransferInfo?.days} gün öne çıkarma için {bankTransferInfo?.amountTl} TL'yi aşağıdaki
+                      hesaplardan birine gönder, sonra havale yaptığını bildir.
+                    </p>
 
-              <div className="plan-grid">
-                <button
-                  type="button"
-                  className={`plan-card ${selectedPlan === "free" ? "active" : ""}`}
-                  onClick={() => setSelectedPlan("free")}
-                >
-                  <span className="plan-kicker">Standart</span>
-                  <strong>Ücretsiz İlan</strong>
-                  <small>Standart listede yayınlanır.</small>
-                </button>
+                    <div className="plan-grid" style={{ gridTemplateColumns: "1fr" }}>
+                      {bankTransferInfo?.banks.map((bank) => (
+                        <button
+                          key={bank.name}
+                          type="button"
+                          className={`plan-card ${selectedBankName === bank.name ? "active" : ""}`}
+                          onClick={() => setSelectedBankName(bank.name)}
+                        >
+                          <span className="plan-kicker">{bank.name}</span>
+                          <small>{bank.holder}</small>
+                          <strong className="bank-iban-value">{bank.iban}</strong>
+                        </button>
+                      ))}
+                    </div>
 
-                <button
-                  type="button"
-                  className={`plan-card ${selectedPlan === "featured" ? "active" : ""}`}
-                  onClick={() => setSelectedPlan("featured")}
-                >
-                  <span className="plan-kicker">Ekiş Acil</span>
-                  <strong>Ekiş Acil İlanı</strong>
-                  <small>Ekiş Acil alanında daha görünür olur.</small>
-                </button>
-              </div>
+                    <div className="bank-ref-box">
+                      <span className="bank-ref-label">Havale açıklamasına şunu ekle:</span>
+                      <strong className="bank-ref-value">{bankTransferInfo?.merchantOid.slice(-10)}</strong>
+                    </div>
 
-              {selectedPlan === "featured" && (
-                <div className="plan-grid" style={{ marginTop: 14 }}>
-                  {featuredPackages.map((pkg) => (
+                    <textarea
+                      className="bank-note-input"
+                      placeholder="Dekont no / açıklama (opsiyonel)"
+                      value={transferNote}
+                      onChange={(e) => setTransferNote(e.target.value)}
+                    />
+
+                    {paymentError ? (
+                      <p className="post-desc" style={{ color: "#DC2626", marginTop: 12 }}>
+                        {paymentError}
+                      </p>
+                    ) : null}
+
+                    <div className="modal-actions" style={{ marginTop: 18 }}>
+                      <button
+                        className="btn btn-primary"
+                        type="button"
+                        onClick={submitBankTransferConfirmation}
+                        disabled={bankTransferSubmitting || !selectedBankName}
+                      >
+                        {bankTransferSubmitting ? "İşleniyor..." : "Havale Yaptım, Onaya Gönder"}
+                      </button>
+                      <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
+                        Geri
+                      </button>
+                    </div>
+                  </>
+                )
+              ) : (
+                <>
+                  <h3 className="post-title">İlanını nasıl yayınlamak istersin?</h3>
+                  <p className="post-desc">
+                    İlanın admin onayına düşer. Onay sonrası standart listede veya Ekiş Acil alanında yayınlanır.
+                  </p>
+
+                  <div className="plan-grid">
                     <button
-                      key={pkg.id}
                       type="button"
-                      className={`plan-card ${selectedPackageId === pkg.id ? "active" : ""}`}
-                      onClick={() => setSelectedPackageId(pkg.id)}
+                      className={`plan-card ${selectedPlan === "free" ? "active" : ""}`}
+                      onClick={() => setSelectedPlan("free")}
                     >
-                      <span className="plan-kicker">{pkg.title}</span>
-                      <strong>{pkg.price} TL</strong>
+                      <span className="plan-kicker">Standart</span>
+                      <strong>Ücretsiz İlan</strong>
+                      <small>Standart listede yayınlanır.</small>
                     </button>
-                  ))}
-                </div>
+
+                    <button
+                      type="button"
+                      className={`plan-card ${selectedPlan === "featured" ? "active" : ""}`}
+                      onClick={() => setSelectedPlan("featured")}
+                    >
+                      <span className="plan-kicker">Ekiş Acil</span>
+                      <strong>Ekiş Acil İlanı</strong>
+                      <small>Ekiş Acil alanında daha görünür olur.</small>
+                    </button>
+                  </div>
+
+                  {selectedPlan === "featured" && (
+                    <div className="plan-grid" style={{ marginTop: 14 }}>
+                      {featuredPackages.map((pkg) => (
+                        <button
+                          key={pkg.id}
+                          type="button"
+                          className={`plan-card ${selectedPackageId === pkg.id ? "active" : ""}`}
+                          onClick={() => setSelectedPackageId(pkg.id)}
+                        >
+                          <span className="plan-kicker">{pkg.title}</span>
+                          <strong>{pkg.price} TL</strong>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {paymentError ? (
+                    <p className="post-desc" style={{ color: "#DC2626", marginTop: 12 }}>
+                      {paymentError}
+                    </p>
+                  ) : null}
+
+                  <div className="modal-actions" style={{ marginTop: 18 }}>
+                    <button
+                      className="btn btn-primary"
+                      type="button"
+                      onClick={selectedPlan === "featured" ? startBankTransfer : handlePlanContinue}
+                      disabled={paymentSubmitting}
+                    >
+                      {paymentSubmitting
+                        ? "İşleniyor..."
+                        : selectedPlan === "featured"
+                        ? "Öde ve Gönder"
+                        : "Onaya Gönder"}
+                    </button>
+                    <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
+                      Geri
+                    </button>
+                  </div>
+                </>
               )}
-
-              {paymentError ? (
-                <p className="post-desc" style={{ color: "#DC2626", marginTop: 12 }}>
-                  {paymentError}
-                </p>
-              ) : null}
-
-              <div className="modal-actions" style={{ marginTop: 18 }}>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={selectedPlan === "featured" ? handleFeaturedPayment : handlePlanContinue}
-                  disabled={paymentSubmitting}
-                >
-                  {paymentSubmitting
-                    ? "İşleniyor..."
-                    : selectedPlan === "featured"
-                    ? "Öde ve Gönder"
-                    : "Onaya Gönder"}
-                </button>
-                <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
-                  Geri
-                </button>
-              </div>
             </div>
           </div>
         </div>

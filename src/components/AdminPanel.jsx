@@ -2,6 +2,12 @@ import { useMemo, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { isJobActive, getDaysLeftLabel } from "../utils/jobUtils";
 
+const bankTransferStatusLabel = (status) => {
+  if (status === "success") return "Onaylandı";
+  if (status === "failed") return "Reddedildi";
+  return "Bekliyor";
+};
+
 const ADMIN_EMAILS = ["nkarci95@gmail.com", "ekissosyal@gmail.com"];
 
 const S = {
@@ -117,6 +123,18 @@ const S = {
     textAlign: "center", padding: "40px 0",
     fontSize: 13, color: "#a8a29e",
   },
+  btTableHead: {
+    display: "grid", gridTemplateColumns: "auto 2fr 1fr 1fr 2fr 1fr 1.2fr",
+    gap: 10, padding: "9px 14px",
+    background: "#fafaf8", borderBottom: "0.5px solid #e7e5e4",
+    fontSize: 10, fontWeight: 700, color: "#a8a29e",
+    textTransform: "uppercase", letterSpacing: "0.06em",
+  },
+  btTableRow: {
+    display: "grid", gridTemplateColumns: "auto 2fr 1fr 1fr 2fr 1fr 1.2fr",
+    gap: 10, padding: "11px 14px",
+    borderBottom: "0.5px solid #f5f5f4", alignItems: "center",
+  },
 
   // Login
   loginWrap: {
@@ -217,6 +235,30 @@ export default function AdminPanel({ jobs, featuredJobs, pendingJobs, onGoHome, 
     try { return JSON.parse(localStorage.getItem("ekisAdminNotifications") || "[]"); }
     catch { return []; }
   });
+  const [view, setView] = useState("jobs"); // 'jobs' | 'bankTransfers'
+  const [bankTransferRequests, setBankTransferRequests] = useState([]);
+  const [bankTransferLoading, setBankTransferLoading] = useState(false);
+  const [reviewingId, setReviewingId] = useState(null);
+
+  const fetchBankTransferRequests = async () => {
+    setBankTransferLoading(true);
+    const { data, error } = await supabase.functions.invoke("admin-bank-transfers", {
+      body: { action: "list" },
+    });
+    setBankTransferLoading(false);
+    if (error) { console.error("admin-bank-transfers list error:", error); setBankTransferRequests([]); return; }
+    setBankTransferRequests(data?.payments || []);
+  };
+
+  const reviewBankTransfer = async (paymentId, action) => {
+    setReviewingId(paymentId);
+    const { error } = await supabase.functions.invoke("admin-bank-transfers", {
+      body: { action, paymentId },
+    });
+    setReviewingId(null);
+    if (error) { console.error("admin-bank-transfers review error:", error); return; }
+    await fetchBankTransferRequests();
+  };
 
   const handleLogin = async () => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -390,76 +432,149 @@ export default function AdminPanel({ jobs, featuredJobs, pendingJobs, onGoHome, 
         </div>
       </div>
 
-      {/* Filters */}
+      {/* View toggle */}
       <div style={S.filterBar}>
-        {[
-          { key: "all", label: `Tümü (${filtered.length})` },
-          { key: "pending", label: `Onay Bekleyen (${totalPending})` },
-          { key: "featured", label: `Ekiş Acil (${totalFeatured})` },
-          { key: "standard", label: `Standart (${totalStandard})` },
-        ].map(f => (
-          <button key={f.key} style={filter === f.key ? S.filterActive : S.filter} onClick={() => setFilter(f.key)}>
-            {f.label}
-          </button>
-        ))}
-        <button style={{ ...S.filter, marginLeft: "auto", color: "#FF5A3C", borderColor: "#FF5A3C" }} onClick={onNewPost}>
-          + Yeni İlan Ekle
+        <button style={view === "jobs" ? S.filterActive : S.filter} onClick={() => setView("jobs")}>
+          İlanlar
+        </button>
+        <button
+          style={view === "bankTransfers" ? S.filterActive : S.filter}
+          onClick={() => { setView("bankTransfers"); fetchBankTransferRequests(); }}
+        >
+          Havale Talepleri{bankTransferRequests.filter(p => p.status === "pending").length > 0
+            ? ` (${bankTransferRequests.filter(p => p.status === "pending").length})`
+            : ""}
         </button>
       </div>
 
-      {/* Search */}
-      <div style={S.searchBar}>
-        <input style={S.searchInput} placeholder="İlan, firma, şehir veya telefon ara..." value={search} onChange={e => setSearch(e.target.value)} />
-      </div>
+      {view === "jobs" ? (
+        <>
+          {/* Filters */}
+          <div style={S.filterBar}>
+            {[
+              { key: "all", label: `Tümü (${filtered.length})` },
+              { key: "pending", label: `Onay Bekleyen (${totalPending})` },
+              { key: "featured", label: `Ekiş Acil (${totalFeatured})` },
+              { key: "standard", label: `Standart (${totalStandard})` },
+            ].map(f => (
+              <button key={f.key} style={filter === f.key ? S.filterActive : S.filter} onClick={() => setFilter(f.key)}>
+                {f.label}
+              </button>
+            ))}
+            <button style={{ ...S.filter, marginLeft: "auto", color: "#FF5A3C", borderColor: "#FF5A3C" }} onClick={onNewPost}>
+              + Yeni İlan Ekle
+            </button>
+          </div>
 
-      {/* Table */}
-      <div style={S.table}>
-        <div style={S.tableHead}>
-          <div>#</div><div>İlan</div><div>Konum</div><div>Tip</div><div>Durum</div><div>İşlem</div>
-        </div>
+          {/* Search */}
+          <div style={S.searchBar}>
+            <input style={S.searchInput} placeholder="İlan, firma, şehir veya telefon ara..." value={search} onChange={e => setSearch(e.target.value)} />
+          </div>
 
-        {filtered.length === 0 ? (
-          <div style={S.empty}>Bu filtreye uygun ilan bulunamadı.</div>
-        ) : filtered.map((job, idx) => {
-          const badge = getBadge(job.adminStatus);
-          return (
-            <div key={`${job.adminStatus}-${job.id}`} style={S.tableRow}>
+          {/* Table */}
+          <div style={S.table}>
+            <div style={S.tableHead}>
+              <div>#</div><div>İlan</div><div>Konum</div><div>Tip</div><div>Durum</div><div>İşlem</div>
+            </div>
+
+            {filtered.length === 0 ? (
+              <div style={S.empty}>Bu filtreye uygun ilan bulunamadı.</div>
+            ) : filtered.map((job, idx) => {
+              const badge = getBadge(job.adminStatus);
+              return (
+                <div key={`${job.adminStatus}-${job.id}`} style={S.tableRow}>
+                  <div style={S.num}>{idx + 1}</div>
+                  <div>
+                    <div style={S.rowTitle}>{job.title}</div>
+                    <div style={S.rowSub}>{job.company} · {job.adminStatus === "Onay Bekliyor" ? "Onay bekliyor" : getDaysLeftLabel(job)}</div>
+                  </div>
+                  <div style={S.rowCell}>{job.location}</div>
+                  <div style={S.rowCell}>{job.type}</div>
+                  <div>
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 5, background: badge.bg, color: badge.color }}>
+                      {badge.text}
+                    </span>
+                  </div>
+                  <div style={S.actions}>
+                    <button style={S.btn} onClick={() => setDetailJob(job)}>Detay</button>
+                    {job.adminStatus === "Onay Bekliyor" ? (
+                      <>
+                        <button style={S.btnGreen} onClick={() => approve(job)}>Onayla</button>
+                        <button style={S.btnRed} onClick={() => reject(job.id)}>Reddet</button>
+                      </>
+                    ) : (
+                      <>
+                        <button style={S.btn} onClick={() => toggleActive(job)}>
+                          {job.status === "passive" ? "Aktif Et" : "Pasif Yap"}
+                        </button>
+                        {job.adminStatus === "Ekiş Acil"
+                          ? <button style={S.btn} onClick={() => makeStandard(job)}>Standarta Al</button>
+                          : <button style={S.btnOrange} onClick={() => makeFeatured(job)}>Ekiş Acil Yap</button>
+                        }
+                        <button style={S.btnRed} onClick={() => deleteJob(job)}>Sil</button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        <div style={S.table}>
+          <div style={S.btTableHead}>
+            <div>#</div><div>İlan</div><div>Paket</div><div>Banka</div><div>Not</div><div>Durum</div><div>İşlem</div>
+          </div>
+
+          {bankTransferLoading ? (
+            <div style={S.empty}>Yükleniyor...</div>
+          ) : bankTransferRequests.length === 0 ? (
+            <div style={S.empty}>Havale talebi yok.</div>
+          ) : bankTransferRequests.map((item, idx) => (
+            <div key={item.id} style={S.btTableRow}>
               <div style={S.num}>{idx + 1}</div>
               <div>
-                <div style={S.rowTitle}>{job.title}</div>
-                <div style={S.rowSub}>{job.company} · {job.adminStatus === "Onay Bekliyor" ? "Onay bekliyor" : getDaysLeftLabel(job)}</div>
+                <div style={S.rowTitle}>{item.job_posts?.job_title}</div>
+                <div style={S.rowSub}>{item.job_posts?.company_name}</div>
               </div>
-              <div style={S.rowCell}>{job.location}</div>
-              <div style={S.rowCell}>{job.type}</div>
+              <div style={S.rowCell}>{item.days} gün · {(item.amount_kurus / 100).toLocaleString("tr-TR")} TL</div>
+              <div style={S.rowCell}>{item.bank_name || "-"}</div>
+              <div style={S.rowCell}>{item.reference_note || "-"}</div>
               <div>
-                <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 5, background: badge.bg, color: badge.color }}>
-                  {badge.text}
+                <span
+                  style={{
+                    fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 5,
+                    background: item.status === "success" ? "#d1fae5" : item.status === "failed" ? "#fee2e2" : "#fef3c7",
+                    color: item.status === "success" ? "#065f46" : item.status === "failed" ? "#991b1b" : "#92400e",
+                  }}
+                >
+                  {bankTransferStatusLabel(item.status)}
                 </span>
               </div>
               <div style={S.actions}>
-                <button style={S.btn} onClick={() => setDetailJob(job)}>Detay</button>
-                {job.adminStatus === "Onay Bekliyor" ? (
+                {item.status === "pending" ? (
                   <>
-                    <button style={S.btnGreen} onClick={() => approve(job)}>Onayla</button>
-                    <button style={S.btnRed} onClick={() => reject(job.id)}>Reddet</button>
-                  </>
-                ) : (
-                  <>
-                    <button style={S.btn} onClick={() => toggleActive(job)}>
-                      {job.status === "passive" ? "Aktif Et" : "Pasif Yap"}
+                    <button
+                      style={S.btnGreen}
+                      disabled={reviewingId === item.id}
+                      onClick={() => reviewBankTransfer(item.id, "approve")}
+                    >
+                      {reviewingId === item.id ? "..." : "Onayla"}
                     </button>
-                    {job.adminStatus === "Ekiş Acil"
-                      ? <button style={S.btn} onClick={() => makeStandard(job)}>Standarta Al</button>
-                      : <button style={S.btnOrange} onClick={() => makeFeatured(job)}>Ekiş Acil Yap</button>
-                    }
-                    <button style={S.btnRed} onClick={() => deleteJob(job)}>Sil</button>
+                    <button
+                      style={S.btnRed}
+                      disabled={reviewingId === item.id}
+                      onClick={() => reviewBankTransfer(item.id, "reject")}
+                    >
+                      {reviewingId === item.id ? "..." : "Reddet"}
+                    </button>
                   </>
-                )}
+                ) : null}
               </div>
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Detail Modal */}
       {detailJob && (
