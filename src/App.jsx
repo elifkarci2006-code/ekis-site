@@ -839,7 +839,7 @@ district: "",
     return [...cityMatched, ...fallbackTurkey, ...remainingPool];
   }, [featuredJobs, submittedSearch, submittedCategory, submittedJobType, submittedCity]);
 
-  const FEATURED_PAGE_SIZE = 6;
+  const FEATURED_PAGE_SIZE = 3;
   const featuredTotalPages = Math.max(1, Math.ceil(filteredFeaturedJobs.length / FEATURED_PAGE_SIZE));
   const featuredPages = Array.from({ length: featuredTotalPages }, (_, pageIndex) =>
     filteredFeaturedJobs.slice(pageIndex * FEATURED_PAGE_SIZE, pageIndex * FEATURED_PAGE_SIZE + FEATURED_PAGE_SIZE)

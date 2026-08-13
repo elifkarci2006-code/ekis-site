@@ -12,7 +12,7 @@ export const PALETTE = {
   warm: "#FFF2EC",
 };
 
-export const ADS_ENABLED = false;
+export const ADS_ENABLED = true;
 
 // Kept in sync with the mobile app's featuredPackages (ekis-mobile/src/app/index.tsx)
 // and the server-side authoritative copy in ekis-mobile/supabase/functions/_shared/paytr.ts.
