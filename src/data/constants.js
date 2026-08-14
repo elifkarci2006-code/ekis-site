@@ -14,6 +14,13 @@ export const PALETTE = {
 
 export const ADS_ENABLED = true;
 
+// Kept in sync with the mobile app's ADMIN_EMAILS (ekis-mobile/src/app/index.tsx)
+// and the server-side authoritative copy in
+// ekis-mobile/supabase/functions/_shared/bankTransfer.ts. Single source for
+// this site so the admin login check and the "Admin Paneli" menu item can't
+// drift apart from each other.
+export const ADMIN_EMAILS = ["nkarci95@gmail.com", "ekissosyal@gmail.com"];
+
 // Kept in sync with the mobile app's featuredPackages (ekis-mobile/src/app/index.tsx)
 // and the server-side authoritative copy in ekis-mobile/supabase/functions/_shared/paytr.ts.
 export const featuredPackages = [

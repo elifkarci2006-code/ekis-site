@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabaseClient";
-import { PALETTE, categories, cities, types, featuredPackages } from "./data/constants";
+import { PALETTE, categories, cities, types, featuredPackages, ADMIN_EMAILS } from "./data/constants";
 import { featuredSeed, jobsSeed } from "./data/seeds";
 import { cityDistricts } from "./data/cityDistricts";
 import {
@@ -3753,6 +3753,7 @@ district: "",
                 onNewPost={() => setShowForm(true)}
                onMyPosts={() => setShowMyJobs(true)}
                 onAdminPanel={() => window.location.hash = "#admin"}
+                isAdmin={ADMIN_EMAILS.includes(currentUser?.email)}
               />
             ) : (
               <button className="btn btn-secondary" onClick={() => setShowAuthModal(true)}>

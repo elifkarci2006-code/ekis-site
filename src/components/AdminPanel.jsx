@@ -1,14 +1,13 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { isJobActive, getDaysLeftLabel } from "../utils/jobUtils";
+import { ADMIN_EMAILS } from "../data/constants";
 
 const bankTransferStatusLabel = (status) => {
   if (status === "success") return "Onaylandı";
   if (status === "failed") return "Reddedildi";
   return "Bekliyor";
 };
-
-const ADMIN_EMAILS = ["nkarci95@gmail.com", "ekissosyal@gmail.com"];
 
 const S = {
   page: {
@@ -222,12 +221,29 @@ function getBadge(status) {
 }
 
 export default function AdminPanel({ jobs, featuredJobs, pendingJobs, onGoHome, onNewPost, setJobs, setFeaturedJobs, setPendingJobs }) {
+  // Seeded from the cached flag so there's no login flash while the real
+  // session check (below) resolves, but that flag alone never grants access
+  // -- the effect always re-verifies against the live session's email before
+  // trusting it, and clears it the moment it doesn't match an admin address.
   const [authenticated, setAuthenticated] = useState(
     () => window.localStorage.getItem("ekisAdminAuth") === "true"
   );
+  const [checkingSession, setCheckingSession] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      const sessionEmail = data.session?.user?.email;
+      const isAdmin = !!sessionEmail && ADMIN_EMAILS.includes(sessionEmail);
+      if (!isAdmin) {
+        window.localStorage.removeItem("ekisAdminAuth");
+      }
+      setAuthenticated(isAdmin);
+      setCheckingSession(false);
+    });
+  }, []);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [detailJob, setDetailJob] = useState(null);
@@ -261,8 +277,19 @@ export default function AdminPanel({ jobs, featuredJobs, pendingJobs, onGoHome, 
   };
 
   const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) { setLoginError("E-posta veya şifre hatalı."); return; }
+
+    // A valid Supabase login only proves *some* account -- it says nothing
+    // about whether this account is an admin. Any self-registered employer
+    // account can pass signInWithPassword, so the admin email allowlist has
+    // to be checked here too, not just trusted from the client-side flag.
+    if (!ADMIN_EMAILS.includes(data.user?.email)) {
+      await supabase.auth.signOut();
+      setLoginError("Bu hesabın admin paneline erişim yetkisi yok.");
+      return;
+    }
+
     localStorage.setItem("ekisAdminAuth", "true");
     setAuthenticated(true);
     setLoginError("");
@@ -367,6 +394,10 @@ export default function AdminPanel({ jobs, featuredJobs, pendingJobs, onGoHome, 
   const totalPending = pendingJobs.length;
   const totalFeatured = featuredJobs.filter(isJobActive).length;
   const totalStandard = jobs.filter(isJobActive).length;
+
+  if (checkingSession) {
+    return <div style={S.page} />;
+  }
 
   if (!authenticated) {
     return (

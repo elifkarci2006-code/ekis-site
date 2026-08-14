@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "../supabaseClient";
 
 
-export default function AccountMenu({ currentUser, onLogout, onNewPost, onMyPosts, onAdminPanel }) {
+export default function AccountMenu({ currentUser, onLogout, onNewPost, onMyPosts, onAdminPanel, isAdmin }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -55,6 +55,11 @@ export default function AccountMenu({ currentUser, onLogout, onNewPost, onMyPost
             <span>📋</span> İlanlarım
           </button>
 
+          {isAdmin && (
+            <button style={menuItem} onClick={() => { onAdminPanel(); setOpen(false); }}>
+              <span>🛡️</span> Admin Paneli
+            </button>
+          )}
 
           <div style={divider} />
 
