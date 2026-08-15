@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "./supabaseClient";
 import { PALETTE, categories, cities, types, featuredPackages, ADMIN_EMAILS } from "./data/constants";
 import { featuredSeed, jobsSeed } from "./data/seeds";
@@ -369,8 +369,15 @@ view_count: job.view_count || 0,
 
 
 
+  const wasShowFormOpen = useRef(false);
   useEffect(() => {
-    if (!showForm) {
+    // Only reset on an actual open->close transition, not merely whenever
+    // showForm is falsy -- it's already falsy on first mount (its initial
+    // value), and resetting there would wipe out a bank-transfer resume that
+    // the effect above just restored into pendingJob/showPlanModal.
+    const wasOpen = wasShowFormOpen.current;
+    wasShowFormOpen.current = showForm;
+    if (!showForm && wasOpen) {
       setShowPreview(false);
       setErrors({});
       setSelectedPlan("free");
@@ -3849,7 +3856,13 @@ district: "",
       />
 
       {showPlanModal && paymentStage !== "iframe" && paymentStage !== "processing" && (
-        <div className="post-modal-backdrop" onClick={() => setShowPlanModal(false)}>
+        <div
+          className="post-modal-backdrop"
+          onClick={() => {
+            if (paymentStage === "bankTransfer") clearPendingBankTransfer();
+            setShowPlanModal(false);
+          }}
+        >
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-panel-inner">
               {paymentStage === "bankTransfer" ? (
