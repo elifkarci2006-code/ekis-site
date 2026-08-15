@@ -472,7 +472,7 @@ export default function AdminPanel({ jobs, featuredJobs, pendingJobs, onGoHome, 
           style={view === "bankTransfers" ? S.filterActive : S.filter}
           onClick={() => { setView("bankTransfers"); fetchBankTransferRequests(); }}
         >
-          Havale Talepleri{bankTransferRequests.filter(p => p.status === "pending").length > 0
+          Havale/EFT Talepleri{bankTransferRequests.filter(p => p.status === "pending").length > 0
             ? ` (${bankTransferRequests.filter(p => p.status === "pending").length})`
             : ""}
         </button>
@@ -560,7 +560,7 @@ export default function AdminPanel({ jobs, featuredJobs, pendingJobs, onGoHome, 
           {bankTransferLoading ? (
             <div style={S.empty}>Yükleniyor...</div>
           ) : bankTransferRequests.length === 0 ? (
-            <div style={S.empty}>Havale talebi yok.</div>
+            <div style={S.empty}>Havale/EFT talebi yok.</div>
           ) : bankTransferRequests.map((item, idx) => (
             <div key={item.id} style={S.btTableRow}>
               <div style={S.num}>{idx + 1}</div>

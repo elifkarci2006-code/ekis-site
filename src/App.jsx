@@ -678,7 +678,7 @@ district: "",
 
     if (fnError || !fnData?.paymentId) {
       console.error("create-bank-transfer-request error:", fnError, fnData);
-      setPaymentError("Havale talebi oluşturulamadı. Lütfen daha sonra tekrar dene.");
+      setPaymentError("Havale/EFT talebi oluşturulamadı. Lütfen daha sonra tekrar dene.");
       return;
     }
 
@@ -3307,10 +3307,16 @@ district: "",
           font-weight: 950;
           letter-spacing: 0.03em;
         }
+        .bank-note-hint {
+          margin: 12px 0 0;
+          font-size: 12px;
+          font-weight: 700;
+          color: ${PALETTE.softText};
+        }
         .bank-note-input {
           width: 100%;
           min-height: 72px;
-          margin-top: 12px;
+          margin-top: 6px;
           padding: 12px 14px;
           border-radius: 15px;
           border: 1px solid rgba(60,74,95,0.12);
@@ -3830,10 +3836,13 @@ district: "",
                     </div>
 
                     <div className="bank-ref-box">
-                      <span className="bank-ref-label">Havale açıklamasına şunu ekle:</span>
+                      <span className="bank-ref-label">Havale/EFT açıklamasına şunu ekle:</span>
                       <strong className="bank-ref-value">{bankTransferInfo?.merchantOid.slice(-10)}</strong>
                     </div>
 
+                    <p className="bank-note-hint">
+                      Hangi ilan için ödeme yaptığını da yazmayı unutma (ör. "{pendingJob?.title}").
+                    </p>
                     <textarea
                       className="bank-note-input"
                       placeholder="Dekont no / açıklama (opsiyonel)"
@@ -3854,7 +3863,7 @@ district: "",
                         onClick={submitBankTransferConfirmation}
                         disabled={bankTransferSubmitting || !selectedBankName}
                       >
-                        {bankTransferSubmitting ? "İşleniyor..." : "Havale Yaptım, Onaya Gönder"}
+                        {bankTransferSubmitting ? "İşleniyor..." : "Havale/EFT Yaptım, Onaya Gönder"}
                       </button>
                       <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
                         Geri
