@@ -595,9 +595,12 @@ export default function AdminPanel({ jobs, featuredJobs, pendingJobs, onGoHome, 
                     <button
                       style={S.btnRed}
                       disabled={reviewingId === item.id}
-                      onClick={() => reviewBankTransfer(item.id, "reject")}
+                      onClick={() => {
+                        if (!window.confirm("Bu havale talebini silmek istediğinize emin misiniz?")) return;
+                        reviewBankTransfer(item.id, "delete");
+                      }}
                     >
-                      {reviewingId === item.id ? "..." : "Reddet"}
+                      {reviewingId === item.id ? "..." : "Sil"}
                     </button>
                   </>
                 ) : null}
