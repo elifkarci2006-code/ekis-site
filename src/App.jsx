@@ -31,6 +31,38 @@ const SITE_URL = "https://www.ekiş.com.tr";
 const PAYTR_OK_URL = `${SITE_URL}/?paytr_result=success`;
 const PAYTR_FAIL_URL = `${SITE_URL}/?paytr_result=fail`;
 
+// A bank transfer means leaving the tab to go do the actual transfer in a
+// banking app/site and coming back -- on a phone under memory pressure the
+// browser can reclaim and reload the tab in the meantime, which would
+// otherwise silently drop the in-progress request. Persisting just enough to
+// resume (not the whole post form) survives that reload.
+const BANK_TRANSFER_STORAGE_KEY = "ekisPendingBankTransfer";
+
+function savePendingBankTransfer(data) {
+  try {
+    localStorage.setItem(BANK_TRANSFER_STORAGE_KEY, JSON.stringify(data));
+  } catch {
+    // Storage unavailable (private mode, quota, etc.) -- resuming just won't work.
+  }
+}
+
+function loadPendingBankTransfer() {
+  try {
+    const raw = localStorage.getItem(BANK_TRANSFER_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function clearPendingBankTransfer() {
+  try {
+    localStorage.removeItem(BANK_TRANSFER_STORAGE_KEY);
+  } catch {
+    // ignore
+  }
+}
+
 
 export default function App() {
   const [search, setSearch] = useState("");
@@ -206,6 +238,24 @@ view_count: job.view_count || 0,
 
   return () => subscription.unsubscribe();
 }, []);
+
+  // Resume an in-progress bank transfer (e.g. the tab got reloaded while the
+  // poster was off in their banking app) once we know who -- if anyone -- is
+  // signed in, so we don't show someone else's pending request.
+  useEffect(() => {
+    const saved = loadPendingBankTransfer();
+    if (!saved || !saved.paymentId) return;
+    if ((saved.userId || null) !== (currentUser?.id || null)) return;
+
+    setBankTransferInfo(saved);
+    setPendingJob({ title: saved.jobTitle });
+    setSelectedPlan("featured");
+    setSelectedBankName(saved.banks?.[0]?.name || "");
+    setBankTransferSubmitted(!!saved.submitted);
+    setPaymentStage("bankTransfer");
+    setShowPlanModal(true);
+  }, [currentUser]);
+
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
@@ -592,6 +642,7 @@ district: "",
     setSelectedBankName("");
     setTransferNote("");
     setBankTransferSubmitted(false);
+    clearPendingBankTransfer();
 
     setFormData({
       company: "",
@@ -687,6 +738,12 @@ district: "",
     setTransferNote("");
     setBankTransferSubmitted(false);
     setPaymentStage("bankTransfer");
+
+    savePendingBankTransfer({
+      ...fnData,
+      jobTitle: pendingJob.title,
+      userId: currentUser?.id || null,
+    });
   };
 
   const submitBankTransferConfirmation = async () => {
@@ -712,6 +769,10 @@ district: "",
     }
 
     setBankTransferSubmitted(true);
+    // Kept (not cleared) so a reload while still on the success screen shows
+    // that screen again instead of losing track of the request entirely;
+    // resetPostFlow (on "Kapat") clears it for good.
+    savePendingBankTransfer({ ...bankTransferInfo, jobTitle: pendingJob?.title, userId: currentUser?.id || null, submitted: true });
   };
 
   const closePaymentFlow = () => {
@@ -3841,7 +3902,7 @@ district: "",
                     </div>
 
                     <p className="bank-note-hint">
-                      Hangi ilan için ödeme yaptığını da yazmayı unutma (ör. "{pendingJob?.title}").
+                      İstersen hangi ilan için gönderdiğini de belirtebilirsin (ör. "{pendingJob?.title}").
                     </p>
                     <textarea
                       className="bank-note-input"
@@ -3865,7 +3926,14 @@ district: "",
                       >
                         {bankTransferSubmitting ? "İşleniyor..." : "Havale/EFT Yaptım, Onaya Gönder"}
                       </button>
-                      <button className="btn btn-secondary" type="button" onClick={() => setShowPlanModal(false)}>
+                      <button
+                        className="btn btn-secondary"
+                        type="button"
+                        onClick={() => {
+                          clearPendingBankTransfer();
+                          setShowPlanModal(false);
+                        }}
+                      >
                         Geri
                       </button>
                     </div>
