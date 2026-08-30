@@ -1426,6 +1426,29 @@ district: "",
           transition: height 0.22s ease, opacity 0.18s ease;
         }
         .topbar.small .brand-logo { height: 102px; }
+        .nav-links {
+          display: flex;
+          align-items: center;
+          gap: 26px;
+        }
+        .nav-link {
+          color: ${PALETTE.text};
+          font-size: 14px;
+          font-weight: 700;
+          text-decoration: none;
+          white-space: nowrap;
+        }
+        .nav-link:hover { color: ${PALETTE.coral}; }
+        .nav-link-button {
+          border: none;
+          background: transparent;
+          padding: 0;
+          cursor: pointer;
+          font-family: inherit;
+        }
+        @media (max-width: 900px) {
+          .nav-links { display: none; }
+        }
         .top-actions {
           display: flex;
           align-items: center;
@@ -2810,69 +2833,72 @@ district: "",
         /* --- Hero trust area + premium featured card revizyonu --- */
         .hero-card {
           padding: 24px 26px;
-          box-shadow: 0 18px 38px rgba(60,74,95,0.08);
-        }
-        .hero-content {
-          display: grid;
-          grid-template-columns: 0.9fr 1.1fr;
-          align-items: center;
-          gap: 30px;
+          box-shadow: none;
+          display: flex;
+          flex-direction: column;
+          gap: 22px;
         }
         .hero-title {
           font-size: clamp(28px, 3vw, 46px);
           line-height: 1.12;
           letter-spacing: -0.055em;
         }
+        .hero-title-accent {
+          color: ${PALETTE.coral};
+        }
+        .hero-subtitle {
+          margin: 14px 0 0;
+          color: ${PALETTE.softText};
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 1.5;
+        }
         .hero-trust-row {
           display: flex;
-          justify-content: flex-end;
-          align-items: center;
+          justify-content: space-between;
+          align-items: flex-start;
           gap: 16px;
-          flex-wrap: nowrap;
+          flex-wrap: wrap;
         }
         .hero-trust-pill {
-          height: 72px;
-          min-width: 230px;
+          flex: 1 1 200px;
           display: inline-flex;
           align-items: center;
-          gap: 14px;
-          padding: 13px 18px;
-          border-radius: 20px;
-          background: linear-gradient(180deg, #fff8f6 0%, #fff0ec 100%);
-          border: 1px solid rgba(255,91,55,0.14);
-          box-shadow: 0 16px 34px rgba(255,91,55,0.10);
+          gap: 12px;
+          padding: 4px;
           color: ${PALETTE.slate};
         }
         .hero-trust-icon {
-          width: 48px;
-          height: 48px;
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          background: rgba(255,90,60,0.1);
           display: inline-flex;
           align-items: center;
           justify-content: center;
           color: #ff4f26;
           flex-shrink: 0;
-          filter: drop-shadow(0 10px 16px rgba(255,82,49,0.16));
         }
         .hero-trust-icon svg {
           display: block;
-          width: 48px;
-          height: 48px;
+          width: 22px;
+          height: 22px;
           overflow: visible;
         }
         .hero-trust-pill strong {
           display: block;
-          color: #ff4f26;
-          font-size: 16px;
-          line-height: 1.08;
-          font-weight: 950;
-          letter-spacing: -0.035em;
+          color: ${PALETTE.text};
+          font-size: 14px;
+          line-height: 1.15;
+          font-weight: 900;
+          letter-spacing: -0.02em;
           white-space: nowrap;
         }
         .hero-trust-pill small {
           display: block;
-          margin-top: 6px;
-          color: ${PALETTE.slate};
-          font-size: 13.5px;
+          margin-top: 3px;
+          color: ${PALETTE.softText};
+          font-size: 12px;
           line-height: 1.05;
           font-weight: 800;
           letter-spacing: -0.025em;
@@ -3810,6 +3836,14 @@ district: "",
             </a>
           </div>
 
+          <nav className="nav-links">
+            <a href="#ilanlar" className="nav-link">İlanlar</a>
+            <a href="#one-cikanlar" className="nav-link">Ekiş Acil</a>
+            <button type="button" className="nav-link nav-link-button" onClick={() => setInfoModal("ekisNedir")}>Nasıl Çalışır?</button>
+            <button type="button" className="nav-link nav-link-button" onClick={() => setInfoModal("ekIsBul")}>Blog</button>
+            <button type="button" className="nav-link nav-link-button" onClick={() => setInfoModal("contact")}>İletişim</button>
+          </nav>
+
         <div className="top-actions">
             <button className="btn btn-primary" onClick={() => {
               if (!currentUser) {
@@ -4167,103 +4201,112 @@ district: "",
 
 
       <main className="container">
-        <section className="top-search" id="ilanlar">
-          <div className="filter-wrap">
-            <div className="filter-grid">
-              <div className="field">
-                <label>İlanlarda ara</label>
-                <input
-                  type="text"
-                  placeholder="Ne iş arıyorsun? (garson, kurye...)"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  onKeyDown={handleSearchKeyDown}
-                />
-              </div>
+        <section className="hero" id="ilanlar">
+          <div className="hero-card">
+            <div>
+              <h1 className="hero-title">Her çalışma şekline,<br />binlerce iş <span className="hero-title-accent">fırsatı.</span></h1>
+              <p className="hero-subtitle">Günlük, saatlik, part time ve tam zamanlı ilanları tek yerde keşfet.</p>
+            </div>
 
-              <div className="field">
-                <label>Şehir seç</label>
-                <select value={city} onChange={(e) => setCity(e.target.value)}>
-                  {cities.map((item) => (
-                    <option key={item} value={item}>{item}</option>
-                  ))}
-                </select>
-              </div>
+            <div className="filter-wrap">
+              <div className="filter-grid">
+                <div className="field">
+                  <label>İlanlarda ara</label>
+                  <input
+                    type="text"
+                    placeholder="Ne iş arıyorsun? (garson, kurye...)"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={handleSearchKeyDown}
+                  />
+                </div>
 
-              <div className="field">
-                <label>Meslek seç</label>
-                <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                  {categories.map((item) => (
-                    <option key={item} value={item}>{item}</option>
-                  ))}
-                </select>
-              </div>
+                <div className="field">
+                  <label>Şehir seç</label>
+                  <select value={city} onChange={(e) => setCity(e.target.value)}>
+                    {cities.map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className="field">
-                <label>Çalışma tipi seç</label>
-                <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
-                  {types.map((item) => (
-                    <option key={item} value={item}>{item}</option>
-                  ))}
-                </select>
-              </div>
+                <div className="field">
+                  <label>Meslek seç</label>
+                  <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                    {categories.map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className="search-action">
-                <button className="search-btn search-btn-primary" type="button" onClick={handleSearchSubmit}>Ara</button>
-              </div>
+                <div className="field">
+                  <label>Çalışma tipi seç</label>
+                  <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
+                    {types.map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className="search-action">
-                <button className="search-btn search-btn-clear" type="button" onClick={clearFilters}>Temizle</button>
+                <div className="search-action">
+                  <button className="search-btn search-btn-primary" type="button" onClick={handleSearchSubmit}>Ara</button>
+                </div>
+
+                <div className="search-action">
+                  <button className="search-btn search-btn-clear" type="button" onClick={clearFilters}>Temizle</button>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
 
-        <section className="hero">
-          <div className="hero-card">
-            <div className="hero-content">
-              <div>
-                <h1 className="hero-title">Günlük, saatlik ve part time işleri kolayca keşfet.</h1>
+            <div className="hero-trust-row">
+              <div className="hero-trust-pill">
+                <span className="hero-trust-icon" aria-hidden="true">
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M24 5.5 37 10.6v10.1c0 8.3-5.4 15.9-13 18.8-7.6-2.9-13-10.5-13-18.8V10.6L24 5.5Z" fill="#ff4f26"/>
+                    <path d="M18.2 23.8 22.2 27.8 30.8 18.7" stroke="white" strokeWidth="3.3" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </span>
+                <span>
+                  <strong>Onaylı ilanlar</strong>
+                  <small>Güvenle başvur</small>
+                </span>
               </div>
-
-              <div className="hero-trust-row">
-                <div className="hero-trust-pill">
-                  <span className="hero-trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 48 48" fill="none">
-                      <path d="M24 5.5 37 10.6v10.1c0 8.3-5.4 15.9-13 18.8-7.6-2.9-13-10.5-13-18.8V10.6L24 5.5Z" fill="#ff4f26"/>
-                      <path d="M18.2 23.8 22.2 27.8 30.8 18.7" stroke="white" strokeWidth="3.3" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
-                  <span>
-                    <strong>Onaylı ilanlar</strong>
-                    <small>Güvenle başvur</small>
-                  </span>
-                </div>
-                <div className="hero-trust-pill">
-                  <span className="hero-trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 48 48" fill="none">
-                      <path d="M24 5.5c2.1 0 3.7 2.2 5.5 2.8 1.9.6 4.4-.4 6 .8 1.6 1.2 1.7 3.9 2.9 5.5 1.2 1.6 3.8 2.4 4.4 4.3.6 1.8-.9 4.1-.9 6.1s1.5 4.3.9 6.1c-.6 1.9-3.2 2.7-4.4 4.3-1.2 1.6-1.3 4.3-2.9 5.5-1.6 1.2-4.1.2-6 .8-1.8.6-3.4 2.8-5.5 2.8s-3.7-2.2-5.5-2.8c-1.9-.6-4.4.4-6-.8-1.6-1.2-1.7-3.9-2.9-5.5-1.2-1.6-3.8-2.4-4.4-4.3-.6-1.8.9-4.1.9-6.1s-1.5-4.3-.9-6.1c.6-1.9 3.2-2.7 4.4-4.3 1.2-1.6 1.3-4.3 2.9-5.5 1.6-1.2 4.1-.2 6-.8 1.8-.6 3.4-2.8 5.5-2.8Z" fill="#ff4f26"/>
-                      <path d="M18.5 30.2 29.5 17.8" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-                      <circle cx="18.5" cy="18.8" r="2.8" stroke="white" strokeWidth="2.6"/>
-                      <circle cx="29.6" cy="29.3" r="2.8" stroke="white" strokeWidth="2.6"/>
-                    </svg>
-                  </span>
-                  <span>
-                    <strong>Türkiye geneli fırsatlar</strong>
-                    <small>Tüm şehirlerde ilanlar</small>
-                  </span>
-                </div>
-                <div className="hero-trust-pill">
-                  <span className="hero-trust-icon" aria-hidden="true">
-                    <svg viewBox="0 0 48 48" fill="none">
-                      <path d="M27.4 4.8 12.5 27.2h10.2l-2.2 16 15-22.5H25.2l2.2-15.9Z" fill="#ff4f26"/>
-                    </svg>
-                  </span>
-                  <span>
-                    <strong>Hızlı başvuru süreci</strong>
-                    <small>İlanlara kolayca başvur</small>
-                  </span>
-                </div>
+              <div className="hero-trust-pill">
+                <span className="hero-trust-icon" aria-hidden="true">
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M27.4 4.8 12.5 27.2h10.2l-2.2 16 15-22.5H25.2l2.2-15.9Z" fill="#ff4f26"/>
+                  </svg>
+                </span>
+                <span>
+                  <strong>Hızlı Başvuru</strong>
+                  <small>Anında iş fırsatları</small>
+                </span>
+              </div>
+              <div className="hero-trust-pill">
+                <span className="hero-trust-icon" aria-hidden="true">
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M24 5.5c2.1 0 3.7 2.2 5.5 2.8 1.9.6 4.4-.4 6 .8 1.6 1.2 1.7 3.9 2.9 5.5 1.2 1.6 3.8 2.4 4.4 4.3.6 1.8-.9 4.1-.9 6.1s1.5 4.3.9 6.1c-.6 1.9-3.2 2.7-4.4 4.3-1.2 1.6-1.3 4.3-2.9 5.5-1.6 1.2-4.1.2-6 .8-1.8.6-3.4 2.8-5.5 2.8s-3.7-2.2-5.5-2.8c-1.9-.6-4.4.4-6-.8-1.6-1.2-1.7-3.9-2.9-5.5-1.2-1.6-3.8-2.4-4.4-4.3-.6-1.8.9-4.1.9-6.1s-1.5-4.3-.9-6.1c.6-1.9 3.2-2.7 4.4-4.3 1.2-1.6 1.3-4.3 2.9-5.5 1.6-1.2 4.1-.2 6-.8 1.8-.6 3.4-2.8 5.5-2.8Z" fill="#ff4f26"/>
+                    <path d="M18.5 30.2 29.5 17.8" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+                    <circle cx="18.5" cy="18.8" r="2.8" stroke="white" strokeWidth="2.6"/>
+                    <circle cx="29.6" cy="29.3" r="2.8" stroke="white" strokeWidth="2.6"/>
+                  </svg>
+                </span>
+                <span>
+                  <strong>Türkiye genelinde fırsatlar</strong>
+                  <small>Tüm şehirlerde işler</small>
+                </span>
+              </div>
+              <div className="hero-trust-pill">
+                <span className="hero-trust-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#ff4f26" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="4" y="10" width="16" height="10" rx="2" />
+                    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                  </svg>
+                </span>
+                <span>
+                  <strong>Güvenli Platform</strong>
+                  <small>Kişisel verileriniz koruma altında</small>
+                </span>
               </div>
             </div>
           </div>
