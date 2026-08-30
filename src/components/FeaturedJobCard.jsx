@@ -1,3 +1,4 @@
+import { Eye } from "lucide-react";
 import CategoryIcon from "./CategoryIcon";
 import { getDaysAgoLabel } from "../utils/jobUtils";
 
@@ -98,7 +99,7 @@ export default function FeaturedJobCard({ job, onOpen }) {
             marginRight: 60,
           }}
         >
-          👁 {job.viewCount || job.view_count || 0}
+          <Eye size={14} /> {job.viewCount || job.view_count || 0}
         </div>
       </div>
 

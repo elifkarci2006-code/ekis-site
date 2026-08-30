@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Smartphone, Star } from "lucide-react";
 import { supabase } from "./supabaseClient";
 import { PALETTE, categories, cities, types, featuredPackages, ADMIN_EMAILS } from "./data/constants";
 import { featuredSeed, jobsSeed } from "./data/seeds";
@@ -1381,10 +1382,7 @@ district: "",
         a { color: inherit; }
         .app-shell {
           min-height: 100vh;
-          background:
-            radial-gradient(circle at top left, rgba(228,93,80,0.10), transparent 26%),
-            radial-gradient(circle at top right, rgba(118,191,190,0.10), transparent 24%),
-            linear-gradient(180deg, #fff 0%, ${PALETTE.bg} 100%);
+          background: ${PALETTE.bg};
         }
         .container {
           width: calc(100% - 24px);
@@ -1465,11 +1463,11 @@ district: "",
           padding: 2px 0 10px;
         }
         .filter-wrap {
-          background: ${PALETTE.teal};
-          border: 1px solid rgba(60,74,95,0.08);
+          background: #FFFFFF;
+          border: 1px solid rgba(31,41,55,0.06);
           border-radius: 24px;
           padding: 16px;
-          box-shadow: 0 14px 30px rgba(60,74,95,0.05);
+          box-shadow: 0 14px 30px rgba(31,41,55,0.06);
         }
         .filter-grid {
           display: grid;
@@ -1485,15 +1483,15 @@ district: "",
         .field label {
           font-size: 13px;
           font-weight: 800;
-          color: #fff;
+          color: ${PALETTE.softText};
           padding-left: 2px;
         }
         .field input, .field select {
           height: 56px;
           width: 100%;
           border-radius: 18px;
-          border: 1px solid rgba(60,74,95,0.12);
-          background: #fff;
+          border: 1px solid rgba(31,41,55,0.10);
+          background: ${PALETTE.cardBg};
           padding: 0 16px;
           font-size: 15px;
           color: ${PALETTE.text};
@@ -1514,16 +1512,16 @@ district: "",
         }
         .search-btn:hover { transform: translateY(-1px); }
         .search-btn-primary {
-          border: 1px solid rgba(255,255,255,0.35);
-          background: linear-gradient(180deg, #ff6846 0%, #ff4f26 100%);
+          border: none;
+          background: ${PALETTE.coral};
           color: #fff;
-          box-shadow: 0 14px 28px rgba(255,79,38,0.24);
+          box-shadow: 0 14px 28px rgba(255,90,60,0.24);
         }
         .search-btn-clear {
-          border: 1px solid rgba(255,255,255,0.62);
-          background: rgba(255,255,255,0.08);
-          color: #fff;
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+          border: 1px solid rgba(31,41,55,0.12);
+          background: #FFFFFF;
+          color: ${PALETTE.softText};
+          box-shadow: none;
         }
 
         .ad-slot {
@@ -1732,8 +1730,8 @@ district: "",
           padding: 30px 22px 26px;
           margin-bottom: 28px;
         }
-        .featured-section .section-title { color: #fff; }
-        .featured-section .section-sub { color: rgba(255,255,255,0.88); }
+        .featured-section .section-title { color: ${PALETTE.text}; }
+        .featured-section .section-sub { color: ${PALETTE.softText}; }
 
         .featured-card,
         .job-card {
@@ -1972,7 +1970,7 @@ district: "",
           z-index: 1;
         }
         .soft-company {
-          color: ${PALETTE.teal};
+          color: ${PALETTE.coral};
           font-size: 15px;
           font-weight: 950;
           line-height: 1.2;
@@ -2531,8 +2529,9 @@ district: "",
           margin-top: 34px;
           border-radius: 34px 34px 0 0;
           overflow: hidden;
-          background: #2F3949;
-          color: rgba(255,255,255,0.92);
+          background: #FFFFFF;
+          border-top: 1px solid rgba(31,41,55,0.06);
+          color: ${PALETTE.text};
         }
        .site-footer-topline {
   height: 12px;
@@ -2555,12 +2554,11 @@ district: "",
           height: auto;
           display: block;
           object-fit: contain;
-          filter: brightness(0) invert(1);
           opacity: 0.98;
         }
         .footer-brand-text {
           max-width: 290px;
-          color: rgba(255,255,255,0.76);
+          color: ${PALETTE.softText};
           font-size: 14px;
           line-height: 1.7;
           margin: 0;
@@ -2568,18 +2566,18 @@ district: "",
         .footer-subheading {
   font-size: 13px;
   font-weight: 900;
-  color: #fff;
+  color: ${PALETTE.text};
   margin: 0 0 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  opacity: 0.5;
+  opacity: 0.6;
 }
         .footer-links {
           display: grid;
           gap: 10px;
         }
         .footer-link {
-          color: rgba(255,255,255,0.82);
+          color: ${PALETTE.softText};
           text-decoration: none;
           font-size: 15px;
           font-weight: 700;
@@ -2605,16 +2603,16 @@ district: "",
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.18);
+  background: ${PALETTE.cardBg};
+  border: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: ${PALETTE.text};
   transition: background 0.2s ease, transform 0.2s ease;
 }
 .footer-social:hover {
-  background: rgba(255,255,255,0.22);
+  background: rgba(255,90,60,0.12);
   transform: translateY(-2px);
 }
         .footer-boxes {
@@ -2623,21 +2621,21 @@ district: "",
           margin-top: 8px;
         }
         .footer-app-box {
-          border: 1px solid rgba(255,255,255,0.18);
+          border: 1px solid rgba(31,41,55,0.08);
           border-radius: 16px;
           padding: 12px 14px;
-          color: #fff;
+          color: ${PALETTE.text};
           text-decoration: none;
           display: flex;
           align-items: center;
           gap: 10px;
-          background: rgba(255,255,255,0.04);
+          background: ${PALETTE.cardBg};
         }
         .footer-app-icon {
           width: 34px;
           height: 34px;
           border-radius: 10px;
-          background: rgba(255,255,255,0.12);
+          background: #FFFFFF;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -2653,12 +2651,12 @@ district: "",
         .footer-app-text strong { font-size: 15px; }
         .footer-app-text span {
           font-size: 12px;
-          color: rgba(255,255,255,0.72);
+          color: ${PALETTE.softText};
         }
         .footer-bottom {
           margin-top: 24px;
           padding-top: 16px;
-          border-top: 1px solid rgba(255,255,255,0.10);
+          border-top: 1px solid rgba(31,41,55,0.06);
           display: flex;
           justify-content: space-between;
           gap: 18px;
@@ -2885,8 +2883,10 @@ district: "",
           display: none;
         }
         .featured-section {
-          background: linear-gradient(135deg, #f35b4d 0%, #ff552b 100%);
-          box-shadow: 0 22px 44px rgba(228,93,80,0.20);
+          background: #FFFFFF;
+          border-top: 1px solid rgba(31,41,55,0.06);
+          border-bottom: 1px solid rgba(31,41,55,0.06);
+          box-shadow: none;
           padding: 30px 22px 24px;
         }
         .featured-head {
@@ -2896,12 +2896,12 @@ district: "",
           display: inline-flex;
           align-items: center;
           gap: 20px;
-          color: rgba(255,255,255,0.96);
+          color: ${PALETTE.softText};
           font-size: 14px;
           font-weight: 900;
         }
         .featured-head-actions a {
-          color: rgba(255,255,255,0.96);
+          color: ${PALETTE.coral};
           text-decoration: none;
         }
         .section-title-vitrin::before {
@@ -2917,8 +2917,8 @@ district: "",
           min-height: 218px;
           padding: 24px 26px 26px;
           border-radius: 24px;
-          border: 1px solid rgba(255,255,255,0.76);
-          box-shadow: 0 18px 38px rgba(35,48,68,0.10);
+          border: 1.5px solid rgba(255,90,60,0.35);
+          box-shadow: 0 14px 28px rgba(31,41,55,0.05);
         }
         .featured-card::after {
           display: none;
@@ -2940,7 +2940,7 @@ district: "",
           border-color: rgba(228,93,80,0.20);
         }
         .featured-company {
-          color: ${PALETTE.teal};
+          color: ${PALETTE.coral};
           font-size: 16px;
           margin-bottom: 6px;
         }
@@ -4501,15 +4501,20 @@ district: "",
                 </div>
 
                 <div className="footer-boxes">
-                  <div className="footer-app-box">
-                    <span className="footer-app-icon">▶</span>
+                  <a
+                    className="footer-app-box"
+                    href="https://ekis-mobile.expo.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="footer-app-icon"><Smartphone size={17} /></span>
                     <span className="footer-app-text">
                       <strong>Mobil uygulama</strong>
-                      <span>Yakında yayında</span>
+                      <span>Şimdi kullanmaya başla</span>
                     </span>
-                  </div>
+                  </a>
                   <div className="footer-app-box">
-                    <span className="footer-app-icon">★</span>
+                    <span className="footer-app-icon"><Star size={16} /></span>
                     <span className="footer-app-text">
                       <strong>İşveren paketi</strong>
                       <span>Daha fazla görünürlük</span>

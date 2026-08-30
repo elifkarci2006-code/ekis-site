@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MapPin, Wallet, Clock, Pencil, Play, Pause, Trash2 } from "lucide-react";
 import { supabase } from "../supabaseClient";
 import { categories, types } from "../data/constants";
 
@@ -233,11 +234,11 @@ export default function MyJobsModal({ currentUser, onClose }) {
                         <div style={jobTitle}>{job.job_title}</div>
                         <div style={jobCompany}>{job.company_name}</div>
                         <div style={jobMeta}>
-                          📍 {job.city}{job.district ? ` / ${job.district}` : ""}
+                          <span style={jobMetaItem}><MapPin size={13} /> {job.city}{job.district ? ` / ${job.district}` : ""}</span>
                           {" · "}
-                          💰 {job.salary}
+                          <span style={jobMetaItem}><Wallet size={13} /> {job.salary}</span>
                           {" · "}
-                          🕐 {job.work_type}
+                          <span style={jobMetaItem}><Clock size={13} /> {job.work_type}</span>
                         </div>
                       </div>
                       <span style={{ ...statusBadge, backgroundColor: statusInfo.color + "20", color: statusInfo.color }}>
@@ -253,16 +254,16 @@ export default function MyJobsModal({ currentUser, onClose }) {
                       </span>
                       <div style={jobActions}>
                         <button style={editBtn} onClick={() => startEdit(job)}>
-                          ✎ Düzenle
+                          <Pencil size={13} /> Düzenle
                         </button>
                         <button style={toggleBtn} onClick={() => toggleActive(job)}>
-                          {job.status === "passive" ? "▶ Aktife Al" : "⏸ Pasife Al"}
+                          {job.status === "passive" ? <><Play size={13} /> Aktife Al</> : <><Pause size={13} /> Pasife Al</>}
                         </button>
                         <button
                           style={deleteBtn}
                           onClick={() => handleDelete(job.id)}
                         >
-                          🗑 Sil
+                          <Trash2 size={13} /> Sil
                         </button>
                       </div>
                     </div>
@@ -386,7 +387,7 @@ const jobTitle = {
 const jobCompany = {
   fontSize: "13px",
   fontWeight: "700",
-  color: "#58ADAD",
+  color: "#FF5A3C",
   marginBottom: "6px",
 };
 
@@ -394,6 +395,16 @@ const jobMeta = {
   fontSize: "12px",
   color: "#6B7280",
   fontWeight: "600",
+  display: "flex",
+  flexWrap: "wrap",
+  alignItems: "center",
+  gap: "4px",
+};
+
+const jobMetaItem = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "4px",
 };
 
 const statusBadge = {
@@ -425,6 +436,9 @@ const jobActions = {
 };
 
 const deleteBtn = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "5px",
   padding: "6px 12px",
   borderRadius: "8px",
   border: "1px solid rgba(239,68,68,0.2)",
@@ -436,22 +450,28 @@ const deleteBtn = {
 };
 
 const editBtn = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "5px",
   padding: "6px 12px",
   borderRadius: "8px",
-  border: "1px solid rgba(88,173,173,0.25)",
-  backgroundColor: "rgba(88,173,173,0.08)",
-  color: "#58ADAD",
+  border: "1px solid rgba(255,90,60,0.25)",
+  backgroundColor: "rgba(255,90,60,0.08)",
+  color: "#FF5A3C",
   fontSize: "12px",
   fontWeight: "700",
   cursor: "pointer",
 };
 
 const toggleBtn = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "5px",
   padding: "6px 12px",
   borderRadius: "8px",
-  border: "1px solid rgba(246,90,69,0.25)",
-  backgroundColor: "rgba(246,90,69,0.08)",
-  color: "#F65A45",
+  border: "1px solid rgba(31,41,55,0.14)",
+  backgroundColor: "rgba(31,41,55,0.05)",
+  color: "#1F2937",
   fontSize: "12px",
   fontWeight: "700",
   cursor: "pointer",

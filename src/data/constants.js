@@ -1,15 +1,20 @@
+// Kept in sync with ekis-mobile's visual identity (src/styles/homeStyles.ts,
+// src/constants/typeColors.ts) so the website and the app look like the same
+// product. "sage"/"aqua"/"teal" are kept only for any leftover references --
+// the live palette is coral/slate/text/bg/border/warm below.
 export const PALETTE = {
-  coral: "#f65a45",
+  coral: "#FF5A3C",
   sage: "#9BC78F",
   aqua: "#76BFBE",
   teal: "#58ADAD",
-  slate: "#3C4A5F",
-  bg: "#F5F7F8",
+  slate: "#1F2937",
+  bg: "#FFFFFF",
   white: "#FFFFFF",
-  text: "#233044",
+  text: "#1F2937",
   softText: "#5D6B7F",
-  border: "#DDE5EA",
+  border: "rgba(31,41,55,0.08)",
   warm: "#FFF2EC",
+  cardBg: "#F5F7F8",
 };
 
 export const ADS_ENABLED = true;

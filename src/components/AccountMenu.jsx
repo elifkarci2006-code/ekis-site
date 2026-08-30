@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ChevronUp, ChevronDown, Plus, ClipboardList, Shield, LogOut } from "lucide-react";
 import { supabase } from "../supabaseClient";
 
 
@@ -33,7 +34,7 @@ export default function AccountMenu({ currentUser, onLogout, onNewPost, onMyPost
           {currentUser?.email?.[0]?.toUpperCase() || "K"}
         </span>
         Hesabım
-        <span style={{ fontSize: "10px", marginLeft: "2px" }}>{open ? "▲" : "▼"}</span>
+        <span style={{ display: "inline-flex", marginLeft: "2px" }}>{open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
       </button>
 
       {open && (
@@ -48,23 +49,23 @@ export default function AccountMenu({ currentUser, onLogout, onNewPost, onMyPost
 
           {/* Menü öğeleri */}
           <button style={menuItem} onClick={() => { onNewPost(); setOpen(false); }}>
-            <span>➕</span> Yeni İlan Ver
+            <Plus size={16} /> Yeni İlan Ver
           </button>
 
           <button style={menuItem} onClick={() => { onMyPosts(); setOpen(false); }}>
-            <span>📋</span> İlanlarım
+            <ClipboardList size={16} /> İlanlarım
           </button>
 
           {isAdmin && (
             <button style={menuItem} onClick={() => { onAdminPanel(); setOpen(false); }}>
-              <span>🛡️</span> Admin Paneli
+              <Shield size={16} /> Admin Paneli
             </button>
           )}
 
           <div style={divider} />
 
           <button style={{ ...menuItem, color: "#FF5A3C" }} onClick={handleLogout}>
-            <span>🚪</span> Çıkış Yap
+            <LogOut size={16} /> Çıkış Yap
           </button>
         </div>
       )}
