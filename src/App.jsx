@@ -1826,6 +1826,7 @@ district: "",
         }
         .featured-carousel-track {
           display: flex;
+          align-items: flex-start;
           transition: transform 0.4s ease;
         }
         .featured-carousel-page {
