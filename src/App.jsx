@@ -1396,9 +1396,6 @@ district: "",
           align-items: center;
           min-width: 0;
         }
-        @media (min-width: 901px) {
-          .brand-wrap { margin-left: -113px; }
-        }
         .brand-logo-link {
           display: inline-flex;
           align-items: center;
@@ -1443,9 +1440,6 @@ district: "",
           align-items: center;
           gap: 16px;
           flex-shrink: 0;
-        }
-        @media (min-width: 901px) {
-          .top-actions { margin-right: -129px; }
         }
         .nav-login-link {
           border: none;
