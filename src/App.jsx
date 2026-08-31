@@ -4626,9 +4626,9 @@ district: "",
                             <div className="promo-icon-box">
                               <ClipboardList size={20} color="#FF5A3C" strokeWidth={2.2} />
                             </div>
-                            <div className="promo-title">İş mi arıyorsun?</div>
+                            <div className="promo-title">Personel mi arıyorsun?</div>
                             <div className="promo-text">
-                              Profilini oluştur, sana uygun iş fırsatlarını keşfetmeye başla.
+                              Hemen ilan ver, işine uygun elemanları keşfetmeye başla.
                             </div>
                             <button type="button" className="promo-button" onClick={() => setShowAuthModal(true)}>
                               Ücretsiz Kayıt Ol
