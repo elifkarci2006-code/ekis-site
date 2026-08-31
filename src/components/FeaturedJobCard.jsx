@@ -16,7 +16,7 @@ export default function FeaturedJobCard({ job, onOpen }) {
   const typeColor = getTypeColor(job.type);
 
   return (
-    <article className="soft-job-card" onClick={() => onOpen(job)}>
+    <article className="soft-job-card soft-job-card-featured" onClick={() => onOpen(job)}>
       <div className="soft-top soft-top-end">
         <div className="soft-badge" style={{ color: typeColor, backgroundColor: `${typeColor}1A` }}>
           {job.type}

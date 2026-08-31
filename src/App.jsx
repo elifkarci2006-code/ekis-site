@@ -2082,6 +2082,9 @@ district: "",
           flex-direction: column;
           height: 100%;
         }
+        .soft-job-card-featured {
+          border: 1.5px solid rgba(255,90,60,0.35);
+        }
         .soft-job-card:hover {
           transform: translateY(-3px);
           box-shadow: 0 10px 20px rgba(35,48,68,0.08);
