@@ -1356,9 +1356,10 @@ district: "",
     <div className="app-shell">
       <style>{`
         * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
         body {
           margin: 0;
+          overflow-x: hidden;
           font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
           background: ${PALETTE.bg};
           color: ${PALETTE.text};
