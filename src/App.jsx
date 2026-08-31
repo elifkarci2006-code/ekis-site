@@ -25,7 +25,7 @@ import AuthModal from "./components/AuthModal";
 import AccountMenu from "./components/AccountMenu";
 import MyJobsModal from "./components/MyJobsModal";
 import AdminPanel from "./components/AdminPanel";
-import { Search, MapPin, Tag, ChevronDown, ShieldCheck, Rocket, Globe2, Lock } from "lucide-react";
+import { Search, MapPin, Tag, ChevronDown, ChevronLeft, ChevronRight, ShieldCheck, Rocket, Globe2, Lock } from "lucide-react";
 
 const FEATURE_BADGES = [
   { title: "Onaylı ilanlar", text: "Güvenle başvur", Icon: ShieldCheck, color: "#0F8F7D" },
@@ -1795,27 +1795,29 @@ district: "",
           flex: 0 0 100%;
           min-width: 100%;
         }
-        .featured-carousel-controls {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 16px;
-          margin-top: 18px;
+        .featured-carousel-wrap {
+          position: relative;
         }
         .featured-carousel-arrow {
-          width: 36px;
-          height: 36px;
+          position: absolute;
+          top: 50%;
+          margin-top: -22px;
+          width: 44px;
+          height: 44px;
           border-radius: 999px;
-          border: none;
-          background: rgba(255,255,255,0.22);
-          color: #fff;
-          font-size: 18px;
-          font-weight: 900;
+          background: #FFFFFF;
+          border: 1px solid rgba(31,41,55,0.10);
+          box-shadow: 0 4px 10px rgba(31,41,55,0.12);
           cursor: pointer;
-          display: flex;
+          display: none;
           align-items: center;
           justify-content: center;
         }
+        @media (min-width: 901px) {
+          .featured-carousel-arrow { display: flex; }
+        }
+        .featured-carousel-arrow-left { left: -22px; }
+        .featured-carousel-arrow-right { right: -22px; }
         .featured-carousel-arrow:disabled {
           opacity: 0.35;
           cursor: default;
@@ -1823,21 +1825,23 @@ district: "",
         .featured-carousel-dots {
           display: flex;
           align-items: center;
-          gap: 8px;
+          justify-content: center;
+          gap: 6px;
+          margin-top: 9px;
         }
         .featured-carousel-dot {
-          width: 8px;
-          height: 8px;
+          width: 5px;
+          height: 5px;
           border-radius: 999px;
           border: none;
-          background: rgba(255,255,255,0.4);
+          background: rgba(31,41,55,0.16);
           padding: 0;
           cursor: pointer;
           transition: width 0.2s ease, background 0.2s ease;
         }
         .featured-carousel-dot.active {
-          width: 22px;
-          background: #fff;
+          width: 15px;
+          background: ${PALETTE.coral};
         }
         .featured-section {
           background: ${PALETTE.coral};
@@ -4399,58 +4403,61 @@ district: "",
             </div>
           </div>
 
-         <div className="featured-carousel-viewport">
-  <div
-    className="featured-carousel-track"
-    style={{ transform: `translateX(-${featuredPage * 100}%)` }}
-  >
-    {featuredPages.map((pageJobs, pageIndex) => (
-      <div className="featured-grid featured-carousel-page" key={pageIndex}>
-        {pageJobs.map((job) => (
-          <FeaturedJobCard
-            key={job.id}
-            job={job}
-            onOpen={handleOpenJob}
-          />
-        ))}
-      </div>
-    ))}
+         <div className="featured-carousel-wrap">
+  <div className="featured-carousel-viewport">
+    <div
+      className="featured-carousel-track"
+      style={{ transform: `translateX(-${featuredPage * 100}%)` }}
+    >
+      {featuredPages.map((pageJobs, pageIndex) => (
+        <div className="featured-grid featured-carousel-page" key={pageIndex}>
+          {pageJobs.map((job) => (
+            <FeaturedJobCard
+              key={job.id}
+              job={job}
+              onOpen={handleOpenJob}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
   </div>
+
+  {featuredTotalPages > 1 && (
+    <>
+      <button
+        type="button"
+        className="featured-carousel-arrow featured-carousel-arrow-left"
+        onClick={() => setFeaturedPage((p) => Math.max(0, p - 1))}
+        disabled={featuredPage === 0}
+        aria-label="Önceki"
+      >
+        <ChevronLeft size={22} color="#1F2937" strokeWidth={2.4} />
+      </button>
+      <button
+        type="button"
+        className="featured-carousel-arrow featured-carousel-arrow-right"
+        onClick={() => setFeaturedPage((p) => Math.min(featuredTotalPages - 1, p + 1))}
+        disabled={featuredPage === featuredTotalPages - 1}
+        aria-label="Sonraki"
+      >
+        <ChevronRight size={22} color="#1F2937" strokeWidth={2.4} />
+      </button>
+    </>
+  )}
 </div>
 
 {featuredTotalPages > 1 && (
-  <div className="featured-carousel-controls">
-    <button
-      type="button"
-      className="featured-carousel-arrow"
-      onClick={() => setFeaturedPage((p) => Math.max(0, p - 1))}
-      disabled={featuredPage === 0}
-      aria-label="Önceki"
-    >
-      ‹
-    </button>
-
-    <div className="featured-carousel-dots">
-      {featuredPages.map((_, pageIndex) => (
-        <button
-          key={pageIndex}
-          type="button"
-          className={`featured-carousel-dot ${pageIndex === featuredPage ? "active" : ""}`}
-          onClick={() => setFeaturedPage(pageIndex)}
-          aria-label={`${pageIndex + 1}. sayfa`}
-        />
-      ))}
-    </div>
-
-    <button
-      type="button"
-      className="featured-carousel-arrow"
-      onClick={() => setFeaturedPage((p) => Math.min(featuredTotalPages - 1, p + 1))}
-      disabled={featuredPage === featuredTotalPages - 1}
-      aria-label="Sonraki"
-    >
-      ›
-    </button>
+  <div className="featured-carousel-dots">
+    {featuredPages.map((_, pageIndex) => (
+      <button
+        key={pageIndex}
+        type="button"
+        className={`featured-carousel-dot ${pageIndex === featuredPage ? "active" : ""}`}
+        onClick={() => setFeaturedPage(pageIndex)}
+        aria-label={`${pageIndex + 1}. sayfa`}
+      />
+    ))}
   </div>
 )}
         </section>
