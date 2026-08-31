@@ -25,7 +25,9 @@ import AuthModal from "./components/AuthModal";
 import AccountMenu from "./components/AccountMenu";
 import MyJobsModal from "./components/MyJobsModal";
 import AdminPanel from "./components/AdminPanel";
-import { Search, MapPin, Tag, ChevronDown, ChevronLeft, ChevronRight, ShieldCheck, Rocket, Globe2, Lock } from "lucide-react";
+import { Search, MapPin, Tag, ChevronDown, ChevronLeft, ChevronRight, ShieldCheck, Rocket, Globe2, Lock, ClipboardList, Smartphone, Check } from "lucide-react";
+import AppleIcon from "./components/AppleIcon";
+import GooglePlayIcon from "./components/GooglePlayIcon";
 
 const FEATURE_BADGES = [
   { title: "Onaylı ilanlar", text: "Güvenle başvur", Icon: ShieldCheck, color: "#0F8F7D" },
@@ -2182,6 +2184,125 @@ district: "",
         .jobs-sidebar-col {
           flex-shrink: 0;
           width: 320px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .promo-card {
+          background: #FFFFFF;
+          border-radius: 18px;
+          padding: 18px;
+          border: 1px solid rgba(255,90,60,0.14);
+          min-height: 210px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+        }
+        .promo-icon-box {
+          width: 44px;
+          height: 44px;
+          border-radius: 14px;
+          background: rgba(255,90,60,0.10);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 12px;
+        }
+        .promo-title {
+          color: #111827;
+          font-size: 16px;
+          font-weight: 900;
+        }
+        .promo-text {
+          color: #7A8798;
+          font-size: 12px;
+          font-weight: 600;
+          line-height: 17px;
+          margin-top: 6px;
+          margin-bottom: 14px;
+        }
+        .promo-button {
+          height: 40px;
+          padding: 0 16px;
+          border: none;
+          border-radius: 10px;
+          background: ${PALETTE.coral};
+          color: #fff;
+          font-size: 12.5px;
+          font-weight: 900;
+          cursor: pointer;
+        }
+        .sidebar-card {
+          background: #FFFFFF;
+          border-radius: 18px;
+          padding: 18px;
+          border: 1px solid rgba(31,41,55,0.06);
+        }
+        .app-download-icon-box {
+          width: 44px;
+          height: 44px;
+          border-radius: 14px;
+          background: rgba(31,41,55,0.05);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 10px;
+        }
+        .sidebar-card-title {
+          color: #111827;
+          font-size: 15px;
+          font-weight: 900;
+        }
+        .sidebar-card-subtitle {
+          color: #7A8798;
+          font-size: 12px;
+          font-weight: 600;
+          line-height: 17px;
+          margin-top: 4px;
+          margin-bottom: 14px;
+        }
+        .store-badge-light {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background: #1F2937;
+          border-radius: 10px;
+          padding: 8px 12px;
+          margin-top: 8px;
+        }
+        .store-badge-small {
+          color: #B7C0CC;
+          font-size: 9px;
+          font-weight: 700;
+        }
+        .store-badge-big {
+          color: #FFFFFF;
+          font-size: 13px;
+          font-weight: 900;
+        }
+        .check-item-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 8px;
+        }
+        .check-item-text {
+          color: #1F2937;
+          font-size: 12.5px;
+          font-weight: 700;
+        }
+        .sidebar-card-button {
+          width: 100%;
+          height: 42px;
+          border-radius: 10px;
+          border: 1px solid rgba(255,90,60,0.3);
+          background: transparent;
+          color: ${PALETTE.coral};
+          font-size: 12.5px;
+          font-weight: 900;
+          cursor: pointer;
+          margin-top: 6px;
         }
         .ad-radarnews-card {
           display: block;
@@ -4461,9 +4582,30 @@ district: "",
                   <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
                 ) : (
                   <div className="jobs-grid">
-                    {sortedJobs.map((job) => (
-                      <JobCard key={job.id} job={job} onOpen={handleOpenJob} />
-                    ))}
+                    {sortedJobs.flatMap((job, index) => {
+                      const cards = [];
+
+                      if (index === 1) {
+                        cards.push(
+                          <div className="promo-card" key="promo-card">
+                            <div className="promo-icon-box">
+                              <ClipboardList size={20} color="#FF5A3C" strokeWidth={2.2} />
+                            </div>
+                            <div className="promo-title">İş mi arıyorsun?</div>
+                            <div className="promo-text">
+                              Profilini oluştur, sana uygun iş fırsatlarını keşfetmeye başla.
+                            </div>
+                            <button type="button" className="promo-button" onClick={() => setShowAuthModal(true)}>
+                              Ücretsiz Kayıt Ol
+                            </button>
+                          </div>
+                        );
+                      }
+
+                      cards.push(<JobCard key={job.id} job={job} onOpen={handleOpenJob} />);
+
+                      return cards;
+                    })}
                   </div>
                 )}
               </div>
@@ -4477,6 +4619,43 @@ district: "",
                 >
                   <img src="/ad-radarnews.png" alt="Radar News Telegram Kanalı" />
                 </a>
+
+                <div className="sidebar-card">
+                  <div className="app-download-icon-box">
+                    <Smartphone size={20} color="#1F2937" strokeWidth={2.2} />
+                  </div>
+                  <div className="sidebar-card-title">Ekiş Mobil Uygulamasını Hemen İndir!</div>
+                  <div className="store-badge-light">
+                    <AppleIcon size={20} color="#FFFFFF" />
+                    <div>
+                      <div className="store-badge-small">App Store'dan</div>
+                      <div className="store-badge-big">indirin</div>
+                    </div>
+                  </div>
+                  <div className="store-badge-light">
+                    <GooglePlayIcon size={18} color="#FFFFFF" />
+                    <div>
+                      <div className="store-badge-small">Google Play'den</div>
+                      <div className="store-badge-big">indirin</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="sidebar-card">
+                  <div className="sidebar-card-title">Ekiş Nedir?</div>
+                  <div className="sidebar-card-subtitle">
+                    Günlük, saatlik, part time ve tam zamanlı ilanları tek yerde keşfet.
+                  </div>
+                  {["Binlerce onaylı ilan", "Hızlı ve kolay başvuru", "Güvenli ve şeffaf platform"].map((item) => (
+                    <div className="check-item-row" key={item}>
+                      <Check size={15} color="#0F8F7D" strokeWidth={3} />
+                      <span className="check-item-text">{item}</span>
+                    </div>
+                  ))}
+                  <button type="button" className="sidebar-card-button" onClick={() => setInfoModal("ekisNedir")}>
+                    Nasıl Çalışır? ›
+                  </button>
+                </div>
               </div>
             </div>
           </div>
