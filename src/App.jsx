@@ -15,7 +15,6 @@ import {
   normalizeLocation,
   toTitleCase,
 } from "./utils/jobUtils";
-import FeaturedJobCard from "./components/FeaturedJobCard";
 import JobCard from "./components/JobCard";
 import InfoModal from "./components/InfoModal";
 import FeaturedListModal from "./components/FeaturedListModal";
@@ -2997,76 +2996,6 @@ district: "",
           color: ${PALETTE.coral};
           text-decoration: none;
         }
-        .featured-card {
-          min-height: 218px;
-          padding: 24px 26px 26px;
-          border-radius: 18px;
-          border: 1px solid rgba(35,48,68,0.06);
-          box-shadow: 0 5px 10px rgba(35,48,68,0.05);
-        }
-        .featured-card::after {
-          display: none;
-        }
-        .featured-card .card-top {
-          justify-content: flex-end;
-          margin-bottom: 12px;
-          min-height: 0;
-        }
-        .featured-card .pill {
-          gap: 6px;
-          padding: 9px 13px;
-          background: ${PALETTE.coral};
-          box-shadow: 0 10px 18px rgba(228,93,80,0.22);
-        }
-        .featured-card .type-tag {
-          padding: 8px 12px;
-          background: ${PALETTE.warm};
-          color: ${PALETTE.coral};
-          border-color: rgba(228,93,80,0.20);
-        }
-        .featured-company {
-          color: ${PALETTE.coral};
-          font-size: 16px;
-          margin-bottom: 6px;
-        }
-        .featured-title {
-          font-size: 21px;
-          margin-bottom: 10px;
-        }
-        .featured-location {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          color: ${PALETTE.text};
-          font-size: 12px;
-          font-weight: 700;
-        }
-        .featured-divider {
-          height: 1px;
-          background: rgba(246,90,69,0.10);
-          margin: 10px 0;
-        }
-        .featured-footer {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .featured-salary {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          color: #111827;
-          font-size: 14px;
-          font-weight: 900;
-        }
-        .featured-views {
-          display: flex;
-          align-items: center;
-          gap: 3px;
-          color: #7A8798;
-          font-size: 11px;
-          font-weight: 700;
-        }
         .featured-icon-circle {
           position: absolute;
           right: 26px;
@@ -3593,7 +3522,6 @@ district: "",
           .hero-trust-row { justify-content: flex-start; flex-wrap: wrap; }
           .hero-trust-pill { width: 100%; min-width: 0; }
           .featured-head-actions { gap: 12px; font-size: 12px; }
-          .featured-card { min-height: 220px; }
           .featured-icon-circle { width: 64px; height: 64px; right: 18px; bottom: 22px; }
           .featured-icon-circle svg { width: 38px; height: 38px; }
           .all-jobs-panel { padding: 16px; border-radius: 22px; }
@@ -4435,7 +4363,7 @@ district: "",
       {featuredPages.map((pageJobs, pageIndex) => (
         <div className="featured-grid featured-carousel-page" key={pageIndex}>
           {pageJobs.map((job) => (
-            <FeaturedJobCard
+            <JobCard
               key={job.id}
               job={job}
               onOpen={handleOpenJob}
