@@ -25,7 +25,7 @@ import AuthModal from "./components/AuthModal";
 import AccountMenu from "./components/AccountMenu";
 import MyJobsModal from "./components/MyJobsModal";
 import AdminPanel from "./components/AdminPanel";
-import { Search, MapPin, Tag, ChevronDown, ChevronLeft, ChevronRight, ShieldCheck, Rocket, Globe2, Lock, ClipboardList, Smartphone, Check } from "lucide-react";
+import { Search, MapPin, Tag, ChevronDown, ChevronLeft, ChevronRight, ShieldCheck, Rocket, Globe2, Lock, ClipboardList, Smartphone, Check, Download } from "lucide-react";
 import AppleIcon from "./components/AppleIcon";
 import GooglePlayIcon from "./components/GooglePlayIcon";
 
@@ -2298,6 +2298,8 @@ district: "",
           border-radius: 10px;
           padding: 8px 12px;
           margin-top: 8px;
+          text-decoration: none;
+          cursor: pointer;
         }
         .store-badge-small {
           color: #B7C0CC;
@@ -4674,6 +4676,13 @@ district: "",
                       <div className="store-badge-big">indirin</div>
                     </div>
                   </div>
+                  <a className="store-badge-light" href="/ekis-mobile.apk" download>
+                    <Download size={18} color="#FFFFFF" />
+                    <div>
+                      <div className="store-badge-small">Android için</div>
+                      <div className="store-badge-big">APK olarak indir</div>
+                    </div>
+                  </a>
                 </div>
 
                 <div className="sidebar-card">
