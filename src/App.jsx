@@ -4415,40 +4415,40 @@ district: "",
 
         <section className="section">
           <div className="all-jobs-panel">
-            <div className="all-jobs-top">
-              <div className="all-jobs-title-block">
-                <h2 className="all-jobs-title">Tüm ilanlar</h2>
-                <div className="all-jobs-sub">{filteredJobs.length} ilan bulundu</div>
-              </div>
-
-              <label className="sort-control">
-                <span>Sırala:</span>
-                <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
-                  <option value="newest">En yeni ilanlar</option>
-                  <option value="salaryHigh">Ücret yüksekten düşüğe</option>
-                  <option value="salaryLow">Ücret düşükten yükseğe</option>
-                </select>
-              </label>
-            </div>
-
-            <div className="quick-type-tabs" aria-label="Hızlı çalışma tipi filtreleri">
-              {types.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  className={`quick-type-tab ${submittedJobType === item ? "active" : ""}`}
-                  onClick={() => {
-                    setJobType(item);
-                    setSubmittedJobType(item);
-                  }}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-
             <div className="jobs-layout">
               <div className="jobs-main-col">
+                <div className="all-jobs-top">
+                  <div className="all-jobs-title-block">
+                    <h2 className="all-jobs-title">Tüm ilanlar</h2>
+                    <div className="all-jobs-sub">{filteredJobs.length} ilan bulundu</div>
+                  </div>
+
+                  <label className="sort-control">
+                    <span>Sırala:</span>
+                    <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+                      <option value="newest">En yeni ilanlar</option>
+                      <option value="salaryHigh">Ücret yüksekten düşüğe</option>
+                      <option value="salaryLow">Ücret düşükten yükseğe</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div className="quick-type-tabs" aria-label="Hızlı çalışma tipi filtreleri">
+                  {types.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      className={`quick-type-tab ${submittedJobType === item ? "active" : ""}`}
+                      onClick={() => {
+                        setJobType(item);
+                        setSubmittedJobType(item);
+                      }}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+
                 {filteredJobs.length === 0 ? (
                   <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
                 ) : (
