@@ -16,6 +16,7 @@ import {
   toTitleCase,
 } from "./utils/jobUtils";
 import JobCard from "./components/JobCard";
+import FeaturedJobCard from "./components/FeaturedJobCard";
 import InfoModal from "./components/InfoModal";
 import FeaturedListModal from "./components/FeaturedListModal";
 import PostJobModal from "./components/PostJobModal";
@@ -2090,6 +2091,10 @@ district: "",
           justify-content: space-between;
           align-items: center;
           margin-bottom: 6px;
+        }
+        .soft-top-end {
+          justify-content: flex-end;
+          margin-bottom: 8px;
         }
         .soft-company {
           color: ${PALETTE.coral};
@@ -4363,7 +4368,7 @@ district: "",
       {featuredPages.map((pageJobs, pageIndex) => (
         <div className="featured-grid featured-carousel-page" key={pageIndex}>
           {pageJobs.map((job) => (
-            <JobCard
+            <FeaturedJobCard
               key={job.id}
               job={job}
               onOpen={handleOpenJob}
