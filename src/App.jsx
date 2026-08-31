@@ -1391,6 +1391,7 @@ district: "",
           display: flex;
           align-items: center;
           min-width: 0;
+          margin-left: -113px;
         }
         .brand-logo-link {
           display: inline-flex;
@@ -1436,7 +1437,7 @@ district: "",
           align-items: center;
           gap: 16px;
           flex-shrink: 0;
-          margin-right: -16px;
+          margin-right: -129px;
         }
         .nav-login-link {
           border: none;
