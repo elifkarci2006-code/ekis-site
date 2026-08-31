@@ -1760,22 +1760,19 @@ district: "",
           letter-spacing: -0.03em;
           color: ${PALETTE.slate};
         }
-        .section-title-vitrin {
-          display: inline-flex;
+        .featured-title-row {
+          display: flex;
           align-items: center;
-          gap: 10px;
-          color: #fff;
+          gap: 7px;
         }
-        .section-title-vitrin::before {
-          content: "";
-          width: 10px;
-          height: 10px;
-          border-radius: 999px;
-          background: rgba(255,255,255,0.92);
-          box-shadow:
-            0 0 0 4px rgba(255,255,255,0.18),
-            0 0 18px rgba(255,255,255,0.22);
+        .featured-title-icon {
           flex-shrink: 0;
+        }
+        .featured-subtitle {
+          color: #9AA5B3;
+          font-size: 12px;
+          font-weight: 700;
+          margin-top: 2px;
         }
         .section-sub {
           color: ${PALETTE.softText};
@@ -3022,15 +3019,6 @@ district: "",
         .featured-head-actions a {
           color: ${PALETTE.coral};
           text-decoration: none;
-        }
-        .section-title-vitrin::before {
-          content: "";
-          width: auto;
-          height: auto;
-          background: transparent;
-          box-shadow: none;
-          font-size: 25px;
-          color: #fff;
         }
         .featured-card {
           min-height: 218px;
@@ -4439,19 +4427,22 @@ district: "",
 
         <section className="section featured-section" id="one-cikanlar">
           <div className="section-head featured-head">
-            <h2 className="section-title section-title-vitrin">
- <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: "8px", verticalAlign: "middle", flexShrink: 0}}>
-  <path d="M12 2v1"/>
-  <path d="M4.2 4.2l.7.7"/>
-  <path d="M19.8 4.2l-.7.7"/>
-  <path d="M2 13h1"/>
-  <path d="M21 13h1"/>
-  <path d="M7 13a5 5 0 0110 0v2H7v-2z"/>
-  <rect x="6" y="15" width="12" height="3" rx="1"/>
-  <path d="M10 18.5a2 2 0 004 0"/>
-</svg>
-  Ekiş Acil
-</h2>
+            <div className="featured-title-row">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FF5A3C" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" className="featured-title-icon">
+                <path d="M12 2v1"/>
+                <path d="M4.2 4.2l.7.7"/>
+                <path d="M19.8 4.2l-.7.7"/>
+                <path d="M2 13h1"/>
+                <path d="M21 13h1"/>
+                <path d="M7 13a5 5 0 0110 0v2H7v-2z"/>
+                <rect x="6" y="15" width="12" height="3" rx="1"/>
+                <path d="M10 18.5a2 2 0 004 0"/>
+              </svg>
+              <div>
+                <h2 className="section-title">Ekiş Acil</h2>
+                <div className="featured-subtitle">Öne çıkan ilanlar</div>
+              </div>
+            </div>
             <div className="featured-head-actions">
               <span>{filteredFeaturedJobs.length} ilan</span>
               <a href="#one-cikanlar" onClick={(e) => { e.preventDefault(); setShowFeaturedList(true); }}>Tümünü Gör →</a>
