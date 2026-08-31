@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Smartphone, Star } from "lucide-react";
 import { supabase } from "./supabaseClient";
 import { PALETTE, categories, cities, types, featuredPackages, ADMIN_EMAILS } from "./data/constants";
 import { featuredSeed, jobsSeed } from "./data/seeds";
@@ -2026,29 +2025,33 @@ district: "",
           letter-spacing: -0.035em;
           color: ${PALETTE.slate};
         }
-        .soft-details {
+        .soft-detail {
           position: relative;
           z-index: 1;
-          display: grid;
-          gap: 9px;
-          margin-top: 4px;
-          margin-bottom: 16px;
-        }
-        .soft-detail {
           display: flex;
           align-items: center;
-          gap: 8px;
-          color: ${PALETTE.softText};
-          font-size: 14px;
-          line-height: 1.35;
-          font-weight: 750;
-          letter-spacing: -0.01em;
+          gap: 5px;
+          margin-top: 8px;
+          color: ${PALETTE.text};
+          font-size: 12px;
+          font-weight: 700;
         }
-        .soft-detail svg {
-          width: 15px;
-          height: 15px;
-          flex-shrink: 0;
-          color: ${PALETTE.slate};
+        .soft-category-text {
+          position: relative;
+          z-index: 1;
+          color: ${PALETTE.softText};
+          font-size: 11px;
+          font-weight: 700;
+          margin-top: 3px;
+          margin-bottom: 16px;
+        }
+        .soft-view-row {
+          display: flex;
+          align-items: center;
+          gap: 3px;
+          color: #7A8798;
+          font-size: 11px;
+          font-weight: 700;
         }
         .soft-divider {
           height: 1px;
@@ -2085,13 +2088,9 @@ district: "",
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          min-width: 76px;
-          height: 34px;
-          padding: 0 13px;
+          padding: 5px 10px;
           border-radius: 999px;
-          background: #fff0eb;
-          color: #ff4b2b;
-          border: 1px solid rgba(255,75,43,0.18);
+          border: none;
           font-size: 12px;
           font-weight: 900;
           letter-spacing: -0.01em;
@@ -2549,61 +2548,52 @@ district: "",
           border: 1px solid rgba(88,173,173,0.12);
         }
         .site-footer {
-          margin-top: 34px;
-          border-radius: 34px 34px 0 0;
-          overflow: hidden;
+          margin-top: 32px;
           background: #FFFFFF;
           border-top: 1px solid rgba(31,41,55,0.06);
           color: ${PALETTE.text};
         }
-       .site-footer-topline {
-  height: 12px;
-  background: linear-gradient(90deg, ${PALETTE.coral} 0%, #f25b7a 100%);
-}
-        .site-footer-inner { padding: 34px 28px 20px; }
+        .site-footer-inner { padding: 28px 20px 24px; }
         .footer-grid {
           display: grid;
-         grid-template-columns: 1.2fr 1fr 1fr 1fr 1.2fr;
-          gap: 28px;
+          grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+          gap: 22px;
           align-items: start;
         }
         .footer-brand {
           display: flex;
           flex-direction: column;
-          gap: 14px;
+          gap: 10px;
         }
         .footer-logo {
-          width: 126px;
+          width: 56px;
           height: auto;
           display: block;
           object-fit: contain;
-          opacity: 0.98;
         }
         .footer-brand-text {
-          max-width: 290px;
+          max-width: 220px;
           color: ${PALETTE.softText};
-          font-size: 14px;
-          line-height: 1.7;
+          font-size: 12px;
+          font-weight: 600;
+          line-height: 18px;
           margin: 0;
         }
         .footer-subheading {
-  font-size: 13px;
-  font-weight: 900;
-  color: ${PALETTE.text};
-  margin: 0 0 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.6;
-}
+          font-size: 13px;
+          font-weight: 900;
+          color: ${PALETTE.text};
+          margin: 0 0 2px;
+        }
         .footer-links {
           display: grid;
-          gap: 10px;
+          gap: 8px;
         }
         .footer-link {
           color: ${PALETTE.softText};
           text-decoration: none;
-          font-size: 15px;
-          font-weight: 700;
+          font-size: 13px;
+          font-weight: 600;
         }
         .footer-link-button {
           border: none;
@@ -2614,70 +2604,36 @@ district: "",
           font-family: inherit;
         }
         .footer-link:hover {
-  color: #FF5A3C;
-  text-decoration: none;
-}
+          color: ${PALETTE.coral};
+          text-decoration: none;
+        }
         .footer-socials {
           display: flex;
-          gap: 10px;
-          margin-bottom: 18px;
+          gap: 8px;
+          margin-top: 4px;
         }
         .footer-social {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: ${PALETTE.cardBg};
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: ${PALETTE.text};
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-.footer-social:hover {
-  background: rgba(255,90,60,0.12);
-  transform: translateY(-2px);
-}
-        .footer-boxes {
-          display: grid;
-          gap: 12px;
-          margin-top: 8px;
-        }
-        .footer-app-box {
-          border: 1px solid rgba(31,41,55,0.08);
-          border-radius: 16px;
-          padding: 12px 14px;
-          color: ${PALETTE.text};
-          text-decoration: none;
-          display: flex;
-          align-items: center;
-          gap: 10px;
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
           background: ${PALETTE.cardBg};
-        }
-        .footer-app-icon {
-          width: 34px;
-          height: 34px;
-          border-radius: 10px;
-          background: #FFFFFF;
+          border: none;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          font-size: 15px;
-          font-weight: 900;
-          flex-shrink: 0;
+          color: ${PALETTE.text};
+          transition: background 0.2s ease, transform 0.2s ease;
         }
-        .footer-app-text {
-          display: flex;
-          flex-direction: column;
-          line-height: 1.2;
+        .footer-social:hover {
+          background: rgba(255,90,60,0.12);
+          transform: translateY(-2px);
         }
-        .footer-app-text strong { font-size: 15px; }
-        .footer-app-text span {
-          font-size: 12px;
-          color: ${PALETTE.softText};
+        .footer-social-inactive {
+          opacity: 0.4;
+          cursor: default;
         }
         .footer-bottom {
-          margin-top: 24px;
+          margin-top: 26px;
           padding-top: 16px;
           border-top: 1px solid rgba(31,41,55,0.06);
           display: flex;
@@ -2688,18 +2644,19 @@ district: "",
         }
         .footer-bottom-links {
           display: flex;
-          gap: 18px;
+          gap: 16px;
           flex-wrap: wrap;
         }
-        .footer-bottom-link,
         .footer-copy {
-         color: #FF5A3C;
-          text-decoration: none;
-          font-size: 13px;
+          color: #9AA5B3;
+          font-size: 12px;
           font-weight: 700;
         }
-
         .footer-bottom-link {
+          color: #7A8798;
+          text-decoration: none;
+          font-size: 12px;
+          font-weight: 700;
           border: none;
           background: transparent;
           padding: 0;
@@ -2707,9 +2664,9 @@ district: "",
           font-family: inherit;
         }
         .footer-bottom-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
+          text-decoration: underline;
+          text-underline-offset: 3px;
+        }
         .info-modal {
           width: min(760px, calc(100vw - 28px));
           max-height: min(86vh, 820px);
@@ -2950,8 +2907,9 @@ district: "",
           display: none;
         }
         .featured-card .card-top {
-          margin-bottom: 26px;
-          min-height: 34px;
+          justify-content: flex-end;
+          margin-bottom: 12px;
+          min-height: 0;
         }
         .featured-card .pill {
           gap: 6px;
@@ -2977,44 +2935,36 @@ district: "",
         .featured-location {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          color: ${PALETTE.softText};
-          font-size: 15px;
-          font-weight: 600;
-        }
-        .featured-location svg {
-          width: 17px;
-          height: 17px;
-          color: ${PALETTE.slate};
-          flex-shrink: 0;
+          gap: 5px;
+          color: ${PALETTE.text};
+          font-size: 12px;
+          font-weight: 700;
         }
         .featured-divider {
-          width: min(76%, 360px);
           height: 1px;
-          background: rgba(228,93,80,0.18);
-          margin: 20px 0 16px;
+          background: rgba(246,90,69,0.10);
+          margin: 10px 0;
         }
-        .featured-salary-row {
+        .featured-footer {
           display: flex;
           align-items: center;
-          gap: 9px;
-          position: relative;
-          z-index: 2;
-        }
-        .salary-wallet {
-          width: 24px;
-          height: 24px;
-          color: #ff4f26;
-          flex-shrink: 0;
-        }
-        .salary-wallet svg {
-          width: 100%;
-          height: 100%;
+          justify-content: space-between;
         }
         .featured-salary {
-          margin: 0;
-          color: #ff4f26;
-          font-size: 20px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: #111827;
+          font-size: 14px;
+          font-weight: 900;
+        }
+        .featured-views {
+          display: flex;
+          align-items: center;
+          gap: 3px;
+          color: #7A8798;
+          font-size: 11px;
+          font-weight: 700;
         }
         .featured-icon-circle {
           position: absolute;
@@ -4464,7 +4414,6 @@ district: "",
         <AdPlaceholder type="footer" />
 
         <footer className="site-footer">
-          <div className="site-footer-topline" />
           <div className="site-footer-inner">
             <div className="footer-grid">
               <div className="footer-brand">
@@ -4477,43 +4426,41 @@ district: "",
                   }}
                 />
                 <p className="footer-brand-text">
-                  Türkiye'nin ek iş platformu. Günlük, saatlik ve part time fırsatlar tek yerde.
+                  Türkiye'nin en yenilikçi platformu.<br />Günlük, saatlik, part time ve tam zamanlı ilanları tek yerde.
                 </p>
               </div>
 
               <div>
                 <h3 className="footer-subheading">İş Arayan</h3>
                 <div className="footer-links">
-                  <a className="footer-link" href="#ilanlar">İlanları keşfet</a>
+                  <a className="footer-link" href="#ilanlar">İlanları Keşfet</a>
                   <a className="footer-link" href="#one-cikanlar">Ekiş Acil</a>
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("cityJobs")}>Şehre göre işler</button>
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("faq")}>Sık sorulanlar</button>
-                </div>
-              </div>
-              <div>
-                <h3 className="footer-subheading">Rehber</h3>
-                <div className="footer-links">
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekIsBul")}>Ek is nasil bulunur?</button>
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("partTimeAvantajlari")}>Part time calisma rehberi</button>
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("gunlukIsRehber")}>Gunluk is rehberi</button>
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("isverenRehber")}>Isveren rehberi</button>
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekisNedir")}>Ekis nedir?</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("cityJobs")}>Şehre Göre İşler</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("faq")}>Sık Sorulanlar</button>
                 </div>
               </div>
 
               <div>
                 <h3 className="footer-subheading">İşveren</h3>
                 <div className="footer-links">
-                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>İlan ver</a>
-                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); setSelectedPlan("featured"); }}>Ekiş Acil’e çıkar</a>
+                  <a className="footer-link" href="#" onClick={(e) => { e.preventDefault(); setShowForm(true); }}>İlan Ver</a>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("isverenRehber")}>Ekiş Acile Çıkar</button>
                   <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("pricing")}>Fiyatlandırma</button>
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("support")}>Destek al</button>
-                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("isverenRehber")}>İşveren rehberi</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("isverenRehber")}>İşveren Rehberi</button>
                 </div>
               </div>
 
               <div>
-                <h3 className="footer-subheading">Bizi takip et</h3>
+                <h3 className="footer-subheading">Hakkımızda</h3>
+                <div className="footer-links">
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("about")}>Hakkımızda</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("ekIsBul")}>Kariyer</button>
+                  <button className="footer-link footer-link-button" type="button" onClick={() => setInfoModal("contact")}>İletişim</button>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="footer-subheading">Bizi Takip Edin</h3>
                 <div className="footer-socials">
                   <a
                     className="footer-social"
@@ -4523,10 +4470,8 @@ district: "",
                     aria-label="Instagram"
                     title="Instagram"
                   >
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-                      <rect x="4" y="4" width="16" height="16" rx="5" stroke="currentColor" strokeWidth="2" />
-                      <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="2" />
-                      <circle cx="17" cy="7" r="1.2" fill="currentColor" />
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                     </svg>
                   </a>
                   <a
@@ -4537,45 +4482,27 @@ district: "",
                     aria-label="Facebook"
                     title="Facebook"
                   >
-                    <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true">
-                      <path d="M14 8.2h2V5h-2.4C10.8 5 9 6.8 9 9.6V12H7v3.2h2V21h3.4v-5.8H15l.5-3.2h-3.1V9.9c0-1 .4-1.7 1.6-1.7Z" />
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.239.386-.334.914-.334 1.598v1.451h3.415l-.301 1.891-.15.943-.618 3.86H14.4v8.291H9.101Z" />
                     </svg>
                   </a>
-                </div>
-
-                <div className="footer-boxes">
-                  <a
-                    className="footer-app-box"
-                    href="https://ekis-mobile.expo.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span className="footer-app-icon"><Smartphone size={17} /></span>
-                    <span className="footer-app-text">
-                      <strong>Mobil uygulama</strong>
-                      <span>Şimdi kullanmaya başla</span>
-                    </span>
-                  </a>
-                  <div className="footer-app-box">
-                    <span className="footer-app-icon"><Star size={16} /></span>
-                    <span className="footer-app-text">
-                      <strong>İşveren paketi</strong>
-                      <span>Daha fazla görünürlük</span>
-                    </span>
-                  </div>
+                  <span className="footer-social footer-social-inactive" aria-hidden="true" title="Telegram (yakında)">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                    </svg>
+                  </span>
                 </div>
               </div>
             </div>
 
             <div className="footer-bottom">
+              <div className="footer-copy">© {new Date().getFullYear()} Ekiş</div>
               <div className="footer-bottom-links">
-                <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("about")}>Hakkımızda</button>
-                <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("terms")}>Kullanım şartları</button>
+                <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("terms")}>Kullanım Şartları</button>
                 <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("kvkk")}>KVKK</button>
                 <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("privacy")}>Gizlilik</button>
                 <button className="footer-bottom-link" type="button" onClick={() => setInfoModal("contact")}>İletişim</button>
               </div>
-              <div className="footer-copy">Ekiş © 2026</div>
             </div>
           </div>
         </footer>

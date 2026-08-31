@@ -1,110 +1,46 @@
-import { Eye } from "lucide-react";
-import CategoryIcon from "./CategoryIcon";
-import { getDaysAgoLabel } from "../utils/jobUtils";
+import { MapPin, Wallet, Eye } from "lucide-react";
+
+const TYPE_COLORS = {
+  "Günlük": "#0F8F7D",
+  "Saatlik": "#FF5A3C",
+  "Part Time": "#8B5CF6",
+  "Tam Zamanlı": "#2F6FED",
+};
+
+function getTypeColor(type) {
+  return TYPE_COLORS[type] || "#5D6B7F";
+}
 
 export default function FeaturedJobCard({ job, onOpen }) {
+  const typeColor = getTypeColor(job.type);
+
   return (
     <article className="featured-card" onClick={() => onOpen(job)}>
       <div className="card-top">
-        <div className="pill">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: "8px", verticalAlign: "middle", flexShrink: 0}}>
-  <path d="M12 2v1"/>
-  <path d="M4.2 4.2l.7.7"/>
-  <path d="M19.8 4.2l-.7.7"/>
-  <path d="M2 13h1"/>
-  <path d="M21 13h1"/>
-  <path d="M7 13a5 5 0 0110 0v2H7v-2z"/>
-  <rect x="6" y="15" width="12" height="3" rx="1"/>
-  <path d="M10 18.5a2 2 0 004 0"/>
-</svg> Öne Çıkan
-        </div>
-
-        <div className="card-top-right">
-          <div className="job-days">{getDaysAgoLabel(job.createdAt)}</div>
-          <div className="type-tag">{job.type}</div>
+        <div className="type-tag" style={{ color: typeColor, backgroundColor: `${typeColor}1A`, borderColor: `${typeColor}33` }}>
+          {job.type}
         </div>
       </div>
 
-      <div className="job-company featured-company">{job.company}</div>
-      <h3 className="job-title featured-title">{job.title}</h3>
+      <div className="featured-company">{job.company}</div>
+      <h3 className="featured-title">{job.title}</h3>
 
       <div className="featured-location">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M12 21s6-5.33 6-11a6 6 0 1 0-12 0c0 5.67 6 11 6 11Z"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle
-            cx="12"
-            cy="10"
-            r="2.5"
-            stroke="currentColor"
-            strokeWidth="2"
-          />
-        </svg>
+        <MapPin size={13} color="#FF5A3C" strokeWidth={2.5} />
         <span>{job.location}</span>
       </div>
 
       <div className="featured-divider" />
 
-      <div
-        className="featured-salary-row"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div className="salary-wallet" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path
-                d="M4 8.5h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9Z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M4 8.5 17 5v3.5"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M17 13h3"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
-
-          <div className="job-salary featured-salary">{job.salary}</div>
+      <div className="featured-footer">
+        <div className="featured-salary">
+          <Wallet size={16} color="#111827" strokeWidth={2.4} />
+          <span>{job.salary}</span>
         </div>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 4,
-            color: "#94a3b8",
-            fontSize: 13,
-            fontWeight: 700,
-            // Clears the 82px decorative category-icon circle absolutely
-            // positioned at the card's bottom-right corner.
-            marginRight: 60,
-          }}
-        >
-          <Eye size={14} /> {job.viewCount || job.view_count || 0}
+        <div className="featured-views">
+          <Eye size={13} color="#7A8798" strokeWidth={2.2} />
+          <span>{job.viewCount || job.view_count || 0}</span>
         </div>
-      </div>
-
-      <div className="featured-icon-circle">
-        <CategoryIcon job={job} />
       </div>
     </article>
   );
