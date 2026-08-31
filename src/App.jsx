@@ -2078,15 +2078,15 @@ district: "",
           margin-bottom: 20px;
         }
         .quick-type-tab {
-          border: none;
+          border: 1px solid rgba(35,48,68,0.06);
           min-width: 84px;
-          height: 40px;
+          height: 34px;
           border-radius: 999px;
-          padding: 0 18px;
-          background: linear-gradient(180deg, #f5f7f9 0%, #edf1f5 100%);
-          color: ${PALETTE.slate};
-          font-size: 13px;
-          font-weight: 900;
+          padding: 0 14px;
+          background: #F5F7F8;
+          color: #5D6B7F;
+          font-size: 12px;
+          font-weight: 800;
           cursor: pointer;
           box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 8px 14px rgba(60,74,95,0.04);
           transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
@@ -2096,9 +2096,9 @@ district: "",
           box-shadow: 0 10px 20px rgba(60,74,95,0.08);
         }
         .quick-type-tab.active {
-          background: ${PALETTE.teal};
+          background: ${PALETTE.coral};
+          border-color: ${PALETTE.coral};
           color: #fff;
-          box-shadow: 0 12px 24px rgba(88,173,173,0.24);
         }
         .soft-job-card {
           background: #FFFFFF;
