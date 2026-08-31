@@ -2348,10 +2348,24 @@ district: "",
           object-fit: cover;
           display: block;
         }
+        .ad-slot-placeholder {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 320px;
+          height: 640px;
+          border-radius: 18px;
+          border: 1px dashed rgba(31,41,55,0.18);
+          background: ${PALETTE.cardBg};
+          color: ${PALETTE.softText};
+          font-size: 13px;
+          font-weight: 800;
+        }
         @media (max-width: 1024px) {
           .jobs-layout { flex-direction: column; }
           .jobs-sidebar-col { width: 100%; }
           .ad-radarnews-card { width: 100%; max-width: 320px; margin: 0 auto; }
+          .ad-slot-placeholder { width: 100%; max-width: 320px; margin: 0 auto; }
         }
         .jobs-grid {
           display: grid;
@@ -4648,6 +4662,10 @@ district: "",
               </div>
 
               <div className="jobs-sidebar-col">
+                <div className="ad-slot-placeholder">
+                  <span>Reklam Alanı</span>
+                </div>
+
                 <a
                   className="ad-radarnews-card"
                   href="https://t.me/radarnews_tr"
