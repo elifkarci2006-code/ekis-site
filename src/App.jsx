@@ -1434,9 +1434,35 @@ district: "",
         .top-actions {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 16px;
           flex-shrink: 0;
         }
+        .nav-login-link {
+          border: none;
+          background: transparent;
+          padding: 0;
+          cursor: pointer;
+          font-family: inherit;
+          color: ${PALETTE.text};
+          font-size: 13px;
+          font-weight: 800;
+          white-space: nowrap;
+        }
+        .nav-login-link:hover { color: ${PALETTE.coral}; }
+        .nav-post-btn {
+          height: 40px;
+          padding: 0 20px;
+          border: none;
+          border-radius: 8px;
+          background: ${PALETTE.coral};
+          color: #fff;
+          font-size: 13px;
+          font-weight: 900;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: transform 0.18s ease;
+        }
+        .nav-post-btn:hover { transform: translateY(-1px); }
         .btn {
           border: none;
           outline: none;
@@ -3865,7 +3891,12 @@ district: "",
           </nav>
 
         <div className="top-actions">
-            <button className="btn btn-primary" onClick={() => {
+            {!currentUser && (
+              <button className="nav-login-link" onClick={() => setShowAuthModal(true)}>
+                Giriş Yap
+              </button>
+            )}
+            <button className="nav-post-btn" onClick={() => {
               if (!currentUser) {
                 setShowAuthModal(true);
               } else {
@@ -3874,7 +3905,7 @@ district: "",
             }}>
               Hemen İlan Ver
             </button>
-            {currentUser ? (
+            {currentUser && (
               <AccountMenu
                 currentUser={currentUser}
                 onLogout={() => setCurrentUser(null)}
@@ -3883,10 +3914,6 @@ district: "",
                 onAdminPanel={() => window.location.hash = "#admin"}
                 isAdmin={ADMIN_EMAILS.includes(currentUser?.email)}
               />
-            ) : (
-              <button className="btn btn-secondary" onClick={() => setShowAuthModal(true)}>
-                Giriş Yap
-              </button>
             )}
           </div>
         </div>
