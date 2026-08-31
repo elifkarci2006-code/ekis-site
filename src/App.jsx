@@ -1721,15 +1721,6 @@ district: "",
           padding: 14px 18px;
           margin-bottom: 10px;
         }
-        .hero-title {
-          margin: 0;
-          font-size: clamp(20px, 2.5vw, 30px);
-          line-height: 1.08;
-          letter-spacing: -0.04em;
-          font-weight: 900;
-          color: ${PALETTE.slate};
-          max-width: 760px;
-        }
         .hero-stats-inline {
           display: flex;
           gap: 8px;
@@ -2875,9 +2866,12 @@ district: "",
           gap: 22px;
         }
         .hero-title {
-          font-size: clamp(28px, 3vw, 46px);
-          line-height: 1.12;
-          letter-spacing: -0.055em;
+          margin: 0;
+          font-size: 27px;
+          line-height: 33px;
+          letter-spacing: -0.6px;
+          font-weight: 900;
+          color: #1F2937;
         }
         .hero-title-accent {
           color: ${PALETTE.coral};
@@ -2899,11 +2893,11 @@ district: "",
           .hero-illustration { display: none; }
         }
         .hero-subtitle {
-          margin: 14px 0 0;
-          color: ${PALETTE.softText};
-          font-size: 16px;
+          margin: 8px 0 0;
+          color: #6B7280;
+          font-size: 14px;
           font-weight: 700;
-          line-height: 1.5;
+          line-height: 20px;
         }
         .hero-trust-row {
           display: flex;
@@ -3566,7 +3560,6 @@ district: "",
           }
           .btn { width: 100%; padding: 12px 14px; }
           .hero-card { padding: 14px 16px; border-radius: 20px; }
-          .hero-title { font-size: 24px; }
           .hero-content { grid-template-columns: 1fr; gap: 14px; }
           .hero-trust-row { justify-content: flex-start; flex-wrap: wrap; }
           .hero-trust-pill { width: 100%; min-width: 0; }
