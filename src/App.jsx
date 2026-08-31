@@ -3000,9 +3000,9 @@ district: "",
         .featured-card {
           min-height: 218px;
           padding: 24px 26px 26px;
-          border-radius: 24px;
-          border: 1.5px solid rgba(255,90,60,0.35);
-          box-shadow: 0 14px 28px rgba(31,41,55,0.05);
+          border-radius: 18px;
+          border: 1px solid rgba(35,48,68,0.06);
+          box-shadow: 0 5px 10px rgba(35,48,68,0.05);
         }
         .featured-card::after {
           display: none;
