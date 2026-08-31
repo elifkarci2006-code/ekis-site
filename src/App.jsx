@@ -1822,6 +1822,18 @@ district: "",
           flex: 0 0 100%;
           min-width: 100%;
         }
+        @media (max-width: 900px) {
+          .featured-carousel-track {
+            display: block;
+            transform: none !important;
+          }
+          .featured-carousel-page {
+            display: none !important;
+          }
+          .featured-carousel-page.active {
+            display: grid !important;
+          }
+        }
         .featured-carousel-wrap {
           position: relative;
         }
@@ -4495,7 +4507,10 @@ district: "",
       style={{ transform: `translateX(-${featuredPage * 100}%)` }}
     >
       {featuredPages.map((pageJobs, pageIndex) => (
-        <div className="featured-grid featured-carousel-page" key={pageIndex}>
+        <div
+          className={`featured-grid featured-carousel-page ${pageIndex === featuredPage ? "active" : ""}`}
+          key={pageIndex}
+        >
           {pageJobs.map((job) => (
             <FeaturedJobCard
               key={job.id}
