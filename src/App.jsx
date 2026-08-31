@@ -898,6 +898,22 @@ district: "",
     filteredFeaturedJobs.slice(pageIndex * FEATURED_PAGE_SIZE, pageIndex * FEATURED_PAGE_SIZE + FEATURED_PAGE_SIZE)
   );
 
+  const featuredTouchStartX = useRef(null);
+  const handleFeaturedTouchStart = (e) => {
+    featuredTouchStartX.current = e.touches[0].clientX;
+  };
+  const handleFeaturedTouchEnd = (e) => {
+    if (featuredTouchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - featuredTouchStartX.current;
+    const SWIPE_THRESHOLD = 40;
+    if (deltaX > SWIPE_THRESHOLD) {
+      setFeaturedPage((p) => Math.max(0, p - 1));
+    } else if (deltaX < -SWIPE_THRESHOLD) {
+      setFeaturedPage((p) => Math.min(featuredTotalPages - 1, p + 1));
+    }
+    featuredTouchStartX.current = null;
+  };
+
   useEffect(() => {
     setFeaturedPage(0);
   }, [filteredFeaturedJobs]);
@@ -4495,7 +4511,11 @@ district: "",
           </div>
 
          <div className="featured-carousel-wrap">
-  <div className="featured-carousel-viewport">
+  <div
+    className="featured-carousel-viewport"
+    onTouchStart={handleFeaturedTouchStart}
+    onTouchEnd={handleFeaturedTouchEnd}
+  >
     <div
       className="featured-carousel-track"
       style={{ transform: `translateX(-${featuredPage * 100}%)` }}
