@@ -114,6 +114,41 @@ export function formatSalaryPreview(workType, salary) {
   return `Günlük ${formatted} TL`;
 }
 
+export function getTimeAgo(value) {
+  if (!value) return "Bugün";
+
+  const date = new Date(value);
+  const diff = Date.now() - date.getTime();
+
+  if (Number.isNaN(diff) || diff < 0) return "Bugün";
+
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (minutes < 1) return "Az önce";
+  if (minutes < 60) return `${minutes} dk önce`;
+  if (hours < 24) return `${hours} saat önce`;
+  if (days === 1) return "Dün";
+  if (days < 7) return `${days} gün önce`;
+
+  return date.toLocaleDateString("tr-TR");
+}
+
+export function getSalaryDisplay(job) {
+  const salary = (job.salary || "").trim();
+  const type = (job.type || "").trim();
+
+  if (!salary && !type) return "Ücret belirtilmedi";
+  if (!type) return salary || "Ücret belirtilmedi";
+
+  const cleanSalary = (salary || "Ücret belirtilmedi")
+    .replace(/^(günlük|saatlik|part\s*time)\s*[:\-•/]*\s*/i, "")
+    .trim();
+
+  return `${type} ${cleanSalary}`;
+}
+
 export function toTitleCase(value) {
   return String(value || "")
     .trim()

@@ -1,5 +1,5 @@
 import { MapPin, Wallet, Eye } from "lucide-react";
-import { getDaysAgoLabel } from "../utils/jobUtils";
+import { getTimeAgo, getSalaryDisplay } from "../utils/jobUtils";
 
 const TYPE_COLORS = {
   "Günlük": "#0F8F7D",
@@ -19,7 +19,7 @@ export default function JobCard({ job, onOpen }) {
     <article className="soft-job-card" onClick={() => onOpen(job)}>
       <div className="soft-top">
         <div className="soft-company">{job.company}</div>
-        <div className="soft-days">{getDaysAgoLabel(job.createdAt)}</div>
+        <div className="soft-days">{getTimeAgo(job.createdAt)}</div>
       </div>
 
       <h3 className="soft-title">{job.title}</h3>
@@ -36,7 +36,7 @@ export default function JobCard({ job, onOpen }) {
       <div className="soft-footer">
         <div className="soft-salary">
           <Wallet size={15} color="#111827" strokeWidth={2.4} />
-          <span>{job.salary}</span>
+          <span>{getSalaryDisplay(job)}</span>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

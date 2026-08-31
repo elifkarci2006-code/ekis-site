@@ -1,4 +1,5 @@
 import { MapPin, Wallet, Eye } from "lucide-react";
+import { getSalaryDisplay } from "../utils/jobUtils";
 
 const TYPE_COLORS = {
   "Günlük": "#0F8F7D",
@@ -35,7 +36,7 @@ export default function FeaturedJobCard({ job, onOpen }) {
       <div className="featured-footer">
         <div className="featured-salary">
           <Wallet size={16} color="#111827" strokeWidth={2.4} />
-          <span>{job.salary}</span>
+          <span>{getSalaryDisplay(job)}</span>
         </div>
         <div className="featured-views">
           <Eye size={13} color="#7A8798" strokeWidth={2.2} />

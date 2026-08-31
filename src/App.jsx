@@ -2047,96 +2047,59 @@ district: "",
           box-shadow: 0 12px 24px rgba(88,173,173,0.24);
         }
         .soft-job-card {
-          position: relative;
-          background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
-          border: 1px solid rgba(60,74,95,0.08);
-          border-radius: 24px;
-          padding: 20px;
-          box-shadow: 0 14px 30px rgba(60,74,95,0.055), inset 0 1px 0 rgba(255,255,255,0.95);
-          overflow: hidden;
+          background: #FFFFFF;
+          border: 1px solid rgba(35,48,68,0.06);
+          border-radius: 18px;
+          padding: 15px;
+          box-shadow: 0 5px 10px rgba(35,48,68,0.05);
           cursor: pointer;
-          transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-          min-height: 230px;
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
           display: flex;
           flex-direction: column;
+          height: 100%;
         }
         .soft-job-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 22px 42px rgba(60,74,95,0.10), inset 0 1px 0 rgba(255,255,255,0.95);
-          border-color: rgba(228,93,80,0.16);
+          transform: translateY(-3px);
+          box-shadow: 0 10px 20px rgba(35,48,68,0.08);
         }
-        .soft-job-card::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(circle at top right, rgba(118,191,190,0.12), transparent 34%);
-          opacity: 0;
-          transition: opacity 0.18s ease;
-          pointer-events: none;
-        }
-        .soft-job-card:hover::before { opacity: 1; }
         .soft-top {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 12px;
-          margin-bottom: 14px;
-          position: relative;
-          z-index: 1;
+          align-items: center;
+          margin-bottom: 6px;
         }
         .soft-company {
           color: ${PALETTE.coral};
-          font-size: 15px;
-          font-weight: 950;
-          line-height: 1.2;
-          letter-spacing: -0.02em;
+          font-size: 12px;
+          font-weight: 900;
         }
         .soft-days {
-          color: ${PALETTE.softText};
-          font-size: 12px;
+          color: #9AA5B3;
+          font-size: 10px;
           font-weight: 800;
-          letter-spacing: -0.01em;
           white-space: nowrap;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-        }
-        .soft-days::before {
-          content: "";
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background: rgba(88,173,173,0.42);
         }
         .soft-title {
-          position: relative;
-          z-index: 1;
-          margin: 0 0 12px;
-          font-size: 20px;
-          line-height: 1.18;
-          font-weight: 950;
-          letter-spacing: -0.035em;
-          color: ${PALETTE.slate};
+          margin: 0;
+          font-size: 16px;
+          line-height: 21px;
+          font-weight: 900;
+          color: #111827;
         }
         .soft-detail {
-          position: relative;
-          z-index: 1;
           display: flex;
           align-items: center;
           gap: 5px;
           margin-top: 8px;
-          color: ${PALETTE.text};
+          color: ${PALETTE.softText};
           font-size: 12px;
           font-weight: 700;
         }
         .soft-category-text {
-          position: relative;
-          z-index: 1;
-          color: ${PALETTE.softText};
+          color: #9AA5B3;
           font-size: 11px;
           font-weight: 700;
           margin-top: 3px;
-          margin-bottom: 16px;
         }
         .soft-view-row {
           display: flex;
@@ -2148,14 +2111,11 @@ district: "",
         }
         .soft-divider {
           height: 1px;
-          background: rgba(228,93,80,0.14);
-          margin: auto 0 14px;
-          position: relative;
-          z-index: 1;
+          background: rgba(246,90,69,0.10);
+          margin-top: auto;
+          margin-bottom: 10px;
         }
         .soft-footer {
-          position: relative;
-          z-index: 1;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -2164,18 +2124,10 @@ district: "",
         .soft-salary {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          color: #ff4b2b;
-          font-size: 17px;
-          font-weight: 950;
-          line-height: 1.2;
-          letter-spacing: -0.02em;
-        }
-        .soft-salary svg {
-          width: 20px;
-          height: 20px;
-          flex-shrink: 0;
-          color: #ff4b2b;
+          gap: 6px;
+          color: #111827;
+          font-size: 14px;
+          font-weight: 900;
         }
         .soft-badge {
           display: inline-flex;
@@ -2184,10 +2136,8 @@ district: "",
           padding: 5px 10px;
           border-radius: 999px;
           border: none;
-          font-size: 12px;
+          font-size: 11px;
           font-weight: 900;
-          letter-spacing: -0.01em;
-          box-shadow: 0 6px 14px rgba(255,75,43,0.07);
         }
         .jobs-layout {
           display: flex;
