@@ -25,6 +25,14 @@ import AuthModal from "./components/AuthModal";
 import AccountMenu from "./components/AccountMenu";
 import MyJobsModal from "./components/MyJobsModal";
 import AdminPanel from "./components/AdminPanel";
+import { Search, MapPin, Tag, ChevronDown, ShieldCheck, Rocket, Globe2, Lock } from "lucide-react";
+
+const FEATURE_BADGES = [
+  { title: "Onaylı ilanlar", text: "Güvenle başvur", Icon: ShieldCheck, color: "#0F8F7D" },
+  { title: "Hızlı Başvuru", text: "Anında iş fırsatları", Icon: Rocket, color: "#FF5A3C" },
+  { title: "Türkiye genelinde fırsatlar", text: "Tüm şehirlerde işler", Icon: Globe2, color: "#0F8F7D" },
+  { title: "Güvenli Platform", text: "Kişisel verileriniz koruma altında", Icon: Lock, color: "#FF5A3C" },
+];
 
 const SITE_URL = "https://www.ekiş.com.tr";
 const PAYTR_OK_URL = `${SITE_URL}/?paytr_result=success`;
@@ -72,6 +80,9 @@ export default function App() {
   const [submittedCategory, setSubmittedCategory] = useState("Tümü");
   const [submittedJobType, setSubmittedJobType] = useState("Tümü");
   const [submittedCity, setSubmittedCity] = useState("Tümü");
+  const [heroCityOpen, setHeroCityOpen] = useState(false);
+  const [heroCategoryOpen, setHeroCategoryOpen] = useState(false);
+  const heroPillRef = useRef(null);
   const [sortOption, setSortOption] = useState("newest");
   const [showForm, setShowForm] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -475,6 +486,17 @@ district: "",
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (heroPillRef.current && !heroPillRef.current.contains(e.target)) {
+        setHeroCityOpen(false);
+        setHeroCategoryOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
 
   const handleSearchSubmit = () => {
     setSubmittedSearch(search);
@@ -1445,66 +1467,179 @@ district: "",
         .top-search {
           padding: 2px 0 10px;
         }
-        .filter-wrap {
+        .search-pill {
           background: #FFFFFF;
-          border: 1px solid rgba(31,41,55,0.06);
-          border-radius: 24px;
-          padding: 16px;
-          box-shadow: 0 14px 30px rgba(31,41,55,0.06);
-        }
-        .filter-grid {
-          display: grid;
-          grid-template-columns: 1.45fr 1fr 1fr 1fr 0.9fr 0.9fr;
-          gap: 12px;
-          align-items: end;
-        }
-        .field {
+          border-radius: 18px;
+          padding: 6px;
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
+          box-shadow: 0 8px 16px rgba(31,41,55,0.08);
+          border: 1px solid rgba(31,41,55,0.06);
+          position: relative;
         }
-        .field label {
+        @media (min-width: 901px) {
+          .search-pill {
+            flex-direction: row;
+            align-items: center;
+            gap: 0;
+            padding: 8px;
+            margin-top: -38px;
+          }
+        }
+        .search-pill-input-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 12px;
+        }
+        @media (min-width: 901px) {
+          .search-pill-input-row {
+            flex: 1.4;
+            height: 52px;
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+        }
+        .search-pill-input {
+          flex: 1;
+          border: none;
+          background: transparent;
+          color: ${PALETTE.text};
+          font-size: 14px;
+          font-weight: 800;
+          outline: none;
+          min-width: 0;
+        }
+        .search-pill-input::placeholder {
+          color: #9AA5B3;
+          font-weight: 700;
+        }
+        .search-pill-divider {
+          height: 1px;
+          background: rgba(31,41,55,0.06);
+          margin: 0 12px;
+        }
+        @media (min-width: 901px) {
+          .search-pill-divider {
+            width: 1px;
+            height: auto;
+            align-self: stretch;
+            background: rgba(31,41,55,0.08);
+            margin: 8px 4px;
+          }
+        }
+        .search-pill-segment {
+          padding: 12px;
+        }
+        @media (min-width: 901px) {
+          .search-pill-segment {
+            flex: 1;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+        }
+        .dropdown-anchor {
+          position: relative;
+          z-index: 20;
+        }
+        .search-pill-segment-row {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          border: none;
+          background: transparent;
+          padding: 0;
+          cursor: pointer;
+          width: 100%;
+          text-align: left;
+        }
+        .search-pill-segment-text {
+          color: ${PALETTE.softText};
           font-size: 13px;
           font-weight: 800;
-          color: ${PALETTE.softText};
-          padding-left: 2px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
-        .field input, .field select {
-          height: 56px;
+        .dropdown-panel {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          margin-top: 10px;
+          min-width: 220px;
+          max-width: 280px;
+          background: #FFFFFF;
+          border-radius: 14px;
+          border: 1px solid rgba(31,41,55,0.08);
+          box-shadow: 0 8px 16px rgba(31,41,55,0.14);
+          padding: 6px 0;
+          z-index: 30;
+        }
+        .dropdown-scroll {
+          max-height: 260px;
+          overflow-y: auto;
+        }
+        .dropdown-option {
+          display: block;
           width: 100%;
-          border-radius: 18px;
-          border: 1px solid rgba(31,41,55,0.10);
-          background: ${PALETTE.cardBg};
-          padding: 0 16px;
-          font-size: 15px;
+          text-align: left;
+          border: none;
+          background: transparent;
+          padding: 10px 16px;
           color: ${PALETTE.text};
-          outline: none;
+          font-size: 13px;
+          font-weight: 700;
+          cursor: pointer;
         }
-        .search-action {
-          display: flex;
-          align-items: end;
+        .dropdown-option:hover {
+          background: ${PALETTE.cardBg};
         }
-        .search-btn {
-          width: 100%;
-          height: 56px;
-          border-radius: 18px;
+        .search-pill-button {
+          height: 46px;
+          margin: 2px;
+          border: none;
+          border-radius: 14px;
+          background: ${PALETTE.coral};
+          color: #fff;
           font-size: 15px;
           font-weight: 900;
           cursor: pointer;
-          transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
         }
-        .search-btn:hover { transform: translateY(-1px); }
-        .search-btn-primary {
+        @media (min-width: 901px) {
+          .search-pill-button {
+            height: 52px;
+            width: 120px;
+            margin-top: 0;
+            margin-bottom: 0;
+          }
+        }
+        .hero-active-filter-row {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 8px;
+          margin-top: 12px;
+        }
+        .hero-active-filter-pill {
+          border-radius: 999px;
+          background: rgba(31,41,55,0.06);
+          color: ${PALETTE.text};
+          font-size: 12px;
+          font-weight: 800;
+          padding: 6px 11px;
+        }
+        .hero-clear-filters-text {
           border: none;
-          background: ${PALETTE.coral};
-          color: #fff;
-          box-shadow: 0 14px 28px rgba(255,90,60,0.24);
-        }
-        .search-btn-clear {
-          border: 1px solid rgba(31,41,55,0.12);
-          background: #FFFFFF;
-          color: ${PALETTE.softText};
-          box-shadow: none;
+          background: transparent;
+          color: ${PALETTE.coral};
+          font-size: 12px;
+          font-weight: 900;
+          cursor: pointer;
+          padding: 0;
         }
 
         .ad-slot {
@@ -2838,18 +2973,10 @@ district: "",
           width: 44px;
           height: 44px;
           border-radius: 12px;
-          background: rgba(255,90,60,0.1);
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          color: #ff4f26;
           flex-shrink: 0;
-        }
-        .hero-trust-icon svg {
-          display: block;
-          width: 22px;
-          height: 22px;
-          overflow: visible;
         }
         .hero-trust-pill strong {
           display: block;
@@ -3475,7 +3602,6 @@ district: "",
           padding: 24px 26px;
         }
         @media (max-width: 1100px) {
-          .filter-grid { grid-template-columns: 1fr; }
           .featured-grid { grid-template-columns: 1fr; }
           .jobs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
@@ -4170,106 +4296,143 @@ district: "",
               <img className="hero-illustration" src="/hero-illustration.png" alt="" aria-hidden="true" />
             </div>
 
-            <div className="filter-wrap">
-              <div className="filter-grid">
-                <div className="field">
-                  <label>İlanlarda ara</label>
-                  <input
-                    type="text"
-                    placeholder="Ne iş arıyorsun? (garson, kurye...)"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    onKeyDown={handleSearchKeyDown}
-                  />
-                </div>
-
-                <div className="field">
-                  <label>Şehir seç</label>
-                  <select value={city} onChange={(e) => setCity(e.target.value)}>
-                    {cities.map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="field">
-                  <label>Meslek seç</label>
-                  <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                    {categories.map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="field">
-                  <label>Çalışma tipi seç</label>
-                  <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
-                    {types.map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="search-action">
-                  <button className="search-btn search-btn-primary" type="button" onClick={handleSearchSubmit}>Ara</button>
-                </div>
-
-                <div className="search-action">
-                  <button className="search-btn search-btn-clear" type="button" onClick={clearFilters}>Temizle</button>
-                </div>
+            <div className="search-pill" ref={heroPillRef}>
+              <div className="search-pill-input-row">
+                <Search size={20} color="#5D6B7F" strokeWidth={2.2} />
+                <input
+                  type="text"
+                  className="search-pill-input"
+                  placeholder="Ne arıyorsunuz? (garson, kurye, depo...)"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                />
               </div>
+
+              <div className="search-pill-divider" />
+
+              <div className="search-pill-segment dropdown-anchor">
+                <button
+                  type="button"
+                  className="search-pill-segment-row"
+                  onClick={() => {
+                    setHeroCategoryOpen(false);
+                    setHeroCityOpen((prev) => !prev);
+                  }}
+                >
+                  <MapPin size={15} color="#9AA5B3" strokeWidth={2.4} />
+                  <span className="search-pill-segment-text">
+                    {city === "Tümü" ? "Şehir seçin" : city}
+                  </span>
+                  <ChevronDown size={15} color="#9AA5B3" strokeWidth={2.4} />
+                </button>
+
+                {heroCityOpen ? (
+                  <div className="dropdown-panel">
+                    <div className="dropdown-scroll">
+                      <button
+                        type="button"
+                        className="dropdown-option"
+                        onClick={() => {
+                          setCity("Tümü");
+                          setHeroCityOpen(false);
+                        }}
+                      >
+                        Tümü
+                      </button>
+                      {cities.filter((item) => item !== "Tümü").map((item) => (
+                        <button
+                          key={item}
+                          type="button"
+                          className="dropdown-option"
+                          onClick={() => {
+                            setCity(item);
+                            setHeroCityOpen(false);
+                          }}
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="search-pill-divider" />
+
+              <div className="search-pill-segment dropdown-anchor">
+                <button
+                  type="button"
+                  className="search-pill-segment-row"
+                  onClick={() => {
+                    setHeroCityOpen(false);
+                    setHeroCategoryOpen((prev) => !prev);
+                  }}
+                >
+                  <Tag size={15} color="#9AA5B3" strokeWidth={2.4} />
+                  <span className="search-pill-segment-text">
+                    {category === "Tümü" ? "Tümü" : category}
+                  </span>
+                  <ChevronDown size={15} color="#9AA5B3" strokeWidth={2.4} />
+                </button>
+
+                {heroCategoryOpen ? (
+                  <div className="dropdown-panel">
+                    <div className="dropdown-scroll">
+                      <button
+                        type="button"
+                        className="dropdown-option"
+                        onClick={() => {
+                          setCategory("Tümü");
+                          setHeroCategoryOpen(false);
+                        }}
+                      >
+                        Tümü
+                      </button>
+                      {categories.filter((item) => item !== "Tümü").map((item) => (
+                        <button
+                          key={item}
+                          type="button"
+                          className="dropdown-option"
+                          onClick={() => {
+                            setCategory(item);
+                            setHeroCategoryOpen(false);
+                          }}
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              <button className="search-pill-button" type="button" onClick={handleSearchSubmit}>
+                Ara
+              </button>
             </div>
 
+            {submittedJobType !== "Tümü" || submittedCity !== "Tümü" || submittedCategory !== "Tümü" ? (
+              <div className="hero-active-filter-row">
+                {submittedJobType !== "Tümü" ? <span className="hero-active-filter-pill">{submittedJobType}</span> : null}
+                {submittedCity !== "Tümü" ? <span className="hero-active-filter-pill">{submittedCity}</span> : null}
+                {submittedCategory !== "Tümü" ? <span className="hero-active-filter-pill">{submittedCategory}</span> : null}
+                <button type="button" className="hero-clear-filters-text" onClick={clearFilters}>Temizle</button>
+              </div>
+            ) : null}
+
             <div className="hero-trust-row">
-              <div className="hero-trust-pill">
-                <span className="hero-trust-icon" aria-hidden="true">
-                  <svg viewBox="0 0 48 48" fill="none">
-                    <path d="M24 5.5 37 10.6v10.1c0 8.3-5.4 15.9-13 18.8-7.6-2.9-13-10.5-13-18.8V10.6L24 5.5Z" fill="#ff4f26"/>
-                    <path d="M18.2 23.8 22.2 27.8 30.8 18.7" stroke="white" strokeWidth="3.3" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </span>
-                <span>
-                  <strong>Onaylı ilanlar</strong>
-                  <small>Güvenle başvur</small>
-                </span>
-              </div>
-              <div className="hero-trust-pill">
-                <span className="hero-trust-icon" aria-hidden="true">
-                  <svg viewBox="0 0 48 48" fill="none">
-                    <path d="M27.4 4.8 12.5 27.2h10.2l-2.2 16 15-22.5H25.2l2.2-15.9Z" fill="#ff4f26"/>
-                  </svg>
-                </span>
-                <span>
-                  <strong>Hızlı Başvuru</strong>
-                  <small>Anında iş fırsatları</small>
-                </span>
-              </div>
-              <div className="hero-trust-pill">
-                <span className="hero-trust-icon" aria-hidden="true">
-                  <svg viewBox="0 0 48 48" fill="none">
-                    <path d="M24 5.5c2.1 0 3.7 2.2 5.5 2.8 1.9.6 4.4-.4 6 .8 1.6 1.2 1.7 3.9 2.9 5.5 1.2 1.6 3.8 2.4 4.4 4.3.6 1.8-.9 4.1-.9 6.1s1.5 4.3.9 6.1c-.6 1.9-3.2 2.7-4.4 4.3-1.2 1.6-1.3 4.3-2.9 5.5-1.6 1.2-4.1.2-6 .8-1.8.6-3.4 2.8-5.5 2.8s-3.7-2.2-5.5-2.8c-1.9-.6-4.4.4-6-.8-1.6-1.2-1.7-3.9-2.9-5.5-1.2-1.6-3.8-2.4-4.4-4.3-.6-1.8.9-4.1.9-6.1s-1.5-4.3-.9-6.1c.6-1.9 3.2-2.7 4.4-4.3 1.2-1.6 1.3-4.3 2.9-5.5 1.6-1.2 4.1-.2 6-.8 1.8-.6 3.4-2.8 5.5-2.8Z" fill="#ff4f26"/>
-                    <path d="M18.5 30.2 29.5 17.8" stroke="white" strokeWidth="3" strokeLinecap="round"/>
-                    <circle cx="18.5" cy="18.8" r="2.8" stroke="white" strokeWidth="2.6"/>
-                    <circle cx="29.6" cy="29.3" r="2.8" stroke="white" strokeWidth="2.6"/>
-                  </svg>
-                </span>
-                <span>
-                  <strong>Türkiye genelinde fırsatlar</strong>
-                  <small>Tüm şehirlerde işler</small>
-                </span>
-              </div>
-              <div className="hero-trust-pill">
-                <span className="hero-trust-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#ff4f26" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="4" y="10" width="16" height="10" rx="2" />
-                    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                  </svg>
-                </span>
-                <span>
-                  <strong>Güvenli Platform</strong>
-                  <small>Kişisel verileriniz koruma altında</small>
-                </span>
-              </div>
+              {FEATURE_BADGES.map((item) => (
+                <div className="hero-trust-pill" key={item.title}>
+                  <span className="hero-trust-icon" aria-hidden="true" style={{ backgroundColor: `${item.color}1A` }}>
+                    <item.Icon size={22} color={item.color} strokeWidth={2.4} />
+                  </span>
+                  <span>
+                    <strong>{item.title}</strong>
+                    <small>{item.text}</small>
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
