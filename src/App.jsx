@@ -1436,6 +1436,7 @@ district: "",
           align-items: center;
           gap: 16px;
           flex-shrink: 0;
+          margin-right: -16px;
         }
         .nav-login-link {
           border: none;
