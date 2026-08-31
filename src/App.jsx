@@ -1362,6 +1362,7 @@ district: "",
           color: ${PALETTE.text};
         }
         a { color: inherit; }
+        button, input, textarea, select { font-family: inherit; }
         .app-shell {
           min-height: 100vh;
           background: ${PALETTE.bg};
