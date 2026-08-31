@@ -15,7 +15,6 @@ import {
   normalizeLocation,
   toTitleCase,
 } from "./utils/jobUtils";
-import { AdPlaceholder, InlineAdCard } from "./components/AdSlots";
 import FeaturedJobCard from "./components/FeaturedJobCard";
 import JobCard from "./components/JobCard";
 import InfoModal from "./components/InfoModal";
@@ -187,44 +186,6 @@ view_count: job.view_count || 0,
 
   useEffect(() => {
     fetchJobs();
-  }, []);
-
-  // Soft location suggestion: pre-select the city filter based on the user's
-  // approximate location, but never hide results or block anything -- the
-  // user can freely change or clear the city filter afterwards. Uses the
-  // browser's native permission prompt and OpenStreetMap's free Nominatim
-  // reverse-geocoding endpoint (no API key required, no backend involved).
-  useEffect(() => {
-    if (!navigator.geolocation || city !== "Tümü") return;
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=tr`
-          );
-          const data = await response.json();
-          const detectedCity = data?.address?.province || data?.address?.city || data?.address?.state;
-          if (!detectedCity) return;
-
-          const matchedCity = cities.find(
-            (c) => c.toLocaleLowerCase("tr-TR") === detectedCity.toLocaleLowerCase("tr-TR")
-          );
-
-          if (matchedCity) {
-            setCity(matchedCity);
-            setSubmittedCity(matchedCity);
-          }
-        } catch (err) {
-          console.log("Konuma göre şehir tespiti başarısız:", err);
-        }
-      },
-      () => {
-        // Permission denied or unavailable -- silently do nothing, keep "Tümü".
-      },
-      { timeout: 8000 }
-    );
   }, []);
 
   useEffect(() => {
@@ -1385,7 +1346,7 @@ district: "",
         }
         .container {
           width: calc(100% - 24px);
-          max-width: none;
+          max-width: 1360px;
           margin: 0 auto;
         }
         .topbar {
@@ -2096,9 +2057,41 @@ district: "",
           letter-spacing: -0.01em;
           box-shadow: 0 6px 14px rgba(255,75,43,0.07);
         }
+        .jobs-layout {
+          display: flex;
+          align-items: flex-start;
+          gap: 24px;
+        }
+        .jobs-main-col {
+          flex: 1;
+          min-width: 0;
+        }
+        .jobs-sidebar-col {
+          flex-shrink: 0;
+          width: 320px;
+        }
+        .ad-radarnews-card {
+          display: block;
+          width: 320px;
+          height: 640px;
+          border-radius: 18px;
+          overflow: hidden;
+          background: #000;
+        }
+        .ad-radarnews-card img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+        @media (max-width: 1024px) {
+          .jobs-layout { flex-direction: column; }
+          .jobs-sidebar-col { width: 100%; }
+          .ad-radarnews-card { width: 100%; max-width: 320px; margin: 0 auto; }
+        }
         .jobs-grid {
           display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 16px;
         }
         .empty-box {
@@ -2802,6 +2795,22 @@ district: "",
         }
         .hero-title-accent {
           color: ${PALETTE.coral};
+        }
+        .hero-top-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 24px;
+        }
+        .hero-illustration {
+          width: 320px;
+          height: auto;
+          object-fit: contain;
+          flex-shrink: 0;
+          display: block;
+        }
+        @media (max-width: 900px) {
+          .hero-illustration { display: none; }
         }
         .hero-subtitle {
           margin: 14px 0 0;
@@ -4153,9 +4162,12 @@ district: "",
       <main className="container">
         <section className="hero" id="ilanlar">
           <div className="hero-card">
-            <div>
-              <h1 className="hero-title">Her çalışma şekline,<br />binlerce iş <span className="hero-title-accent">fırsatı.</span></h1>
-              <p className="hero-subtitle">Günlük, saatlik, part time ve tam zamanlı ilanları tek yerde keşfet.</p>
+            <div className="hero-top-row">
+              <div>
+                <h1 className="hero-title">Her çalışma şekline,<br />binlerce iş <span className="hero-title-accent">fırsatı.</span></h1>
+                <p className="hero-subtitle">Günlük, saatlik, part time ve tam zamanlı ilanları tek yerde keşfet.</p>
+              </div>
+              <img className="hero-illustration" src="/hero-illustration.png" alt="" aria-hidden="true" />
             </div>
 
             <div className="filter-wrap">
@@ -4261,7 +4273,6 @@ district: "",
             </div>
           </div>
         </section>
-        <AdPlaceholder type="banner" />
 
         <section className="section featured-section" id="one-cikanlar">
           <div className="section-head featured-head">
@@ -4374,24 +4385,30 @@ district: "",
               ))}
             </div>
 
-            {filteredJobs.length === 0 ? (
-              <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
-            ) : (
-              <div className="jobs-grid">
-  {sortedJobs.map((job, index) => (
-    <React.Fragment key={job.id}>
-      <JobCard
-        job={job}
-        onOpen={handleOpenJob}
-      />
+            <div className="jobs-layout">
+              <div className="jobs-main-col">
+                {filteredJobs.length === 0 ? (
+                  <div className="empty-box">Aramana uygun ilan bulunamadı.</div>
+                ) : (
+                  <div className="jobs-grid">
+                    {sortedJobs.map((job) => (
+                      <JobCard key={job.id} job={job} onOpen={handleOpenJob} />
+                    ))}
+                  </div>
+                )}
+              </div>
 
-      {(index + 1) % 6 === 0 && (
-        <InlineAdCard />
-      )}
-    </React.Fragment>
-  ))}
-</div>
-            )}
+              <div className="jobs-sidebar-col">
+                <a
+                  className="ad-radarnews-card"
+                  href="https://t.me/radarnews_tr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src="/ad-radarnews.png" alt="Radar News Telegram Kanalı" />
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -4410,8 +4427,6 @@ district: "",
   handleOpenJob(job);
 }}
         />
-
-        <AdPlaceholder type="footer" />
 
         <footer className="site-footer">
           <div className="site-footer-inner">

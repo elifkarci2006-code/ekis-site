@@ -17,8 +17,6 @@ export const PALETTE = {
   cardBg: "#F5F7F8",
 };
 
-export const ADS_ENABLED = true;
-
 // Kept in sync with the mobile app's ADMIN_EMAILS (ekis-mobile/src/app/index.tsx)
 // and the server-side authoritative copy in
 // ekis-mobile/supabase/functions/_shared/bankTransfer.ts. Single source for
